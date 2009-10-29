@@ -1,0 +1,61 @@
+/*
+musicappobservermpx.mmp
+
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+Copyright (C) 2009  Michael Coffey
+
+http://code.google.com/p/mobbler
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+#include "mobbler.mmh"
+
+#ifdef SYMBIAN_SIGNED
+TARGET		musicappobservermpx_0x20027114.dll
+TARGETTYPE	PLUGIN
+UID		0x10009D8D 0x20027114
+#else
+TARGET		musicappobservermpx.dll
+TARGETTYPE	PLUGIN
+UID		0x10009D8D 0xA000D9F4
+#endif
+
+SOURCEPATH	..\src
+USERINCLUDE	..\inc
+SYSTEMINCLUDE	\epoc32\include
+
+SOURCE		musicappobservermpx.cpp
+
+START RESOURCE ..\data\musicappobservermpx.rss
+#ifdef SYMBIAN_SIGNED
+TARGET musicappobservermpx_0x20027114
+#else
+TARGET musicappobservermpx
+#endif
+END
+
+LIBRARY		apparc.lib
+LIBRARY		apgrfx.lib
+LIBRARY		efsrv.lib
+LIBRARY		euser.lib
+
+#ifndef WINS
+LIBRARY		mpxcommon.lib
+LIBRARY		mpxplaybackutility.lib
+#endif
+
+// End of file
+

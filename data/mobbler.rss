@@ -1,0 +1,854 @@
+/*
+mobbler.rss
+
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+Copyright (C) 2008  Michael Coffey
+
+http://code.google.com/p/mobbler
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+NAME MOBB
+
+#include <appinfo.rh>
+#include <avkon.rh>
+#include <avkon.rsg>
+#include <eikon.rh>
+#include <startupitem.rh>
+#include "mobbler.hrh"
+#include "mobbler.loc"
+
+CHARACTER_SET UTF8
+
+RESOURCE RSS_SIGNATURE
+	{
+	}
+
+RESOURCE TBUF
+	{
+	buf = STR_mobbler_mobbler;
+	}
+
+RESOURCE EIK_APP_INFO
+	{
+	cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
+	}
+
+RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
+	{
+	short_caption = STR_mobbler_mobbler;
+	caption_and_icon = 
+	CAPTION_AND_ICON_INFO
+		{
+		caption = STR_mobbler_mobbler;
+
+		number_of_icons = 1;
+#ifdef __SYMBIAN_SIGNED__
+		icon_file = "\\resource\\apps\\mobbler_0x2002655A.mif";
+#else
+		icon_file = "\\resource\\apps\\mobbler.mif";
+#endif
+		};
+	}
+
+RESOURCE AVKON_VIEW r_mobbler_setting_item_list_view
+	{
+	cba = R_AVKON_SOFTKEYS_OK_CANCEL;
+	toolbar = 0;
+	}
+	
+RESOURCE AVKON_VIEW r_mobbler_status_view
+	{
+	cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
+	menubar = r_mobbler_status_options_menu;
+	toolbar = 0;
+	}
+
+RESOURCE AVKON_VIEW r_mobbler_webservices_view
+	{
+	cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
+	menubar = r_mobbler_webservices_options_menu;
+	toolbar = 0;
+	}
+
+RESOURCE AVKON_VIEW r_mobbler_browser_view
+    {
+    cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
+    menubar = r_mobbler_status_options_menu;
+    toolbar = 0;
+    }
+
+
+
+RESOURCE MENU_BAR r_mobbler_webservices_options_menu
+	{
+	titles =
+		{
+		MENU_TITLE
+			{
+			menu_pane = r_mobbler_webservices_menu_pane;
+			}
+		};
+	}
+
+RESOURCE MENU_PANE r_mobbler_webservices_menu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandOpen;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioStart;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadio;
+			cascade = r_mobbler_webservices_radio_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandTrackLove;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlaylistCreate;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlaylistAddTrack;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAttendance;
+			cascade = r_mobbler_attendance_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandShare;
+			cascade = r_mobbler_share_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandView;
+			cascade = r_mobbler_view_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandShout;
+			cascade = r_mobbler_shout_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EAknSoftkeyExit;
+			}
+		};
+	}
+	
+RESOURCE MENU_PANE r_mobbler_shout_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandShoutOwner;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandShoutUser;
+			}
+		};
+	}
+	
+RESOURCE MENU_PANE r_mobbler_webservices_radio_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioPersonal;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioNeighbourhood;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioLoved;
+			}
+		};
+	}	
+	
+RESOURCE MENU_PANE r_mobbler_attendance_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandAttendanceYes;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAttendanceMaybe;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAttendanceNo;
+			}
+		};
+	}	
+
+RESOURCE MENU_PANE r_mobbler_share_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandTrackShare;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistShare;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandEventShare;
+			}
+		};
+	}	
+
+RESOURCE MENU_BAR r_mobbler_status_options_menu
+	{
+	titles =
+		{
+		MENU_TITLE
+			{
+			menu_pane = r_mobbler_status_menu_pane;
+			}
+		};
+	}
+	
+RESOURCE MENU_PANE r_mobbler_status_menu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadio;
+			cascade = r_radio_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandResumeRadio;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandOnline;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandOffline;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandView;
+			cascade = r_mobbler_view_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandSearch;
+			cascade = r_mobbler_search_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandEqualizer;
+			cascade = r_mobbler_equalizer_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandTools;
+			cascade = r_mobbler_tools_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandEditSettings;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAbout;
+			},
+		MENU_ITEM
+			{
+			command = EAknSoftkeyExit;
+			}
+		};
+	}
+
+RESOURCE MENU_PANE r_mobbler_search_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandSearchTrack;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandSearchAlbum;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandSearchArtist;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandSearchTag;
+			}
+		};
+	}
+
+RESOURCE MENU_PANE r_mobbler_view_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandFriends;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandSimilarArtists;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandSimilarTracks;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandUserShoutbox;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistShoutbox;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandEventShoutbox;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlaylists;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRecentTracks;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandUserEvents;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistEvents;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRecommendedArtists;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRecommendedEvents;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandUserTopArtists;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandUserTopAlbums;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandUserTopTracks;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandUserTopTags;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistTopAlbums;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistTopTracks;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistTopTags;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandEventWebPage;
+			}
+		};
+	}
+	
+RESOURCE MENU_PANE r_radio_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioArtist;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioTag;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioUser;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioPersonal;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioRecommendations;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioLoved;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioNeighbourhood;
+			}
+		};
+	}
+
+RESOURCE MENU_PANE r_mobbler_equalizer_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandEqualizerDefault;
+			flags = EEikMenuItemRadioStart;
+			}
+		};
+	}
+
+RESOURCE MENU_PANE r_mobbler_tools_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandCheckForUpdates;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandToggleScrobbling;
+			},
+#ifdef __SYMBIAN_SIGNED__
+		MENU_ITEM
+			{
+			command = EMobblerCommandSetAsWallpaper;
+			},
+#endif
+		MENU_ITEM
+			{
+			command = EMobblerCommandSleepTimer;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAlarm;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandExportQueueToLogFile;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandLanguagePatches;
+			}
+		};
+	}
+
+RESOURCE DIALOG r_mobbler_text_query_dialog
+	{
+	flags = EGeneralQueryFlags;
+	buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+	items=
+		{
+		DLG_LINE
+			{
+			type = EAknCtQuery;
+			id = EMobblerQuery;
+			control= AVKON_DATA_QUERY
+				{
+				layout = EDataLayout;
+				control = EDWIN
+					{
+					flags= EEikEdwinNoHorizScrolling | EEikEdwinResizable;
+					maxlength = EMobblerMaxQueryDialogLength;
+					width = 4;
+					lines = 1;
+					};
+				};
+			}
+		};
+	}
+	
+RESOURCE STATUS_PANE_APP_MODEL r_mobbler_status_pane
+	{
+	panes =
+		{
+		SPANE_PANE
+			{
+			id = EEikStatusPaneUidTitle;
+			type = EAknCtTitlePane;
+			resource = r_mobbler_title_resource;
+			}
+		};
+	}
+	
+RESOURCE TITLE_PANE r_mobbler_title_resource
+	{
+	txt = STR_mobbler_mobbler;
+	}
+	
+RESOURCE AVKON_SETTING_ITEM_LIST r_mobbler_setting_item_list
+	{
+	title = "";
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_binary_setting_page
+	{
+	type = EAknCtPopupSettingList;
+	editor_resource_id = r_mobbler_popup_binary_setting_list;
+	}
+
+RESOURCE POPUP_SETTING_LIST r_mobbler_popup_binary_setting_list
+	{
+	// no definitions required - values obtained from 
+	// associated_resource of owning AVKON_SETTING_ITEM_LIST
+	}
+
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_mobbler_popup_setting_binary_texts
+	{
+	setting_texts_resource = r_mobbler_binary_texts;
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_setting_page_username
+	{
+	label = "";
+	type = EEikCtEdwin;
+	editor_resource_id = r_mobbler_setting_page_resource_id_username;
+	}
+
+RESOURCE EDWIN r_mobbler_setting_page_resource_id_username
+	{
+	maxlength = 30;
+	default_case = EAknEditorLowerCase;
+	allowed_case_modes = EAknEditorAllCaseModes;
+	numeric_keymap = EAknEditorStandardNumberModeKeymap;
+	default_input_mode = EAknEditorTextInputMode;
+	allowed_input_modes = EAknEditorTextInputMode | EAknEditorNumericInputMode | EAknEditorSecretAlphaInputMode | EAknEditorKatakanaInputMode | EAknEditorFullWidthTextInputMode | EAknEditorFullWidthNumericInputMode | EAknEditorFullWidthKatakanaInputMode | EAknEditorHiraganaKanjiInputMode | EAknEditorHalfWidthTextInputMode;
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_setting_page_password
+	{
+	label = "";
+	type = EEikCtSecretEd;
+	editor_resource_id = r_mobbler_setting_page_resource_id_password;
+	}
+	
+RESOURCE SECRETED r_mobbler_setting_page_resource_id_password
+	{
+	num_letters = 30;
+	}
+
+RESOURCE ARRAY r_mobbler_binary_texts
+	{
+	items =
+		{
+		AVKON_ENUMERATED_TEXT { value = 0; text = ""; },
+		AVKON_ENUMERATED_TEXT { value = 1; text = ""; }
+		};
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_setting_page_enum
+	{
+	type = EAknCtPopupSettingList;
+	editor_resource_id = r_mobbler_popup_setting_list_enum;
+	}
+
+RESOURCE POPUP_SETTING_LIST r_mobbler_popup_setting_list_enum
+	{
+	flags = 0;
+	}
+
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_mobbler_popup_setting_texts_enum
+	{
+	setting_texts_resource = r_mobbler_texts_enum;
+	}
+
+RESOURCE ARRAY r_mobbler_texts_enum
+	{
+	items =
+		{
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 0;
+			text = "";
+			}
+		};
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_slider_setting_page_buffer_size
+	{
+	label = "";
+	type = EAknCtSlider;
+	editor_resource_id = r_mobbler_slider_setting_editor_buffer_size;
+	}
+
+RESOURCE SLIDER r_mobbler_slider_setting_editor_buffer_size
+	{
+	layout = EAknSettingsItemSliderLayout;
+	minvalue = 1;
+	maxvalue = 15;
+	step = 1;
+	valuetype = EAknSliderValueBareFigure;
+	singular_valuelabel = STR_mobbler_second;
+	valuelabel = STR_mobbler_seconds;
+	minlabel = "1";
+	maxlabel = "15";
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_slider_setting_page_scrobble_percent
+	{
+	label = "";
+	type = EAknCtSlider;
+	editor_resource_id = r_mobbler_slider_setting_editor_scrobble_percent;
+	}
+
+RESOURCE SLIDER r_mobbler_slider_setting_editor_scrobble_percent
+	{
+	layout = EAknSettingsItemSliderLayout;
+	minvalue = 50;
+	maxvalue = 100;
+	step = 1;
+	valuetype = EAknSliderValueBareFigure;
+	valuelabel = STR_mobbler_percent;
+	minlabel = "50";
+	maxlabel = "100";
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_integer_setting_page_sleep_minutes
+	{
+	type = EAknCtIntegerEdwin;
+	editor_resource_id = r_mobbler_integer_edwin_sleep_minutes;
+	}
+
+RESOURCE AVKON_INTEGER_EDWIN r_mobbler_integer_edwin_sleep_minutes
+	{
+	min = 1;
+	max = 999; // 16 hours and 39 minutes
+	}  
+
+RESOURCE DIALOG r_mobbler_wait_dialog
+	{
+	flags = EAknWaitNoteFlags | EEikDialogFlagNotifyEsc;
+	buttons = R_AVKON_SOFTKEYS_CANCEL;
+	items =
+		{
+		DLG_LINE
+			{
+			type = EAknCtNote;
+			id = EMobblerWait;
+			control= AVKON_NOTE 
+				{ 
+				layout = EWaitLayout;
+				animation = R_QGN_GRAF_WAIT_BAR_ANIM;
+				};
+			}
+		};
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_time_setting_page
+	{
+	type = EEikCtTimeEditor;
+	editor_resource_id = r_mobbler_time_edwin;
+	}
+
+RESOURCE TIME_EDITOR r_mobbler_time_edwin
+	{
+	flags = EEikTimeWithoutSecondsField;
+	minTime = TIME
+		{
+		hour = 0;
+		minute = 0;
+		second = 0;
+		};
+	maxTime = TIME
+		{
+		hour = 23;
+		minute = 59;
+		second = 59;
+		};
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_volume_setting_page
+	{
+	type = EAknCtVolumeControl;
+	editor_resource_id = r_mobbler_volume_control;
+	}
+
+RESOURCE VOLUME r_mobbler_volume_control
+	{
+	flags = ESettingsVolumeControl;
+	value = 10;
+	}
+
+RESOURCE AVKON_SETTING_PAGE r_mobbler_setting_page_text
+	{
+	type = EEikCtEdwin;
+	editor_resource_id = r_mobbler_setting_page_text_edwin;
+	}
+
+RESOURCE EDWIN r_mobbler_setting_page_text_edwin
+	{
+	maxlength = 255;
+	default_case = EAknEditorTextCase;
+	allowed_case_modes = EAknEditorAllCaseModes;
+	numeric_keymap = EAknEditorStandardNumberModeKeymap;
+	default_input_mode = EAknEditorTextInputMode;
+	allowed_input_modes = EAknEditorTextInputMode | EAknEditorNumericInputMode | EAknEditorSecretAlphaInputMode | EAknEditorKatakanaInputMode | EAknEditorFullWidthTextInputMode | EAknEditorFullWidthNumericInputMode | EAknEditorFullWidthKatakanaInputMode | EAknEditorHiraganaKanjiInputMode | EAknEditorHalfWidthTextInputMode;
+	}
+
+RESOURCE DIALOG r_mobbler_downloading_dialog
+	{
+	flags = EAknWaitNoteFlags;
+	buttons = R_AVKON_SOFTKEYS_EMPTY;
+	items =
+		{
+		DLG_LINE
+			{
+			type = EAknCtNote;
+			id = EMobblerSettingItemListViewConnectingDialog;
+			control = AVKON_NOTE
+				{
+				layout = EWaitLayout;
+				animation = R_QGN_GRAF_WAIT_BAR_ANIM;
+				};
+			}
+		};
+	}
+
+RESOURCE DIALOG r_mobbler_yes_no_query_dialog
+	{
+	flags = EGeneralQueryFlags;
+	buttons = R_AVKON_SOFTKEYS_YES_NO;
+	items =
+		{
+		DLG_LINE
+			{
+			type = EAknCtQuery;
+			id = EMobblerQuery;
+			
+			control = AVKON_CONFIRMATION_QUERY
+				{
+				layout = EConfirmationQueryLayout;
+				animation = R_QGN_NOTE_QUERY_ANIM;
+				};
+			}
+		};
+	}
+
+RESOURCE DIALOG r_mobbler_ok_cancel_query_dialog
+	{
+	flags = EGeneralQueryFlags;
+	buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+	items =
+		{
+		DLG_LINE
+			{
+			type = EAknCtQuery;
+			id = EMobblerQuery;
+			
+			control = AVKON_CONFIRMATION_QUERY
+				{
+				layout = EConfirmationQueryLayout;
+				animation = R_QGN_NOTE_QUERY_ANIM;
+				};
+			}
+		};
+	}
+
+RESOURCE DIALOG r_mobbler_about_box
+	{
+	flags = EEikDialogFlagNoDrag | EEikDialogFlagCbaButtons | EEikDialogFlagWait;
+	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+	items =
+		{
+		DLG_LINE
+			{
+			type = EAknCtPopupHeadingPane;
+			id = EAknMessageQueryHeaderId;
+			control = AVKON_HEADING
+				{
+				headinglayout = R_AVKON_LIST_HEADING_PANE_POPUPS;
+				};
+			},
+		DLG_LINE
+			{
+			type = EAknCtMessageQuery;
+			id = EAknMessageQueryContentId;
+			control = AVKON_MESSAGE_QUERY
+				{
+				message = "";
+				};
+			}
+		};
+	}
+
+RESOURCE DIALOG r_mobbler_get_latest_language_dialog
+	{
+	flags = EGeneralQueryFlags;
+	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+	items =
+		{
+		DLG_LINE
+			{
+			type = EAknCtQuery;
+			id = EMobblerGetLatestLanguageNote;
+			
+			control = AVKON_CONFIRMATION_QUERY
+				{
+				layout = EConfirmationQueryLayout;
+				animation = R_QGN_NOTE_ERROR_ANIM;
+				};
+			}
+		};
+	}
+
+// End of File

@@ -1,0 +1,63 @@
+/*
+bld.inf
+
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+Copyright (C) 2008  Michael Coffey
+
+http://code.google.com/p/mobbler
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+
+
+PRJ_MMPFILES
+// application icon makefile
+gnumakefile icons.mk
+PRJ_MMPFILES
+// projects
+mobbler.mmp
+
+//..\musicappobservermpx\group\musicappobservermpx.mmp
+..\touchfeedback\group\mobblertouchfeedback.mmp
+..\contentlisting\group\mobblercontentlisting.mmp
+//..\gestureobserver\group\gestureobserver3x.mmp
+..\destinations\group\mobblerdestinations.mmp
+
+// In 5th edition, the sensor framework now requires SymbianSigned (ReadDeviceData)
+// ..\gestureobserver\group\gestureobserver5x.mmp
+
+PRJ_EXPORTS
+// music player ecom plugin interface
+..\inc\mobblermusicapp.h	mobbler\mobblermusicapp.h
+..\inc\mobblertouchfeedbackinterface.h	mobbler\mobblertouchfeedbackinterface.h
+..\inc\mobblercontentlistinginterface.h	mobbler\mobblercontentlistinginterface.h
+..\inc\mobblergesturesinterface.h	mobbler\mobblergesturesinterface.h
+..\inc\mobblerdestinationsinterface.h	mobbler\mobblerdestinationsinterface.h
+
+// mobbler_gfx
+..\gfx\icon_track.png						z:\resource\apps\mobbler\icon_track.png
+..\gfx\scrobble.png							z:\resource\apps\mobbler\scrobble.png
+..\gfx\lastfm_badges\lastfm_red_small.png					z:\resource\apps\mobbler\lastfm.png
+..\gfx\cover_small.gif										z:\resource\apps\mobbler\default_album.gif
+..\gfx\default_artist_small.png								z:\resource\apps\mobbler\default_artist.png
+..\gfx\office-calendar.png									z:\resource\apps\mobbler\default_event.png
+..\gfx\default_album_small.png								z:\resource\apps\mobbler\default_playlist.png
+..\gfx\default_tag_small.png								z:\resource\apps\mobbler\default_tag.png
+..\gfx\audio-x-generic.png									z:\resource\apps\mobbler\default_track.png
+..\gfx\default_user_small.png								z:\resource\apps\mobbler\default_user.png
+..\gfx\preferences-desktop-multimedia.png					z:\resource\apps\mobbler\icon_alarm.png
+
+// End of file
