@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblerbitmapcollection.h"
 #include "mobblercontacts.h"
+#include "mobblerliterals.h"
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
@@ -86,7 +87,7 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 	
 	delete iFriendFetchObserverHelperTrackShare;
 	iFriendFetchObserverHelperTrackShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("getfriends"), username->String8(), *iFriendFetchObserverHelperTrackShare);
+	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, username->String8(), *iFriendFetchObserverHelperTrackShare);
 	
 	CleanupStack::PopAndDestroy(username);
 	}
@@ -101,7 +102,7 @@ void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 	
 	delete iFriendFetchObserverHelperArtistShare;
 	iFriendFetchObserverHelperArtistShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("getfriends"), username->String8(), *iFriendFetchObserverHelperArtistShare);
+	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, username->String8(), *iFriendFetchObserverHelperArtistShare);
 	
 	CleanupStack::PopAndDestroy(username);
 	}
@@ -116,7 +117,7 @@ void CMobblerWebServicesHelper::PlaylistAddL(CMobblerTrack& aTrack)
 	
 	delete iPlaylistFetchObserverHelper;
 	iPlaylistFetchObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("getplaylists"), username->String8(), *iPlaylistFetchObserverHelper);
+	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetPlaylists, username->String8(), *iPlaylistFetchObserverHelper);
 	
 	CleanupStack::PopAndDestroy(username);
 	}
@@ -130,7 +131,7 @@ void CMobblerWebServicesHelper::EventShareL(const TDesC8& aEventId)
 	
 	delete iFriendFetchObserverHelperEventShare;
 	iFriendFetchObserverHelperEventShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("getfriends"), username->String8(), *iFriendFetchObserverHelperEventShare);
+	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, username->String8(), *iFriendFetchObserverHelperEventShare);
 	
 	CleanupStack::PopAndDestroy(username);
 	}
@@ -300,7 +301,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 		if (aObserver == iShareObserverHelper ||
 				aObserver == iPlaylistAddObserverHelper)
 			{
-			if (domFragment->AsElement().AttrValue(_L8("status"))->Compare(_L8("ok")) == 0)
+			if (domFragment->AsElement().AttrValue(KElementStatus)->Compare(KOk) == 0)
 				{
 				// Everything worked
 				CAknConfirmationNote* note(new (ELeave) CAknConfirmationNote(EFalse));
@@ -310,7 +311,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				{
 				// There was an error so display it
 				CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
-				CMobblerString* string(CMobblerString::NewL(domFragment->AsElement().Element(_L8("error"))->Content()));
+				CMobblerString* string(CMobblerString::NewL(domFragment->AsElement().Element(KElementError)->Content()));
 				CleanupStack::PushL(string);
 				note->ExecuteLD(string->String());
 				CleanupStack::Pop(string);
@@ -340,12 +341,12 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			
 			//items->AppendL(_L("From contacts...")); // TODO: REMOVE HARDCODED, LOCALISE IT
 			
-			RPointerArray<CSenElement>& users(domFragment->AsElement().Element(_L8("friends"))->ElementsL());
+			RPointerArray<CSenElement>& users(domFragment->AsElement().Element(KElementFriends)->ElementsL());
 			
 			const TInt KUserCount(users.Count());
 			for (TInt i(0); i < KUserCount; ++i)
 				{
-				CMobblerString* user(CMobblerString::NewL(users[i]->Element(_L8("name"))->Content()));
+				CMobblerString* user(CMobblerString::NewL(users[i]->Element(KElementName)->Content()));
 				CleanupStack::PushL(user);
 				items->AppendL(user->String());
 				CleanupStack::PopAndDestroy(user);
@@ -363,7 +364,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				CMobblerString* recipient(CMobblerString::NewL((*items)[list->CurrentItemIndex()]));
 				CleanupStack::PushL(recipient);
 				
-				TBuf<EMobblerMaxQueryDialogLength> message;
+				TBuf<KMobblerMaxQueryDialogLength> message;
 				
 				CAknTextQueryDialog* shoutDialog(new(ELeave) CAknTextQueryDialog(message));
 				shoutDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
@@ -423,12 +424,12 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
 			CleanupStack::PushL(items);
 			
-			RPointerArray<CSenElement>& playlists(domFragment->AsElement().Element(_L8("playlists"))->ElementsL());
+			RPointerArray<CSenElement>& playlists(domFragment->AsElement().Element(KElementPlaylists)->ElementsL());
 			
 			const TInt KPlaylistCount(playlists.Count());
 			for (TInt i(0); i < KPlaylistCount; ++i)
 				{
-				CMobblerString* playlist(CMobblerString::NewL(playlists[i]->Element(_L8("title"))->Content()));
+				CMobblerString* playlist(CMobblerString::NewL(playlists[i]->Element(KElementTitle)->Content()));
 				CleanupStack::PushL(playlist);
 				items->AppendL(playlist->String());
 				CleanupStack::PopAndDestroy(playlist);
@@ -447,7 +448,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 					{
 					delete iPlaylistAddObserverHelper;
 					iPlaylistAddObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-					iAppUi.LastFmConnection().PlaylistAddTrackL(playlists[list->CurrentItemIndex()]->Element(_L8("id"))->Content(), iTrack->Artist().String8(), iTrack->Title().String8(), *iPlaylistAddObserverHelper);
+					iAppUi.LastFmConnection().PlaylistAddTrackL(playlists[list->CurrentItemIndex()]->Element(KElementId)->Content(), iTrack->Artist().String8(), iTrack->Title().String8(), *iPlaylistAddObserverHelper);
 					}
 				}
 			

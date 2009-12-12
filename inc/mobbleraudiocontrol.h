@@ -74,7 +74,7 @@ private: // from CActive
 	void DoCancel();
 	
 private: // from 
-	void DataPartL(const TDesC8& aData, TInt aTotalSize);
+	void DataPart(const TDesC8& aData, TInt aTotalSize);
 	void DataCompleteL(CMobblerLastFmConnection::TTransactionError aTransactionError, TInt aHTTPStatusCode, const TDesC8& aStatusText);
 	
 private:

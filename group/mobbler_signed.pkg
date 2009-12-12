@@ -25,7 +25,7 @@
 &EN, FR, GE, SP, IT, SW, DA, NO, FI, AM, TU, RU, HU, DU, CS, SK, PL, ZH, AF, AR, BE, BG, CA, EL, HE, IN, LV, LT, BP, RO, SR
 
 ; Header
-#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 1, 7, 6194
+#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 1, 8, 237
 
 ; Localised vendor names
 %{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}
@@ -45,6 +45,11 @@
 ; The Mobbler music app observer
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\musicappobserver_0x2002655E.dll"-"!:\sys\bin\musicappobserver_0x2002655E.dll"
 "$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobserver_0x2002655E.rsc"-"!:\resource\plugins\musicappobserver_0x2002655E.rsc"
+
+; The Mobbler 3.0 music app observer
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblermusicapp30_0x20026561.dll"-"!:\sys\bin\mobblermusicapp30_0x20026561.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblermusicapp30_0x20026561.rsc"-"!:\resource\plugins\mobblermusicapp30_0x20026561.rsc"
+
 
 ; The Mobbler mpx music app observer
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\musicappobservermpx_0x20027114.dll"-"!:\sys\bin\musicappobservermpx_0x20027114.dll"
@@ -79,6 +84,7 @@
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_track.png"-		"!:\resource\apps\mobbler_0x2002655A\default_track.png"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_user.png"-		"!:\resource\apps\mobbler_0x2002655A\default_user.png"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler.mif"-					"!:\resource\apps\mobbler_0x2002655A.mif"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\Mobbler.png"-				"C:\private\2002655A\Mobbler.png"
 
 ; Resource file
 {

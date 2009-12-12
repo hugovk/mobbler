@@ -21,14 +21,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <bautils.h>
-
 #include "mobblerappui.h"
-#include "mobblerlogging.h"
 #include "mobblerstring.h"
 #include "mobblertrackbase.h"
-#include "mobblerutility.h"
-
 
 CMobblerTrackBase* CMobblerTrackBase::NewL(const CMobblerTrackBase& aTrack)
 	{
@@ -53,7 +48,9 @@ CMobblerTrackBase::CMobblerTrackBase()
 	}
 
 CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength)
-	:iTrackNumber(KErrUnknown), iStartTimeUTC(Time::NullTTime()), iTrackLength(aTrackLength), iTotalPlayed(0), iInitialPlaybackPosition(KErrUnknown)
+	:iTrackNumber(KErrUnknown), iStartTimeUTC(Time::NullTTime()), 
+	iTrackLength(aTrackLength), iTotalPlayed(0), 
+	iInitialPlaybackPosition(KErrUnknown)
 	{
 	}
 

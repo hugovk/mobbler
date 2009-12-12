@@ -53,6 +53,8 @@ CMobblerListItem::~CMobblerListItem()
 	delete iImageLocation;
 	iImage->Close();
 	delete iId;
+	delete iLatitude;
+	delete iLongitude;
 	}
 
 void CMobblerListItem::SetIdL(const TDesC8& aId)
@@ -134,6 +136,38 @@ void CMobblerListItem::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 void CMobblerListItem::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
 	iObserver.HandleLoadedL();
+	}
+
+void CMobblerListItem::SetLatitudeL(const TDesC8& aLatitude)
+	{
+	delete iLatitude;
+	iLatitude = aLatitude.AllocL();
+	}
+
+const TDesC8& CMobblerListItem::Latitude() const
+	{
+	if (iLatitude)
+		{
+		return *iLatitude;
+		}
+	
+	return KNullDesC8;
+	}
+
+void CMobblerListItem::SetLongitudeL(const TDesC8& aLongitude)
+	{
+	delete iLongitude;
+	iLongitude = aLongitude.AllocL();
+	}
+
+const TDesC8& CMobblerListItem::Longitude() const
+	{
+	if (iLongitude)
+		{
+		return *iLongitude;
+		}
+	
+	return KNullDesC8;
 	}
 
 // End of file

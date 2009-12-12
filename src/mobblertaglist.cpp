@@ -26,11 +26,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
+#include "mobblerliterals.h"
 #include "mobblerparser.h"
 #include "mobblerstring.h"
 #include "mobblertaglist.h"
 
 _LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_tag.png");
+_LIT8(KGetTopTags, "gettoptags");
 
 CMobblerTagList::CMobblerTagList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -44,13 +46,13 @@ void CMobblerTagList::ConstructL()
 	switch (iType)
 		{
 		case EMobblerCommandUserTopTags:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("gettoptags"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetTopTags, iText1->String8(), *this);
 			break;
 		case EMobblerCommandArtistTopTags:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("artist"), _L8("gettoptags"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KArtist, KGetTopTags, iText1->String8(), *this);
 			break;
 		case EMobblerCommandSearchTag:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("tag"), _L8("search"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KTag, KSearch, iText1->String8(), *this);
 			break;
 		default:
 			break;

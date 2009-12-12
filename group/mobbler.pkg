@@ -79,6 +79,7 @@
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_track.png"-		"!:\resource\apps\mobbler\default_track.png"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_user.png"-		"!:\resource\apps\mobbler\default_user.png"
 "$(EPOCROOT)epoc32\data\z\resource\apps\ssmobbler.mif"-				"!:\resource\apps\mobbler.mif"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\Mobbler.png"-				"C:\private\A0007648\Mobbler.png"
 
 ; Resource file
 {

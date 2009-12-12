@@ -27,6 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblercontacts.h"
 
+_LIT(KMobbler, "Mobbler");
+
 CMobblerContacts* CMobblerContacts::NewLC()
 	{
 	CMobblerContacts* self(new(ELeave) CMobblerContacts());
@@ -62,7 +64,7 @@ void CMobblerContacts::ConstructL()
 	sortOrder.AppendL(KUidContactFieldFamilyName);
 	sortOrder.AppendL(KUidContactFieldCompanyName);
 	
-	iRemoteView = CContactNamedRemoteView::NewL(*this, _L("Mobbler"), *iDb, sortOrder, EContactsOnly);
+	iRemoteView = CContactNamedRemoteView::NewL(*this, KMobbler, *iDb, sortOrder, EContactsOnly);
 	iFilteredView = CContactFilteredView::NewL(*this, *iDb, *iRemoteView, CContactDatabase::EMailable);
 	
 	CleanupStack::PopAndDestroy(&sortOrder);
@@ -169,7 +171,7 @@ void CMobblerContacts::BuildListL()
 		}
 	}
 
-void CMobblerContacts::HandleContactViewEvent(const CContactViewBase& aView, const TContactViewEvent& aEvent)
+void CMobblerContacts::HandleContactViewEventL(const CContactViewBase& aView, const TContactViewEvent& aEvent)
 	{
 	if (&aView == iRemoteView && aEvent.iEventType == TContactViewEvent::EReady)
 		{

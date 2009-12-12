@@ -225,7 +225,7 @@ TBool CMobblerAudioThread::PreBufferFilled() const
 	}
 
 void CMobblerAudioThread::FillBufferL(TBool aDataAdded)
-	{	
+	{
 	if (iShared.iPlaying)
 		{
 		if (aDataAdded)

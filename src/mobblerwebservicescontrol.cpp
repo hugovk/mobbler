@@ -63,7 +63,10 @@ void CMobblerWebServicesControl::ConstructL(const TRect& aRect, TUid aCustomMess
 			// These can only be called if there is a current track playing
 			if (iAppUi.CurrentTrack())
 				{
-				control = CMobblerListControl::CreateListL(iAppUi, *this, aCustomMessageId.iUid, iAppUi.CurrentTrack()->Artist().String8(), iAppUi.CurrentTrack()->Title().String8());
+				control = CMobblerListControl::CreateListL(iAppUi, *this, 
+						aCustomMessageId.iUid, 
+						iAppUi.CurrentTrack()->Artist().String8(), 
+						iAppUi.CurrentTrack()->Title().String8());
 				}
 			break;
 		default:
@@ -135,7 +138,7 @@ void CMobblerWebServicesControl::HandleListControlStateChangedL()
 
 void CMobblerWebServicesControl::ChangePaneTextL()
 	{
-	TBuf<255> text;
+	TBuf<KMaxMobblerTextSize> text;
 	
 	text.AppendFill('>', Max(0, iControls.Count() - 1));
 	

@@ -29,11 +29,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
+#include "mobblerliterals.h"
 #include "mobblerparser.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
 #include "mobblertracklist.h"
 #include "mobblerwebserviceshelper.h"
+
+_LIT8(KGetTopTracks, "gettoptracks");
+_LIT8(KTrack, "track");
 
 CMobblerTrackList::CMobblerTrackList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -47,10 +51,10 @@ void CMobblerTrackList::ConstructL()
 	switch (iType)
 		{
 		case EMobblerCommandArtistTopTracks:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("artist"), _L8("gettoptracks"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KArtist, KGetTopTracks, iText1->String8(), *this);
 			break;
 		case EMobblerCommandUserTopTracks:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("gettoptracks"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetTopTracks, iText1->String8(), *this);
 			break;
 		case EMobblerCommandRecentTracks:
 			iAppUi.LastFmConnection().RecentTracksL(iText1->String8(), *this);
@@ -76,7 +80,7 @@ void CMobblerTrackList::ConstructL()
 				}
 			break;
 		case EMobblerCommandSearchTrack:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("track"), _L8("search"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KTrack, KSearch, iText1->String8(), *this);
 			break;
 		default:
 			break;
@@ -169,7 +173,7 @@ void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 			// Parse the XML into the DOM fragment
 			xmlReader->ParseL(aData);
 			
-			iAppUi.LastFmConnection().PlaylistFetchAlbumL(domFragment->AsElement().Element(_L8("album"))->Element(_L8("id"))->Content(), *this);
+			iAppUi.LastFmConnection().PlaylistFetchAlbumL(domFragment->AsElement().Element(KElementAlbum)->Element(KElementId)->Content(), *this);
 			
 			CleanupStack::PopAndDestroy(2);
 			}

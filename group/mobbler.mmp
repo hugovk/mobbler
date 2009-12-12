@@ -178,8 +178,8 @@ LIBRARY		browserlauncher.lib
 #endif
 LIBRARY		centralrepository.lib
 LIBRARY		charconv.lib
-LIBRARY		cntmodel.lib
-LIBRARY		cntview.lib
+//LIBRARY		cntmodel.lib
+//LIBRARY		cntview.lib
 LIBRARY		commdb.lib
 LIBRARY		commonengine.lib
 LIBRARY		commonui.lib	// CDocumentHandler

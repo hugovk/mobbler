@@ -35,11 +35,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerparser.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
+#include "mobblerliterals.h"
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
 
 _LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_user.png");
+_LIT8(KEvent, "event");
+_LIT8(KGetShouts, "getshouts");
 
 CMobblerShoutbox::CMobblerShoutbox(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -53,13 +56,13 @@ void CMobblerShoutbox::ConstructL()
 	switch (iType)
 		{
 		case EMobblerCommandUserShoutbox:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("getshouts"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetShouts, iText1->String8(), *this);
 			break;
 		case EMobblerCommandEventShoutbox:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("event"), _L8("getshouts"), iText2->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KEvent, KGetShouts, iText2->String8(), *this);
 			break;
 		case EMobblerCommandArtistShoutbox:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("artist"), _L8("getshouts"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KArtist, KGetShouts, iText1->String8(), *this);
 			break;
 		default:
 			break;
@@ -114,7 +117,7 @@ CMobblerListControl* CMobblerShoutbox::HandleListCommandL(TInt aCommand)
 	CMobblerListControl* list(NULL);
 	
 	CAknTextQueryDialog* shoutDialog(NULL);
-	TBuf<EMobblerMaxQueryDialogLength> shoutMessage;
+	TBuf<KMobblerMaxQueryDialogLength> shoutMessage;
 	
 	HBufC* dialogPromptText(NULL);
 	
@@ -156,23 +159,23 @@ CMobblerListControl* CMobblerShoutbox::HandleListCommandL(TInt aCommand)
 					case EMobblerCommandUserShoutbox:
 						if (aCommand == EMobblerCommandShoutUser)
 							{
-							iAppUi.LastFmConnection().ShoutL(_L8("user"), iList[iListBox->CurrentItemIndex()]->Title()->String8(), shout->String8());
+							iAppUi.LastFmConnection().ShoutL(KUser, iList[iListBox->CurrentItemIndex()]->Title()->String8(), shout->String8());
 							}
 						else if (iText1->String().Length() == 0)
 							{
 							CMobblerString* name(CMobblerString::NewL(iAppUi.SettingView().Username()));
-							iAppUi.LastFmConnection().ShoutL(_L8("user"), name->String8(), shout->String8());
+							iAppUi.LastFmConnection().ShoutL(KUser, name->String8(), shout->String8());
 							}
 						else
 							{
-							iAppUi.LastFmConnection().ShoutL(_L8("user"), iText1->String8(), shout->String8());
+							iAppUi.LastFmConnection().ShoutL(KUser, iText1->String8(), shout->String8());
 							}
 						break;
 					case EMobblerCommandEventShoutbox:
-						iAppUi.LastFmConnection().ShoutL(_L8("event"), iText2->String8(), shout->String8());
+						iAppUi.LastFmConnection().ShoutL(KEvent, iText2->String8(), shout->String8());
 						break;
 					case EMobblerCommandArtistShoutbox:
-						iAppUi.LastFmConnection().ShoutL(_L8("artist"), iList[iListBox->CurrentItemIndex()]->Title()->String8(), shout->String8());
+						iAppUi.LastFmConnection().ShoutL(KArtist, iList[iListBox->CurrentItemIndex()]->Title()->String8(), shout->String8());
 						break;
 					default:
 						break;

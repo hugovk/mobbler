@@ -79,7 +79,7 @@ public:
 	TTransactionState TransactionState() const;
 
 	void SkipTrackL();
-	void Stop();
+	void StopL();
 	
 	void VolumeUp();
 	void VolumeDown();
@@ -112,7 +112,7 @@ private:
 	
 	void SubmitCurrentTrackL();
 	
-	void DoStop(TBool aFullStop);
+	void DoStopL(TBool aFullStop);
 	
 	void DoChangeStateL(TState aState);
 	void DoChangeTransactionStateL(TTransactionState aState);

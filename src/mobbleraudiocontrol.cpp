@@ -35,7 +35,11 @@ const TInt KMobblerAudioThreadMinHeapSize(0x100000); // 1 MB
 const TInt KMobblerAudioThreadMaxHeapSize(0x700000); // 7 MB
 
 
-CMobblerAudioControl* CMobblerAudioControl::NewL(MMobblerAudioControlObserver& aObserver, CMobblerTrack& aTrack, TTimeIntervalSeconds aPreBufferSize, TInt aVolume, TInt aEqualizerIndex, TInt aBitRate)
+CMobblerAudioControl* CMobblerAudioControl::NewL(MMobblerAudioControlObserver& aObserver, 
+												 CMobblerTrack& aTrack, 
+												 TTimeIntervalSeconds aPreBufferSize, 
+												 TInt aVolume, TInt aEqualizerIndex, 
+												 TInt aBitRate)
 	{
 	CMobblerAudioControl* self(new(ELeave) CMobblerAudioControl(aObserver));
 	CleanupStack::PushL(self);
@@ -76,7 +80,9 @@ void CMobblerAudioControl::ConstructL(CMobblerTrack& aTrack, TTimeIntervalSecond
 	iShared.iEqualizerIndex = aEqualizerIndex;
 	
 	// Create the audio thread and wait for it to finish loading
-	User::LeaveIfError(iAudioThread.Create(KNullDesC, ThreadFunction, KDefaultStackSize, KMobblerAudioThreadMinHeapSize, KMobblerAudioThreadMaxHeapSize, &iShared));
+	User::LeaveIfError(iAudioThread.Create(KNullDesC, ThreadFunction, KDefaultStackSize, 
+										   KMobblerAudioThreadMinHeapSize, 
+										   KMobblerAudioThreadMaxHeapSize, &iShared));
 	iAudioThread.SetPriority(EPriorityRealTime);
 	TRequestStatus status;
 	iAudioThread.Rendezvous(status);
@@ -131,7 +137,7 @@ TInt CMobblerAudioControl::HandleAudioPositionChangeL(TAny* aSelf)
 	return KErrNone;
 	}
 
-void CMobblerAudioControl::DataPartL(const TDesC8& aData, TInt aTotalDataSize)
+void CMobblerAudioControl::DataPart(const TDesC8& aData, TInt aTotalDataSize)
 	{
 	iShared.iTotalDataSize = aTotalDataSize;
 	iShared.iAudioData.Set(aData);

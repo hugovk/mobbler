@@ -52,8 +52,8 @@ private:
     MCLFContentListingEngine* iClfEngine;
     MCLFItemListModel* iClfModel;
 	TBool iClfModelReady;
-	TBuf<255> iArtist;
-	TBuf<255> iTitle;
+	HBufC* iArtist;
+	HBufC* iTitle;
 
 	MMobblerContentListingObserver* iObserver;
 	};

@@ -1,7 +1,7 @@
 /*
 mobblerstatusview.h
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
@@ -25,14 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define __MOBBLERSTATUSVIEW_H__
 
 #include <aknview.h>
-#include <aknwaitdialog.h>
-#include <aknprogressdialog.h>
-
-#include "mobblersettingitemlistsettings.h"
-#include "mobblerbitmap.h"
-
-class CMobblerStatusControl;
-class CMobblerTrack;
 
 class CMobblerStatusView : public CAknView, public MMobblerBitmapObserver
 	{
@@ -54,12 +46,12 @@ private:
 	
 	void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane);
 
-	void DoActivateL(const TVwsViewId& aPrevViewId, TUid aCustomMessageId, const TDesC8& aCustomMessage );
+	void DoActivateL(const TVwsViewId& aPrevViewId, TUid aCustomMessageId, const TDesC8& aCustomMessage);
 	void DoDeactivate();
 	void HandleStatusPaneSizeChange();
 	
-	TBool HandleChangeSelectedSettingItemL( TInt aCommand );
-
+	TBool HandleChangeSelectedSettingItemL(TInt aCommand);
+	
 	void SetupStatusPaneL();
 	
 	void BitmapLoadedL(const CMobblerBitmap* aMobblerBitmap);
@@ -67,10 +59,12 @@ private:
 
 	void SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aResourceId, 
 						  TInt aCommandId);
+	void SettingsWizardL();
 	
 private:
-	CAknWaitDialog* iConnectingDialog;
 	CMobblerStatusControl* iMobblerStatusControl;
 	};
 
 #endif // __MOBBLERSTATUSVIEW_H__
+
+// End of file

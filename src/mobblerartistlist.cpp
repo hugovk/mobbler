@@ -27,10 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
+#include "mobblerliterals.h"
 #include "mobblerparser.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
 #include "mobblerwebserviceshelper.h"
+
+_LIT8(KGetTopArtists, "gettopartists");
 
 CMobblerArtistList::CMobblerArtistList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -44,7 +47,7 @@ void CMobblerArtistList::ConstructL()
 	switch (iType)
 		{
 		case EMobblerCommandUserTopArtists:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("gettopartists"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetTopArtists, iText1->String8(), *this);
 			break;
 		case EMobblerCommandRecommendedArtists:
 			iAppUi.LastFmConnection().RecommendedArtistsL(*this);
@@ -53,10 +56,10 @@ void CMobblerArtistList::ConstructL()
 			iAppUi.LastFmConnection().SimilarArtistsL(iText1->String8(), *this);
 			break;
 		case EMobblerCommandTagTopArtists:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("tag"), _L8("gettopartists"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KTag, KGetTopArtists, iText1->String8(), *this);
 			break;
 		case EMobblerCommandSearchArtist:
-			iAppUi.LastFmConnection().WebServicesCallL(_L8("artist"), _L8("search"), iText1->String8(), *this);
+			iAppUi.LastFmConnection().WebServicesCallL(KArtist, KSearch, iText1->String8(), *this);
 			break;
 		default:
 			break;

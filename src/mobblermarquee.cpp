@@ -50,13 +50,16 @@ void CMobblerMarquee::ConstructL()
 CMobblerMarquee::~CMobblerMarquee()
 	{
 	delete iTimer;
+	delete iText;
 	}
 
 void CMobblerMarquee::Start(const TDesC& aText, TInt aInitialOffset, TInt aTextWidth, TInt aDisplayWidth)
 	{
-	if (aText.Compare(iText) != 0)
+	if (!iText || iText && iText->Compare(aText) != 0)
 		{
-		iText = aText;
+		delete iText;
+		iText = aText.AllocL();
+		
 		iTextWidth = aTextWidth;
 		iDisplayWidth = aDisplayWidth;
 		iInitialOffset = aInitialOffset;
@@ -108,7 +111,8 @@ TInt CMobblerMarquee::GetPosition2() const
 
 void CMobblerMarquee::Reset()
 	{
-	iText = KNullDesC;
+	delete iText;
+	iText = NULL;
 	}
 
 TInt CMobblerMarquee::CallBack(TAny* aRef)

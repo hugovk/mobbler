@@ -29,7 +29,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerdataobserver.h"
 #include "mobblerresourcereader.h"
 
-CMobblerFlatDataObserverHelper* CMobblerFlatDataObserverHelper::NewL(CMobblerLastFmConnection& aConnection, MMobblerFlatDataObserverHelper& aObserver, TBool aShowWaitDialog)
+CMobblerFlatDataObserverHelper* CMobblerFlatDataObserverHelper::NewL(
+									CMobblerLastFmConnection& aConnection,
+									MMobblerFlatDataObserverHelper& aObserver,
+									TBool aShowWaitDialog)
 	{
 	CMobblerFlatDataObserverHelper* self(new(ELeave) CMobblerFlatDataObserverHelper(aConnection, aObserver));
 	CleanupStack::PushL(self);

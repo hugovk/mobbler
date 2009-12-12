@@ -26,11 +26,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerutility.h"
 #include "mobblerwebservicesquery.h"
 
-_LIT8(KMobblerAPIKey, "31e4e200b2c0b8aa90d9829534ad40a6");
+_LIT8(KMobblerApiKey, "31e4e200b2c0b8aa90d9829534ad40a6");
 _LIT8(KMobblerSecretKey, "49116c5cf8d2882380cd98f19174a70a");
 
-_LIT8(KMobblerParameterAPIKey, "api_key");
+_LIT8(KMobblerParameterApiKey, "api_key");
+_LIT8(KMobblerParameterApiSig, "api_sig");
 _LIT8(KMobblerParameterMethod, "method");
+
+_LIT8(KAmpersand, "&");
+_LIT8(KEquals,    "=");
 
 CMobblerWebServicesQuery* CMobblerWebServicesQuery::NewLC(const TDesC8& aMethod)
 	{
@@ -48,13 +52,13 @@ CMobblerWebServicesQuery::CMobblerWebServicesQuery()
 void CMobblerWebServicesQuery::ConstructL(const TDesC8& aMethod)
 	{
 	AddFieldL(KMobblerParameterMethod, aMethod);
-	AddFieldL(KMobblerParameterAPIKey, KMobblerAPIKey);
+	AddFieldL(KMobblerParameterApiKey, KMobblerApiKey);
 	}
 
 CMobblerWebServicesQuery::~CMobblerWebServicesQuery()
 	{
 	const TInt KFieldCount(iFields.Count());
-	for (TInt i(0) ; i < KFieldCount ; ++i)
+	for (TInt i(0); i < KFieldCount; ++i)
 		{
 		delete iFields[i].iParameter;
 		delete iFields[i].iValue;
@@ -84,11 +88,11 @@ HBufC8* CMobblerWebServicesQuery::GetQueryAuthLC() const
 		// add the fields for the normal query
 		if (i > 0)
 			{
-			queryText->Des().Append(_L8("&"));
+			queryText->Des().Append(KAmpersand);
 			}
 		
 		queryText->Des().Append(*iFields[i].iParameter);
-		queryText->Des().Append(_L8("="));
+		queryText->Des().Append(KEquals);
 		queryText->Des().Append(*iFields[i].iValue);
 		
 		// append to the api sig
@@ -100,9 +104,9 @@ HBufC8* CMobblerWebServicesQuery::GetQueryAuthLC() const
 	apiSig->Des().Append(KMobblerSecretKey);
 	HBufC8* apiSigHash(MobblerUtility::MD5LC(*apiSig));
 	
-	queryText->Des().Append(_L8("&"));
-	queryText->Des().Append(_L8("api_sig"));
-	queryText->Des().Append(_L8("="));
+	queryText->Des().Append(KAmpersand);
+	queryText->Des().Append(KMobblerParameterApiSig);
+	queryText->Des().Append(KEquals);
 	queryText->Des().Append(*apiSigHash);
 	
 	CleanupStack::PopAndDestroy(2, apiSig);
@@ -119,9 +123,9 @@ HBufC8* CMobblerWebServicesQuery::GetQueryLC() const
 	for (TInt i(0); i < KFieldCount; ++i)
 		{
 		// add the fields for the normal query
-		queryText->Des().Append(_L8("&"));
+		queryText->Des().Append(KAmpersand);
 		queryText->Des().Append(*iFields[i].iParameter);
-		queryText->Des().Append(_L8("="));
+		queryText->Des().Append(KEquals);
 		queryText->Des().Append(*iFields[i].iValue);
 		}
 	
@@ -151,7 +155,7 @@ CHTTPFormEncoder* CMobblerWebServicesQuery::GetFormLC() const
 	apiSig->Des().Append(KMobblerSecretKey);
 	HBufC8* apiSigHash(MobblerUtility::MD5LC(*apiSig));
 	
-	form->AddFieldL(_L8("api_sig"), *apiSigHash);
+	form->AddFieldL(KMobblerParameterApiSig, *apiSigHash);
 	
 	CleanupStack::PopAndDestroy(2, apiSig);
 	

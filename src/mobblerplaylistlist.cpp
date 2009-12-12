@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
+#include "mobblerliterals.h"
 #include "mobblerparser.h"
 #include "mobblerplaylistlist.h"
 #include "mobblerresourcereader.h"
@@ -40,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblertrack.h"
 
 _LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_playlist.png");
+_LIT8(KElementPlaylist, "playlist");
 
 CMobblerPlaylistList::CMobblerPlaylistList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -50,7 +52,7 @@ void CMobblerPlaylistList::ConstructL()
 	{
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultPlaylistImage);
 	
-	iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("getplaylists"), iText1->String8(), *this);
+	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetPlaylists, iText1->String8(), *this);
 	}
 
 CMobblerPlaylistList::~CMobblerPlaylistList()
@@ -73,7 +75,10 @@ CMobblerListControl* CMobblerPlaylistList::HandleListCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandOpen:
 			{
-			list = CMobblerListControl::CreateListL(iAppUi, iWebServicesControl, EMobblerCommandPlaylistFetchUser, iList[iListBox->CurrentItemIndex()]->Title()->String8(), iList[iListBox->CurrentItemIndex()]->Id());
+			list = CMobblerListControl::CreateListL(iAppUi, iWebServicesControl, 
+					EMobblerCommandPlaylistFetchUser, 
+					iList[iListBox->CurrentItemIndex()]->Title()->String8(), 
+					iList[iListBox->CurrentItemIndex()]->Id());
 			}
 			break;
 		case EMobblerCommandPlaylistAddTrack:
@@ -90,8 +95,8 @@ CMobblerListControl* CMobblerPlaylistList::HandleListCommandL(TInt aCommand)
 		case EMobblerCommandPlaylistCreate:
 			{
 			// ask for title and description
-			TBuf<EMobblerMaxQueryDialogLength> title;
-			TBuf<EMobblerMaxQueryDialogLength> description;
+			TBuf<KMobblerMaxQueryDialogLength> title;
+			TBuf<KMobblerMaxQueryDialogLength> description;
 			
 			CAknTextQueryDialog* titleDialog(new(ELeave) CAknTextQueryDialog(title));
 			titleDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
@@ -140,14 +145,14 @@ void CMobblerPlaylistList::DataL(CMobblerFlatDataObserverHelper* aObserver, cons
 		// Parse the XML into the DOM fragment
 		xmlReader->ParseL(aData);
 		
-		CSenElement* playlist(domFragment->AsElement().Element(_L8("playlists"))->Element(_L8("playlist")));
+		CSenElement* playlist(domFragment->AsElement().Element(KElementPlaylists)->Element(KElementPlaylist));
 		
 		CMobblerListItem* item(CMobblerListItem::NewL(*this,
-															playlist->Element(_L8("title"))->Content(),
-															playlist->Element(_L8("description"))->Content(),
-															playlist->Element(_L8("image"))->Content()));
+															playlist->Element(KElementTitle)->Content(),
+															playlist->Element(KElementDescription)->Content(),
+															playlist->Element(KElementImage)->Content()));
 		
-		item->SetIdL(playlist->Element(_L8("id"))->Content());
+		item->SetIdL(playlist->Element(KElementId)->Content());
 		
 		iList.InsertL(item, 0);
 		

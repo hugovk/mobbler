@@ -52,7 +52,7 @@ public:
 	
 	CMobblerTrack* CurrentTrack();
 	void NowPlayingL();
-	const TDesC& MusicAppNameL() const;
+	HBufC* MusicAppNameL() const;
 	TBool IsPlaying() const;
 	
 private:
@@ -68,9 +68,9 @@ private:
 	void ScheduleNowPlayingL();
 	
 private: // from MMobblerMusicAppObserver
-	void PlayerStateChangedL(TMPlayerRemoteControlState aState);
+	void PlayerStateChangedL(TMobblerMusicAppObserverState aState);
 	void TrackInfoChangedL(const TDesC& aTitle, const TDesC& aArtist);
-	void CommandReceivedL(TMPlayerRemoteControlCommands aCommand);
+	void CommandReceivedL(TMobblerMusicAppObserverCommand aCommand);
 	void PlayerPositionL(TTimeIntervalSeconds aPlayerPosition);
 
 private: // from MMobblerContentListingObserver
@@ -88,13 +88,11 @@ private:
 	CMobblerNowPlayingCallback* iNowPlayingCallback;
 	
 	CMobblerTrack* iCurrentTrack;
-	
-	mutable TBuf<255> iMusicAppName;
 
 	CMobblerContentListingInterface* iMobblerContentListing;
 	TUid iDtorIdKey;
 
-	TMPlayerRemoteControlState iMusicPlayerState;
+	TMobblerMusicAppObserverState iMusicPlayerState;
 	
 	RPointerArray<MMobblerMusicAppListenerObserver> iObservers;
 	};

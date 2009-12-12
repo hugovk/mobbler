@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <senxmlutils.h>
 
 #include "mobblerappui.h"
+#include "mobblerliterals.h"
 #include "mobblerlogging.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
-#include "mobblerutility.h"
 
 const TPtrC KArtExtensionArray[] =
 	{
@@ -51,6 +51,12 @@ const TPtrC KArtFileArray[] =
 	};
 
 _LIT(KArtistImageCache, "E:\\System\\Data\\Mobbler\\cache\\");
+
+_LIT8(KElementExtraLarge, "extralarge");
+_LIT8(KElementImages, "images");
+_LIT8(KElementLarge, "large");
+_LIT8(KElementSize, "size");
+_LIT8(KElementSizes, "sizes");
 
 CMobblerTrack* CMobblerTrack::NewL(const TDesC8& aArtist,
 									const TDesC8& aTitle,
@@ -213,7 +219,7 @@ void CMobblerTrack::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
 	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->StatusDrawDeferred();
 #ifdef __SYMBIAN_SIGNED__
-	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SetAlbumArtAsWallpaperL(ETrue);
+	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SetAlbumArtAsWallpaper(ETrue);
 #endif
 	}
 
@@ -509,23 +515,23 @@ TBool CMobblerTrack::FetchImageL(const TDesC8& aData)
 
 	if (iState == EFetchingAlbumInfo)
 		{
-		User::LeaveIfError(domFragment->AsElement().Element(_L8("album"))->ElementsL(imageArray, _L8("image")));
+		User::LeaveIfError(domFragment->AsElement().Element(KElementAlbum)->ElementsL(imageArray, KElementImage));
 		}
 	else
 		{
-		CSenElement* element(domFragment->AsElement().Element(_L8("images")));
+		CSenElement* element(domFragment->AsElement().Element(KElementImages));
 
 		if (element)
 			{
-			element = element->Element(_L8("image"));
+			element = element->Element(KElementImage);
 
 			if (element)
 				{
-				element = element->Element(_L8("sizes"));
+				element = element->Element(KElementSizes);
 
 				if (element)
 					{
-					User::LeaveIfError(element->ElementsL(imageArray, _L8("size")));
+					User::LeaveIfError(element->ElementsL(imageArray, KElementSize));
 					}
 				}
 			}
@@ -535,10 +541,10 @@ TBool CMobblerTrack::FetchImageL(const TDesC8& aData)
 	for (TInt i(0); i < KImageCount; ++i)
 		{
 		if ((iState == EFetchingAlbumInfo &&
-			 imageArray[i]->AttrValue(_L8("size"))->Compare(_L8("extralarge")) == 0)
+			 imageArray[i]->AttrValue(KElementSize)->Compare(KElementExtraLarge) == 0)
 				||
 			(iState == EFetchingArtistInfo &&
-			 imageArray[i]->AttrValue(_L8("name"))->Compare(_L8("large")) == 0))
+			 imageArray[i]->AttrValue(KElementName)->Compare(KElementLarge) == 0))
 			{
 			if (imageArray[i]->Content().Length() > 0)
 				{
@@ -595,6 +601,7 @@ void CMobblerTrack::SaveAlbumArtL(const TDesC8& aData)
 		LOG(albumArtFileName);
 
 		RFile albumArtFile;
+		CleanupClosePushL(albumArtFile);
 		TInt createError(albumArtFile.Create(CCoeEnv::Static()->FsSession(), albumArtFileName, EFileWrite));
 
 		if (createError == KErrNone)
@@ -607,7 +614,7 @@ void CMobblerTrack::SaveAlbumArtL(const TDesC8& aData)
 				}
 			}
 
-		albumArtFile.Close();
+		CleanupStack::PopAndDestroy(&albumArtFile);
 		}
 
 	iAlbumArt = CMobblerBitmap::NewL(*this, aData);

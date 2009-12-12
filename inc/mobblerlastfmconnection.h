@@ -117,7 +117,7 @@ public:
 	void SetIapIdL(TUint32 aIadId);
 	TUint32 IapId() const;
 
-	void SetBitRateL(TInt aBitRate);
+	void SetBitRate(TInt aBitRate);
 
 	TLastFmMemberType MemberType() const;
 
@@ -173,6 +173,9 @@ public:
 	void PlaylistFetchUserL(const TDesC8& aPlaylistId, MMobblerFlatDataObserver& aObserver);
 	void PlaylistFetchAlbumL(const TDesC8& aAlbumId, MMobblerFlatDataObserver& aObserver);
 	void PlaylistAddTrackL(const TDesC8& aPlaylistId, const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver);
+	
+	void FoursquareL(const TDesC8& aLongitude, const TDesC8& aLatitude, MMobblerFlatDataObserver& aObserver);
+//	void FetchLyricsL(const TDesC8& aArtist, const TDesC8& aTitle, MMobblerFlatDataObserver& aObserver);
 
 	TBool ExportQueueToLogFileL();
 

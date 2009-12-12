@@ -43,9 +43,10 @@ const TInt KUpdateIntervalDays(1);
 #else
 const TInt KUpdateIntervalDays(7);
 #endif
+const TInt KMaxMobblerTextSize(255);
 
-const TInt KMobblerMinorVersion(7);
-const TInt KMobblerBuildNumber(6194);
+const TInt KMobblerMinorVersion(8);
+const TInt KMobblerBuildNumber(237);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
@@ -67,6 +68,7 @@ class CBrowserLauncher;
 #endif
 
 class CAknGlobalConfirmationQuery;
+class CDocumentHandler;
 class CMobblerBitmapCollection;
 class CMobblerBrowserView;
 class CMobblerDestinationsInterface;
@@ -150,13 +152,14 @@ public:
 	CMobblerDestinationsInterface* Destinations() const;
 
 	CMobblerSettingItemListView& SettingView() const;
-	const TDesC& MusicAppNameL() const;
+	HBufC* MusicAppNameL() const;
 
 	void RadioStartL(TInt aRadioStation,
 					 const CMobblerString* aRadioOption,
 					 TBool aSaveStations = ETrue);
 
-	void SetDetailsL(const TDesC& aUsername, const TDesC& aPassword);
+	void SetDetailsL(const TDesC& aUsername, const TDesC& aPassword, 
+					 TBool aAndSaveToSettings = EFalse);
 	void SetIapIDL(TUint32 aIapID);
 	void SetBufferSize(TTimeIntervalSeconds aBufferSize);
 	void SetAccelerometerGesturesL(TBool aAccelerometerGestures);
@@ -191,10 +194,12 @@ public:
 	TBool SleepAfterTrackStopped() { return iSleepAfterTrackStopped; }
 
 #ifdef __SYMBIAN_SIGNED__
-	TInt SetAlbumArtAsWallpaperL(TBool aAutomatically = EFalse);
+	TInt SetAlbumArtAsWallpaper(TBool aAutomatically = EFalse);
 #endif
 	void GoToLastFmL(TInt aCommand, const TDesC8& aEventId = KNullDesC8);
 	void OpenWebBrowserL(const TDesC& aUrl);
+	void GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const TDesC8& aLongitude);
+	TBool DetailsNeeded();
 
 public: // CEikAppUi
 	void HandleCommandL(TInt aCommand);
@@ -209,7 +214,7 @@ private:
 	void HandleConnectCompleteL(TInt aError);
 	void HandleLastFmErrorL(CMobblerLastFmError& aError);
 	void HandleCommsErrorL(TInt aStatusCode, const TDesC8& aStatus);
-	void HandleTrackSubmittedL(const CMobblerTrackBase& aTrack);
+	void HandleTrackSubmitted(const CMobblerTrackBase& aTrack);
 	void HandleTrackQueuedL(const CMobblerTrackBase& aTrack);
 	void HandleTrackDequeued(const CMobblerTrackBase& aTrack);
 	void HandleTrackNowPlayingL(const CMobblerTrackBase& aTrack);
@@ -227,8 +232,8 @@ private: // from MMobblerSleepTimerNotify
 	void TimerExpiredL(TAny* aTimer, TInt aError);
 
 private: // auto-repeat audio button callbacks
-	static TInt VolumeUpCallBackL(TAny *self);
-	static TInt VolumeDownCallBackL(TAny *self);
+	static TInt VolumeUpCallBack(TAny *self);
+	static TInt VolumeDownCallBack(TAny *self);
 
 private:
 	void LoadGesturesPluginL();
@@ -306,6 +311,7 @@ private:
 
 	CMobblerWebServicesHelper* iWebServicesHelper;
 	CMobblerFlatDataObserverHelper* iCheckForUpdatesObserver;
+//	CMobblerFlatDataObserverHelper* iFetchLyricsObserver;
 
 	CMobblerDestinationsInterface* iDestinations;
 	TUid iDestinationsDtorUid;
@@ -315,6 +321,8 @@ private:
 #ifdef __SYMBIAN_SIGNED__
 	TBool iWallpaperSet;
 #endif
+
+	CDocumentHandler* iDocHandler;
 	};
 
 #endif // __MOBBLERAPPUI_H__

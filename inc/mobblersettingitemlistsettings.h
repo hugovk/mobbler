@@ -153,7 +153,7 @@ protected:
 	TInt iBitRate;
 	TInt iAlarmVolume;
 	TInt iAlarmStation;
-	TBuf<255> iAlarmOption;
+	TBuf<KMaxMobblerTextSize> iAlarmOption;
 	TBool iAutomaticWallpaper;
 	};
 

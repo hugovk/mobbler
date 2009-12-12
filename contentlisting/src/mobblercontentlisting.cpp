@@ -88,6 +88,9 @@ CMobblerContentListing::~CMobblerContentListing()
 		delete iClfModel;
 		}
 	delete iClfEngine;
+	
+	delete iArtist;
+	delete iTitle;
 	}
 
 void CMobblerContentListing::SetObserver(MMobblerContentListingObserver& aObserver)
@@ -98,8 +101,11 @@ void CMobblerContentListing::SetObserver(MMobblerContentListingObserver& aObserv
 void CMobblerContentListing::FindAndSetAlbumNameL(const TDesC& aArtist, 
 												  const TDesC& aTitle)
 	{
-	iArtist = aArtist;
-	iTitle  = aTitle;
+	delete iArtist;
+	delete iTitle;
+	iArtist = aArtist.AllocL();
+	iTitle  = aTitle.AllocL();
+	
 	FindAndSetAlbumNameL();
 	}
 
@@ -109,7 +115,7 @@ void CMobblerContentListing::FindAndSetAlbumNameL()
 		{
 		iClfModel->RefreshL();
 		}
-	else if (iClfModelReady && iObserver && iArtist.Length() > 0)
+	else if (iClfModelReady && iObserver && iArtist && iTitle)
 		{
 		TBool found(EFalse);
 		
@@ -133,8 +139,8 @@ void CMobblerContentListing::FindAndSetAlbumNameL()
 			// Only if title and artist tags were found
 			if (artistError == KErrNone && titleError == KErrNone)
 				{
-				if ((artist.Compare(iArtist) == 0) &&
-					(title.Compare(iTitle) == 0))
+				if ((artist.Compare(*iArtist) == 0) &&
+					(title.Compare(*iTitle) == 0))
 					{
 					if (trackNumberError == KErrNone)
 						{
@@ -170,8 +176,10 @@ void CMobblerContentListing::FindAndSetAlbumNameL()
 			iObserver->SetAlbumL(KNullDesC);
 			}
 		
-		iArtist = KNullDesC;
-		iTitle  = KNullDesC;
+		delete iArtist;
+		delete iTitle;
+		iArtist = NULL;
+		iTitle = NULL;
 		}
 	}
 
@@ -183,7 +191,7 @@ void CMobblerContentListing::HandleOperationEventL(
 		{
 		// We can now look for the album of anything now playing
 		iClfModelReady = ETrue;
-		if (iArtist.Length() > 0)
+		if (iArtist && iTitle)
 			{
 			FindAndSetAlbumNameL();
 			}

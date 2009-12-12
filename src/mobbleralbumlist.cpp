@@ -28,8 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerparser.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
+#include "mobblerliterals.h"
 #include "mobblerstring.h"
 #include "mobblerutility.h"
+
+_LIT8(KGetTopAlbums, "gettopalbums");
 
 CMobblerAlbumList::CMobblerAlbumList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -39,21 +42,21 @@ CMobblerAlbumList::CMobblerAlbumList(CMobblerAppUi& aAppUi, CMobblerWebServicesC
 void CMobblerAlbumList::ConstructL()
 	{
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultAlbumImage);
-    
-    switch (iType)
-    	{
-    	case EMobblerCommandUserTopAlbums:
-    		iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("gettopalbums"), iText1->String8(), *this);
-    		break;
-    	case EMobblerCommandArtistTopAlbums:
-    		iAppUi.LastFmConnection().WebServicesCallL(_L8("artist"), _L8("gettopalbums"), iText1->String8(), *this);
-    		break;
-        case EMobblerCommandSearchAlbum:
-            iAppUi.LastFmConnection().WebServicesCallL(_L8("album"), _L8("search"), iText1->String8(), *this);
-            break;
-    	default:
-    		break;
-    	}
+	
+	switch (iType)
+		{
+		case EMobblerCommandUserTopAlbums:
+			iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetTopAlbums, iText1->String8(), *this);
+			break;
+		case EMobblerCommandArtistTopAlbums:
+			iAppUi.LastFmConnection().WebServicesCallL(KArtist, KGetTopAlbums, iText1->String8(), *this);
+			break;
+		case EMobblerCommandSearchAlbum:
+			iAppUi.LastFmConnection().WebServicesCallL(KAlbum, KSearch, iText1->String8(), *this);
+			break;
+		default:
+			break;
+		}
 	}
 
 CMobblerAlbumList::~CMobblerAlbumList()
@@ -65,12 +68,12 @@ CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
 	CMobblerListControl* list(NULL);
 	
 	switch (aCommand)
-		{	
+		{
 		case EMobblerCommandOpen:
 			list = CMobblerListControl::CreateListL(iAppUi, iWebServicesControl, EMobblerCommandPlaylistFetchAlbum, iList[iListBox->CurrentItemIndex()]->Title()->String8(), iList[iListBox->CurrentItemIndex()]->Id());
 			break;
 		default:
-			break;	
+			break;
 		}
 	
 	return list;
@@ -81,20 +84,20 @@ void CMobblerAlbumList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandOpen);
 	}
 
-void CMobblerAlbumList::ParseL(const TDesC8& aXML)
+void CMobblerAlbumList::ParseL(const TDesC8& aXml)
 	{
 	switch (iType)
-	    {
-	    case EMobblerCommandUserTopAlbums:
-	    case EMobblerCommandArtistTopAlbums:
-	        CMobblerParser::ParseTopAlbumsL(aXML, *this, iList);
-	        break;
-	    case EMobblerCommandSearchAlbum:
-	        CMobblerParser::ParseSearchAlbumL(aXML, *this, iList);
-	        break;
-	    default:
-	        break;
-	    }
+		{
+		case EMobblerCommandUserTopAlbums:
+		case EMobblerCommandArtistTopAlbums:
+			CMobblerParser::ParseTopAlbumsL(aXml, *this, iList);
+			break;
+		case EMobblerCommandSearchAlbum:
+			CMobblerParser::ParseSearchAlbumL(aXml, *this, iList);
+			break;
+		default:
+			break;
+		}
 	}
 
 // End of file

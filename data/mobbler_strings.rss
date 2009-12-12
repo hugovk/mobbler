@@ -326,5 +326,18 @@ RESOURCE STRING r_mobbler_set_wallpaper_manually		{ text = STR_mobbler_set_wallp
 RESOURCE STRING r_mobbler_language_patches				{ text = STR_mobbler_language_patches; }
 RESOURCE STRING r_mobbler_sleep_timer_time_minutes		{ text = STR_mobbler_sleep_timer_time_minutes; }
 RESOURCE STRING r_mobbler_close_query					{ text = STR_mobbler_close_query; }
+
+///////////////////////////////////////////////////////////////////////////////
+
+// Mobbler 0.7.x resources above,
+// Mobbler 0.8.x resources below
+
+///////////////////////////////////////////////////////////////////////////////
+
+RESOURCE STRING r_mobbler_qr_code					{ text = STR_mobbler_qr_code; }
+RESOURCE STRING r_mobbler_visit_map					{ text = STR_mobbler_visit_map; }
+RESOURCE STRING r_mobbler_foursquare				{ text = STR_mobbler_foursquare; }
+RESOURCE STRING r_mobbler_map						{ text = STR_mobbler_map; }
 RESOURCE STRING r_mobbler_view_artist_bio		{ text = STR_mobbler_view_artist_bio; }
+
 // End of file

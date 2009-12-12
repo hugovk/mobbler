@@ -26,11 +26,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <httpstringconstants.h>
 
 #include "mobblertransaction.h"
-#include "mobblerutility.h"
 #include "mobblerwebservicesquery.h"
 
 // The granurarity of the buffer that responses from last.fm are read into
 const TInt KBufferGranularity(256);
+
+_LIT8(KSk, "sk");
+_LIT8(KFormEncoding, "application/x-www-form-urlencoded");
 
 CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnection, CUri8* aURI)
 	{
@@ -50,7 +52,10 @@ CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnec
 	return self;
 	}
 
-CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnection, TBool aRequiresAuthentication, CUri8* aURI, CMobblerWebServicesQuery* aQuery)
+CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnection, 
+											   TBool aRequiresAuthentication, 
+											   CUri8* aURI, 
+											   CMobblerWebServicesQuery* aQuery)
 	{
 	CMobblerTransaction* self(new(ELeave) CMobblerTransaction(aConnection, aRequiresAuthentication));
 	CleanupStack::PushL(self);
@@ -73,21 +78,21 @@ CMobblerTransaction::CMobblerTransaction(CMobblerLastFmConnection& aConnection, 
 	{
 	}
 
-void CMobblerTransaction::ConstructL(CUri8* aURI)
+void CMobblerTransaction::ConstructL(CUri8* aUri)
 	{
-	iURI = aURI;
+	iURI = aUri;
 	}
 
-void CMobblerTransaction::ConstructL(CUri8* aURI, CHTTPFormEncoder* aForm)
+void CMobblerTransaction::ConstructL(CUri8* aUri, CHTTPFormEncoder* aForm)
 	{
 	iForm = aForm;
-	iURI = aURI;
+	iURI = aUri;
 	}
 
-void CMobblerTransaction::ConstructL(CUri8* aURI, CMobblerWebServicesQuery* aQuery)
+void CMobblerTransaction::ConstructL(CUri8* aUri, CMobblerWebServicesQuery* aQuery)
 	{
 	iQuery = aQuery;
-	iURI = aURI;
+	iURI = aUri;
 	}
 
 RHTTPTransaction& CMobblerTransaction::Transaction()
@@ -105,7 +110,7 @@ void CMobblerTransaction::SubmitL()
 		if (iQuery)
 			{
 			// we were passed a query so add the session key
-			iQuery->AddFieldL(_L8("sk"), *iConnection.iWebServicesSessionKey);
+			iQuery->AddFieldL(KSk, *iConnection.iWebServicesSessionKey);
 			
 			iForm = iQuery->GetFormLC();
 			CleanupStack::Pop(iForm);
@@ -124,7 +129,7 @@ void CMobblerTransaction::SubmitL()
 			iTransaction.Request().SetBody(*iForm);
 			
 			// get the header
-			RStringF contentType(stringPool.OpenFStringL(_L8("application/x-www-form-urlencoded")));
+			RStringF contentType(stringPool.OpenFStringL(KFormEncoding));
 			THTTPHdrVal accVal(contentType);
 			iTransaction.Request().GetHeaderCollection().SetFieldL(stringPool.StringF(HTTP::EContentType, RHTTPSession::GetTable()), accVal);
 			contentType.Close();

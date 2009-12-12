@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerutility.h"
 
-#ifndef __WINS__  //s
+#ifndef __WINS__  //s - TODO: see if this section is needed
 #include "mobblerappui.h"
 #include "mobblerstring.h"
 #endif //s

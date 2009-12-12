@@ -53,6 +53,12 @@ public:
 	
 	CMobblerBitmap* Image() const;
 	
+	void SetLatitudeL(const TDesC8& aLatitude);
+	const TDesC8& Latitude() const;
+	
+	void SetLongitudeL(const TDesC8& aLongitude);
+	const TDesC8& Longitude() const;
+	
 private:
 	void DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
 	
@@ -76,6 +82,9 @@ private:
 	CMobblerBitmap* iImage;
 	
 	TTime iLocalTime;
+	
+	HBufC8* iLatitude;
+	HBufC8* iLongitude;
 	};
 
 #endif // __MOBBLERLISTITEM_H__

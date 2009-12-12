@@ -193,7 +193,7 @@ void CMobblerRadioPlayer::HandleConnectionStateChangedL()
 				// we should stop the radio and wait to be told
 				// that the connection is back, this will come through
 				// the try again callback from the auido control
-				DoStop(ETrue);
+				DoStopL(ETrue);
 				iRestart = ETrue;
 				}
 			}
@@ -272,7 +272,7 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 	delete iStation;
 	iStation = NULL;
 	
-	TBuf<255> station;
+	TBuf<KMaxMobblerTextSize> station;
 	TPtrC text(KNullDesC);
 	
 	if (!aRadioText)
@@ -317,7 +317,7 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 	
 	// Stop the radio and also make sure that
 	// we get rid of any playlists hanging around
-	DoStop(ETrue);
+	DoStopL(ETrue);
 	
 	iPlaylist->Reset();
 	
@@ -449,11 +449,11 @@ void CMobblerRadioPlayer::SkipTrackL()
 	{
 	if 	(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SleepAfterTrackStopped())
 		{
-		DoStop(ETrue);
+		DoStopL(ETrue);
 		}
 	else
 		{
-		DoStop(EFalse);
+		DoStopL(EFalse);
 		
 		if (iPlaylist->Count() < 5)
 			{
@@ -647,12 +647,12 @@ void CMobblerRadioPlayer::RequestPlaylistL(TBool aCancelPrevious)
 		}
 	}
 
-void CMobblerRadioPlayer::Stop()
+void CMobblerRadioPlayer::StopL()
 	{
-	DoStop(ETrue);
+	DoStopL(ETrue);
 	}
 
-void CMobblerRadioPlayer::DoStop(TBool aFullStop)
+void CMobblerRadioPlayer::DoStopL(TBool aFullStop)
 	{
 	// Try to submit the last played track
 	SubmitCurrentTrackL();
@@ -757,7 +757,7 @@ void CMobblerRadioPlayer::HandleIncomingCallL(TPSTelephonyCallState aPSTelephony
 			// There was an incoming call so stop playing the radio
 			if (iState == EPlaying)
 				{
-				DoStop(ETrue);
+				DoStopL(ETrue);
 				iRestartRadioOnCallDisconnect = ETrue;
 				}
 			break;

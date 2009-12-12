@@ -39,7 +39,7 @@ public:
 	virtual void HandleTrackNowPlayingL(const CMobblerTrackBase& aTrack) = 0;
 	virtual void HandleTrackQueuedL(const CMobblerTrackBase& aTrack) = 0;
 	virtual void HandleTrackDequeued(const CMobblerTrackBase& aTrack) = 0;
-	virtual void HandleTrackSubmittedL(const CMobblerTrackBase& aTrack) = 0;
+	virtual void HandleTrackSubmitted(const CMobblerTrackBase& aTrack) = 0;
 	
 	virtual TBool GoOnlineL() = 0;
 	};

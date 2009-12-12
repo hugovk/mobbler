@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #include <akncontext.h>
+#include <aknnotewrappers.h>
 #include <akntitle.h>
 #include <audioequalizerutility.h>
 #include <barsread.h>
-#include <eikmenub.h>
 #include <mdaaudiooutputstream.h>
 
 #include "mobbler.hrh"
@@ -49,7 +49,6 @@ CMobblerStatusView* CMobblerStatusView::NewL()
 CMobblerStatusView::CMobblerStatusView()
 	{
 	}
-
 
 CMobblerStatusView::~CMobblerStatusView()
 	{
@@ -151,13 +150,13 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SHOUTBOX,					EMobblerCommandArtistShoutbox);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SHOUTBOX,					EMobblerCommandEventShoutbox);
 		}
-   else if(aResourceId == R_MOBBLER_SEARCH_SUBMENU_PANE)
-        {
-        SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_TRACKS,				EMobblerCommandSearchTrack);
-        SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_ALBUMS,				EMobblerCommandSearchAlbum);
-        SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_ARTISTS,				EMobblerCommandSearchArtist);
-        SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_TAGS,					EMobblerCommandSearchTag);
-        }
+	else if(aResourceId == R_MOBBLER_SEARCH_SUBMENU_PANE)
+		{
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_TRACKS,				EMobblerCommandSearchTrack);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_ALBUMS,				EMobblerCommandSearchAlbum);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_ARTISTS,				EMobblerCommandSearchArtist);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH_TAGS,					EMobblerCommandSearchTag);
+		}
 	else if(aResourceId == R_MOBBLER_EQUALIZER_SUBMENU_PANE)
 		{
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EQUALIZER_PROFILE_DEFAULT, EMobblerCommandEqualizerDefault);
@@ -180,6 +179,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_ALARM,					EMobblerCommandAlarm);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EXPORT_QUEUE_TO_LOG,		EMobblerCommandExportQueueToLogFile);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_LANGUAGE_PATCHES,			EMobblerCommandLanguagePatches);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_QR_CODE,					EMobblerCommandQrCode);
 		}
 
 	// Now the menu text is set, dimming logic is next
@@ -204,7 +204,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 			{
 			aMenuPane->SetItemDimmed(EMobblerCommandEqualizer, ETrue);
 			}
-			
+		
 		tempStream->Stop();
 		delete tempEqualizer;
 		delete tempStream;
@@ -260,6 +260,8 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		aMenuPane->SetItemDimmed(EMobblerCommandArtistTopAlbums, ETrue);
 		aMenuPane->SetItemDimmed(EMobblerCommandArtistTopTracks, ETrue);
 		aMenuPane->SetItemDimmed(EMobblerCommandArtistTopTags, ETrue);
+		
+		aMenuPane->SetItemDimmed(EMobblerCommandEventWebPage, ETrue);
 		}
 	
 	// Third edition only due to an S60 5th edition bug (issue 364)
@@ -286,12 +288,14 @@ void CMobblerStatusView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid /*a
 		
 		iMobblerStatusControl->ActivateL();
 		AppUi()->AddToStackL(*this, iMobblerStatusControl);
-	
+		
 		// Change the Back softkey to Hide
 		TInt pos(Cba()->PositionById(EAknSoftkeyBack));
 		Cba()->RemoveCommandFromStack(pos, EAknSoftkeyBack);
 		Cba()->SetCommandL(pos, EAknSoftkeyBack, static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_SOFTKEY_HIDE));
 		}
+	
+	SettingsWizardL();
 	}
 
 void CMobblerStatusView::DoDeactivate()
@@ -332,7 +336,7 @@ void CMobblerStatusView::SetupStatusPaneL()
 		iEikonEnv->CreateResourceReaderLC(reader, R_MOBBLER_TITLE_RESOURCE);
 		title->SetFromResourceL(reader);
 		CleanupStack::PopAndDestroy();
-		}		
+		}
 	}
 
 void CMobblerStatusView::DrawDeferred() const
@@ -354,6 +358,28 @@ void CMobblerStatusView::DrawNow() const
 CMobblerStatusControl* CMobblerStatusView::StatusControl()
 	{
 	return iMobblerStatusControl;
+	}
+
+void CMobblerStatusView::SettingsWizardL()
+	{
+	if (static_cast<CMobblerAppUi*>(AppUi())->DetailsNeeded())
+		{
+		// Display info note
+		CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
+		note->ExecuteLD(static_cast<CMobblerAppUi*>(AppUi())->
+			ResourceReader().ResourceL(R_MOBBLER_NOTE_NO_DETAILS));
+		
+		// Query username and password
+		TBuf<KMobblerMaxUsernameLength> username;
+		TBuf<KMobblerMaxPasswordLength> password;
+		CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
+		dlg->SetPromptL(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
+						static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
+		if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
+			{
+			static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(username, password, ETrue);
+			}
+		}
 	}
 
 // End of file

@@ -173,6 +173,13 @@ void CMobblerSettingItemListView::DoDeactivate()
 		}
 	}
 
+void CMobblerSettingItemListView::SetDetailsL(const TDesC& aUsername, const TDesC& aPassword)
+	{
+	iSettings->SetUsername(aUsername);
+	iSettings->SetPassword(aPassword);
+	iSettings->SaveSettingValuesL();
+	}
+
 void CMobblerSettingItemListView::SetEqualizerIndexL(TInt aIndex)
 	{
 	iSettings->SetEqualizerIndex(aIndex);

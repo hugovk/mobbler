@@ -72,7 +72,7 @@ void CMobblerMusicAppObserver::ConstructL()
 
 	TApaAppInfo info;
 	User::LeaveIfError(apaLsSession.GetAppInfo(info, KMusicAppUID));
-	CleanupStack::PopAndDestroy(); // apaLsSession
+	CleanupStack::PopAndDestroy(&apaLsSession);
 
 	// The caption is the app's name (e.g. EN: "Music player" or FI: "Soitin")
 	iName = info.iCaption;
@@ -88,12 +88,12 @@ CMobblerMusicAppObserver::~CMobblerMusicAppObserver()
 
 void CMobblerMusicAppObserver::CommandReceived(TMPlayerRemoteControlCommands aCmd)
 	{
-	TRAP_IGNORE(iObserver->CommandReceivedL(aCmd));
+	TRAP_IGNORE(iObserver->CommandReceivedL(ConvertCommand(aCmd)));
 	}
 
 void CMobblerMusicAppObserver::PlayerStateChanged(TMPlayerRemoteControlState aState)
 	{
-	TRAP_IGNORE(iObserver->PlayerStateChangedL(aState));
+	TRAP_IGNORE(iObserver->PlayerStateChangedL(ConvertState(aState)));
 	}
 
 void CMobblerMusicAppObserver::TrackInfoChanged(const TDesC& aTitle, const TDesC& aArtist)
@@ -131,12 +131,12 @@ HBufC* CMobblerMusicAppObserver::NameL()
 	return iName.AllocL();
 	}
 
-TMPlayerRemoteControlState CMobblerMusicAppObserver::PlayerState()
+TMobblerMusicAppObserverState CMobblerMusicAppObserver::PlayerState()
 	{
 #ifndef __WINS__
-	return iEngine->PlayerState();
+	return ConvertState(iEngine->PlayerState());
 #else
-	return EMPlayerRCtrlNotRunning;
+	return EPlayerNotRunning;
 #endif
 	}
 const TDesC& CMobblerMusicAppObserver::Title()
@@ -169,6 +169,91 @@ TTimeIntervalSeconds CMobblerMusicAppObserver::Duration()
 #else
 	return 0;
 #endif
+	}
+
+TMobblerMusicAppObserverState CMobblerMusicAppObserver::ConvertState(TMPlayerRemoteControlState aState)
+	{
+	TMobblerMusicAppObserverState playerState(EPlayerNotRunning);
+
+	switch (aState)
+		{
+		case EMPlayerRCtrlNotRunning:
+			playerState = EPlayerNotRunning;
+			break;
+		case EMPlayerRCtrlNotInitialised:
+			playerState = EPlayerNotInitialised;
+			break;
+		case EMPlayerRCtrlInitialising:
+			playerState = EPlayerInitialising;
+			break;
+		case EMPlayerRCtrlStopped:
+			playerState = EPlayerStopped;
+			break;
+		case EMPlayerRCtrlPlaying:
+			playerState = EPlayerPlaying;
+			break;
+		case EMPlayerRCtrlPaused:
+			playerState = EPlayerPaused;
+			break;
+		case EMPlayerRCtrlSeekingForward:
+			playerState = EPlayerSeekingForward;
+			break;
+		case EMPlayerRCtrlSeekingBackward:
+			playerState = EPlayerSeekingBackward;
+			break;
+		}
+	
+	return playerState;
+	}
+
+TMobblerMusicAppObserverCommand CMobblerMusicAppObserver::ConvertCommand(TMPlayerRemoteControlCommands aCommand)
+	{
+	TMobblerMusicAppObserverCommand command(EPlayerCmdNoCommand);
+
+	switch (aCommand)
+		{
+		case EMPlayerRCtrlCmdNoCommand:
+			command = EPlayerCmdNoCommand;
+			break;
+		case EMPlayerRCtrlCmdPlay:
+			command = EPlayerCmdPlay;
+			break;
+		case EMPlayerRCtrlCmdPause:
+			command = EPlayerCmdPause;
+			break;
+		case EMPlayerRCtrlCmdStop:
+			command = EPlayerCmdStop;
+			break;
+		case EMPlayerRCtrlCmdStartSeekForward:
+			command = EPlayerCmdStartSeekForward;
+			break;
+		case EMPlayerRCtrlCmdStartSeekBackward:
+			command = EPlayerCmdStartSeekBackward;
+			break;
+		case EMPlayerRCtrlCmdStopSeeking:
+			command = EPlayerCmdStopSeeking;
+			break;
+		case EMPlayerRCtrlCmdNextTrack:
+			command = EPlayerCmdNextTrack;
+			break;
+		case EMPlayerRCtrlCmdPreviousTrack:
+			command = EPlayerCmdPreviousTrack;
+			break;
+		case EMPlayerRCtrlCmdStartMusicPlayer:
+			command = EPlayerCmdStartMusicPlayer;
+			break;
+		case EMPlayerRCtrlCmdCloseMusicPlayer:
+			command = EPlayerCmdCloseMusicPlayer;
+			break;
+		case EMPlayerRCtrlCmdBack:
+			command = EPlayerCmdBack;
+			break;
+		case EMPlayerRCtrlCmdPlayPause:
+			command = EPlayerCmdPlayPause;
+			break;
+		}
+	
+	return command;
 	}
 
 // End of file

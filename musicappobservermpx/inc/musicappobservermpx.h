@@ -40,11 +40,11 @@ private:
 	void ConstructL();
 	
 	void RequestMediaL();
-	TMPlayerRemoteControlState MPlayerState(TMPXPlaybackState aState);
+	TMobblerMusicAppObserverState MPlayerState(TMPXPlaybackState aState);
 	
 private: // from MMobblerMusicApp
 	HBufC* NameL();
-	TMPlayerRemoteControlState PlayerState();
+	TMobblerMusicAppObserverState PlayerState();
 	const TDesC& Title();
 	const TDesC& Artist();
 	const TDesC& Album();
@@ -58,19 +58,6 @@ private:
 	void HandleSubPlayerNamesL(TUid aPlayer, const MDesCArray* aSubPlayers, TBool aComplete, TInt aError);
 	void HandleMediaL(const CMPXMedia& aMedia, TInt aError);
 	void HandlePlaybackCommandComplete(CMPXCommand* aCommandResult, TInt aError);
-	
-private: // from MMPlayerCommandObserver
-	void CommandReceived(TMPlayerRemoteControlCommands aCmd);
-	
-private: // from MMPlayerPlaybackObserver
-	void PlayerStateChanged(TMPlayerRemoteControlState aState);
-	void TrackInfoChanged(const TDesC& aTitle, const TDesC& aArtist);
-	void PlaylistChanged();
-	void PlaybackPositionChanged(TInt aPosition);
-	void EqualizerPresetChanged(TInt aPresetNameKey); 
-	void PlaybackModeChanged(TBool aRandom, TMPlayerRepeatMode aRepeat); 
-	void PlayerUidChanged(TInt aPlayerUid);
-	void VolumeChanged(TInt aVolume); 
 	
 private:
 	MMobblerMusicAppObserver* iObserver;

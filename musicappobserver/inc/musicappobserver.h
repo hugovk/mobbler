@@ -40,11 +40,14 @@ private:
 	
 private: // from MMobblerMusicApp
 	HBufC* NameL();
-	TMPlayerRemoteControlState PlayerState();
+	TMobblerMusicAppObserverState PlayerState();
 	const TDesC& Title();
 	const TDesC& Artist();
 	const TDesC& Album();
 	TTimeIntervalSeconds Duration();
+	
+	static TMobblerMusicAppObserverState ConvertState(TMPlayerRemoteControlState aState);
+	static TMobblerMusicAppObserverCommand ConvertCommand(TMPlayerRemoteControlCommands aCommand);
 	
 private: // from MMPlayerCommandObserver
 	void CommandReceived(TMPlayerRemoteControlCommands aCmd);

@@ -74,6 +74,7 @@ public:
 	const TDesC& AlarmOption() const	{ return iSettings->AlarmOption(); }
 	TBool AutomaticWallpaper() const	{ return iSettings->AutomaticWallpaper(); }
 	
+	void SetDetailsL(const TDesC& aUsername, const TDesC& aPassword);
 	void SetEqualizerIndexL(TInt aIndex);
 	void SetVolumeL(TInt aVolume);
 	void SetSleepTimerMinutesL(TInt aSleepTimerMinutes);
@@ -130,8 +131,7 @@ private:
 private:
 	CMobblerSettingItemList* iMobblerSettingItemList;
 	CMobblerSettingItemListSettings* iSettings;
-	CAknWaitDialog* iConnectingDialog;
-
+	
 	TInt iOrdinal;
 	TBool iIsNumberedStyle;
 	CArrayPtr<CGulIcon>* iIcons;

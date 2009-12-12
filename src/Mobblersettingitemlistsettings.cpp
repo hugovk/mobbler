@@ -101,9 +101,9 @@ void CMobblerSettingItemListSettings::LoadSettingValuesL()
 		RFileReadStream readStream(file);
 		CleanupClosePushL(readStream);
 		
-		TBuf<255> username;
-		TBuf<255> password;
-		TBuf<255> alarmOption;
+		TBuf<KMaxMobblerTextSize> username;
+		TBuf<KMaxMobblerTextSize> password;
+		TBuf<KMaxMobblerTextSize> alarmOption;
 
 		 // Ignore KErrEof if these settings are not yet saved in the file
 		TRAP_IGNORE(readStream >> username);

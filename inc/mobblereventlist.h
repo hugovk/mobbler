@@ -47,6 +47,8 @@ private:
 private:
 	CMobblerFlatDataObserverHelper* iAttendanceHelper;
 	CMobblerFlatDataObserverHelper* iAttendanceHelperNo;
+	CMobblerFlatDataObserverHelper* iFoursquareHelper;
+	
 	CMobblerWebServicesHelper* iWebServicesHelper;
 	};
 

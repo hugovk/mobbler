@@ -99,7 +99,9 @@ CMobblerAlbumArtTransition::~CMobblerAlbumArtTransition()
 	delete iTimer;
 	}
 
-void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlbumArt, const CMobblerBitmap* aNextAlbumArt, TRect aAlbumArtRect, TInt aSlideAmount)
+void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlbumArt, 
+											   const CMobblerBitmap* aNextAlbumArt, 
+											   TRect aAlbumArtRect, TInt aSlideAmount)
 	{
 	// Try to put any new album art in the list
 	
@@ -157,8 +159,8 @@ void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlb
 			// It's not transitioning or being moved by a finger
 			// so just display the current album art
 			CMobblerBitmap::LongSidesEqual(aCurrentAlbumArt->Bitmap()->SizeInPixels(), aAlbumArtRect.Size())?
-				iStatusControl.BitBltMobblerBitmap(aCurrentAlbumArt, aAlbumArtRect.iTl, TRect(TPoint(0, 0), aCurrentAlbumArt->SizeInPixels())):
-				iStatusControl.DrawMobblerBitmap(aCurrentAlbumArt, aAlbumArtRect, aCurrentAlbumArt->SizeInPixels());
+				iStatusControl.BitBltMobblerBitmapL(aCurrentAlbumArt, aAlbumArtRect.iTl, TRect(TPoint(0, 0), aCurrentAlbumArt->SizeInPixels())):
+				iStatusControl.DrawMobblerBitmapL(aCurrentAlbumArt, aAlbumArtRect, aCurrentAlbumArt->SizeInPixels());
 			}
 		}
 	else
@@ -190,7 +192,7 @@ void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlb
 		}
 	}
 
-TRect CMobblerAlbumArtTransition::ScaledRectL(TRect aDestRect, TRect aSourceRect)
+/*TRect CMobblerAlbumArtTransition::ScaledRect(TRect aDestRect, TRect aSourceRect)
 	{
 	TRect destRect(aDestRect);
 	TInt width(aSourceRect.Width());
@@ -206,7 +208,7 @@ TRect CMobblerAlbumArtTransition::ScaledRectL(TRect aDestRect, TRect aSourceRect
 		}
 	
 	return destRect;
-	}
+	}*/
 
 void CMobblerAlbumArtTransition::DoDrawAlbumArtL(const CMobblerBitmap* aLeft, const CMobblerBitmap* aRight, TRect aAlbumArtRect, TInt aPosition)
 	{
@@ -218,7 +220,7 @@ void CMobblerAlbumArtTransition::DoDrawAlbumArtL(const CMobblerBitmap* aLeft, co
 		TPoint destPoint(aAlbumArtRect.iTl);
 		TRect sourceRect(TPoint(aPosition, 0), TSize(aAlbumArtRect.Width() - aPosition, aLeft->SizeInPixels().iHeight));
 		
-		iStatusControl.BitBltMobblerBitmap(aLeft, destPoint, sourceRect);
+		iStatusControl.BitBltMobblerBitmapL(aLeft, destPoint, sourceRect);
 		}
 	else
 		{
@@ -230,7 +232,7 @@ void CMobblerAlbumArtTransition::DoDrawAlbumArtL(const CMobblerBitmap* aLeft, co
 		TSize sourceSize((((aAlbumArtRect.Width() - aPosition) * aLeft->SizeInPixels().iWidth) / aAlbumArtRect.Width()), aLeft->SizeInPixels().iHeight);
 		TRect sourceRect(sourceTopLeft, sourceSize);
 		
-		iStatusControl.DrawMobblerBitmap(aLeft, destRect, sourceRect);
+		iStatusControl.DrawMobblerBitmapL(aLeft, destRect, sourceRect);
 		}
 	
 	// Draw the second bitmap by the slide amount
@@ -238,7 +240,7 @@ void CMobblerAlbumArtTransition::DoDrawAlbumArtL(const CMobblerBitmap* aLeft, co
 		{
 		// The long sides are equal so the bitmap has been scaled
 		
-		iStatusControl.BitBltMobblerBitmap(aRight, 
+		iStatusControl.BitBltMobblerBitmapL(aRight, 
 				TPoint(aAlbumArtRect.iTl.iX - aPosition + aAlbumArtRect.Width(), aAlbumArtRect.iTl.iY), 
 				TRect(TPoint(0, 0), TSize(aPosition, aRight->SizeInPixels().iHeight)));
 		}
@@ -249,7 +251,7 @@ void CMobblerAlbumArtTransition::DoDrawAlbumArtL(const CMobblerBitmap* aLeft, co
 		TRect destRect(aAlbumArtRect.iTl - TPoint(aPosition - aAlbumArtRect.Width(), 0), TSize(aPosition, aAlbumArtRect.Height()));
 		TRect sourceRect(TPoint(0, 0), TSize(((aPosition * aRight->SizeInPixels().iWidth) / aAlbumArtRect.Width()), aRight->SizeInPixels().iHeight));
 		
-		iStatusControl.DrawMobblerBitmap(aRight, destRect, sourceRect);
+		iStatusControl.DrawMobblerBitmapL(aRight, destRect, sourceRect);
 		}
 	}
 

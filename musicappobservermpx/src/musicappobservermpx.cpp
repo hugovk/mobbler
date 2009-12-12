@@ -128,7 +128,7 @@ void CMobblerMusicAppObserverMPX::HandlePlaybackMessage(CMPXMessage* aMessage, T
 				}
 			case TMPXPlaybackMessage::EStateChanged:
 				{
-				TMPlayerRemoteControlState state(MPlayerState(aMessage->ValueTObjectL<TMPXPlaybackState>(KMPXMessageGeneralType)));
+				TMobblerMusicAppObserverState state(MPlayerState(aMessage->ValueTObjectL<TMPXPlaybackState>(KMPXMessageGeneralType)));
 				
 				iObserver->PlayerStateChangedL(state);
 				break;
@@ -163,35 +163,35 @@ void CMobblerMusicAppObserverMPX::HandlePlaybackMessage(CMPXMessage* aMessage, T
 #endif
 	}
 
-TMPlayerRemoteControlState CMobblerMusicAppObserverMPX::MPlayerState(TMPXPlaybackState aState)
+TMobblerMusicAppObserverState CMobblerMusicAppObserverMPX::MPlayerState(TMPXPlaybackState aState)
 	{
-	TMPlayerRemoteControlState state(EMPlayerRCtrlNotRunning);
+	TMobblerMusicAppObserverState state(EPlayerNotRunning);
 	
 	switch (aState)
 		{
 		case EPbStateNotInitialised:
-			state = EMPlayerRCtrlNotInitialised;
+			state = EPlayerNotInitialised;
 			break;
 		case EPbStateInitialising:
-			state = EMPlayerRCtrlInitialising;
+			state = EPlayerInitialising;
 			break;
 		case EPbStatePlaying:
-			state = EMPlayerRCtrlPlaying;
+			state = EPlayerPlaying;
 			break;
 		case EPbStatePaused:
-			state = EMPlayerRCtrlPaused;
+			state = EPlayerPaused;
 			break;
 		case EPbStateStopped:
-			state = EMPlayerRCtrlStopped;
+			state = EPlayerStopped;
 			break;
 		case EPbStateSeekingForward:
-			state = EMPlayerRCtrlSeekingForward;
+			state = EPlayerSeekingForward;
 			break;
 		case EPbStateSeekingBackward:
-			state = EMPlayerRCtrlSeekingBackward;
+			state = EPlayerSeekingBackward;
 			break;
 		case EPbStateShuttingDown:
-			state = EMPlayerRCtrlNotRunning;
+			state = EPlayerNotRunning;
 			break;
 		case EPbStateBuffering:
 			break;
@@ -279,57 +279,17 @@ void CMobblerMusicAppObserverMPX::HandlePlaybackCommandComplete(CMPXCommand* /*a
 	
 	}
 
-void CMobblerMusicAppObserverMPX::CommandReceived(TMPlayerRemoteControlCommands aCmd)
-	{
-	TRAP_IGNORE(iObserver->CommandReceivedL(aCmd));
-	}
-
-void CMobblerMusicAppObserverMPX::PlayerStateChanged(TMPlayerRemoteControlState aState)
-	{
-	TRAP_IGNORE(iObserver->PlayerStateChangedL(aState));
-	}
-
-void CMobblerMusicAppObserverMPX::TrackInfoChanged(const TDesC& aTitle, const TDesC& aArtist)
-	{
-	TRAP_IGNORE(iObserver->TrackInfoChangedL(aTitle, aArtist));
-	}
-
-void CMobblerMusicAppObserverMPX::PlaylistChanged()
-	{
-	}
-
-void CMobblerMusicAppObserverMPX::PlaybackPositionChanged(TInt aPosition)
-	{
-	TRAP_IGNORE(iObserver->PlayerPositionL(aPosition));
-	}
-
-void CMobblerMusicAppObserverMPX::EqualizerPresetChanged(TInt /*aPresetNameKey*/)
-	{
-	}
-
-void CMobblerMusicAppObserverMPX::PlaybackModeChanged(TBool /*aRandom*/, TMPlayerRepeatMode /*aRepeat*/)
-	{
-	}
-
-void CMobblerMusicAppObserverMPX::PlayerUidChanged(TInt /*aPlayerUid*/)
-	{
-	}
-
-void CMobblerMusicAppObserverMPX::VolumeChanged(TInt /*aVolume*/)
-	{
-	}
-
 HBufC* CMobblerMusicAppObserverMPX::NameL()
 	{
 	return iName.AllocL();
 	}
 
-TMPlayerRemoteControlState CMobblerMusicAppObserverMPX::PlayerState()
+TMobblerMusicAppObserverState CMobblerMusicAppObserverMPX::PlayerState()
 	{
 #ifndef __WINS__
 	return MPlayerState(iPlaybackUtility->StateL());
 #else
-	return EMPlayerRCtrlNotRunning;
+	return EPlayerNotRunning;
 #endif
 	}
 

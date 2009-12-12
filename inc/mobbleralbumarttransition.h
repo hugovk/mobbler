@@ -63,7 +63,7 @@ private:
 private:
 	static TInt CallBack(TAny* aRef);
 	
-	static TRect ScaledRectL(TRect aDestRect, TRect aSourceRect);
+//	static TRect ScaledRect(TRect aDestRect, TRect aSourceRect);
 	
 private:
 	CMobblerStatusControl& iStatusControl;

@@ -24,11 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef __MOBBLER_HRH__
 #define __MOBBLER_HRH__
 
-enum
-	{
-	EMobblerMaxQueryDialogLength = 1000
-	};
-	
+#define KMobblerMaxQueryDialogLength 1000
+#define KMobblerMaxUsernameLength 15
+#define KMobblerMaxPasswordLength 30
+
 enum TMobblerSettingItemListViewCommands
 	{
 	EMobblerCommandOffline = 0x6000,
@@ -38,12 +37,6 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandTools,
 	
 	EMobblerCommandPlus,
-	EMobblerCommandVisitWebPage,
-	EMobblerCommandTrackWebPage,
-	EMobblerCommandArtistWebPage,
-	EMobblerCommandAlbumWebPage,
-	EMobblerCommandEventsWebPage,
-	EMobblerCommandEventWebPage,
 	
 	EMobblerCommandToggleScrobbling,
 	EMobblerCommandSleepTimer,
@@ -54,20 +47,12 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandSetAsWallpaper,
 #endif
 	EMobblerCommandLanguagePatches,
+	EMobblerCommandQrCode,
 	
 	EMobblerCommandEqualizer = 0x7000,
 	EMobblerCommandEqualizerDefault,
 	EMobblerCommandEqualizerMaximum = 0x7FFF,
-
-	// IMPORTANT! New commands that WON'T connect to Last.fm go BEFORE here!
-	// IMPORTANT! New commands that WILL connect to Last.fm go AFTER here!
-	//
-	// There's no point going online to Last.fm if no user details are entered.
-	// The following commands will try to connect to Last.fm, but will only be 
-	// executed in CMobblerAppUi::HandleCommandL() if and only if the user has
-	// already stored their Last.fm username and password. Otherwise an error
-	// note is shown.
-
+	
 	EMobblerCommandOnline = 0x8000,
 	
 	EMobblerCommandRadio,
@@ -116,6 +101,10 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandShoutOwner,
 	EMobblerCommandShoutUser,
 	
+	EMobblerCommandMaps,
+	EMobblerCommandVisitMap,
+	EMobblerCommandFoursquare,
+	
 	EMobblerCommandSearch,
 	EMobblerCommandSearchArtist,
 	EMobblerCommandSearchTrack,
@@ -146,7 +135,14 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandRadioEnumLast = 0xA000,
 	
 	EMobblerCommandCheckForUpdates,
-
+//	EMobblerCommandFetchLyrics,
+	EMobblerCommandVisitWebPage,
+	EMobblerCommandTrackWebPage,
+	EMobblerCommandArtistWebPage,
+	EMobblerCommandAlbumWebPage,
+	EMobblerCommandEventsWebPage,
+	EMobblerCommandEventWebPage,
+	
 	EMobblerCommandLast
 	};
 	

@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblereventlist.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
+#include "mobblerliterals.h"
 #include "mobblerplaylistlist.h"
 #include "mobblerparser.h"
 #include "mobblerresourcereader.h"
@@ -48,7 +49,7 @@ void CMobblerFriendList::ConstructL()
 	{
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultUserImage);
 	
-	iAppUi.LastFmConnection().WebServicesCallL(_L8("user"), _L8("getfriends"), iText1->String8(), *this);
+	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, iText1->String8(), *this);
 	}
 
 CMobblerFriendList::~CMobblerFriendList()
@@ -63,12 +64,15 @@ CMobblerListControl* CMobblerFriendList::HandleListCommandL(TInt aCommand)
 	switch (aCommand)
 		{
 		case EMobblerCommandFriends:
-			list = CMobblerListControl::CreateListL(iAppUi, iWebServicesControl, EMobblerCommandFriends, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8);
+			list = CMobblerListControl::CreateListL(iAppUi, iWebServicesControl, 
+					EMobblerCommandFriends, 
+					iList[iListBox->CurrentItemIndex()]->Title()->String8(), 
+					KNullDesC8);
 			break;
 		case EMobblerCommandTrackShare:
 		case EMobblerCommandArtistShare:
 			{
-			TBuf<EMobblerMaxQueryDialogLength> message;
+			TBuf<KMobblerMaxQueryDialogLength> message;
 			
 			CAknTextQueryDialog* shareDialog(new(ELeave) CAknTextQueryDialog(message));
 			shareDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
@@ -86,13 +90,18 @@ CMobblerListControl* CMobblerFriendList::HandleListCommandL(TInt aCommand)
 						{
 						delete iShareObserver;
 						iShareObserver = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().TrackShareL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), iAppUi.CurrentTrack()->Artist().String8(), iAppUi.CurrentTrack()->Title().String8(), messageString->String8(), *iShareObserver);
+						iAppUi.LastFmConnection().TrackShareL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), 
+								iAppUi.CurrentTrack()->Artist().String8(), 
+								iAppUi.CurrentTrack()->Title().String8(), 
+								messageString->String8(), *iShareObserver);
 						}
 					else
 						{
 						delete iShareObserver;
 						iShareObserver = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().ArtistShareL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), iAppUi.CurrentTrack()->Artist().String8(), messageString->String8(), *iShareObserver);
+						iAppUi.LastFmConnection().ArtistShareL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), 
+								iAppUi.CurrentTrack()->Artist().String8(), 
+								messageString->String8(), *iShareObserver);
 						}
 					}
 				

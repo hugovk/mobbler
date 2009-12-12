@@ -34,7 +34,7 @@ class CMobblerFlatDataObserverHelper;
 class MMobblerSegDataObserver
 	{
 public:
-	virtual void DataPartL(const TDesC8& aData, TInt aTotalSize) = 0;
+	virtual void DataPart(const TDesC8& aData, TInt aTotalSize) = 0;
 	virtual void DataCompleteL(CMobblerLastFmConnection::TTransactionError aTransactionError, TInt aHTTPStatusCode, const TDesC8& aStatusText) = 0;
 	};
 

@@ -46,20 +46,70 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblertracklist.h"
 #include "mobblerutility.h"
 
-_LIT8(KElementCreator, "creator");
-_LIT8(KElementDuration, "duration");
-_LIT8(KElementKey, "key");
-_LIT8(KElementLink, "link");
-_LIT8(KElementLocation, "location");
-_LIT8(KElementRadioAuth, "trackauth");
-_LIT8(KElementSession, "session");
-_LIT8(KElementTrackList, "trackList");
-_LIT8(KElementSubscriber, "subscriber");
-_LIT8(KElementEvents, "events");
+_LIT8(KCompareOkNewLine, "OK\n");
+_LIT8(KCompareBadSessionNewLine, "BADSESSION\n");
+
+_LIT8(KElementAlbumMatches, "albummatches");
 _LIT8(KElementArtist, "artist");
+_LIT8(KElementArtistMatches, "artistmatches");
 _LIT8(KElementAuthor, "author");
 _LIT8(KElementBody, "body");
+_LIT8(KElementCity, "city");
+_LIT8(KElementCreator, "creator");
+_LIT8(KElementCode, "code");
+_LIT8(KElementCount, "count");
+_LIT8(KElementCountry, "country");
+_LIT8(KElementDate, "date");
+_LIT8(KElementDuration, "duration");
+_LIT8(KElementEvents, "events");
+_LIT8(KElementExtension, "extension");
+_LIT8(KElementKey, "key");
+_LIT8(KElementIdentifier, "identifier");
+_LIT8(KElementLink, "link");
+_LIT8(KElementLocation, "location");
+_LIT8(KElementMatch, "match");
+_LIT8(KElementMbid, "mbid");
 _LIT8(KElementNowPlaying, "nowplaying");
+_LIT8(KElementPlayCount, "playcount");
+_LIT8(KElementRadioAuth, "trackauth");
+_LIT8(KElementRealName, "realname");
+_LIT8(KElementRecentTracks, "recenttracks");
+_LIT8(KElementRecommendations, "recommendations");
+_LIT8(KElementResults, "results");
+_LIT8(KElementSession, "session");
+_LIT8(KElementShouts, "shouts");
+_LIT8(KElementSimilarArtists, "similarartists");
+_LIT8(KElementSimilarTracks, "similartracks");
+_LIT8(KElementStation, "station");
+_LIT8(KElementStartDate, "startDate");
+_LIT8(KElementSubscriber, "subscriber");
+_LIT8(KElementTagMatches, "tagmatches");
+_LIT8(KElementTopArtists, "topartists");
+_LIT8(KElementTopAlbums, "topalbums");
+_LIT8(KElementTopTags, "toptags");
+_LIT8(KElementTopTracks, "toptracks");
+_LIT8(KElementTrackAuth, "trackauth");
+_LIT8(KElementTrackList, "trackList");
+_LIT8(KElementTrackMatches, "trackmatches");
+_LIT8(KElementTrue, "true");
+//_LIT8(KElementTrack, "track");
+_LIT8(KElementUts, "uts");
+_LIT8(KElementGeoNamespaceUri, "http://www.w3.org/2003/01/geo/wgs84_pos#");
+_LIT8(KElementPoint, "point");
+_LIT8(KElementLat, "lat");
+_LIT8(KElementLong, "long");
+
+_LIT8(KFindResponseEqualsOk, "response=OK");
+_LIT8(KFindSessionEqualsFailed, "session=FAILED");
+
+_LIT8(KMatchBadAuthStar, "BADAUTH*");
+_LIT8(KMatchBadTimeStar, "BADTIME*");
+_LIT8(KMatchBannedStar, "BANNED*");
+_LIT8(KMatchFailedStar, "FAILED*");
+_LIT8(KMatchOkStar, "OK*");
+_LIT8(KMatchSessionStar, "session*");
+
+_LIT8(KNewLine, "\n");
 
 _LIT8(KUpdateVersionMajor,		"major");
 _LIT8(KUpdateVersionMinor,		"minor");
@@ -93,41 +143,41 @@ CMobblerLastFmError* CMobblerParser::ParseHandshakeL(const TDesC8& aHandshakeRes
 
 	CMobblerLastFmError* error(NULL);
 
-	if (aHandshakeResponse.MatchF(_L8("OK*")) == 0)
+	if (aHandshakeResponse.MatchF(KMatchOkStar) == 0)
 		{
-		TInt position(aHandshakeResponse.Find(_L8("\n")));
+		TInt position(aHandshakeResponse.Find(KNewLine));
 
 		// get the session ID
 		TPtrC8 last3Lines(aHandshakeResponse.Mid(position + 1, aHandshakeResponse.Length() - (position + 1)));
-		position = last3Lines.Find(_L8("\n"));
+		position = last3Lines.Find(KNewLine);
 		delete aSessionId;
 		aSessionId = last3Lines.Mid(0, position).AllocL();
 
 		// get the now playing URL
 		TPtrC8 last2Lines(last3Lines.Mid(position + 1, last3Lines.Length() - (position + 1)));
-		position = last2Lines.Find(_L8("\n"));
+		position = last2Lines.Find(KNewLine);
 		delete aNowPlayingUrl;
 		aNowPlayingUrl = last2Lines.Mid(0, position).AllocL();
 
 		// get the submit URL
 		TPtrC8 last1Lines(last2Lines.Mid(position + 1, last2Lines.Length() - (position + 1)));
-		position = last1Lines.Find(_L8("\n"));
+		position = last1Lines.Find(KNewLine);
 		delete aSubmitUrl;
 		aSubmitUrl = last1Lines.Mid(0, position).AllocL();
 		}
-	else if (aHandshakeResponse.MatchF(_L8("BANNED*")) == 0)
+	else if (aHandshakeResponse.MatchF(KMatchBannedStar) == 0)
 		{
 		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BANNED), CMobblerLastFmError::EBanned);
 		}
-	else if (aHandshakeResponse.MatchF(_L8("BADAUTH*")) == 0)
+	else if (aHandshakeResponse.MatchF(KMatchBadAuthStar) == 0)
 		{
 		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BAD_AUTH), CMobblerLastFmError::EBadAuth);
 		}
-	else if (aHandshakeResponse.MatchF(_L8("BADTIME*")) == 0)
+	else if (aHandshakeResponse.MatchF(KMatchBadTimeStar) == 0)
 		{
 		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BAD_TIME), CMobblerLastFmError::EBadTime);
 		}
-	else if (aHandshakeResponse.MatchF(_L8("FAILED*")) == 0)
+	else if (aHandshakeResponse.MatchF(KMatchFailedStar) == 0)
 		{
 		error = CMobblerLastFmError::NewL(aHandshakeResponse.Mid(7), CMobblerLastFmError::EFailed);
 		}
@@ -155,9 +205,9 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioHandshakeL(const TDesC8& aRadi
 
 	CMobblerLastFmError* error(NULL);
 
-	if (aRadioHandshakeResponse.MatchF(_L8("session*")) == 0)
+	if (aRadioHandshakeResponse.MatchF(KMatchSessionStar) == 0)
 		{
-		if (aRadioHandshakeResponse.Find(_L8("session=FAILED")) == 0)
+		if (aRadioHandshakeResponse.Find(KFindSessionEqualsFailed) == 0)
 			{
 			error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BAD_AUTH), CMobblerLastFmError::EBadAuth);
 			}
@@ -171,7 +221,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioHandshakeL(const TDesC8& aRadi
 				{
 				_LIT(KDelimeter, "\n");
 
-				TBuf8<255> line;
+				TBuf8<KMaxMobblerTextSize> line;
 				readStream.ReadL(line, TChar(KDelimeter()[0]));
 
 				_LIT8(KEquals, "=");
@@ -208,7 +258,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioHandshakeL(const TDesC8& aRadi
 			CleanupStack::PopAndDestroy(&readStream);
 			}
 		}
-	else if (aRadioHandshakeResponse.MatchF(_L8("FAILED*")) == 0)
+	else if (aRadioHandshakeResponse.MatchF(KMatchFailedStar) == 0)
 		{
 		error = CMobblerLastFmError::NewL(aRadioHandshakeResponse.Mid(7), CMobblerLastFmError::EFailed);
 		}
@@ -226,15 +276,15 @@ CMobblerLastFmError* CMobblerParser::ParseScrobbleResponseL(const TDesC8& aScrob
 
 	CMobblerLastFmError* error(NULL);
 
-	if (aScrobbleResponse.Compare(_L8("OK\n")) == 0)
+	if (aScrobbleResponse.Compare(KCompareOkNewLine) == 0)
 		{
 		// do nothing
 		}
-	else if (aScrobbleResponse.Compare(_L8("BADSESSION\n")) == 0)
+	else if (aScrobbleResponse.Compare(KCompareBadSessionNewLine) == 0)
 		{
 		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BAD_SESSION), CMobblerLastFmError::EBadSession);
 		}
-	else if (aScrobbleResponse.MatchF(_L8("FAILED*")) == 0)
+	else if (aScrobbleResponse.MatchF(KMatchFailedStar) == 0)
 		{
 		error = CMobblerLastFmError::NewL(aScrobbleResponse.Mid(7), CMobblerLastFmError::EFailed);
 		}
@@ -302,7 +352,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioTuneL(const TDesC8& aXml)
 
 	CMobblerLastFmError* error(NULL);
 
-	if (aXml.Find(_L8("response=OK")) != 0)
+	if (aXml.Find(KFindResponseEqualsOk) != 0)
 		{
 		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BAD_STATION), CMobblerLastFmError::EFailed);
 		}
@@ -391,15 +441,15 @@ CMobblerLastFmError* CMobblerParser::ParseRadioTuneL(const TDesC8& aXml, CMobble
 	// Get the error code
 	const TDesC8* statusText(domFragment->AsElement().AttrValue(KElementStatus));
 
-	if (statusText && (statusText->CompareF(_L8("ok")) == 0))
+	if (statusText && (statusText->CompareF(KOk) == 0))
 		{
-		aStationName = CMobblerString::NewL(domFragment->AsElement().Element(_L8("station"))->Element(KElementName)->Content());
+		aStationName = CMobblerString::NewL(domFragment->AsElement().Element(KElementStation)->Element(KElementName)->Content());
 		}
 	else
 		{
-		CSenElement* errorElement(domFragment->AsElement().Element(_L8("error")));
+		CSenElement* errorElement(domFragment->AsElement().Element(KElementError));
 
-		TLex8 lex(*errorElement->AttrValue(_L8("code")));
+		TLex8 lex(*errorElement->AttrValue(KElementCode));
 		TInt errorCode;
 		lex.Val(errorCode);
 
@@ -433,7 +483,7 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 	// Get the error code
 	const TDesC8* statusText(domFragment->AsElement().AttrValue(KElementStatus));
 
-	if (statusText && (statusText->CompareF(_L8("ok")) == 0))
+	if (statusText && (statusText->CompareF(KOk) == 0))
 		{
 		// The Last.fm error status was ok so get the tracks from the playlist
 
@@ -476,8 +526,8 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 
 				TPtrC8 image((*tracks)[i]->Element(KElementImage)->Content());
 				TPtrC8 location((*tracks)[i]->Element(KElementLocation)->Content());
-				TPtrC8 identifier((*tracks)[i]->Element(_L8("identifier"))->Content());
-				TPtrC8 trackauth((*tracks)[i]->Element(_L8("extension"))->Element(_L8("trackauth"))->Content());
+				TPtrC8 identifier((*tracks)[i]->Element(KElementIdentifier)->Content());
+				TPtrC8 trackauth((*tracks)[i]->Element(KElementExtension)->Element(KElementTrackAuth)->Content());
 
 				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, trackauth));
 				CleanupStack::PushL(track);
@@ -500,9 +550,9 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 		}
 	else
 		{
-		CSenElement* errorElement(domFragment->AsElement().Element(_L8("error")));
+		CSenElement* errorElement(domFragment->AsElement().Element(KElementError));
 
-		TLex8 lex(*errorElement->AttrValue(_L8("code")));
+		TLex8 lex(*errorElement->AttrValue(KElementCode));
 		TInt errorCode;
 		lex.Val(errorCode);
 
@@ -532,10 +582,10 @@ CMobblerLastFmError* CMobblerParser::ParseWebServicesHandshakeL(const TDesC8& aW
 	// Get the error code
 	const TDesC8* statusText(domFragment->AsElement().AttrValue(KElementStatus));
 
-	if (statusText && (statusText->CompareF(_L8("ok")) == 0))
+	if (statusText && (statusText->CompareF(KOk) == 0))
 		{
 		aWebServicesSessionKey = domFragment->AsElement().Element(KElementSession)->Element(KElementKey)->Content().AllocL();
-		if (domFragment->AsElement().Element(KElementSession)->Element(KElementSubscriber)->Content().Compare(_L8("1")) == 0)
+		if (domFragment->AsElement().Element(KElementSession)->Element(KElementSubscriber)->Content().Compare(KNumeralOne) == 0)
 			{
 			aMemberType = CMobblerLastFmConnection::ESubscriber;
 			}
@@ -546,9 +596,9 @@ CMobblerLastFmError* CMobblerParser::ParseWebServicesHandshakeL(const TDesC8& aW
 		}
 	else
 		{
-		CSenElement* errorElement(domFragment->AsElement().Element(_L8("error")));
+		CSenElement* errorElement(domFragment->AsElement().Element(KElementError));
 
-		TLex8 lex(*errorElement->AttrValue(_L8("code")));
+		TLex8 lex(*errorElement->AttrValue(KElementCode));
 		TInt errorCode;
 		lex.Val(errorCode);
 
@@ -592,7 +642,8 @@ CMobblerLastFmError* CMobblerParser::ParseBetaTestersHandshakeL(const TDesC8& aH
 
 	if (!aIsBetaTester)
 		{
-		error = CMobblerLastFmError::NewL(_L8("Sorry. You're not registered to use this private beta version. Please visit http://code.google.com/p/mobbler"), CMobblerLastFmError::EFailed);
+		_LIT8(KBetaError, "Sorry. You're not registered to use this private beta version. Please visit http://code.google.com/p/mobbler");
+		error = CMobblerLastFmError::NewL(KBetaError, CMobblerLastFmError::EFailed);
 		}
 
 	CleanupStack::PopAndDestroy(2, xmlReader);
@@ -616,7 +667,7 @@ void CMobblerParser::ParseSearchTrackL(const TDesC8& aXml, CMobblerTrackList& aO
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("results"))->Element(_L8("trackmatches"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementResults)->Element(KElementTrackMatches)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -655,7 +706,7 @@ void CMobblerParser::ParseSearchAlbumL(const TDesC8& aXml, CMobblerAlbumList& aO
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("results"))->Element(_L8("albummatches"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementResults)->Element(KElementAlbumMatches)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -697,7 +748,7 @@ void CMobblerParser::ParseSearchArtistL(const TDesC8& aXml, CMobblerArtistList& 
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("results"))->Element(_L8("artistmatches"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementResults)->Element(KElementArtistMatches)->ElementsL());
 
     const TInt KCount(items.Count());
     for (TInt i(0); i < KCount; ++i)
@@ -713,7 +764,7 @@ void CMobblerParser::ParseSearchArtistL(const TDesC8& aXml, CMobblerArtistList& 
 
 		CleanupStack::PopAndDestroy(2);
 
-		item->SetIdL(items[i]->Element(_L8("mbid"))->Content());
+		item->SetIdL(items[i]->Element(KElementMbid)->Content());
 
 		CleanupStack::PushL(item);
 		aList.AppendL(item);
@@ -738,10 +789,10 @@ void CMobblerParser::ParseSearchTagL(const TDesC8& aXml, CMobblerTagList& aObser
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("results"))->Element(_L8("tagmatches"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementResults)->Element(KElementTagMatches)->ElementsL());
 
-    const TInt KCount(items.Count());
-    for (TInt i(0); i < KCount; ++i)
+	const TInt KCount(items.Count());
+	for (TInt i(0); i < KCount; ++i)
 		{
 		HBufC8* image((items[i]->Element(KElementImage) == NULL) ?
 						KNullDesC8().AllocLC() :
@@ -749,7 +800,7 @@ void CMobblerParser::ParseSearchTagL(const TDesC8& aXml, CMobblerTagList& aObser
 
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementName)->Content()),
-														items[i]->Element(_L8("count"))->Content(),
+														items[i]->Element(KElementCount)->Content(),
 														*image));
 
 		CleanupStack::PopAndDestroy(2);
@@ -777,7 +828,7 @@ void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aO
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("friends"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementFriends)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -788,7 +839,7 @@ void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aO
 
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														items[i]->Element(KElementName)->Content(),
-														items[i]->Element(_L8("realname"))->Content(),
+														items[i]->Element(KElementRealName)->Content(),
 														*image));
 
 		CleanupStack::PopAndDestroy(image);
@@ -816,7 +867,7 @@ void CMobblerParser::ParseTopArtistsL(const TDesC8& aXml, CMobblerArtistList& aO
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("topartists"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementTopArtists)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -827,7 +878,7 @@ void CMobblerParser::ParseTopArtistsL(const TDesC8& aXml, CMobblerArtistList& aO
 
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementName)->Content()),
-														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(_L8("playcount"))->Content()),
+														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementPlayCount)->Content()),
 														*image));
 		CleanupStack::PopAndDestroy(3);
 
@@ -855,7 +906,7 @@ void CMobblerParser::ParseRecommendedArtistsL(const TDesC8& aXml, CMobblerArtist
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("recommendations"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementRecommendations)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -893,7 +944,7 @@ void CMobblerParser::ParseSimilarArtistsL(const TDesC8& aXml, CMobblerArtistList
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("similarartists"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementSimilarArtists)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -904,7 +955,7 @@ void CMobblerParser::ParseSimilarArtistsL(const TDesC8& aXml, CMobblerArtistList
 
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementName)->Content()),
-														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(_L8("match"))->Content()),
+														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementMatch)->Content()),
 														*image));
 		CleanupStack::PopAndDestroy(3);
 
@@ -940,9 +991,9 @@ void CMobblerParser::ParseEventsL(const TDesC8& aXml, CMobblerEventList& aObserv
 				items[i]->Element(KElementImage)->Content().AllocLC());
 
 		// Format the description line
-		TPtrC8 venue(items[i]->Element(_L8("venue"))->Element(KElementName)->Content());
-		TPtrC8 city(items[i]->Element(_L8("venue"))->Element(_L8("location"))->Element(_L8("city"))->Content());
-		TPtrC8 country(items[i]->Element(_L8("venue"))->Element(_L8("location"))->Element(_L8("country"))->Content());
+		TPtrC8 venue(items[i]->Element(KElementVenue)->Element(KElementName)->Content());
+		TPtrC8 city(items[i]->Element(KElementVenue)->Element(KElementLocation)->Element(KElementCity)->Content());
+		TPtrC8 country(items[i]->Element(KElementVenue)->Element(KElementLocation)->Element(KElementCountry)->Content());
 
 		_LIT8(KEventDescriptionFormat, "%S, %S, %S");
 
@@ -952,7 +1003,7 @@ void CMobblerParser::ParseEventsL(const TDesC8& aXml, CMobblerEventList& aObserv
 
 		// Format the title line
 		TPtrC8 title(items[i]->Element(KElementTitle)->Content());
-		TPtrC8 startDate(items[i]->Element(_L8("startDate"))->Content().Mid(0, 11));
+		TPtrC8 startDate(items[i]->Element(KElementStartDate)->Content().Mid(0, 11));
 
 		_LIT8(KEventTitleFormat, "%S (%S)");
 		HBufC8* eventTitle(HBufC8::NewLC(KEventTitleFormat().Length() + title.Length() + startDate.Length()));
@@ -966,6 +1017,17 @@ void CMobblerParser::ParseEventsL(const TDesC8& aXml, CMobblerEventList& aObserv
 
 		item->SetIdL(items[i]->Element(KElementId)->Content());
 
+		// Get the location of the event
+		CSenElement* geoPoint(items[i]->Element(KElementVenue)->Element(KElementLocation)->Element(KElementGeoNamespaceUri, KElementPoint));
+		
+		if (geoPoint)
+			{
+			TPtrC8 latitude(geoPoint->Element(KElementGeoNamespaceUri, KElementLat)->Content());
+			TPtrC8 longitude(geoPoint->Element(KElementGeoNamespaceUri, KElementLong)->Content());
+			item->SetLongitudeL(longitude);
+			item->SetLatitudeL(latitude);
+			}
+		
 		CleanupStack::PopAndDestroy(5);
 		CleanupStack::PushL(item);
 		aList.AppendL(item);
@@ -990,7 +1052,7 @@ void CMobblerParser::ParseTopAlbumsL(const TDesC8& aXml, CMobblerAlbumList& aObs
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("topalbums"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementTopAlbums)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -1004,7 +1066,7 @@ void CMobblerParser::ParseTopAlbumsL(const TDesC8& aXml, CMobblerAlbumList& aObs
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementArtist)->Element(KElementName)->Content()),
 														*image));
 
-		item->SetIdL(items[i]->Element(_L8("mbid"))->Content());
+		item->SetIdL(items[i]->Element(KElementMbid)->Content());
 
 		CleanupStack::PopAndDestroy(3);
 
@@ -1031,18 +1093,18 @@ void CMobblerParser::ParseArtistTopTracksL(const TDesC8& aXml, CMobblerTrackList
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("toptracks"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementTopTracks)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
 		{
-		HBufC8* image((items[i]->Element(_L8("image")) == NULL) ?
+		HBufC8* image((items[i]->Element(KElementImage) == NULL) ?
 				KNullDesC8().AllocLC() :
-				items[i]->Element(_L8("image"))->Content().AllocLC());
+				items[i]->Element(KElementImage)->Content().AllocLC());
 
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementName)->Content()),
-														items[i]->Element(_L8("playcount"))->Content(),
+														items[i]->Element(KElementPlayCount)->Content(),
 														*image));
 		CleanupStack::PopAndDestroy(2);
 
@@ -1069,7 +1131,7 @@ void CMobblerParser::ParseUserTopTracksL(const TDesC8& aXml, CMobblerTrackList& 
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("toptracks"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementTopTracks)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -1107,7 +1169,7 @@ void CMobblerParser::ParsePlaylistL(const TDesC8& aXml, CMobblerTrackList& aObse
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Child(0)->Element(_L8("trackList"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Child(0)->Element(KElementTrackList)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -1118,7 +1180,7 @@ void CMobblerParser::ParsePlaylistL(const TDesC8& aXml, CMobblerTrackList& aObse
 
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementTitle)->Content()),
-														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(_L8("creator"))->Content()),
+														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementCreator)->Content()),
 														*image));
 		CleanupStack::PopAndDestroy(3);
 
@@ -1146,7 +1208,7 @@ void CMobblerParser::ParseSimilarTracksL(const TDesC8& aXml, CMobblerTrackList& 
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("similartracks"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementSimilarTracks)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -1188,14 +1250,14 @@ void CMobblerParser::ParseRecentTracksL(const TDesC8& aXml, CMobblerTrackList& a
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("recenttracks"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementRecentTracks)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
 		{
-		HBufC8* image((items[i]->Element(_L8("image")) == NULL) ?
+		HBufC8* image((items[i]->Element(KElementImage) == NULL) ?
 				KNullDesC8().AllocLC():
-				items[i]->Element(_L8("image"))->Content().AllocLC());
+				items[i]->Element(KElementImage)->Content().AllocLC());
 
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementName)->Content()),
@@ -1203,14 +1265,14 @@ void CMobblerParser::ParseRecentTracksL(const TDesC8& aXml, CMobblerTrackList& a
 														*image));
 
 		if (items[i]->AttrValue(KElementNowPlaying)
-				&& items[i]->AttrValue(KElementNowPlaying)->Compare(_L8("true")) == 0)
+				&& items[i]->AttrValue(KElementNowPlaying)->Compare(KElementTrue) == 0)
 			{
 			// We set null as a constant meaning 'now'
 			item->SetTimeL(KNullDesC8);
 			}
 		else
 			{
-			item->SetTimeL(*items[i]->Element(_L8("date"))->AttrValue(_L8("uts")));
+			item->SetTimeL(*items[i]->Element(KElementDate)->AttrValue(KElementUts));
 			}
 
 		CleanupStack::PopAndDestroy(3);
@@ -1238,7 +1300,7 @@ void CMobblerParser::ParsePlaylistsL(const TDesC8& aXml, CMobblerPlaylistList& a
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("playlists"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementPlaylists)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
@@ -1278,7 +1340,7 @@ void CMobblerParser::ParseShoutboxL(const TDesC8& aXml, CMobblerShoutbox& aObser
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("shouts"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementShouts)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < Min(KCount, 25); ++i)
@@ -1312,14 +1374,14 @@ void CMobblerParser::ParseTopTagsL(const TDesC8& aXml, CMobblerTagList& aObserve
 	// Parse the XML into the DOM fragment
 	xmlReader->ParseL(aXml);
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(_L8("toptags"))->ElementsL());
+	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KElementTopTags)->ElementsL());
 
 	const TInt KCount(items.Count());
 	for (TInt i(0); i < KCount; ++i)
 		{
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementName)->Content()),
-														items[i]->Element(_L8("count"))->Content(),
+														items[i]->Element(KElementCount)->Content(),
 														KNullDesC8));
 		CleanupStack::PopAndDestroy(1);
 

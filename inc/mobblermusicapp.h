@@ -24,14 +24,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef __MOBBLERMUSICAPP_H__
 #define __MOBBLERMUSICAPP_H__
 
-#include <mplayerremotecontrol.h>
+enum TMobblerMusicAppObserverState
+	{
+    EPlayerNotRunning,
+    EPlayerNotInitialised,
+    EPlayerInitialising,
+    EPlayerStopped,
+    EPlayerPlaying,
+    EPlayerPaused,
+    EPlayerSeekingForward,
+    EPlayerSeekingBackward
+	};
+
+enum TMobblerMusicAppObserverCommand
+	{
+    EPlayerCmdNoCommand,
+    EPlayerCmdPlay,
+    EPlayerCmdPause,
+    EPlayerCmdStop,
+    EPlayerCmdStartSeekForward,
+    EPlayerCmdStartSeekBackward,
+    EPlayerCmdStopSeeking,
+    EPlayerCmdNextTrack,
+    EPlayerCmdPreviousTrack,
+    EPlayerCmdStartMusicPlayer,
+    EPlayerCmdCloseMusicPlayer,
+    EPlayerCmdBack,
+    EPlayerCmdPlayPause 
+	};
 
 class MMobblerMusicAppObserver
 	{
 public:
-	virtual void PlayerStateChangedL(TMPlayerRemoteControlState aState) = 0;
+	virtual void PlayerStateChangedL(TMobblerMusicAppObserverState aState) = 0;
 	virtual void TrackInfoChangedL(const TDesC& aTitle, const TDesC& aArtist) = 0;
-	virtual void CommandReceivedL(TMPlayerRemoteControlCommands aCommand) = 0;
+	virtual void CommandReceivedL(TMobblerMusicAppObserverCommand aCommand) = 0;
 	virtual void PlayerPositionL(TTimeIntervalSeconds aPlayerPosition) = 0;
 	};
 
@@ -39,7 +66,7 @@ class CMobblerMusicApp : public CBase
 	{
 public:
 	virtual HBufC* NameL() = 0;
-	virtual TMPlayerRemoteControlState PlayerState() = 0;
+	virtual TMobblerMusicAppObserverState PlayerState() = 0;
 	virtual const TDesC& Title() = 0;
 	virtual const TDesC& Artist() = 0;
 	virtual const TDesC& Album() = 0;

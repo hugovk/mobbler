@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 _LIT(KLogPath, "C:\\Mobbler\\");
 _LIT(KLogFilename, "mobbler.log");
+const TInt KMaxLoggingTextSize(255);
 
 void CMobblerLogging::DumpDataL(const TDesC8& aData, const TDesC& aLogFile)
 	{
@@ -49,14 +50,14 @@ void CMobblerLogging::DumpDataL(const TDesC8& aData, const TDesC& aLogFile)
 
 void CMobblerLogging::LogL(const TInt aNumber)
 	{
-	TBuf8<255> text8;
+	TBuf8<KMaxLoggingTextSize> text8;
 	text8.AppendNum(aNumber);
 	LogL(text8);
 	}
 
 void CMobblerLogging::LogL(const TInt aFirstNumber, const TInt aSecondNumber)
 	{
-	TBuf8<255> text8;
+	TBuf8<KMaxLoggingTextSize> text8;
 	text8.AppendNum(aFirstNumber);
 	text8.Append(_L8(", "));
 	text8.AppendNum(aSecondNumber);
@@ -73,7 +74,7 @@ void CMobblerLogging::LogL(const TDesC& aText)
 
 void CMobblerLogging::LogL(const TDesC8& aText, const TInt aNumber)
 	{
-	TBuf8<255> text8;
+	TBuf8<KMaxLoggingTextSize> text8;
 	text8.Append(aText);
 	text8.Append(_L8(", "));
 	text8.AppendNum(aNumber);
@@ -82,7 +83,7 @@ void CMobblerLogging::LogL(const TDesC8& aText, const TInt aNumber)
 
 void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC8& aSecondText)
 	{
-	TBuf8<255> text8;
+	TBuf8<KMaxLoggingTextSize> text8;
 	text8.Append(aFirstText);
 	text8.Append(_L8(", "));
 	text8.Append(aSecondText);
@@ -91,7 +92,7 @@ void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC8& aSecondText)
 
 void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC& aSecondText)
 	{
-	TBuf8<255> text8;
+	TBuf8<KMaxLoggingTextSize> text8;
 	text8.Append(aFirstText);
 	text8.Append(_L8(", "));
 	text8.Append(aSecondText);
@@ -100,7 +101,7 @@ void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC& aSecondText)
 
 void CMobblerLogging::LogL(const CMobblerString* aMobblerString)
 	{
-	TBuf8<255> text8;
+	TBuf8<KMaxLoggingTextSize> text8;
 	if (aMobblerString)
 		{
 		text8.Append(aMobblerString->String8());

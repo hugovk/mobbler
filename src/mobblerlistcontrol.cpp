@@ -43,11 +43,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 _LIT(KDoubleLargeStyleListBoxTextFormat, "%d\t%S\t%S");
 _LIT(KRecentTracksTitleFormat, "%S - %S");
+_LIT(KPlaylistsFormat, "%S");
+_LIT(KOne, "1");
 
 const TTimeIntervalMinutes KMinutesInAnHour(60);
 const TTimeIntervalHours KHoursInOneDay(24);
 
-CMobblerListControl* CMobblerListControl::CreateListL(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl, TInt aType, const TDesC8& aText1, const TDesC8& aText2)
+CMobblerListControl* CMobblerListControl::CreateListL(CMobblerAppUi& aAppUi, 
+		CMobblerWebServicesControl& aWebServicesControl, 
+		TInt aType, 
+		const TDesC8& aText1, 
+		const TDesC8& aText2)
 	{
 	CMobblerListControl* self(NULL);
 	
@@ -153,7 +159,6 @@ void CMobblerListControl::MakeListBoxL()
 	iListBox->ActivateL();
 	}
 
-
 CMobblerListControl::~CMobblerListControl()
 	{
 	iAppUi.LastFmConnection().CancelTransaction(this);
@@ -221,7 +226,7 @@ HBufC* CMobblerListControl::NameL() const
 			break;
 		case EMobblerCommandPlaylistFetchUser:
 		case EMobblerCommandPlaylistFetchAlbum:
-			format.Set(_L("%S"));
+			format.Set(KPlaylistsFormat);
 			break;
 		case EMobblerCommandPlaylists:
 			format.Set(iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_PLAYLISTS));
@@ -291,7 +296,7 @@ void CMobblerListControl::UpdateIconArrayL()
 			iListBox->ItemDrawer()->ColumnData()->IconArray()->AppendL(icon);
 			}
 		
-		iListBox->HandleItemAdditionL();
+		iListBox->DrawDeferred();
 		}
 	}
 
@@ -322,7 +327,7 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 						case EMobblerCommandUserTopTags:
 						case EMobblerCommandArtistTopTags:
 							{
-							descriptionFormatId = (iList[i]->Description()->String().Compare(_L("1")) == 0)?
+							descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
 													R_MOBBLER_FORMAT_TIME_USED:
 													R_MOBBLER_FORMAT_TIMES_USED;
 							break;
@@ -330,7 +335,7 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 						case EMobblerCommandUserTopArtists:
 						case EMobblerCommandArtistTopTracks:
 							{
-							descriptionFormatId = (iList[i]->Description()->String().Compare(_L("1")) == 0)?
+							descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
 													R_MOBBLER_FORMAT_PLAY:
 													R_MOBBLER_FORMAT_PLAYS;
 							break;
@@ -392,7 +397,7 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 							description->Des().Format( (hoursAgo.Int() == 1)?
 															iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_HOUR):
 															iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_HOURS),
-															hoursAgo.Int());				
+															hoursAgo.Int());
 							}
 						else
 							{
@@ -429,7 +434,9 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 
 				default:
 					{
-					HBufC* itemText(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + iList[i]->Title()->String().Length() + iList[i]->Description()->String().Length()));
+					HBufC* itemText(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length()
+												+ iList[i]->Title()->String().Length()
+												+ iList[i]->Description()->String().Length()));
 					itemText->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), &iList[i]->Description()->String());
 					iListBoxItems->AppendL(*itemText);
 					CleanupStack::PopAndDestroy(itemText);
@@ -438,11 +445,11 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 				}
 			}
 
-	    iListBox->HandleItemAdditionL();
-	
-	    UpdateIconArrayL();
-	    
-	    RequestImagesL();
+		iListBox->HandleItemAdditionL();
+		
+		UpdateIconArrayL();
+		
+		RequestImagesL();
 		}
 	else
 		{
@@ -465,7 +472,7 @@ void CMobblerListControl::HandleResourceChange(TInt aType)
 	TRect rect;
 	
 	if (aType == KEikDynamicLayoutVariantSwitch)
-		{  	
+		{
 		AknLayoutUtils::LayoutMetricsRect(AknLayoutUtils::EMainPane, rect);
 		SetRect(rect);
 		}
@@ -527,6 +534,8 @@ void CMobblerListControl::HandleListBoxEventL(CEikListBox* /*aListBox*/, TListBo
 	{
 	CMobblerListControl* list(NULL);
 	
+	RequestImagesL();
+	
 	switch (aEventType)
 		{
 		case EEventEnterKeyPressed:
@@ -583,7 +592,7 @@ TKeyResponse CMobblerListControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEv
 void CMobblerListControl::Draw(const TRect& /*aRect*/) const
 	{
 	CWindowGc& gc(SystemGc());
-   	gc.Clear(Rect());
+	gc.Clear(Rect());
 	}
 
 CCoeControl* CMobblerListControl::ComponentControl(TInt /*aIndex*/) const

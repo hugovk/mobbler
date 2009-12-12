@@ -28,8 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblermusiclistener.h"
 #include "mobblerradioplayer.h" 
 
-const TInt KMaxMobblerTextSize(255);
-
 class CAknNavigationControlContainer;
 class CAknNavigationDecorator;
 class CAknsBasicBackgroundControlContext;
@@ -75,8 +73,8 @@ private:
 	void BitmapResizedL(const CMobblerBitmap* aMobblerBitmap);
 	
 	// Drawing helper methods
-	void DrawMobblerBitmap(const CMobblerBitmap* aMobblerBitmap, const TRect& aRect, const TRect& aSourceRect, TBool aGray = EFalse) const;
-	void BitBltMobblerBitmap(const CMobblerBitmap* aMobblerBitmap, const TPoint& aPoint, const TRect& aSourceRect, TBool aGray = EFalse) const;
+	void DrawMobblerBitmapL(const CMobblerBitmap* aMobblerBitmap, const TRect& aRect, const TRect& aSourceRect, TBool aGray = EFalse) const;
+	void BitBltMobblerBitmapL(const CMobblerBitmap* aMobblerBitmap, const TPoint& aPoint, const TRect& aSourceRect, TBool aGray = EFalse) const;
 	void DrawText(const TDesC& aText, const TRect& aRect, const TRgb& aPenColor, CGraphicsContext::TTextAlign aTextAlign, TInt aOffset) const;
 	void DrawRect(const TRect& aRect, const TRgb& aPenColor, const TRgb& aBrushColor) const;
 	

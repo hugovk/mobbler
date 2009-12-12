@@ -41,7 +41,7 @@ public:
 private:
 	CMobblerContacts();
 	void ConstructL(); 
-	virtual void HandleContactViewEvent(const CContactViewBase& aView, const TContactViewEvent& aEvent);
+	virtual void HandleContactViewEventL(const CContactViewBase& aView, const TContactViewEvent& aEvent);
 	void BuildListL();
 	
 private:
