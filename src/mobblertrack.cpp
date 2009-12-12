@@ -54,8 +54,6 @@ _LIT(KArtistImageCache, "E:\\System\\Data\\Mobbler\\cache\\");
 
 _LIT8(KElementExtraLarge, "extralarge");
 _LIT8(KElementImages, "images");
-_LIT8(KElementLarge, "large");
-_LIT8(KElementSize, "size");
 _LIT8(KElementSizes, "sizes");
 
 CMobblerTrack* CMobblerTrack::NewL(const TDesC8& aArtist,

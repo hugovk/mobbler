@@ -34,7 +34,7 @@ mobbler.mmp
 ..\mobblermusicapp30\group\mobblermusicapp30.mmp
 //..\touchfeedback\group\mobblertouchfeedback.mmp
 ..\contentlisting\group\mobblercontentlisting.mmp
-//..\gestureobserver\group\gestureobserver3x.mmp
+..\gestureobserver\group\gestureobserver3x.mmp
 ..\destinations\group\mobblerdestinations.mmp
 
 // In 5th edition, the sensor framework now requires SymbianSigned (ReadDeviceData)

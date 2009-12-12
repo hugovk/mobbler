@@ -152,15 +152,11 @@ no-repeat fixed 5%% 20%%; \
 				text-align: center;\
 			}\
 \
-			#info_bar, #title_bar {\
+			#info_bar {\
 				left: 0px;\
-				width: 100%;\
+				width: 100%%;\
 			}\
 \
-			#title_bar {\
-				background-color: #ff0000;\
-				color: #ffffff;\
-			\
 			#scrobbled_tracks {\
 				float: left;\
 				width: 35%%;\
@@ -180,7 +176,7 @@ no-repeat fixed 5%% 20%%; \
 	</head>\
 	<body>\
 	<div id=\"main\">\
-		<div id=\"title_bar\"><h3>%S</h3></div>\
+		<h3>%S</h3>\
 		<div id=\"image\"></div>\
 		<div id=\"info_bar\">\
 		<div id=\"artist_image\"><img src=\"%S\" width=\"%d\"  /></div>\
@@ -269,7 +265,9 @@ void CMobblerBrowserControl::DataL(const TDesC8& aData, CMobblerLastFmConnection
 		// Decide how big the artist picture should be taking into account the width
 		// of the application
 		TRect applicationRect(iAppUi.ApplicationRect());
-		TInt artistImageWidth((TInt)((TReal)applicationRect.Width() * 0.5));
+		TInt artistImageWidth((TInt)((TReal)applicationRect.Width() * 0.45));
+
+		__ASSERT_DEBUG(artistImageWidth < 1000, User::Invariant());
 
 		HBufC8* artistInfoHtml = HBufC8::NewLC(KArtistInfoHtmlTemplate().Length() +
 								 iAppUi.CurrentTrack()->Artist().String8().Length() +
@@ -349,7 +347,17 @@ void CMobblerBrowserControl::Draw(const TRect& /*aRect*/) const
 
 TKeyResponse CMobblerBrowserControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode aEventCode)
 	{
-	return iBrCtlInterface->OfferKeyEventL(aKeyEvent, aEventCode);
+	// This is a hack because the CBrCtlInterface which is part of the
+	// platform makes both the left and right arrow keys scroll the page
+	// up which is counter-intuitive. So change right to down before passing
+	// the key event to the control.
+	TKeyEvent newKeyEvent(aKeyEvent);
+	if (aKeyEvent.iCode == EKeyRightArrow)
+		{
+		newKeyEvent.iCode = EKeyDownArrow;
+		}
+
+	return iBrCtlInterface->OfferKeyEventL(newKeyEvent, aEventCode);
 	}
 
 // End of file

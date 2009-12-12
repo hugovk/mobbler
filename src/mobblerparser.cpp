@@ -1569,6 +1569,11 @@ void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, H
 			}
 		}
 
+	__ASSERT_DEBUG(aSimilarArtistsText, User::Invariant());
+	__ASSERT_DEBUG(aTagsText, User::Invariant());
+	__ASSERT_DEBUG(aImageUrl, User::Invariant());
+	__ASSERT_DEBUG(aArtistBio, User::Invariant());
+
 	CleanupStack::Pop(aSimilarArtistsText);
 	CleanupStack::PopAndDestroy(&similarArtistsArray);
 	CleanupStack::Pop(aTagsText);

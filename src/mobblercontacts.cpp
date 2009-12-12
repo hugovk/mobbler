@@ -171,7 +171,7 @@ void CMobblerContacts::BuildListL()
 		}
 	}
 
-void CMobblerContacts::HandleContactViewEventL(const CContactViewBase& aView, const TContactViewEvent& aEvent)
+void CMobblerContacts::HandleContactViewEvent(const CContactViewBase& aView, const TContactViewEvent& aEvent)
 	{
 	if (&aView == iRemoteView && aEvent.iEventType == TContactViewEvent::EReady)
 		{
@@ -186,9 +186,17 @@ void CMobblerContacts::HandleContactViewEventL(const CContactViewBase& aView, co
 	// wait until both the views are ready and then build the lists 
 	if (iNumViews == 2 && !iListBuilt)
 		{
-		BuildListL();
+		//TODO: temp added trap
+		TRAPD(err, BuildListL());
 		CActiveScheduler::Stop();
-		iListBuilt = ETrue;
+		if (err)
+			{
+			iListBuilt = EFalse;
+			}
+		else
+			{
+			iListBuilt = ETrue;
+			}
 		}
 	}
 
