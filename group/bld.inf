@@ -31,7 +31,7 @@ PRJ_MMPFILES
 mobbler.mmp
 
 //..\musicappobservermpx\group\musicappobservermpx.mmp
-..\touchfeedback\group\mobblertouchfeedback.mmp
+//..\touchfeedback\group\mobblertouchfeedback.mmp
 ..\contentlisting\group\mobblercontentlisting.mmp
 //..\gestureobserver\group\gestureobserver3x.mmp
 ..\destinations\group\mobblerdestinations.mmp

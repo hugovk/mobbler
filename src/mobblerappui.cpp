@@ -861,9 +861,9 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 								HandleCommandL(EMobblerCommandVisitWebPage);
 								break;
 							case EPlusOptionViewArtistBio:
-							    {
-							    ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandArtistBio), currentTrack->Artist().String8());
-							    }
+								{
+								ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandArtistBio), currentTrack->Artist().String8());
+								}
 								break;
 							case EPlusOptionShareTrack:
 							case EPlusOptionShareArtist:

@@ -230,7 +230,7 @@ void CMobblerWebServicesView::HandleCommandL(TInt aCommand)
 	switch (aCommand)
 		{
 		case EAknSoftkeyBack:
-			iWebServicesControl->Back();
+			iWebServicesControl->BackL();
 			break;
 		case EAknSoftkeyExit:
 			AppUi()->HandleCommandL(aCommand);

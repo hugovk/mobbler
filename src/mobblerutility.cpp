@@ -23,14 +23,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerutility.h"
 
-#ifndef __WINS__
+#ifndef __WINS__  //s
 #include "mobblerappui.h"
 #include "mobblerstring.h"
-#endif
+#endif //s
 
 #include <bautils.h>
 #include <coemain.h>
 #include <hash.h>
+
+#include "mobblerutility.h"
 
 _LIT8(KChineseLangCode, "cn");
 _LIT8(KEnglishLangCode, "en");
@@ -58,6 +60,9 @@ _LIT(KSpanishUrl,		"http://m.lastfm.es/");
 _LIT(KSwedishUrl,		"http://m.lastfm.se/");
 _LIT(KTurkishUrl,		"http://m.lastfm.com.tr/");
 
+_LIT8(KFormat1, "%02x");
+_LIT8(KFormat2, "%%%2x");
+
 HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
 	{
 	CMD5* md5(CMD5::NewL());
@@ -68,7 +73,7 @@ HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
 	
 	for (TInt i(0); i < hash.Length(); ++i)
 		{
-		hashResult->Des().AppendFormat(_L8("%02x"), hash[i]);
+		hashResult->Des().AppendFormat(KFormat1, hash[i]);
 		}
 	
 	CleanupStack::Pop(hashResult);
@@ -84,7 +89,7 @@ HBufC8* MobblerUtility::URLEncodeLC(const TDesC8& aString)
 	const TInt KCharCount(aString.Length());
 	for (TInt i(0); i < KCharCount; ++i)
 		{
-		urlEncoded->Des().AppendFormat(_L8("%%%2x"), aString[i]);
+		urlEncoded->Des().AppendFormat(KFormat2, aString[i]);
 		}
 	
 	return urlEncoded;

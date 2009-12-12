@@ -196,7 +196,7 @@ void CMobblerWebServicesControl::ForwardL(CMobblerListControl* aListControl)
 	DrawDeferred();
 	}
 
-void CMobblerWebServicesControl::Back()
+void CMobblerWebServicesControl::BackL()
 	{
 	if (iControls.Count() == 1)
 		{
@@ -229,7 +229,7 @@ TKeyResponse CMobblerWebServicesControl::OfferKeyEventL(const TKeyEvent& aKeyEve
 		{
 		case EKeyLeftArrow:
 			// the user pressed left so try to go up a control
-			Back();
+			BackL();
 			response = EKeyWasConsumed;
 			break;
 		case EKeyRightArrow:

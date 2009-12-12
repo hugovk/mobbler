@@ -51,8 +51,8 @@
 ;"$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobservermpx.rsc"-"!:\resource\plugins\musicappobservermpx.rsc"
 
 ; 5th edition touch feedback
-"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblertouchfeedback.dll"-"!:\sys\bin\mobblertouchfeedback.dll"
-"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblertouchfeedback.rsc"-"!:\resource\plugins\mobblertouchfeedback.rsc"
+;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblertouchfeedback.dll"-"!:\sys\bin\mobblertouchfeedback.dll"
+;"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblertouchfeedback.rsc"-"!:\resource\plugins\mobblertouchfeedback.rsc"
 
 ; Content listing plugin
 "$(EPOCROOT)\epoc32\release\$(PLATFORM)\$(TARGET)\mobblercontentlisting.dll"-"!:\sys\bin\mobblercontentlisting.dll"
