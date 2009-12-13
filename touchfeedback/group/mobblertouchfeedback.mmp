@@ -52,6 +52,4 @@ LIBRARY		apgrfx.lib
 LIBRARY		apparc.lib
 LIBRARY		euser.lib
 
-//#ifdef S60_50
-LIBRARY		touchfeedback.lib
-//#endif S60_50
+//LIBRARY		touchfeedback.lib

@@ -72,8 +72,9 @@ _LIT8(KArtistInfoHtmlTemplate, "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\
 		<style type=\"text/css\">\
 			body, html {\
 				margin: 0;\
-				padding: 2px;\
-				font-family: Arial, Helvetica, Verdana, Geneva, sans-serif;\
+				padding: 0px;\
+				font-family: Arial, Helvetica, sans-serif;\
+				font-size: medium;\
 				color: #333333;\
 				background: url(data:image/gif;base64,\
 R0lGODlhpwCnAPcAAPzq7Pz29Pzy7Pz+/Pz6/Pzu7Pz69Pzy9B5zAR/kAACQCgB8AABsjADlEBYS\
@@ -142,18 +143,15 @@ no-repeat fixed 5%% 20%%; \
 				\
 			}\
 \
-			#main {\
-			}\
-\
 			#nav_bar {\
-				top: 0px;\
-				left: 0px;\
 				width: 100%%;\
 				text-align: center;\
+				background-color: #ff0000;\
+				color: #ffffff;\
+				padding: 1px;\
 			}\
 \
 			#info_bar {\
-				left: 0px;\
 				width: 100%%;\
 			}\
 \
@@ -175,9 +173,7 @@ no-repeat fixed 5%% 20%%; \
 		</style>\
 	</head>\
 	<body>\
-	<div id=\"main\">\
-		<h3>%S</h3>\
-		<div id=\"image\"></div>\
+		<div id=\"nav_bar\"><h3>%S</h3></div>\
 		<div id=\"info_bar\">\
 		<div id=\"artist_image\"><img src=\"%S\" width=\"%d\"  /></div>\
 		<a name=\"#tags\"><p><strong>Tags: </strong>%S</p></a>\
@@ -185,10 +181,9 @@ no-repeat fixed 5%% 20%%; \
 		</div>\
 		<div id=\"body_text\">\
 \
-		<a name=\"#bio\"><p>%S</p></a>\
+		<p>%S</p>\
 \
 		</div><!-- body_text -->\
-	</div><!-- #main -->\
 	</body>\
 </html>");
 
