@@ -300,7 +300,6 @@ void CMobblerBrowserControl::SizeChanged()
 		{
 		iBrCtlInterface->SetRect(Rect());
 		}
-	//iAppUi.StatusPane()->MakeVisible(EFalse);
 	}
 
 TInt CMobblerBrowserControl::CountComponentControls() const

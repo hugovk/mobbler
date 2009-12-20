@@ -32,7 +32,7 @@ mobbler.mmp
 
 ..\musicappobserver\group\musicappobserver.mmp
 ..\mobblermusicapp30\group\mobblermusicapp30.mmp
-//..\touchfeedback\group\mobblertouchfeedback.mmp
+..\touchfeedback\group\mobblertouchfeedback.mmp
 ..\contentlisting\group\mobblercontentlisting.mmp
 ..\gestureobserver\group\gestureobserver3x.mmp
 ..\destinations\group\mobblerdestinations.mmp
