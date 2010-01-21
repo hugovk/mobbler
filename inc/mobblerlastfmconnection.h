@@ -121,6 +121,11 @@ public:
 
 	TLastFmMemberType MemberType() const;
 
+	// Scrobbler log access
+	TInt ScrobbleLogCount() const;
+	const CMobblerTrackBase& ScrobbleLogItem(TInt aIndex) const;
+	void RemoveScrobbleLogItemL(TInt aIndex);
+	
 	// state observers
 	void AddStateChangeObserverL(MMobblerConnectionStateObserver* aObserver);
 	void RemoveStateChangeObserver(MMobblerConnectionStateObserver* aObserver);
@@ -164,7 +169,20 @@ public:
 
 	void SimilarArtistsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	void ArtistGetImageL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	
+	void TrackGetTagsL(const TDesC8& aTrack, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	void TrackGetTopTagsL(const TDesC8& aTrack, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	void TrackAddTagL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
+	void TrackRemoveTagL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
+	
 	void ArtistGetTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	void ArtistGetTopTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	void ArtistAddTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
+	void ArtistRemoveTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
+	
+	void AlbumGetTagsL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	void AlbumAddTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
+	void AlbumRemoveTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
 
 	void AlbumGetInfoL(const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver);
 	void AlbumGetInfoL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
@@ -175,7 +193,7 @@ public:
 	void PlaylistAddTrackL(const TDesC8& aPlaylistId, const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver);
 	
 	void FoursquareL(const TDesC8& aLongitude, const TDesC8& aLatitude, MMobblerFlatDataObserver& aObserver);
-//	void FetchLyricsL(const TDesC8& aArtist, const TDesC8& aTitle, MMobblerFlatDataObserver& aObserver);
+	void FetchLyricsL(const TDesC8& aArtist, const TDesC8& aTitle, MMobblerFlatDataObserver& aObserver);
 
 	TBool ExportQueueToLogFileL();
 

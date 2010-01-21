@@ -28,7 +28,7 @@ TARGET		mobblerdestinations_0x2002661F.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0x2002661F
 #else
-TARGET		mobblerdestinations.dll
+TARGET		mobblerdestinations_0xA000BEB4.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0xA000BEB4
 #endif
@@ -43,7 +43,7 @@ START RESOURCE ..\data\mobblerdestinations.rss
 #ifdef SYMBIAN_SIGNED
 TARGET mobblerdestinations_0x2002661F
 #else
-TARGET mobblerdestinations
+TARGET mobblerdestinations_0xA000BEB4
 #endif
 END
 

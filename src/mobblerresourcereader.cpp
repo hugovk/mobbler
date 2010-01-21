@@ -41,10 +41,10 @@ _LIT(KLanguageRscFile2,"C:\\Resource\\apps\\mobbler_strings2.rsc");
 #else // !__SYMBIAN_SIGNED__
 
 #ifdef __WINS__
-_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings.r01");
+_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings_0xA0007648.r01");
 _LIT(KLanguageRscFile2,"Z:\\Resource\\apps\\mobbler_strings2.r01");
 #else
-_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings.rsc");
+_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings_0xA0007648.rsc");
 _LIT(KLanguageRscFile2,"C:\\Resource\\apps\\mobbler_strings2.rsc");
 #endif
 

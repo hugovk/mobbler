@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <EscapeUtils.h>
 #include <s32file.h>
 #include <sendomfragment.h>
+#include <senxmlutils.h>
 
 #ifdef __SYMBIAN_SIGNED__
 #include <aknswallpaperutils.h>
@@ -131,6 +132,8 @@ void CMobblerSystemCloseGlobalQuery::DoCancel()
 
 void CMobblerAppUi::ConstructL()
 	{
+	iWebServicesHelper = CMobblerWebServicesHelper::NewL(*this);
+	
 	iResourceReader = CMobblerResourceReader::NewL();
 	iBitmapCollection = CMobblerBitmapCollection::NewL();
 	
@@ -191,10 +194,7 @@ void CMobblerAppUi::ConstructL()
 	// Attempt to load gesture plug-in
 	iGesturePlugin = NULL;
 	TRAP_IGNORE(LoadGesturesPluginL());
-	if (iGesturePlugin && iSettingView->AccelerometerGestures())
-		{
-		SetAccelerometerGesturesL(ETrue);
-		}
+	UpdateAccelerometerGesturesL();
 	
 	AddViewL(iWebServicesView);
 	AddViewL(iBrowserView);
@@ -229,7 +229,7 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iBitmapCollection;
 	delete iCheckForUpdatesObserver;
 	delete iDocHandler;
-//	delete iFetchLyricsObserver;
+	delete iFetchLyricsObserver;
 	delete iInterfaceSelector;
 	delete iLastFmConnection;
 	delete iMobblerDownload;
@@ -418,9 +418,12 @@ void CMobblerAppUi::SetBitRateL(TInt aBitRate)
 	iRadioPlayer->SetBitRateL(aBitRate);
 	}
 
-void CMobblerAppUi::SetAccelerometerGesturesL(TBool aAccelerometerGestures)
+void CMobblerAppUi::UpdateAccelerometerGesturesL()
 	{
-	if (iGesturePlugin && aAccelerometerGestures)
+	// If the radio is playing and the setting is on
+	if (iGesturePlugin && 
+		iRadioPlayer->CurrentTrack() && 
+		iSettingView->AccelerometerGestures())
 		{
 		iGesturePlugin->ObserveGesturesL(*this);
 		}
@@ -592,6 +595,11 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				}
 			}
 			break;
+		case EMobblerCommandViewScrobbleLog:
+			{
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(aCommand), KNullDesC8);
+			}
+			break;
 		case EMobblerCommandCheckForUpdates:
 			{
 			delete iCheckForUpdatesObserver;
@@ -599,20 +607,6 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			iLastFmConnection->CheckForUpdateL(*iCheckForUpdatesObserver);
 			}
 			break;
-/*		case EMobblerCommandFetchLyrics:
-			{
-			if (currentTrack)
-				{
-				delete iFetchLyricsObserver;
-				iFetchLyricsObserver = CMobblerFlatDataObserverHelper::NewL(
-											*iLastFmConnection, *this, ETrue);
-				iLastFmConnection->FetchLyricsL(currentTrack->Artist().String8(), 
-												currentTrack->Title().String8(), 
-												*iFetchLyricsObserver);
-				}
-			}
-			break;
-*/
 		case EMobblerCommandEditSettings:
 			ActivateLocalViewL(iSettingView->Id(), 
 								TUid::Uid(CMobblerSettingItemListView::ENormalSettings), 
@@ -804,126 +798,106 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			
 			break;
 		case EMobblerCommandPlus:
-			
 			if (currentTrack)
 				{
-				CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
-				CleanupStack::PushL(list);
-				
-				CAknPopupList* popup(CAknPopupList::NewL(list, R_AVKON_SOFTKEYS_OK_CANCEL, AknPopupLayouts::EMenuWindow));
-				CleanupStack::PushL(popup);
-				
-				list->ConstructL(popup, CEikListBox::ELeftDownInViewRect);
-				
-				popup->SetTitleL(iResourceReader->ResourceL(R_MOBBLER_CURRENT_TRACK));
-				
-				list->CreateScrollBarFrameL(ETrue);
-				list->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto);
-				
-				CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(11));
-				CleanupStack::PushL(items);
-				
-				// Add the first menu item and append the shortcut key 
-				HBufC* menuText(iResourceReader->ResourceL(R_MOBBLER_VISIT_LASTFM_MENU).AllocLC());
-				const TInt KTextLimit(CEikMenuPaneItem::SData::ENominalTextLength);
-				_LIT(KShortcut0, " (0)");
-				TBuf<KTextLimit> newText(menuText->Left(KTextLimit - KShortcut0().Length()));
-				newText.Append(KShortcut0);
-				CleanupStack::PopAndDestroy(menuText);
-				menuText = newText.AllocLC();
-				items->AppendL(*menuText);
-				CleanupStack::PopAndDestroy(menuText);
-				
-				// Add the other menu items
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_VIEW_ARTIST_BIO));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_SHARE_TRACK));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_SHARE_ARTIST));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_PLAYLIST_ADD_TRACK));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_SIMILAR_ARTISTS));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_SIMILAR_TRACKS));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_EVENTS));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_ARTIST_SHOUTBOX));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_TOP_ALBUMS));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_TOP_TRACKS));
-				items->AppendL(iResourceReader->ResourceL(R_MOBBLER_TOP_TAGS));
-				
-				CleanupStack::Pop(items);
-				
-				list->Model()->SetItemTextArray(items);
-				list->Model()->SetOwnershipType(ELbmOwnsItemArray);
-				
-				CleanupStack::Pop(popup);
-				
-				if (popup->ExecuteLD())
-					{
-					if (iLastFmConnection->Mode() != CMobblerLastFmConnection::EOnline && GoOnlineL())
-						{
-						iLastFmConnection->SetModeL(CMobblerLastFmConnection::EOnline);
-						}
-					
-					if (iLastFmConnection->Mode() == CMobblerLastFmConnection::EOnline)
-						{
-						switch (list->CurrentItemIndex())
-							{
-							case EPlusOptionVisitLastFm:
-								HandleCommandL(EMobblerCommandVisitWebPage);
-								break;
-							case EPlusOptionViewArtistBio:
-								{
-								ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandArtistBio), currentTrack->Artist().String8());
-								}
-								break;
-							case EPlusOptionShareTrack:
-							case EPlusOptionShareArtist:
-							case EPlusOptionPlaylistAddTrack:
-								{
-								if (CurrentTrack())
-									{
-									delete iWebServicesHelper;
-									iWebServicesHelper = CMobblerWebServicesHelper::NewL(*this);
-									switch (list->CurrentItemIndex())
-										{
-										case EPlusOptionShareTrack: iWebServicesHelper->TrackShareL(*CurrentTrack()); break;
-										case EPlusOptionShareArtist: iWebServicesHelper->ArtistShareL(*CurrentTrack()); break;
-										case EPlusOptionPlaylistAddTrack: iWebServicesHelper->PlaylistAddL(*CurrentTrack()); break;
-										}
-									}
-								else
-									{
-									// TODO: display an error
-									}
-								}
-								break;
-							case EPlusOptionSimilarArtists:
-								ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandSimilarArtists), currentTrack->Artist().String8());
-								break;
-							case EPlusOptionSimilarTracks:
-								ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandSimilarTracks), currentTrack->MbTrackId().String8());
-								break;
-							case EPlusOptionEvents:
-								ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistEvents), currentTrack->Artist().String8());
-								break;
-							case EPlusOptionArtistShoutbox:
-								ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistShoutbox), currentTrack->Artist().String8());
-								break;
-							case EPlusOptionTopAlbums:
-								ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopAlbums), currentTrack->Artist().String8());
-								break;
-							case EPlusOptionTopTracks:
-								ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopTracks), currentTrack->Artist().String8());
-								break;
-							case EPlusOptionTopTags:
-								ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopTags), currentTrack->Artist().String8());
-								break;
-							default:
-								break;
-							}
-						}
-					}
-				
-				CleanupStack::PopAndDestroy(list);
+				iStatusView->DisplayPlusMenuL();
 				}
-			
+
+			break;
+		case EMobblerCommandPlusVisitLastFm:
+			HandleCommandL(EMobblerCommandVisitWebPage);			
+			break;
+		case EMobblerCommandPlusViewArtistBio:
+			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandArtistBio), currentTrack->Artist().String8());
+			break;
+		case EMobblerCommandPlusShareTrack:
+		case EMobblerCommandPlusShareArtist:
+		case EMobblerCommandPlusPlaylistAddTrack:
+			{
+			if (CurrentTrack())
+				{
+				switch (aCommand)
+					{
+					case EMobblerCommandPlusShareTrack: iWebServicesHelper->TrackShareL(*CurrentTrack()); break;
+					case EMobblerCommandPlusShareArtist: iWebServicesHelper->ArtistShareL(*CurrentTrack()); break;
+					case EMobblerCommandPlusPlaylistAddTrack: iWebServicesHelper->PlaylistAddL(*CurrentTrack()); break;
+					}
+				}
+			else
+				{
+				// TODO: display an error
+				}
+			}
+			break;
+		case EMobblerCommandPlusSimilarArtists:
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandSimilarArtists), currentTrack->Artist().String8());
+			break;
+		case EMobblerCommandPlusSimilarTracks:
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandSimilarTracks), currentTrack->MbTrackId().String8());
+			break;
+		case EMobblerCommandPlusEvents:
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistEvents), currentTrack->Artist().String8());
+			break;
+		case EMobblerCommandPlusArtistShoutbox:
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistShoutbox), currentTrack->Artist().String8());
+			break;
+		case EMobblerCommandPlusTopAlbums:
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopAlbums), currentTrack->Artist().String8());
+			break;
+		case EMobblerCommandPlusTopTracks:
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopTracks), currentTrack->Artist().String8());
+			break;
+		case EMobblerCommandPlusTopTags:
+			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopTags), currentTrack->Artist().String8());
+			break;
+		case EMobblerCommandPlusLyrics:
+			{
+			if (currentTrack)
+				{
+				delete iFetchLyricsObserver;
+				iFetchLyricsObserver = CMobblerFlatDataObserverHelper::NewL(
+											*iLastFmConnection, *this, ETrue);
+				iLastFmConnection->FetchLyricsL(currentTrack->Artist().String8(), 
+												currentTrack->Title().String8(), 
+												*iFetchLyricsObserver);
+				}
+			}
+			break;
+			case EMobblerCommandTrackAddTag:
+			if (CurrentTrack())
+				{
+				iWebServicesHelper->TrackAddTagL(*CurrentTrack());
+				}
+			break;
+		case EMobblerCommandTrackRemoveTag:
+			if (CurrentTrack())
+				{
+				iWebServicesHelper->TrackRemoveTagL(*CurrentTrack());
+				}
+			break;
+		case EMobblerCommandAlbumAddTag:
+			if (CurrentTrack())
+				{
+				iWebServicesHelper->AlbumAddTagL(*CurrentTrack());
+				}
+			break;
+		case EMobblerCommandAlbumRemoveTag:
+			if (CurrentTrack())
+				{
+				iWebServicesHelper->AlbumRemoveTagL(*CurrentTrack());
+				}
+			break;
+		case EMobblerCommandArtistAddTag:
+			if (CurrentTrack())
+				{
+				iWebServicesHelper->ArtistAddTagL(*CurrentTrack());
+				}
+			break;
+		case EMobblerCommandArtistRemoveTag:
+			if (CurrentTrack())
+				{
+				iWebServicesHelper->ArtistRemoveTagL(*CurrentTrack());
+				}
 			break;
 		case EMobblerCommandVisitWebPage:
 			{
@@ -1092,7 +1066,10 @@ void CMobblerAppUi::RadioStartL(TInt aRadioStation,
 								TBool aSaveStations)
 	{
 	iPreviousRadioStation = aRadioStation;
-
+	
+	// Turn on gesture plug-in
+	UpdateAccelerometerGesturesL();
+	
 	if (aSaveStations)
 		{
 		switch (iPreviousRadioStation)
@@ -1256,15 +1233,19 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 					}
 				}
 			}
-/*		else if (aObserver == iFetchLyricsObserver)
+		else if (aObserver == iFetchLyricsObserver)
 			{
 			DUMPDATA(aData, _L("lyricsdata.txt"));
-			_LIT(KLyricsFilename, "c:\\mobblerlyrics.txt");
-			//_LIT8(KElementStart, "start");
-			//_LIT8(KElementSg, "sq");
+			_LIT(KLyricsFilename, "C:\\System\\Data\\Mobbler\\lyrics.txt");
+			_LIT8(KElementSg, "sg");
 			_LIT8(KElementTx, "tx");
 			_LIT8(KElement200, "200");
+			_LIT8(KElement204, "204");
 			_LIT8(KElement300, "300");
+			_LIT8(KElement400, "400");
+			_LIT8(KElement401, "401");
+			_LIT8(KElement402, "402");
+			_LIT8(KElement406, "406");
 			
 			RFileWriteStream file;
 			CleanupClosePushL(file);
@@ -1280,39 +1261,78 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			
 			xmlReader->ParseL(aData);
 			
-			// Get the error code
-			const TDesC8* statusText(domFragment->AsElement().AttrValue(KElementStatus));
+			// Get the status error code
+			TPtrC8 statusPtrC(domFragment->AsElement().Element(KElementStatus)->Content());
+			TBool success(ETrue);
 			
-			if (statusText && (statusText->CompareF(KElement200) == 0))
+			if ((statusPtrC.CompareF(KElement200) == 0) || 
+				(statusPtrC.CompareF(KElement300) == 0))
 				{
-				LOG(_L8("200 - ok"));
-				const TDesC8* lyricsText(domFragment->AsElement().AttrValue(KElementTx));
-				file.WriteL(*lyricsText);
-				}
-			else if (statusText && (statusText->CompareF(KElement300) == 0))
-				{
-				LOG(_L8("300 - TESTING LIMITED"));
-				const TDesC8* lyricsText(domFragment->AsElement().AttrValue(KElementTx));
-				file.WriteL(*lyricsText);
-				}
-			else if (statusText)
-				{
-				LOG(_L8("statusText"));
-				file.WriteL(*statusText);
+				TPtrC8 lyricsPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementTx)->Content());
+				
+				HBufC8* lyricsBuf(HBufC8::NewLC(lyricsPtrC.Length()));
+				SenXmlUtils::DecodeHttpCharactersL(lyricsPtrC, lyricsBuf);
+				
+				TPtr8 lyricsPtr(lyricsBuf->Des());
+				MobblerUtility::FixLyricsLineBreaks(lyricsPtr);
+				file.WriteL(lyricsPtr);
+				CleanupStack::PopAndDestroy(lyricsBuf);
 				}
 			else
 				{
-				// error!
-				LOG(_L8("error!"));
-				file.WriteL(aData);
+				CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
+				note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_LYRICS_NOT_FOUND));
+				success = EFalse;
+				
+//				TPtrC8 songPtrC(domFragment->AsElement().Element(KElementSg)->Content());
+//				file.WriteL(songPtrC);
 				}
-			CleanupStack::PopAndDestroy(2);
 			
+#ifdef _DEBUG
+			if (statusPtrC.CompareF(KElement200) == 0)
+				{
+				LOG(_L8("200 - ok"));
+				//LOG(_L8("    Results are returned. All parameters checked ok."));
+				}
+			else if (statusPtrC.CompareF(KElement204) == 0)
+				{
+				LOG(_L8("204 - NO CONTENT"));
+				//LOG(_L8("   Parameter query returned no results. All parameters checked ok."));
+				}
+			else if (statusPtrC.CompareF(KElement300) == 0)
+				{
+				LOG(_L8("300 - TESTING LIMITED"));
+				//LOG(_L8("    Temporary access. Limited content. All parameters checked ok."));
+				}
+			else if (statusPtrC.CompareF(KElement400) == 0)
+				{
+				LOG(_L8("400 - MISSING KEY"));
+				//LOG(_L8("   Parameter “i” missing. Authorization failed."));
+				}
+			else if (statusPtrC.CompareF(KElement401) == 0)
+				{
+				LOG(_L8("401 – UNAUTHORIZED"));
+				//LOG(_L8("   Parameter “i” invalid. Authorization failed."));
+				}
+			else if (statusPtrC.CompareF(KElement402) == 0)
+				{
+				LOG(_L8("402 - LIMITED TIME"));
+				//LOG(_L8("    This response is returned only if you query too soon. Limit query requests. Time of delay is shown in <delay> tag in milliseconds."));
+				}
+			else if (statusPtrC.CompareF(KElement406) == 0)
+				{
+				LOG(_L8("406 - QUERY TOO SHORT"));
+				//LOG(_L8("    Query request string is too short. All other parameters checked ok."));
+				}
+#endif // _DEBUG
+
+			CleanupStack::PopAndDestroy(2); // xmlReader & domFragment
 			CleanupStack::PopAndDestroy(&file);
-			
-			LaunchFileEmbeddedL(KLyricsFilename);
+			if (success)
+				{
+				LaunchFileEmbeddedL(KLyricsFilename);
+				}
 			}
-*/
 		}
 	}
 

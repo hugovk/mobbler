@@ -46,7 +46,7 @@ const TInt KUpdateIntervalDays(7);
 const TInt KMaxMobblerTextSize(255);
 
 const TInt KMobblerMinorVersion(8);
-const TInt KMobblerBuildNumber(237);
+const TInt KMobblerBuildNumber(241);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
@@ -120,22 +120,6 @@ public:
 		EAlwaysWhenOnline
 		};
 
-private:
-	enum TPlusOptions
-		{
-		EPlusOptionVisitLastFm,
-		EPlusOptionViewArtistBio,
-		EPlusOptionShareTrack,
-		EPlusOptionShareArtist,
-		EPlusOptionPlaylistAddTrack,
-		EPlusOptionSimilarArtists,
-		EPlusOptionSimilarTracks,
-		EPlusOptionEvents,
-		EPlusOptionArtistShoutbox,
-		EPlusOptionTopAlbums,
-		EPlusOptionTopTracks,
-		EPlusOptionTopTags
-		};
 
 public:
 	void ConstructL();
@@ -162,7 +146,7 @@ public:
 					 TBool aAndSaveToSettings = EFalse);
 	void SetIapIDL(TUint32 aIapID);
 	void SetBufferSize(TTimeIntervalSeconds aBufferSize);
-	void SetAccelerometerGesturesL(TBool aAccelerometerGestures);
+	void UpdateAccelerometerGesturesL();
 	TBool AccelerometerGesturesAvailable() const;
 	void SetSleepTimerL(const TInt aMinutes);
 	void SetAlarmTimerL(const TTime aTime);
@@ -311,7 +295,7 @@ private:
 
 	CMobblerWebServicesHelper* iWebServicesHelper;
 	CMobblerFlatDataObserverHelper* iCheckForUpdatesObserver;
-//	CMobblerFlatDataObserverHelper* iFetchLyricsObserver;
+	CMobblerFlatDataObserverHelper* iFetchLyricsObserver;
 
 	CMobblerDestinationsInterface* iDestinations;
 	TUid iDestinationsDtorUid;

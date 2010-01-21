@@ -1,7 +1,7 @@
 /*
 mobblermusicapp30.h
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
@@ -25,12 +25,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define __MOBBLERMUSICAPP30_H__
 
 #include <e32base.h>
-#include <mplayerremotecontrol.h>
 #include <mobbler\mobblermusicapp.h>
+#include <mplayerremotecontrol.h>
 
 #include "mobblermusicstatelistener.h"
-#include "mobblertracklistener.h"
 #include "mobblerplaybackpositionlistener.h"
+#include "mobblertracklistener.h"
 
 class CMobblerMusicAppObserver30 : public CMobblerMusicApp,
 									public CMobblerTrackListener::MMobblerTrackObserver,
@@ -68,6 +68,7 @@ private:
 	
 private:
 	CMobblerMusicAppStateListener* iMusicAppStateListener;
+	CMobblerPlaybackPositionListener* iPlaybackPositionListener;
 	CMobblerTrackListener* iTrackListener;
 	
 	TBuf<255> iTitle;
@@ -77,3 +78,5 @@ private:
 	};
 
 #endif // __MOBBLERMUSICAPP30_H__
+
+// End of file

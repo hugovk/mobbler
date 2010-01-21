@@ -100,6 +100,12 @@ const CMobblerString* CMobblerListItem::Description() const
 	return iDescription;
 	}
 
+void CMobblerListItem::SetImageLocationL(const TDesC8& aImageLocation)
+	{
+	delete iImageLocation;
+	iImageLocation = aImageLocation.AllocL();
+	}
+
 const TDesC8& CMobblerListItem::ImageLocation() const
 	{
 	return *iImageLocation;

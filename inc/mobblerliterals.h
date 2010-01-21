@@ -44,6 +44,7 @@ _LIT8(KAlbum, "album");
 _LIT8(KArtist, "artist");
 _LIT8(KGetPlaylists, "getplaylists");
 _LIT8(KGetFriends, "getfriends");
+_LIT8(KGetInfo, "getinfo");
 _LIT8(KSearch, "search");
 _LIT8(KTag, "tag");
 _LIT8(KUser, "user");

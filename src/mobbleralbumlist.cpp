@@ -30,7 +30,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlistitem.h"
 #include "mobblerliterals.h"
 #include "mobblerstring.h"
+#include "mobblertrack.h"
 #include "mobblerutility.h"
+#include "mobblerwebserviceshelper.h"
 
 _LIT8(KGetTopAlbums, "gettopalbums");
 
@@ -42,6 +44,8 @@ CMobblerAlbumList::CMobblerAlbumList(CMobblerAppUi& aAppUi, CMobblerWebServicesC
 void CMobblerAlbumList::ConstructL()
 	{
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultAlbumImage);
+	
+	iWebServicesHelper = CMobblerWebServicesHelper::NewL(iAppUi);
 	
 	switch (iType)
 		{
@@ -61,6 +65,7 @@ void CMobblerAlbumList::ConstructL()
 
 CMobblerAlbumList::~CMobblerAlbumList()
 	{
+	delete iWebServicesHelper;
 	}
 
 CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
@@ -72,6 +77,20 @@ CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
 		case EMobblerCommandOpen:
 			list = CMobblerListControl::CreateListL(iAppUi, iWebServicesControl, EMobblerCommandPlaylistFetchAlbum, iList[iListBox->CurrentItemIndex()]->Title()->String8(), iList[iListBox->CurrentItemIndex()]->Id());
 			break;
+		case EMobblerCommandAlbumAddTag:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			iWebServicesHelper->AlbumAddTagL(*track);            
+			track->Release();
+			}
+			break;
+		case EMobblerCommandAlbumRemoveTag:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			iWebServicesHelper->AlbumRemoveTagL(*track);            
+			track->Release();
+			}
+			break;
 		default:
 			break;
 		}
@@ -82,6 +101,14 @@ CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
 void CMobblerAlbumList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
 	aCommands.AppendL(EMobblerCommandOpen);
+	
+	aCommands.AppendL(EMobblerCommandTag);
+	aCommands.AppendL(EMobblerCommandAlbumAddTag);
+	aCommands.AppendL(EMobblerCommandAlbumRemoveTag);
+	}
+
+void CMobblerAlbumList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError /*aError*/)
+	{
 	}
 
 void CMobblerAlbumList::ParseL(const TDesC8& aXml)

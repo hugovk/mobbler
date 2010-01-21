@@ -1,7 +1,7 @@
 /*
-musicplaybackpositionlistener.h
+mobblerplaybackpositionlistener.cpp
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
@@ -21,14 +21,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <e32base.h>
+#include <e32property.h> 
+
 #include "mobblerplaybackpositionlistener.h"
 
-const TUid KMusicAppUID = {0x102072c3};
-const TInt KPlaybackPositionKey = 6;
+const TUid KMusicAppUid = {0x102072c3};
+const TInt KPlaybackPositionKey(6);
 
 CMobblerPlaybackPositionListener* CMobblerPlaybackPositionListener::NewL(MMobblerPlaybackPositionObserver& aObserver)
 	{
-	CMobblerPlaybackPositionListener* self = new(ELeave) CMobblerPlaybackPositionListener(aObserver);
+	CMobblerPlaybackPositionListener* self(new(ELeave) CMobblerPlaybackPositionListener(aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL();
 	CleanupStack::Pop(self);
@@ -49,7 +52,7 @@ CMobblerPlaybackPositionListener::CMobblerPlaybackPositionListener(MMobblerPlayb
 
 void CMobblerPlaybackPositionListener::ConstructL()
 	{
-	User::LeaveIfError(iProperty.Attach(KMusicAppUID, KPlaybackPositionKey));
+	User::LeaveIfError(iProperty.Attach(KMusicAppUid, KPlaybackPositionKey));
 	iProperty.Subscribe(iStatus);
 	SetActive();
 	}
@@ -66,7 +69,10 @@ void CMobblerPlaybackPositionListener::RunL()
 		iObserver.HandlePlaybackPositionChangeL(playbackPosition);
 		}
 	}
+
 void CMobblerPlaybackPositionListener::DoCancel()
 	{
 	iProperty.Close();
 	}
+
+// End of file

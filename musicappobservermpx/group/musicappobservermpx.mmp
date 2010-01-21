@@ -28,7 +28,7 @@ TARGET		musicappobservermpx_0x20027114.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0x20027114
 #else
-TARGET		musicappobservermpx.dll
+TARGET		musicappobservermpx_0xA000D9F4.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0xA000D9F4
 #endif
@@ -43,7 +43,7 @@ START RESOURCE ..\data\musicappobservermpx.rss
 #ifdef SYMBIAN_SIGNED
 TARGET musicappobservermpx_0x20027114
 #else
-TARGET musicappobservermpx
+TARGET musicappobservermpx_0xA000D9F4
 #endif
 END
 

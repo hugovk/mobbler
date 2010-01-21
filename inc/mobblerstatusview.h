@@ -32,6 +32,8 @@ public:
 	static CMobblerStatusView* NewL();
 	~CMobblerStatusView();
 	
+	void DisplayPlusMenuL();
+	
 	TUid Id() const;
 	void HandleCommandL(TInt aCommand);
 	
@@ -63,6 +65,8 @@ private:
 	
 private:
 	CMobblerStatusControl* iMobblerStatusControl;
+	
+	TBool iDisplayPlusMenu;
 	};
 
 #endif // __MOBBLERSTATUSVIEW_H__

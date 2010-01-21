@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef __SYMBIAN_SIGNED__
 #include <mobbler_0x2002655A.rsg>
 #else
-#include <mobbler.rsg>
+#include <mobbler_0xA0007648.rsg>
 #endif
 
 #endif // __MOBBLERSTRINGS_RSG_H__

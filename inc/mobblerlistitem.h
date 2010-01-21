@@ -40,6 +40,7 @@ public:
 	const CMobblerString* Title() const;
 	const CMobblerString* Description() const;
 	
+	void SetImageLocationL(const TDesC8& aImageLocation);
 	const TDesC8& ImageLocation() const;
 	
 	void SetIdL(const TDesC8& aId);

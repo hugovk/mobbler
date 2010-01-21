@@ -25,7 +25,7 @@
 &EN, FR, GE, SP, IT, SW, DA, NO, FI, AM, TU, RU, HU, DU, CS, SK, PL, ZH, AF, AR, BE, BG, CA, EL, HE, IN, LV, LT, BP, RO, SR
 
 ; Header
-#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 1, 8, 237
+#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 1, 8, 241
 
 ; Localised vendor names
 %{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}
@@ -47,8 +47,8 @@
 "$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobserver_0x2002655E.rsc"-"!:\resource\plugins\musicappobserver_0x2002655E.rsc"
 
 ; The Mobbler 3.0 music app observer
-"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblermusicapp30_0x20026561.dll"-"!:\sys\bin\mobblermusicapp30_0x20026561.dll"
-"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblermusicapp30_0x20026561.rsc"-"!:\resource\plugins\mobblermusicapp30_0x20026561.rsc"
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblermusicapp30_0x20027117.dll"-"!:\sys\bin\mobblermusicapp30_0x20027117.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblermusicapp30_0x20027117.rsc"-"!:\resource\plugins\mobblermusicapp30_0x20027117.rsc"
 
 
 ; The Mobbler mpx music app observer

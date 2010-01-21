@@ -1,7 +1,7 @@
 /*
-musicstatelistener.h
+mobblermusicstatelistener.cpp
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
@@ -21,10 +21,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <e32base.h>
+
 #include "mobblermusicstatelistener.h"
 
-const TUid KMusicAppUID = {0x102072c3};
-const TInt KStateKey = 3;
+const TUid KMusicAppUid = {0x102072c3};
+const TInt KStateKey(3);
 
 CMobblerMusicAppStateListener* CMobblerMusicAppStateListener::NewL(MMobblerMusicAppStateObserver& aObserver)
 	{
@@ -49,7 +51,7 @@ CMobblerMusicAppStateListener::CMobblerMusicAppStateListener(MMobblerMusicAppSta
 
 void CMobblerMusicAppStateListener::ConstructL()
 	{
-	User::LeaveIfError(iProperty.Attach(KMusicAppUID, KStateKey));
+	User::LeaveIfError(iProperty.Attach(KMusicAppUid, KStateKey));
 	iProperty.Subscribe(iStatus);
 	SetActive();
 	}
@@ -70,3 +72,5 @@ void CMobblerMusicAppStateListener::DoCancel()
 	{
 	iProperty.Close();
 	}
+
+// End of file

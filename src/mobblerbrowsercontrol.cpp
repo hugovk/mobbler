@@ -146,7 +146,7 @@ no-repeat fixed 5%% 20%%; \
 			#nav_bar {\
 				width: 100%%;\
 				text-align: center;\
-				background-color: #ff0000;\
+				background-color: #D51007;\
 				color: #ffffff;\
 				padding: 1px;\
 			}\
@@ -210,8 +210,6 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect)
 	CreateWindowL();
 	SetRect(aRect);
 	SetExtentToWholeScreen(); // Full screen
-	//iAppUi.StatusPane()->MakeVisible(ETrue);
-
 
 	if (iBrCtlInterface)
 		{
@@ -221,12 +219,13 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect)
 
 	// TODO: need to detect 3rd Ed and use
 	// TRect brCtlRect(Position(), Size());   // in 3rd Ed devices
+	// need a device to test on first
 	TRect brCtlRect(TPoint(0, 0), Size()); // in 3rd Ed, FP1 devices
 
 	iBrCtlInterface = ::CreateBrowserControlL(
 			this,
 			brCtlRect,
-			TBrCtlDefs::ECapabilityDisplayScrollBar | TBrCtlDefs::ECapabilityLoadHttpFw,
+			TBrCtlDefs::ECapabilityDisplayScrollBar/* | TBrCtlDefs::ECapabilityLoadHttpFw*/,
 			TBrCtlDefs::ECommandIdBase);
 
 	iAppUi.LastFmConnection().WebServicesCallL(KArtist, KGetInfo, iAppUi.CurrentTrack()->Artist().String8(), *this);
@@ -260,7 +259,7 @@ void CMobblerBrowserControl::DataL(const TDesC8& aData, CMobblerLastFmConnection
 		// Decide how big the artist picture should be taking into account the width
 		// of the application
 		TRect applicationRect(iAppUi.ApplicationRect());
-		TInt artistImageWidth((TInt)((TReal)applicationRect.Width() * 0.45));
+		TInt artistImageWidth((TInt)((TReal)applicationRect.Width() * 0.40));
 
 		__ASSERT_DEBUG(artistImageWidth < 1000, User::Invariant());
 

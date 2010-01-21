@@ -34,7 +34,7 @@ TARGET		gestureobserver5x_0x20026569.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0x20026569
 #else
-TARGET		gestureobserver5x.dll
+TARGET		gestureobserver5x_0xA000B6D1.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0xA000B6D1
 #endif

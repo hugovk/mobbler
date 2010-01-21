@@ -1,7 +1,7 @@
 /*
-mobblermusicapp30.h
+mobblermusicapp30.cpp
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblermusicapp30.h"
 
-const TUid KMusicAppUID = {0x102072c3};
+const TUid KMusicAppUid = {0x102072c3};
 
 #ifdef __SYMBIAN_SIGNED__
 const TInt KImplementationUid = {0x20026562}; 
@@ -33,48 +33,50 @@ const TInt KImplementationUid = {0x20026562};
 const TInt KImplementationUid = {0xA0007CAF}; 
 #endif
 
-const TInt KTrackTitleKey = 2;
-const TInt KStateKey = 3;
-const TInt KTrackArtistKey = 5;
-//const TInt KPlaybackPositionKey = 6;
-const TInt KTrackLengthKey = 7;
-//const TInt KPlaylistPositionKey = 8;
-//const TInt KCommandKey = 12;
+const TInt KTrackTitleKey(2);
+const TInt KStateKey(3);
+const TInt KTrackArtistKey(5);
+//const TInt KPlaybackPositionKey(6);
+const TInt KTrackLengthKey(7);
+//const TInt KPlaylistPositionKey(8);
+//const TInt KCommandKey(12);
 
 const TImplementationProxy ImplementationTable[] =
-    {
-    {{KImplementationUid}, TProxyNewLPtr(CMobblerMusicAppObserver30::NewL)}
-    };
+	{
+	{{KImplementationUid}, TProxyNewLPtr(CMobblerMusicAppObserver30::NewL)}
+	};
 
 EXPORT_C const TImplementationProxy* ImplementationGroupProxy(TInt& aTableCount)
-    {
-    aTableCount = sizeof(ImplementationTable) / sizeof(TImplementationProxy);
-    return ImplementationTable;
-    }
+	{
+	aTableCount = sizeof(ImplementationTable) / sizeof(TImplementationProxy);
+	return ImplementationTable;
+	}
 
 CMobblerMusicAppObserver30* CMobblerMusicAppObserver30::NewL(TAny* aObserver)
 	{
-	CMobblerMusicAppObserver30* self = new(ELeave) CMobblerMusicAppObserver30(aObserver);
+	CMobblerMusicAppObserver30* self(new(ELeave) CMobblerMusicAppObserver30(aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL();
 	CleanupStack::Pop(self);
 	return self;
 	}
-	
+
 CMobblerMusicAppObserver30::CMobblerMusicAppObserver30(TAny* aObserver)
 	:iObserver(static_cast<MMobblerMusicAppObserver*>(aObserver))
 	{
 	}
-	
+
 void CMobblerMusicAppObserver30::ConstructL()
 	{
 	iMusicAppStateListener = CMobblerMusicAppStateListener::NewL(*this);
+	iPlaybackPositionListener = CMobblerPlaybackPositionListener::NewL(*this);
 	iTrackListener = CMobblerTrackListener::NewL(*this);
 	}
-	
+
 CMobblerMusicAppObserver30::~CMobblerMusicAppObserver30()
 	{
 	delete iMusicAppStateListener;
+	delete iPlaybackPositionListener;
 	delete iTrackListener;
 	}
 
@@ -102,7 +104,7 @@ void CMobblerMusicAppObserver30::PlayerStateChanged(TMPlayerRemoteControlState a
 	{
 	iObserver->PlayerStateChangedL(ConvertState(aState));
 	}
-	
+
 void CMobblerMusicAppObserver30::TrackInfoChanged(const TDesC& aTitle, const TDesC& aArtist)
 	{
 	iObserver->TrackInfoChangedL(aTitle, aArtist);
@@ -111,7 +113,7 @@ void CMobblerMusicAppObserver30::TrackInfoChanged(const TDesC& aTitle, const TDe
 TMobblerMusicAppObserverState CMobblerMusicAppObserver30::PlayerState()
 	{
 	TInt playerState(EMPlayerRCtrlNotRunning);
-	RProperty::Get(KMusicAppUID, KStateKey, playerState);
+	RProperty::Get(KMusicAppUid, KStateKey, playerState);
 	return ConvertState(static_cast<TMPlayerRemoteControlState>(playerState));
 	}
 
@@ -122,13 +124,13 @@ HBufC* CMobblerMusicAppObserver30::NameL()
 	
 const TDesC& CMobblerMusicAppObserver30::Title()
 	{
-	RProperty::Get(KMusicAppUID, KTrackTitleKey, iTitle);
+	RProperty::Get(KMusicAppUid, KTrackTitleKey, iTitle);
 	return iTitle;
 	}
 
 const TDesC& CMobblerMusicAppObserver30::Artist()
 	{
-	RProperty::Get(KMusicAppUID, KTrackArtistKey, iArtist);
+	RProperty::Get(KMusicAppUid, KTrackArtistKey, iArtist);
 	return iArtist;
 	}
 
@@ -140,14 +142,14 @@ const TDesC& CMobblerMusicAppObserver30::Album()
 TTimeIntervalSeconds CMobblerMusicAppObserver30::Duration()
 	{
 	TInt duration;
-	RProperty::Get(KMusicAppUID, KTrackLengthKey, duration);
+	RProperty::Get(KMusicAppUid, KTrackLengthKey, duration);
 	return duration;
 	}
 
 TMobblerMusicAppObserverState CMobblerMusicAppObserver30::ConvertState(TMPlayerRemoteControlState aState)
 	{
 	TMobblerMusicAppObserverState playerState(EPlayerNotRunning);
-
+	
 	switch (aState)
 		{
 		case EMPlayerRCtrlNotRunning:
@@ -182,7 +184,7 @@ TMobblerMusicAppObserverState CMobblerMusicAppObserver30::ConvertState(TMPlayerR
 TMobblerMusicAppObserverCommand CMobblerMusicAppObserver30::ConvertCommand(TMPlayerRemoteControlCommands aCommand)
 	{
 	TMobblerMusicAppObserverCommand command(EPlayerCmdNoCommand);
-
+	
 	switch (aCommand)
 		{
 		case EMPlayerRCtrlCmdNoCommand:
@@ -228,4 +230,5 @@ TMobblerMusicAppObserverCommand CMobblerMusicAppObserver30::ConvertCommand(TMPla
 	
 	return command;
 	}
-	
+
+// End of file

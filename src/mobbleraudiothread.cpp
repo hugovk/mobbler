@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbleraudiothread.h"
 #include "mobblershareddata.h"
 #include "mobblertrack.h"
+#include "mobblerutility.h"
 
 const TInt KBufferSizeInPackets(32);
 
@@ -133,7 +134,11 @@ void CMobblerAudioThread::RunL()
 			{
 			iStream = CMdaAudioOutputStream::NewL(*this);
 			iStream->Open(&iShared.iAudioDataSettings);
-			TRAP_IGNORE(iEqualizer = CAudioEqualizerUtility::NewL(*iStream));
+			
+			if (MobblerUtility::EqualizerSupported())
+				{
+				TRAP_IGNORE(iEqualizer = CAudioEqualizerUtility::NewL(*iStream));
+				}
 			}
 			break;
 		case ECmdDestroyAudio:

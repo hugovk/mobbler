@@ -30,8 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <bautils.h>
 #include <coemain.h>
+#include <hal.h>
 #include <hash.h>
 
+#include "mobblerlogging.h"
 #include "mobblerutility.h"
 
 _LIT8(KChineseLangCode, "cn");
@@ -62,6 +64,16 @@ _LIT(KTurkishUrl,		"http://m.lastfm.com.tr/");
 
 _LIT8(KFormat1, "%02x");
 _LIT8(KFormat2, "%%%2x");
+
+const TInt KNokiaE52MachineUid(0x20014DCC);
+const TInt KNokiaE72MachineUid(0x20014DD0);
+
+TBool MobblerUtility::EqualizerSupported()
+	{
+	TInt machineUid(0);
+	TInt error(HAL::Get(HALData::EMachineUid, machineUid));
+	return (error == KErrNone) && !(machineUid == KNokiaE52MachineUid || machineUid == KNokiaE72MachineUid);
+	}
 
 HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
 	{
@@ -227,6 +239,82 @@ TBuf<30> MobblerUtility::LocalLastFmDomainL()
 	return url;
 	}
 
+void MobblerUtility::FixLyricsSpecialCharacters(TDes8& aText)
+	{
+	// Lyricsfly: "Because our database varies with many html format encodings 
+	// including international characters, we recommend that you replace all 
+	// quotes, ampersands and all other special and international characters 
+	// with "%". Simply put; if the character is not [A-Z a-z 0-9] or space, 
+	// just substitute "%" for it to get most out of your results."
+	
+	_LIT8(KSubstitute, "%");
+	
+	for (TInt i(0); i < aText.Length(); ++i)
+		{
+		TChar ch(aText[i]);
+
+		if (ch.IsDigit() || ch.IsSpace())
+			{
+			// Do nothing
+			}
+		else
+			{
+			// Do nothing if [A-Za-z]
+			ch.LowerCase();
+			switch (ch)
+				{
+				case 'a':
+				case 'b':
+				case 'c':
+				case 'd':
+				case 'e':
+				case 'f':
+				case 'g':
+				case 'h':
+				case 'i':
+				case 'j':
+				case 'k':
+				case 'l':
+				case 'm':
+				case 'n':
+				case 'o':
+				case 'p':
+				case 'q':
+				case 'r':
+				case 's':
+				case 't':
+				case 'u':
+				case 'v':
+				case 'w':
+				case 'x':
+				case 'y':
+				case 'z':
+					// Do nothing
+					break;
+				default:
+					// Replace with %
+					LOG(_L8("Replace with %"));
+					aText.Delete(i, 1);
+					aText.Insert(i, KSubstitute);
+					break;
+				}
+			}
+		}
+	}
+
+void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
+	{
+	_LIT8(KBrTag1, "[br]");
+	_LIT8(KBrTag2, "\r\n");
+	
+	TInt pos(KErrNotFound);
+	while ((pos = aText.Find(KBrTag1)) != KErrNotFound)
+		{
+		aText.Delete(pos, KBrTag1().Length());
+		aText.Insert(pos, KBrTag2);
+		}
+	}
+
 void MobblerUtility::StripUnwantedTagsFromHtml(TDes8& aHtml)
 	{
 	_LIT8(KAnchorStart, "<a");
@@ -267,6 +355,8 @@ void MobblerUtility::StripUnwantedTagsFromHtml(TDes8& aHtml)
 		aHtml.Delete(pos, KBandMemberEndTag().Length());
 		}
 	}
+
+
 
 
 // End of file

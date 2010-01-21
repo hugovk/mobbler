@@ -35,6 +35,8 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandAbout,
 	
 	EMobblerCommandTools,
+	EMobblerCommandViewScrobbleLog,
+	EMobblerCommandScrobbleLogRemove,
 	
 	EMobblerCommandPlus,
 	
@@ -48,6 +50,8 @@ enum TMobblerSettingItemListViewCommands
 #endif
 	EMobblerCommandLanguagePatches,
 	EMobblerCommandQrCode,
+	
+	EMobblerCommandOfflineLast,
 	
 	EMobblerCommandEqualizer = 0x7000,
 	EMobblerCommandEqualizerDefault,
@@ -119,6 +123,39 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandArtistShare,
 	EMobblerCommandEventShare,
 	
+	EMobblerCommandTag,
+	EMobblerCommandTrackAddTag,
+	EMobblerCommandTrackRemoveTag,
+	EMobblerCommandArtistAddTag,
+	EMobblerCommandArtistRemoveTag,
+	EMobblerCommandAlbumAddTag,
+	EMobblerCommandAlbumRemoveTag,
+	
+	// plus menu commands
+	EMobblerCommandPlusVisitLastFm,
+	EMobblerCommandPlusViewArtistBio,
+	EMobblerCommandPlusEvents,
+	EMobblerCommandPlusArtistShoutbox,
+	EMobblerCommandPlusPlaylistAddTrack,
+	
+	EMobblerCommandPlusTag,
+	
+	EMobblerCommandPlusShare,
+	EMobblerCommandPlusShareTrack,
+	EMobblerCommandPlusShareArtist,
+	
+	EMobblerCommandPlusSimilar,
+	EMobblerCommandPlusSimilarArtists,
+	EMobblerCommandPlusSimilarTracks,
+	
+	EMobblerCommandPlusTop,
+	EMobblerCommandPlusTopAlbums,
+	EMobblerCommandPlusTopTracks,
+	EMobblerCommandPlusTopTags,
+	
+	EMobblerCommandPlusLyrics,
+	
+	// radio commands
 	EMobblerCommandRadioStart,
 	EMobblerCommandResumeRadio,
 	EMobblerCommandRadioEnumFirst = 0x9000,
@@ -135,7 +172,6 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandRadioEnumLast = 0xA000,
 	
 	EMobblerCommandCheckForUpdates,
-//	EMobblerCommandFetchLyrics,
 	EMobblerCommandVisitWebPage,
 	EMobblerCommandTrackWebPage,
 	EMobblerCommandArtistWebPage,

@@ -43,6 +43,8 @@ private:
 	CMobblerWebServicesView();        
 	void ConstructL();
 	
+	void FilterMenuItemL(CEikMenuPane* aMenuPane, TInt aIndex, const RArray<TInt>& aSupportedCommands);
+	
 	void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane);
 
 	void DoActivateL(const TVwsViewId& aPrevViewId, TUid aCustomMessageId, const TDesC8& aCustomMessage );

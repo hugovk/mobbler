@@ -1,7 +1,7 @@
 /*
-musicplaybackpositionlistener.h
+mobblerplaybackpositionlistener.h
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
@@ -23,9 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef __MUSICPLAYBACKPOSITIONLISTENER_H__
 #define __MUSICPLAYBACKPOSITIONLISTENER_H__
-
-#include <e32base.h>
-#include <e32property.h> 
 
 class CMobblerPlaybackPositionListener : public CActive
 	{
@@ -54,3 +51,5 @@ private:
 	};
 
 #endif // __MUSICLISTENER_H__
+
+// End of file

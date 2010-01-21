@@ -59,7 +59,7 @@ RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
 #ifdef __SYMBIAN_SIGNED__
 		icon_file = "\\resource\\apps\\mobbler_0x2002655A.mif";
 #else
-		icon_file = "\\resource\\apps\\mobbler.mif";
+		icon_file = "\\resource\\apps\\mobbler_0xA0007648.mif";
 #endif
 		};
 	}
@@ -154,8 +154,17 @@ RESOURCE MENU_PANE r_mobbler_webservices_menu_pane
 			},
 		MENU_ITEM
 			{
+			command = EMobblerCommandTag;
+			cascade = r_mobbler_tag_submenu_pane;
+			},
+		MENU_ITEM
+			{
 			command = EMobblerCommandMaps;
 			cascade = r_mobbler_map_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandScrobbleLogRemove;
 			},
 		MENU_ITEM
 			{
@@ -164,6 +173,38 @@ RESOURCE MENU_PANE r_mobbler_webservices_menu_pane
 		};
 	}
 
+RESOURCE MENU_PANE r_mobbler_tag_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandTrackAddTag;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandTrackRemoveTag;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAlbumAddTag;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAlbumRemoveTag;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistAddTag;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandArtistRemoveTag;
+			}
+		};
+	}
+
+	
 RESOURCE MENU_PANE r_mobbler_shout_submenu_pane
 	{
 	items =
@@ -296,9 +337,104 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			{
 			command = EMobblerCommandAbout;
 			},
+		// The plus option menu commands
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusVisitLastFm;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusViewArtistBio;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusShare;
+			cascade = r_mobbler_plus_share_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusTag;
+			cascade = r_mobbler_tag_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusPlaylistAddTrack;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusSimilar;
+			cascade = r_mobbler_plus_similar_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusTop;
+			cascade = r_mobbler_plus_top_submenu_pane;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusEvents;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusArtistShoutbox;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusLyrics;
+			},
+		// end of the plus option menu commands
 		MENU_ITEM
 			{
 			command = EAknSoftkeyExit;
+			}
+		};
+	}
+
+RESOURCE MENU_PANE r_mobbler_plus_share_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusShareTrack;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusShareArtist;
+			}
+		};
+	}
+
+RESOURCE MENU_PANE r_mobbler_plus_similar_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusSimilarArtists;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusSimilarTracks;
+			}
+		};
+	}
+			
+RESOURCE MENU_PANE r_mobbler_plus_top_submenu_pane
+	{
+	items =
+		{
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusTopAlbums;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusTopTracks;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusTopTags;
 			}
 		};
 	}
@@ -481,6 +617,10 @@ RESOURCE MENU_PANE r_mobbler_tools_submenu_pane
 		{
 		MENU_ITEM
 			{
+			command = EMobblerCommandViewScrobbleLog;
+			},
+		MENU_ITEM
+			{
 			command = EMobblerCommandCheckForUpdates;
 			},
 		MENU_ITEM
@@ -540,6 +680,30 @@ RESOURCE DIALOG r_mobbler_text_query_dialog
 			}
 		};
 	}
+
+RESOURCE DIALOG r_mobbler_tag_remove_query
+    {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+    items =
+        {
+        DLG_LINE
+            {
+            type = EAknCtListQueryControl;
+            id = EListQueryControl;
+            control = AVKON_LIST_QUERY_CONTROL
+                {
+                listtype = EAknCtSinglePopupMenuListBox;
+                listbox = LISTBOX
+                    {
+                    flags = EAknListBoxMultiselectionList;
+                    height = 3;
+                    width = 3;
+                    };
+                };
+            }
+        };
+    }
 
 RESOURCE STATUS_PANE_APP_MODEL r_mobbler_status_pane
 	{

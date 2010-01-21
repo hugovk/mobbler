@@ -34,11 +34,11 @@ Protected - Unprotected - Purpose
 
 0x2002655B - 0xA0007CA8 - status view
 0x2002655C - 0xA0007CA9 - settings view
-0x2002655D - 0xA0007CAA - music app observer interface
+0x2002655D - 0xA0007CAA - (DON'T USE)
 0x2002655E - !0xA0007CAB - music app observer 3.1 dll 
 0x2002655F - !0xA0007CAC - music app observer 3.1 implementation
 0x20026560 - !0xA0007CAD - ?
-0x20026561 - !0xA0007CAE - music app observer 3.0 dll
+0x20026561 - !0xA0007CAE - (DON'T USE)
 0x20026562 - !0xA0007CAF - music app observer 3.0 implementation
 0x20026563 - 0xA000B6CB - touch feedback dll
 0x20026564 - 0xA000B6CC - touch feedback interface
@@ -63,8 +63,8 @@ Protected - Unprotected - Purpose
 0x20026626 - 0x???????? - unused
 0x20027114 - 0xA000D9F4 - mpx music app observer dll
 0x20027115 - 0xA000D9F5 - mpx music app observer implementation
-0x20027116 - 0xA000D9F6 - unused
-0x20027117 - 0xA000D9F7 - unused
+0x20027116 - 0xA000D9F6 - music app observer interface
+0x20027117 - 0xA000D9F7 - music app observer 3.0 dll
 0x20027118 - 0xA000D9F8 - unused
 0x20027119 - 0xA000D9F9 - unused
 0x2002711A - 0xA000D9FA - unused
@@ -85,7 +85,7 @@ SECUREID		0x2002655A
 
 #else // !SYMBIAN_SIGNED
 
-TARGET			mobbler.exe
+TARGET			mobbler_0xA0007648.exe
 TARGETTYPE		exe
 UID				0x100039CE 0xA0007648
 SECUREID		0xA0007648
@@ -221,7 +221,7 @@ HEADER
 #ifdef SYMBIAN_SIGNED
 TARGET mobbler_0x2002655A
 #else
-TARGET mobbler
+TARGET mobbler_0xA0007648
 #endif
 TARGETPATH resource\apps
 END //RESOURCE
@@ -231,7 +231,7 @@ HEADER
 #ifdef SYMBIAN_SIGNED
 TARGET mobbler_strings_0x2002655A
 #else
-TARGET mobbler_strings
+TARGET mobbler_strings_0xA0007648
 #endif
 TARGETPATH resource\apps
 END //RESOURCE
@@ -241,7 +241,7 @@ LANG 01
 #ifdef SYMBIAN_SIGNED
 TARGET mobbler_reg_0x2002655A
 #else
-TARGET mobbler_reg
+TARGET mobbler_reg_0xA0007648
 #endif
 TARGETPATH \private\10003a3f\apps
 END //RESOURCE

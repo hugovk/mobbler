@@ -21,16 +21,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <aknquerydialog.h>
 #include <sendomfragment.h>
 #include <senxmlutils.h> 
 
 #include "mobbler.hrh"
+#include "mobbler.rsg.h"
+#include "mobbler_strings.rsg.h"
 #include "mobblerappui.h"
 #include "mobblerbitmapcollection.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
 #include "mobblerliterals.h"
 #include "mobblerparser.h"
+#include "mobblerresourcereader.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
 #include "mobblertracklist.h"
@@ -47,6 +51,8 @@ CMobblerTrackList::CMobblerTrackList(CMobblerAppUi& aAppUi, CMobblerWebServicesC
 void CMobblerTrackList::ConstructL()
 	{
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultTrackImage);
+	
+	iWebServicesHelper = CMobblerWebServicesHelper::NewL(iAppUi);
 
 	switch (iType)
 		{
@@ -82,6 +88,14 @@ void CMobblerTrackList::ConstructL()
 		case EMobblerCommandSearchTrack:
 			iAppUi.LastFmConnection().WebServicesCallL(KTrack, KSearch, iText1->String8(), *this);
 			break;
+		case EMobblerCommandViewScrobbleLog:
+			{
+			iAsyncCallBack = new(ELeave) CAsyncCallBack(CActive::EPriorityStandard);
+			iCallBack = TCallBack(CMobblerTrackList::ViewScrobbleLogCallBackL, this);
+			iAsyncCallBack->Set(iCallBack);
+			iAsyncCallBack->Call();
+			}
+			break;
 		default:
 			break;
 		}
@@ -89,8 +103,38 @@ void CMobblerTrackList::ConstructL()
 
 CMobblerTrackList::~CMobblerTrackList()
 	{
+	delete iAsyncCallBack;
 	delete iAlbumInfoObserver;
 	delete iWebServicesHelper;
+	}
+
+void CMobblerTrackList::GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle)
+	{
+	if (iType == EMobblerCommandViewScrobbleLog)
+		{
+		if (iAppUi.LastFmConnection().ScrobbleLogCount() > iListBox->CurrentItemIndex()
+				&& iAppUi.LastFmConnection().ScrobbleLogCount() > 0)
+			{
+			aArtist.Set(iAppUi.LastFmConnection().ScrobbleLogItem(iListBox->CurrentItemIndex()).Artist().String8());
+			aTitle.Set(iAppUi.LastFmConnection().ScrobbleLogItem(iListBox->CurrentItemIndex()).Title().String8());
+			}
+		}
+	else
+		{
+		if (iList.Count() > 0)
+			{
+			aTitle.Set(iList[iListBox->CurrentItemIndex()]->Title()->String8());
+			
+			if (iType == EMobblerCommandArtistTopTracks)
+				{
+				aArtist.Set(iText1->String8());
+				}
+			else
+				{
+				aArtist.Set(iList[iListBox->CurrentItemIndex()]->Description()->String8());
+				}
+			}
+		}
 	}
 
 CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
@@ -100,33 +144,32 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 	TPtrC8 artist(KNullDesC8);
 	TPtrC8 title(KNullDesC8);
 	
-	if (iList.Count() > 0)
-		{
-		title.Set(iList[iListBox->CurrentItemIndex()]->Title()->String8());
+	GetArtistAndTitleName(artist, title);
 		
-		if (iType == EMobblerCommandArtistTopTracks)
-			{
-			artist.Set(iText1->String8());
-			}
-		else
-			{
-			artist.Set(iList[iListBox->CurrentItemIndex()]->Description()->String8());
-			}
-		}
-	
 	switch(aCommand)
 		{
 		case EMobblerCommandTrackLove:
 			iAppUi.LastFmConnection().TrackLoveL(artist, title);
+			break;
+		case EMobblerCommandTrackAddTag:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			iWebServicesHelper->TrackAddTagL(*track);
+			track->Release();
+			}
+			break;
+		case EMobblerCommandTrackRemoveTag:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			iWebServicesHelper->TrackRemoveTagL(*track);
+			track->Release();
+			}
 			break;
 		case EMobblerCommandTrackShare:
 		case EMobblerCommandArtistShare:
 		case EMobblerCommandPlaylistAddTrack:
 			{
 			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
-			
-			delete iWebServicesHelper;
-			iWebServicesHelper = CMobblerWebServicesHelper::NewL(iAppUi);
 			
 			switch (aCommand)
 				{
@@ -136,6 +179,29 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 				}
 				
 			track->Release();
+			}
+			break;
+		case EMobblerCommandScrobbleLogRemove:
+			{
+			// Get the list box items model
+			MDesCArray* listArray(iListBox->Model()->ItemTextArray());
+			CDesCArray* itemArray(static_cast<CDesCArray*>(listArray));
+			
+			// Number of items in the list
+			const TInt KCount(itemArray->Count());
+			
+			// Validate index then delete
+			const TInt KIndex(iListBox->CurrentItemIndex());
+			if (KIndex >= 0 && KIndex < KCount)
+				{
+				// Remove the item from the scrobble log
+				iAppUi.LastFmConnection().RemoveScrobbleLogItemL(KIndex);
+				
+				// remove the item from out list box
+				itemArray->Delete(KIndex, 1);
+				AknListBoxUtils::HandleItemRemovalAndPositionHighlightL(iListBox, KIndex, ETrue);
+				iListBox->DrawNow();
+				}
 			}
 			break;
 		default:
@@ -153,35 +219,50 @@ void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandTrackShare);
 	aCommands.AppendL(EMobblerCommandArtistShare);
 	
+	aCommands.AppendL(EMobblerCommandTag);
+	aCommands.AppendL(EMobblerCommandTrackAddTag);
+	aCommands.AppendL(EMobblerCommandTrackRemoveTag);
+	
 	aCommands.AppendL(EMobblerCommandPlaylistAddTrack);
+	
+	if (iType == EMobblerCommandViewScrobbleLog)
+		{
+		aCommands.AppendL(EMobblerCommandScrobbleLogRemove);
+		}
 	}
 
 void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
+		// Create the XML reader and DOM fragment and associate them with each other
+		CSenXmlReader* xmlReader(CSenXmlReader::NewL());
+		CleanupStack::PushL(xmlReader);
+		CSenDomFragment* domFragment(CSenDomFragment::NewL());
+		CleanupStack::PushL(domFragment);
+		xmlReader->SetContentHandler(*domFragment);
+		domFragment->SetReader(*xmlReader);
+		
+		// Parse the XML into the DOM fragment
+		xmlReader->ParseL(aData);
+			
 		if (aObserver == iAlbumInfoObserver)
-			{
-			// Create the XML reader and DOM fragment and associate them with each other
-			CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-			CleanupStack::PushL(xmlReader);
-			CSenDomFragment* domFragment(CSenDomFragment::NewL());
-			CleanupStack::PushL(domFragment);
-			xmlReader->SetContentHandler(*domFragment);
-			domFragment->SetReader(*xmlReader);
-			
-			// Parse the XML into the DOM fragment
-			xmlReader->ParseL(aData);
-			
+			{	
 			iAppUi.LastFmConnection().PlaylistFetchAlbumL(domFragment->AsElement().Element(KElementAlbum)->Element(KElementId)->Content(), *this);
-			
-			CleanupStack::PopAndDestroy(2);
 			}
+		
+		CleanupStack::PopAndDestroy(2);
 		}
+
 	else
 		{
 		// TODO
 		}
+	}
+
+TInt CMobblerTrackList::ViewScrobbleLogCallBackL(TAny* aPtr)
+	{
+	static_cast<CMobblerTrackList*>(aPtr)->CMobblerListControl::DataL(KNullDesC8, CMobblerLastFmConnection::ETransactionErrorNone);
 	}
 
 void CMobblerTrackList::ParseL(const TDesC8& aXML)
@@ -206,6 +287,23 @@ void CMobblerTrackList::ParseL(const TDesC8& aXML)
 			break;
 		case EMobblerCommandSearchTrack:
 			CMobblerParser::ParseSearchTrackL(aXML, *this, iList);
+			break;
+		case EMobblerCommandViewScrobbleLog:
+			{
+			const TInt KScrobbleLogCount(iAppUi.LastFmConnection().ScrobbleLogCount());
+			for (TInt i(0) ; i < KScrobbleLogCount ; ++i)
+				{
+				// Add an item to the list box			
+				CMobblerListItem* item(CMobblerListItem::NewL(*this,
+																iAppUi.LastFmConnection().ScrobbleLogItem(i).Title().String8(),
+																iAppUi.LastFmConnection().ScrobbleLogItem(i).Artist().String8(),
+																KNullDesC8));
+
+				CleanupStack::PushL(item);
+				iList.AppendL(item);
+				CleanupStack::Pop(item);
+				}
+			}
 			break;
 		default:
 			break;

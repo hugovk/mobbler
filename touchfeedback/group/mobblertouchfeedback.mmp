@@ -28,7 +28,7 @@ TARGET		mobblertouchfeedback_0x20026563.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0x20026563
 #else
-TARGET		mobblertouchfeedback.dll
+TARGET		mobblertouchfeedback_0xA000B6CB.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0xA000B6CB
 #endif
@@ -43,7 +43,7 @@ START RESOURCE	..\data\mobblertouchfeedback.rss
 #ifdef SYMBIAN_SIGNED
 TARGET mobblertouchfeedback_0x20026563
 #else
-TARGET mobblertouchfeedback
+TARGET mobblertouchfeedback_0xA000B6CB
 #endif
 END //RESOURCE
 

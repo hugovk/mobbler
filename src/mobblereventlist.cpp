@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlastfmconnection.h"
 #include "mobblerlistitem.h"
 #include "mobblerliterals.h"
-#include "mobblerlogging.h"
 #include "mobblerparser.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"

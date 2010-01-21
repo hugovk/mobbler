@@ -338,6 +338,31 @@ RESOURCE STRING r_mobbler_qr_code					{ text = STR_mobbler_qr_code; }
 RESOURCE STRING r_mobbler_visit_map					{ text = STR_mobbler_visit_map; }
 RESOURCE STRING r_mobbler_foursquare				{ text = STR_mobbler_foursquare; }
 RESOURCE STRING r_mobbler_map						{ text = STR_mobbler_map; }
+RESOURCE STRING r_mobbler_view_scrobble_log			{ text = STR_mobbler_view_scrobble_log; }
+RESOURCE STRING r_mobbler_scrobble_log				{ text = STR_mobbler_scrobble_log; }
+RESOURCE STRING r_mobbler_scrobble_log_remove			{ text = STR_mobbler_scrobble_log_remove; }
+
+///////////////////////////////////////////////////////////////////////////////
+
+// Mobbler 0.8.x resources above,
+// Mobbler 0.9.x resources below
+
+///////////////////////////////////////////////////////////////////////////////
+
+RESOURCE STRING r_mobbler_tag					{ text = STR_mobbler_tag; }
+RESOURCE STRING r_mobbler_track_add_tag			{ text = STR_mobbler_track_add_tag; }
+RESOURCE STRING r_mobbler_track_remove_tag		{ text = STR_mobbler_track_remove_tag; }
+RESOURCE STRING r_mobbler_album_add_tag			{ text = STR_mobbler_album_add_tag; }
+RESOURCE STRING r_mobbler_album_remove_tag		{ text = STR_mobbler_album_remove_tag; }
+RESOURCE STRING r_mobbler_artist_add_tag		{ text = STR_mobbler_artist_add_tag; }
+RESOURCE STRING r_mobbler_artist_remove_tag		{ text = STR_mobbler_artist_remove_tag; }
+
+RESOURCE STRING r_mobbler_similar				{ text = STR_mobbler_similar; }
+RESOURCE STRING r_mobbler_top					{ text = STR_mobbler_top; }
+
+RESOURCE STRING r_mobbler_lyrics				{ text = STR_mobbler_lyrics; }
+RESOURCE STRING r_mobbler_lyrics_not_found		{ text = STR_mobbler_lyrics_not_found; }
+
 RESOURCE STRING r_mobbler_view_artist_bio		{ text = STR_mobbler_view_artist_bio; }
 
 // End of file

@@ -44,6 +44,8 @@ void CMobblerArtistList::ConstructL()
 	{
     iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultArtistImage);
     
+	iWebServicesHelper = CMobblerWebServicesHelper::NewL(iAppUi);
+    
 	switch (iType)
 		{
 		case EMobblerCommandUserTopArtists:
@@ -68,6 +70,7 @@ void CMobblerArtistList::ConstructL()
 
 CMobblerArtistList::~CMobblerArtistList()
 	{
+	delete iWebServicesHelper;
 	}
 
 CMobblerListControl* CMobblerArtistList::HandleListCommandL(TInt aCommand)
@@ -90,11 +93,24 @@ CMobblerListControl* CMobblerArtistList::HandleListCommandL(TInt aCommand)
 		case EMobblerCommandArtistShare:
 			{
 			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
-			delete iWebServicesHelper;
-			iWebServicesHelper = CMobblerWebServicesHelper::NewL(iAppUi);
 			iWebServicesHelper->ArtistShareL(*track);            
 			track->Release();
 			}
+			break;
+		case EMobblerCommandArtistAddTag:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			iWebServicesHelper->ArtistAddTagL(*track);            
+			track->Release();
+			}
+			break;
+		case EMobblerCommandArtistRemoveTag:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			iWebServicesHelper->ArtistRemoveTagL(*track);            
+			track->Release();
+			}
+			break;
 		default:
 			break;
 		}
@@ -113,6 +129,10 @@ void CMobblerArtistList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandArtistTopAlbums);
 	aCommands.AppendL(EMobblerCommandArtistTopTracks);
 	aCommands.AppendL(EMobblerCommandArtistTopTags);
+	
+	aCommands.AppendL(EMobblerCommandTag);
+	aCommands.AppendL(EMobblerCommandArtistAddTag);
+	aCommands.AppendL(EMobblerCommandArtistRemoveTag);
 	
 	aCommands.AppendL(EMobblerCommandShare);
 	aCommands.AppendL(EMobblerCommandArtistShare);

@@ -28,7 +28,7 @@ TARGET		mobblercontentlisting_0x2002656D.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0x2002656D
 #else
-TARGET		mobblercontentlisting.dll
+TARGET		mobblercontentlisting_0xA000BEB1.dll
 TARGETTYPE	PLUGIN
 UID		0x10009D8D 0xA000BEB1
 #endif
@@ -43,7 +43,7 @@ START RESOURCE ..\data\mobblercontentlisting.rss
 #ifdef SYMBIAN_SIGNED
 TARGET mobblercontentlisting_0x2002656D
 #else
-TARGET mobblercontentlisting
+TARGET mobblercontentlisting_0xA000BEB1
 #endif
 END
 

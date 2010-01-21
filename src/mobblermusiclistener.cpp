@@ -33,10 +33,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblertrack.h"
 
 #ifdef __SYMBIAN_SIGNED__
-const TUid KMobblerMusicAppInterfaceUid = {0x2002655D};
+const TUid KMobblerMusicAppInterfaceUid = {0x20027117};
 const TUid KContentListingImplUid = {0x2002661E};
 #else
-const TUid KMobblerMusicAppInterfaceUid = {0xA0007CAA};
+const TUid KMobblerMusicAppInterfaceUid = {0xA000D9F6};
 const TUid KContentListingImplUid = {0xA000BEB3};
 #endif
 

@@ -41,14 +41,13 @@ RESOURCE APP_REGISTRATION_INFO
 	app_file = "mobbler_0x2002655A";
 	localisable_resource_file =  "\\resource\\apps\\mobbler_0x2002655A";
 #else
-	app_file = "mobbler";
-	localisable_resource_file =  "\\resource\\apps\\mobbler";
+	app_file = "mobbler_0xA0007648";
+	localisable_resource_file =  "\\resource\\apps\\mobbler_0xA0007648";
 #endif
 	
 	localisable_resource_id = R_LOCALISABLE_APP_INFO;
 
 	embeddability = KAppNotEmbeddable;
 	newfile = KAppDoesNotSupportNewFile;
-	group_name = "music";
 	}
 

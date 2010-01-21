@@ -44,6 +44,15 @@ public:
 	
 	void EventShareL(const TDesC8& aEventId);
 	
+	void TrackAddTagL(CMobblerTrack& aTrack);
+	void TrackRemoveTagL(CMobblerTrack& aTrack);
+	
+	void AlbumAddTagL(CMobblerTrack& aTrack);
+	void AlbumRemoveTagL(CMobblerTrack& aTrack);
+	
+	void ArtistAddTagL(CMobblerTrack& aTrack);
+	void ArtistRemoveTagL(CMobblerTrack& aTrack);
+	
 private:
 	void BitmapLoadedL(const CMobblerBitmap* aMobblerBitmap);
 	void BitmapResizedL(const CMobblerBitmap* aMobblerBitmap);
@@ -63,6 +72,13 @@ private:
 	
 	CMobblerTrack* iTrack;
 	HBufC8* iEventId;
+	
+	CMobblerFlatDataObserverHelper* iTagAddHelper;
+	CMobblerFlatDataObserverHelper* iTagRemoveHelper;
+	
+	CMobblerFlatDataObserverHelper* iTrackTagRemoveTagsHelper;
+	CMobblerFlatDataObserverHelper* iAlbumTagRemoveTagsHelper;
+	CMobblerFlatDataObserverHelper* iArtistTagRemoveTagsHelper;
 	
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperTrackShare;
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperArtistShare;

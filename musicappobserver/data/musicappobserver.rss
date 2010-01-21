@@ -36,9 +36,9 @@ RESOURCE REGISTRY_INFO theInfo
 		INTERFACE_INFO
 			{
 #ifdef __SYMBIAN_SIGNED__
-			interface_uid = 0x2002655D;
+			interface_uid = 0x20027117;
 #else
-			interface_uid = 0xA0007CAA;
+			interface_uid = 0xA000D9F6;
 #endif
 			implementations = 
 				{

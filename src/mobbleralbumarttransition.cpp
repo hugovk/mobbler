@@ -99,9 +99,12 @@ CMobblerAlbumArtTransition::~CMobblerAlbumArtTransition()
 	delete iTimer;
 	}
 
-void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlbumArt, 
-											   const CMobblerBitmap* aNextAlbumArt, 
-											   TRect aAlbumArtRect, TInt aSlideAmount)
+TBool CMobblerAlbumArtTransition::IsActive() const
+	{
+	return (iTimer != NULL);
+	}
+
+void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlbumArt, const CMobblerBitmap* aNextAlbumArt, TRect aAlbumArtRect, TInt aSlideAmount)
 	{
 	// Try to put any new album art in the list
 	
@@ -166,19 +169,21 @@ void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlb
 	else
 		{
 		// The album art is transitioning so draw it
+		CMobblerBitmap* left(iAlbumArt[0]);
+		CMobblerBitmap* right(iAlbumArt.Count() > 1 ? iAlbumArt[1] : iAlbumArt[0]);
 		
 		switch (iSlide)
 			{
 			case ESlideNormal:
 				{
-				DoDrawAlbumArtL(iAlbumArt[0], iAlbumArt[1], aAlbumArtRect, SlideAmount(aAlbumArtRect.Width()));
+				DoDrawAlbumArtL(left, right, aAlbumArtRect, SlideAmount(aAlbumArtRect.Width()));
 				}
 				break;
 			case ESlideLeft:
 				{
 				TInt slideAmount(SlideAmount(aAlbumArtRect.Width()));
 				TInt actualSlideAmount(iFingerUpOffset + (slideAmount * (aAlbumArtRect.Width() - iFingerUpOffset)) / aAlbumArtRect.Width());
-				DoDrawAlbumArtL(iAlbumArt[0], iAlbumArt[1], aAlbumArtRect, Clamp(actualSlideAmount, 0, aAlbumArtRect.Width()));
+				DoDrawAlbumArtL(left, right, aAlbumArtRect, Clamp(actualSlideAmount, 0, aAlbumArtRect.Width()));
 				}
 				break;
 			case ESlideRight:

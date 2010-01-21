@@ -690,6 +690,9 @@ void CMobblerRadioPlayer::DoStopL(TBool aFullStop)
 		
 		// stop all radio downloads
 		iLastFmConnection.RadioStop();
+		
+		// Turn off the accelerometer
+		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->UpdateAccelerometerGesturesL();
 		}
 	else
 		{
@@ -702,14 +705,14 @@ void CMobblerRadioPlayer::DoStopL(TBool aFullStop)
 			// the current one
 			iLastFmConnection.RadioStop();
 			}
-	
+		
 		if (iCurrentAudioControl)
 			{
 			iPlaylist->RemoveAndReleaseTrack(0);
 			
 			delete iCurrentAudioControl;
 			iCurrentAudioControl = NULL;
-			}	
+			}
 		}
 	
 //	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->StatusDrawDeferred();

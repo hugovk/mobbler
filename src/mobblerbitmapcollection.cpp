@@ -29,8 +29,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmap.h"
 #include "mobblerbitmapcollection.h"
 
-#if defined(__SYMBIAN_SIGNED__) && !defined(__WINS__)
+#ifdef __SYMBIAN_SIGNED__
+#ifdef __WINS__
+_LIT(KMobblerMifFile, "\\resource\\apps\\mobbler.mif");
+#else
 _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0x2002655A.mif");
+#endif // __WINS__
+#else // !__SYMBIAN_SIGNED__
+#ifdef __WINS__
+_LIT(KMobblerMifFile, "\\resource\\apps\\ssmobbler.mif");
+#else
+_LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0xA0007648.mif");
+#endif // __WINS__
+#endif // __SYMBIAN_SIGNED__
+
+#if defined (__SYMBIAN_SIGNED__) && !defined(__WINS__)
 _LIT(KPngScrobble, "\\resource\\apps\\mobbler_0x2002655A\\scrobble.png");
 _LIT(KPngTrackIcon, "\\resource\\apps\\mobbler_0x2002655A\\icon_track.png");
 _LIT(KPngAlarmIcon, "\\resource\\apps\\mobbler_0x2002655A\\icon_alarm.png");
@@ -44,7 +57,6 @@ _LIT(KDefaultPlaylistImage, "\\resource\\apps\\mobbler_0x2002655A\\default_playl
 _LIT(KDefaultTagImage, "\\resource\\apps\\mobbler_0x2002655A\\default_tag.png");
 _LIT(KDefaultTrackImage, "\\resource\\apps\\mobbler_0x2002655A\\default_track.png");
 #else
-_LIT(KMobblerMifFile, "\\resource\\apps\\mobbler.mif");
 _LIT(KPngScrobble, "\\resource\\apps\\mobbler\\scrobble.png");
 _LIT(KPngTrackIcon, "\\resource\\apps\\mobbler\\icon_track.png");
 _LIT(KPngAlarmIcon, "\\resource\\apps\\mobbler\\icon_alarm.png");
@@ -115,6 +127,16 @@ CMobblerBitmapCollection::CMobblerBitmapCollection()
 
 void CMobblerBitmapCollection::ConstructL()
 	{
+	// load the list box default images because if we
+	// populate the list box before the image decodes
+	// the phone will hang.
+	BitmapL(*this, EBitmapDefaultAlbumImage);
+	BitmapL(*this, EBitmapDefaultArtistImage);
+	BitmapL(*this, EBitmapDefaultEventImage);
+	BitmapL(*this, EBitmapDefaultUserImage);
+	BitmapL(*this, EBitmapDefaultPlaylistImage);
+	BitmapL(*this, EBitmapDefaultTagImage);
+	BitmapL(*this, EBitmapDefaultTrackImage);
 	}
 
 CMobblerBitmapCollection::~CMobblerBitmapCollection()
@@ -228,6 +250,14 @@ void CMobblerBitmapCollection::Cancel(CMobblerBitmap* aBitmap) const
 			break;
 			}
 		}
+	}
+
+void CMobblerBitmapCollection::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
+	{
+	}
+
+void CMobblerBitmapCollection::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
+	{
 	}
 
 // End of file

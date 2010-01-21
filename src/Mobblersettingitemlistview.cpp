@@ -78,7 +78,7 @@ void CMobblerSettingItemListView::HandleCommandL(TInt aCommand)
 			static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(iSettings->Username(), iSettings->Password());
 			static_cast<CMobblerAppUi*>(AppUi())->SetIapIDL(iSettings->IapId());
 			static_cast<CMobblerAppUi*>(AppUi())->SetBufferSize(iSettings->BufferSize());
-			static_cast<CMobblerAppUi*>(AppUi())->SetAccelerometerGesturesL(iSettings->AccelerometerGestures());
+			static_cast<CMobblerAppUi*>(AppUi())->UpdateAccelerometerGesturesL();
 			static_cast<CMobblerAppUi*>(AppUi())->SetBitRateL(iSettings->BitRate());
 			}
 		else if (iSettingsToSet == ESleepTimer)

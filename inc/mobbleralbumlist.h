@@ -28,8 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlistcontrol.h"
 
 class CMobblerAppUi;
+class CMobblerWebServicesHelper;
 
-class CMobblerAlbumList : public CMobblerListControl
+class CMobblerAlbumList : public CMobblerListControl, public MMobblerFlatDataObserverHelper
 	{
 public:
 	CMobblerAlbumList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl);
@@ -41,6 +42,10 @@ public:
 	void ParseL(const TDesC8& aXML);
 	
 private:
+    void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+	
+private:
+	CMobblerWebServicesHelper* iWebServicesHelper; 
 	};
 
 #endif // __MOBBLERARTISTLIST_H__

@@ -70,6 +70,24 @@ void CMobblerWebServicesView::SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aRe
 	CleanupStack::PopAndDestroy(menuText);
 	}
 
+void CMobblerWebServicesView::FilterMenuItemL(CEikMenuPane* aMenuPane, TInt aIndex, const RArray<TInt>& aSupportedCommands)
+	{
+	TInt position(0);
+	if (aMenuPane->MenuItemExists(aIndex, position))
+		{
+		TBool commandNotSupported(aSupportedCommands.Find(aIndex) == KErrNotFound);
+		
+		aMenuPane->SetItemDimmed(aIndex, commandNotSupported || iWebServicesControl->TopControl()->Count() == 0);
+		
+		if (!commandNotSupported &&
+				(aIndex == EMobblerCommandShout || aIndex == EMobblerCommandPlaylistCreate))
+			{
+			// Display these commands when they are supported even if there are no items
+			aMenuPane->SetItemDimmed(aIndex, EFalse);
+			}
+		}
+	}
+
 void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane)
 	{
 	// First load the menu text so as not to confuse any dimming logic
@@ -87,6 +105,8 @@ void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* a
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_PLAYLIST_CREATE,		EMobblerCommandPlaylistCreate);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_PLAYLIST_ADD_TRACK,	EMobblerCommandPlaylistAddTrack);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_MAP,					EMobblerCommandMaps);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_SCROBBLE_LOG_REMOVE,	EMobblerCommandScrobbleLogRemove);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_TAG,					EMobblerCommandTag);
 		}
 	else if (aResourceId == R_MOBBLER_WEBSERVICES_RADIO_SUBMENU_PANE)
 		{
@@ -132,6 +152,15 @@ void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* a
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_VISIT_MAP,			EMobblerCommandVisitMap);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_FOURSQUARE,			EMobblerCommandFoursquare);
 		}
+	else if (aResourceId == R_MOBBLER_TAG_SUBMENU_PANE)
+		{
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_TRACK_ADD_TAG,			EMobblerCommandTrackAddTag);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_TRACK_REMOVE_TAG,			EMobblerCommandTrackRemoveTag);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_ALBUM_ADD_TAG,			EMobblerCommandAlbumAddTag);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_ALBUM_REMOVE_TAG,			EMobblerCommandAlbumRemoveTag);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_ARTIST_ADD_TAG,			EMobblerCommandArtistAddTag);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_ARTIST_REMOVE_TAG,		EMobblerCommandArtistRemoveTag);
+		}
 	
 	// Now the menu text is set, dimming logic is next
 	RArray<TInt> supportedCommands;
@@ -143,22 +172,16 @@ void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* a
 	// Find the commands that this list box supports
 	iWebServicesControl->TopControl()->SupportedCommandsL(supportedCommands);
 	
+	// filter the offline commands
+	for (TInt i(EMobblerCommandOffline); i < EMobblerCommandOfflineLast; ++i)
+		{
+		FilterMenuItemL(aMenuPane, i, supportedCommands);
+		}
+	
+	// filter the online commands
 	for (TInt i(EMobblerCommandOnline); i < EMobblerCommandLast; ++i)
 		{
-		TInt position(0);
-		if (aMenuPane->MenuItemExists(i, position))
-			{
-			TBool commandNotSupported(supportedCommands.Find(i) == KErrNotFound);
-			
-			aMenuPane->SetItemDimmed(i, commandNotSupported || iWebServicesControl->TopControl()->Count() == 0);
-			
-			if (!commandNotSupported &&
-					(i == EMobblerCommandShout || i == EMobblerCommandPlaylistCreate))
-				{
-				// Display these commands when they are supported even if there are no items
-				aMenuPane->SetItemDimmed(i, EFalse);
-				}
-			}
+		FilterMenuItemL(aMenuPane, i, supportedCommands);
 		}
 	
 	CleanupStack::PopAndDestroy(&supportedCommands);

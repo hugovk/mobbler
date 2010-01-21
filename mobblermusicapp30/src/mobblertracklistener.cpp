@@ -1,7 +1,7 @@
 /*
-tracklistener.h
+mobblertracklistener.cpp
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
@@ -21,15 +21,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <e32base.h>
+#include <e32property.h> 
 
 #include "mobblertracklistener.h"
 
-const TUid KMusicAppUID = {0x102072c3};
-const TInt KTrackKey = 2;
+const TUid KMusicAppUid = {0x102072c3};
+const TInt KTrackKey(2);
 
 CMobblerTrackListener* CMobblerTrackListener::NewL(MMobblerTrackObserver& aObserver)
 	{
-	CMobblerTrackListener* self = new(ELeave) CMobblerTrackListener(aObserver);
+	CMobblerTrackListener* self(new(ELeave) CMobblerTrackListener(aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL();
 	CleanupStack::Pop(self);
@@ -50,7 +52,7 @@ CMobblerTrackListener::CMobblerTrackListener(MMobblerTrackObserver& aObserver)
 
 void CMobblerTrackListener::ConstructL()
 	{
-	User::LeaveIfError(iProperty.Attach(KMusicAppUID, KTrackKey));
+	User::LeaveIfError(iProperty.Attach(KMusicAppUid, KTrackKey));
 	iProperty.Subscribe(iStatus);
 	SetActive();
 	}
@@ -71,3 +73,5 @@ void CMobblerTrackListener::DoCancel()
 	{
 	iProperty.Close();
 	}
+
+// End of file
