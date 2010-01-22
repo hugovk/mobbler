@@ -37,20 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <brctlinterface.h>
 #include <charconv.h>
 
-/*_LIT8(KArtistInfoHtmlTemplate,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\
-<html><head><title>%S</title></head>\
-<body style=\"font-family: arial, sans-serif;\">\
-<h3>%S</h3>\
-<p>\
-%S\
-</p>\
-</body>\
-</html>");*/
-// background: url('background.gif') no-repeat fixed 5%% 20%%; <-- goes in style tag
-
-//.even { background: #fff url(data:image/gif;base64,R0lGODlhBgASALMAAOfn5+rq6uvr6+zs7O7u7vHx8fPz8/b29vj4+P39/f///wAAAAAAAAAAAAAAAAAAACwAAAAABgASAAAIMAAVCBxIsKDBgwgTDkzAsKGAhxARSJx4oKJFAxgzFtjIkYDHjwNCigxAsiSAkygDAgA7) repeat-x bottom}
-//background-image:url(data:image/jpeg;base64,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%3D%3D);
-
 /*
  * Format string specifiers are:
  *
@@ -59,9 +45,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * %d - image width
  * %S - tags
  * %S - similar artists
- * %S - bio
+ * %S - biography text
  */
-
 _LIT8(KArtistInfoHtmlTemplate, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\
 	<html xmlns=\"http://www.w3.org/1999/xhtml\">\
@@ -71,8 +56,8 @@ _LIT8(KArtistInfoHtmlTemplate, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 		<title></title>\
 		<style type=\"text/css\">\
 			body, html {\
-				margin: 0;\
-				padding: 0px;\
+				margin: 0px;\
+				padding: 0px 0px 2px 0px;\
 				font-family: Arial, Helvetica, sans-serif;\
 				font-size: medium;\
 				color: #333333;\
@@ -153,6 +138,7 @@ no-repeat fixed 5%% 20%%; \
 \
 			#info_bar {\
 				width: 100%%;\
+				margin: 2px;\
 			}\
 \
 			#scrobbled_tracks {\
@@ -163,11 +149,13 @@ no-repeat fixed 5%% 20%%; \
 			#artist_image {\
 				float:right;\
 				width: auto;\
+				margin: 2px;\
 			}\
 \
 			#body_text {\
 				width: 100%%;\
 				float: left;\
+				margin: 2px;\
 			}\
 \
 		</style>\
@@ -225,7 +213,7 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect)
 	iBrCtlInterface = ::CreateBrowserControlL(
 			this,
 			brCtlRect,
-			TBrCtlDefs::ECapabilityDisplayScrollBar/* | TBrCtlDefs::ECapabilityLoadHttpFw*/,
+			TBrCtlDefs::ECapabilityDisplayScrollBar,
 			TBrCtlDefs::ECommandIdBase);
 
 	iAppUi.LastFmConnection().WebServicesCallL(KArtist, KGetInfo, iAppUi.CurrentTrack()->Artist().String8(), *this);
