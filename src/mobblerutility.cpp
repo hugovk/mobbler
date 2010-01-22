@@ -66,13 +66,16 @@ _LIT8(KFormat1, "%02x");
 _LIT8(KFormat2, "%%%2x");
 
 const TInt KNokiaE52MachineUid(0x20014DCC);
+const TInt KNokiaE55MachineUid(0x20014DCF);
 const TInt KNokiaE72MachineUid(0x20014DD0);
 
 TBool MobblerUtility::EqualizerSupported()
 	{
 	TInt machineUid(0);
 	TInt error(HAL::Get(HALData::EMachineUid, machineUid));
-	return (error == KErrNone) && !(machineUid == KNokiaE52MachineUid || machineUid == KNokiaE72MachineUid);
+	return (error == KErrNone) && !(machineUid == KNokiaE52MachineUid || 
+									machineUid == KNokiaE55MachineUid || 
+									machineUid == KNokiaE72MachineUid);
 	}
 
 HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
@@ -304,15 +307,40 @@ void MobblerUtility::FixLyricsSpecialCharacters(TDes8& aText)
 
 void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 	{
+	DUMPDATA(aText, _L("lyrics0.txt"));
+	
+	// First, remove all Windows newlines
+	_LIT8(KCRLF,"\x0D\x0A");
+
+	TInt pos(KErrNotFound);
+	while ((pos = aText.Find(KCRLF)) != KErrNotFound)
+		{
+		aText.Delete(pos, KCRLF().Length());
+		}
+	
+	// Next, remove all Linux newlines
+	_LIT8(KLF,"\x0A");
+	
+	pos = KErrNotFound;
+	while ((pos = aText.Find(KLF)) != KErrNotFound)
+		{
+		aText.Delete(pos, KLF().Length());
+		}
+	
+	DUMPDATA(aText, _L("lyrics1.txt"));
+	
+	// Finally, replace [br] tags with newlines
 	_LIT8(KBrTag1, "[br]");
 	_LIT8(KBrTag2, "\r\n");
 	
-	TInt pos(KErrNotFound);
+	pos = KErrNotFound;
 	while ((pos = aText.Find(KBrTag1)) != KErrNotFound)
 		{
 		aText.Delete(pos, KBrTag1().Length());
 		aText.Insert(pos, KBrTag2);
 		}
+	
+	DUMPDATA(aText, _L("lyrics2.txt"));
 	}
 
 void MobblerUtility::StripUnwantedTagsFromHtml(TDes8& aHtml)

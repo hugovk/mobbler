@@ -80,6 +80,13 @@ _LIT8(KRadioStationRecommended, "lastfm://user/%S/recommended");
 _LIT8(KLatesverFileLocation, "http://www.mobbler.co.uk/latestver.xml");
 #endif
 
+#ifdef PERMANENT_LYRICSFLY_ID_KEY
+#include "mobblerlyricsflyidkey.h"
+#else
+// Update with the weekly user ID key from http://www.lyricsfly.com/api/#doc
+_LIT8(KLyricsflyIdKey, "1c0736f65ac693cbd-temporary.API.access");
+#endif
+
 // The file name to store the queue of listened tracks
 _LIT(KTracksFile, "c:track_queue.dat");
 _LIT(KCurrentTrackFile, "c:current_track.dat");
@@ -115,6 +122,7 @@ _LIT8(KFieldTitle, "title");
 _LIT8(KFieldUser, "user");
 _LIT8(KFieldUsername, "username");
 _LIT8(KQueryAuthGetMobileSession, "auth.getMobileSession");
+_LIT8(KQueryTrackGetInfo, "track.getinfo");
 _LIT8(KQueryAlbumGetInfo, "album.getinfo");
 _LIT8(KQueryArtistGetImages, "artist.getimages");
 _LIT8(KQueryArtistGetSimilar, "artist.getsimilar");
@@ -146,7 +154,6 @@ _LIT8(KQueryUserGetRecommendedArtists, "user.getrecommendedartists");
 _LIT8(KQueryUserGetRecommendedEvents, "user.getrecommendedevents");
 _LIT8(KShoutFormat, "%S.shout");
 
-_LIT8(KNumeralZero, "0");
 _LIT8(KNumeralTwo, "2");
 _LIT8(KAdjustPhp, "/adjust.php");
 _LIT8(KTwoDotZero, "2.0");
@@ -164,8 +171,6 @@ _LIT8(KLowerS8, "s");
 _LIT8(KLowerT8, "t");
 _LIT8(KUpperL8, "L");
 _LIT8(KUpperP8, "P");
-
-_LIT(KBadSession, "BADSESSION");
 
 // Last.fm can accept up to this many track in one submission
 const TInt KMaxSubmitTracks(50);
@@ -246,11 +251,11 @@ void CMobblerLastFmConnection::DoSetModeL(TMode aMode)
 		}
 	}
 
-void CMobblerLastFmConnection::SetIapIdL(TUint32 iIapId)
+void CMobblerLastFmConnection::SetIapIdL(TUint32 aIapId)
 	{
-	if (iIapId != iIapId)
+	if (aIapId != iIapId)
 		{
-		iIapId = iIapId;
+		iIapId = aIapId;
 		
 		if (((iMode == EOnline || iState == EHandshaking) && iCurrentIapId != iIapId)
 				|| iState == EConnecting)
@@ -663,7 +668,7 @@ void CMobblerLastFmConnection::CheckForUpdateL(MMobblerFlatDataObserver& aObserv
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::TrackLoveL(const TDesC8& aArtist, const TDesC8& aTrack)
+void CMobblerLastFmConnection::TrackLoveL(const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver)
 	{
 	CUri8* uri(CUri8::NewLC());
 	
@@ -676,6 +681,7 @@ void CMobblerLastFmConnection::TrackLoveL(const TDesC8& aArtist, const TDesC8& a
 	query->AddFieldL(KFieldArtist, aArtist);
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
+	transaction->SetFlatDataObserver(&aObserver);
 	
 	CleanupStack::Pop(query);
 	CleanupStack::Pop(uri);
@@ -965,19 +971,18 @@ void CMobblerLastFmConnection::FetchLyricsL(const TDesC8& aArtist,
 	LOG2(artistPtr, titlePtr);
 
 	// 2. URL encode artist and title
-
-	// Using the weekly user ID key from http://www.lyricsfly.com/api/#doc 
-	// until we get a permanent key. Make sure the weekly key is correct.
-	_LIT8(KLyricsflyFormat, "http://lyricsfly.com/api/api.php?i=80f126a4797c9fe8f-temporary.API.access&a=%S&t=%S");
+	_LIT8(KLyricsflyFormat, "http://lyricsfly.com/api/api.php?i=%S&a=%S&t=%S");
 	
 	HBufC8* artistEncoded(MobblerUtility::URLEncodeLC(artistPtr));
 	HBufC8* titleEncoded(MobblerUtility::URLEncodeLC(titlePtr));
 	
 	HBufC8* uriBuf(HBufC8::NewLC(KLyricsflyFormat().Length() + 
+								 KLyricsflyIdKey().Length() +
 								 artistEncoded->Length() + 
 								 titleEncoded->Length()));
 	
-	uriBuf->Des().Format(KLyricsflyFormat, artistEncoded, titleEncoded);
+	uriBuf->Des().Format(KLyricsflyFormat, &KLyricsflyIdKey, 
+							artistEncoded, titleEncoded);
 	LOG(*uriBuf);
 	
 	TUriParser8 uriParser;
@@ -1295,6 +1300,41 @@ void CMobblerLastFmConnection::AlbumRemoveTagL(const TDesC8& aAlbum, const TDesC
 	AppendAndSubmitTransactionL(transaction);
 	}
 
+void CMobblerLastFmConnection::TrackGetInfoL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver)
+	{
+	CUri8* uri(CUri8::NewL());
+	CleanupStack::PushL(uri);
+	
+	uri->SetComponentL(KScheme, EUriScheme);
+	uri->SetComponentL(KWebServicesHost, EUriHost);
+	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	
+	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackGetInfo));
+	
+	query->AddFieldL(KFieldTrack, *MobblerUtility::URLEncodeLC(aTrack));
+	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aArtist)
+	
+	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
+	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aAlbum)
+	
+	query->AddFieldL(KFieldUsername, iUsername->String8());
+	
+	if (aMbId.Length() > 0)
+		{
+		query->AddFieldL(KFieldMbid, aMbId);
+		}
+	
+	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
+	CleanupStack::PopAndDestroy(); // *query->GetQueryLC()
+	
+	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
+	transaction->SetFlatDataObserver(&aObserver);
+	
+	CleanupStack::PopAndDestroy(query);
+	CleanupStack::Pop(uri);
+	
+	AppendAndSubmitTransactionL(transaction);
+	}
 
 void CMobblerLastFmConnection::AlbumGetInfoL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
 	{
@@ -1954,10 +1994,13 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 					}
 				
 				HBufC8* love(HBufC8::NewLC(1));
-				if (iTrackQueue[ii]->Love())
+				if (iTrackQueue[ii]->Love() != CMobblerTrack::ENoLove)
 					{
+					// The track has been loved so set this in the scrobble submission
 					love->Des().Append(KUpperL8);
-					TrackLoveL(iTrackQueue[ii]->Artist().String8(), iTrackQueue[ii]->Title().String8());
+					
+					// Make sure we also tell Last.fm in a web service call
+					iTrackQueue[ii]->LoveTrackL();
 					}
 				
 				submitForm->AddFieldL(r, *love);
@@ -2199,7 +2242,7 @@ void CMobblerLastFmConnection::TransactionResponseL(CMobblerTransaction* aTransa
 		else
 			{
 			CleanupStack::PushL(error);
-			if (error->Text() == KBadSession)
+			if (error->LastFmErrorCode() == CMobblerLastFmError::EBadSession)
 				{
 				// The session has become invalid so handshake again
 				AuthenticateL();

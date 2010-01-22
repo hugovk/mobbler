@@ -25,7 +25,7 @@
 &EN, FR, GE, SP, IT, SW, DA, NO, FI, AM, TU, RU, HU, DU, CS, SK, PL, ZH, AF, AR, BE, BG, CA, EL, HE, IN, LV, LT, BP, RO, SR
 
 ; Header
-#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 1, 8, 241
+#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 1, 9, 258
 
 ; Localised vendor names
 %{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}
@@ -50,7 +50,6 @@
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblermusicapp30_0x20027117.dll"-"!:\sys\bin\mobblermusicapp30_0x20027117.dll"
 "$(EPOCROOT)epoc32\data\z\resource\plugins\mobblermusicapp30_0x20027117.rsc"-"!:\resource\plugins\mobblermusicapp30_0x20027117.rsc"
 
-
 ; The Mobbler mpx music app observer
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\musicappobservermpx_0x20027114.dll"-"!:\sys\bin\musicappobservermpx_0x20027114.dll"
 "$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobservermpx_0x20027114.rsc"-"!:\resource\plugins\musicappobservermpx_0x20027114.rsc"
@@ -66,6 +65,10 @@
 ; Gesture plugin (uses sensor framework)
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0x20026566.dll"-"!:\sys\bin\gestureobserver3x_0x20026566.dll"
 "$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0x20026566.rsc"-"!:\resource\plugins\gestureobserver3x_0x20026566.rsc"
+
+; Gesture plugin (uses 2nd sensor framework)
+;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver5x_0x20026569.dll"-"!:\sys\bin\gestureobserver5x_0x20026569.dll"
+;"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver5x_0x20026569.rsc"-"!:\resource\plugins\gestureobserver5x_0x20026569.rsc"
 
 ; Destinations (uses cmmanager.lib (3.2 onwards))
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblerdestinations_0x2002661F.dll"-"!:\sys\bin\mobblerdestinations_0x2002661F.dll"

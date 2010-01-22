@@ -24,14 +24,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef __MOBBLERCONTENTLISTINGINTERFACE_H__
 #define __MOBBLERCONTENTLISTINGINTERFACE_H__
 
-class MMobblerContentListingObserver;
-
-class CMobblerContentListingInterface : public CBase
+class MMobblerContentListingObserver
 	{
 public:
-	virtual void SetObserver(MMobblerContentListingObserver& aObserver) = 0;
-	virtual void FindAndSetAlbumNameL(const TDesC& aArtist, 
-									  const TDesC& aTitle) = 0;
+	virtual void HandleFindLocalTrackCompleteL(TInt aTrackNumber, const TDesC& aAlbum, const TDesC& aLocalFile) = 0;
+	};
+
+class CMobblerContentListingInterface : public CActive
+	{
+public:
+	CMobblerContentListingInterface(CActive::TPriority aPriority) : CActive(aPriority) {}
+
+	virtual void FindLocalTrackL(const TDesC& aArtist, const TDesC& aTitle, MMobblerContentListingObserver* aObserver) = 0;
+	virtual void CancelFindLocalTrack(MMobblerContentListingObserver* aObserver) = 0;
 	};
 
 #endif // __MOBBLERTOUCHFEEDBACKINTERFACE_H__

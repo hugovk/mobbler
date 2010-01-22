@@ -231,4 +231,24 @@ TMobblerMusicAppObserverCommand CMobblerMusicAppObserver30::ConvertCommand(TMPla
 	return command;
 	}
 
+TBool CMobblerMusicAppObserver30::ControlsSupported()
+	{
+	return EFalse;
+	}
+
+void CMobblerMusicAppObserver30::PlayL()
+	{
+	
+	}
+
+void CMobblerMusicAppObserver30::StopL()
+	{
+	
+	}
+
+void CMobblerMusicAppObserver30::SkipL()
+	{
+	
+	}
+
 // End of file

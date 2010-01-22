@@ -26,13 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <e32base.h>
 
-#include "..\contentlisting\inc\mobblercontentlistingobserver.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblermusicapp.h"
 
 class CMobblerNowPlayingCallback;
 class CMobblerRadioPlayer;
-class CMobblerContentListingInterface;
 
 class MMobblerMusicAppListenerObserver
 	{
@@ -40,8 +38,7 @@ public:
 	virtual void HandleMusicAppChangeL() = 0;
 	};
 
-class CMobblerMusicAppListener : public CBase, public MMobblerMusicAppObserver,
-								 public MMobblerContentListingObserver
+class CMobblerMusicAppListener : public CBase, public MMobblerMusicAppObserver
 	{
 public:
 	static CMobblerMusicAppListener* NewL(CMobblerLastFmConnection& aSubmitter);
@@ -54,6 +51,11 @@ public:
 	void NowPlayingL();
 	HBufC* MusicAppNameL() const;
 	TBool IsPlaying() const;
+	
+	TBool ControlsSupported();
+	void PlayL();
+	void StopL();
+	void SkipL();
 	
 private:
 	CMobblerMusicAppListener(CMobblerLastFmConnection& aSubmitter);
@@ -72,11 +74,6 @@ private: // from MMobblerMusicAppObserver
 	void TrackInfoChangedL(const TDesC& aTitle, const TDesC& aArtist);
 	void CommandReceivedL(TMobblerMusicAppObserverCommand aCommand);
 	void PlayerPositionL(TTimeIntervalSeconds aPlayerPosition);
-
-private: // from MMobblerContentListingObserver
-	void SetAlbumL(const TDesC& aAlbum);
-	void SetTrackNumber(const TInt aTrackNumber);
-	void SetPathL(const TDesC& aPath);
     
 private:
 	// Music app observer
@@ -88,9 +85,6 @@ private:
 	CMobblerNowPlayingCallback* iNowPlayingCallback;
 	
 	CMobblerTrack* iCurrentTrack;
-
-	CMobblerContentListingInterface* iMobblerContentListing;
-	TUid iDtorIdKey;
 
 	TMobblerMusicAppObserverState iMusicPlayerState;
 	

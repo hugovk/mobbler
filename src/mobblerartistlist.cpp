@@ -92,21 +92,21 @@ CMobblerListControl* CMobblerArtistList::HandleListCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandArtistShare:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
 			iWebServicesHelper->ArtistShareL(*track);            
 			track->Release();
 			}
 			break;
 		case EMobblerCommandArtistAddTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
 			iWebServicesHelper->ArtistAddTagL(*track);            
 			track->Release();
 			}
 			break;
 		case EMobblerCommandArtistRemoveTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
 			iWebServicesHelper->ArtistRemoveTagL(*track);            
 			track->Release();
 			}

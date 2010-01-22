@@ -79,14 +79,14 @@ CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandAlbumAddTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
 			iWebServicesHelper->AlbumAddTagL(*track);            
 			track->Release();
 			}
 			break;
 		case EMobblerCommandAlbumRemoveTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8));
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
 			iWebServicesHelper->AlbumRemoveTagL(*track);            
 			track->Release();
 			}

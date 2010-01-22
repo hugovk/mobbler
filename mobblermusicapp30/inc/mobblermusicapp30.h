@@ -61,6 +61,11 @@ private: // from MMobblerMusicApp
 	const TDesC& Album();
 	TTimeIntervalSeconds Duration();
 	
+	TBool ControlsSupported();
+	void PlayL();
+	void StopL();
+	void SkipL();
+	
 private:
 	void CommandReceived(TMPlayerRemoteControlCommands aCmd);
 	void PlayerStateChanged(TMPlayerRemoteControlState aState);

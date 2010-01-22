@@ -67,6 +67,7 @@ _LIT8(KElementKey, "key");
 _LIT8(KElementIdentifier, "identifier");
 _LIT8(KElementLink, "link");
 _LIT8(KElementLocation, "location");
+_LIT8(KElementLoved, "loved");
 _LIT8(KElementMatch, "match");
 _LIT8(KElementMbid, "mbid");
 _LIT8(KElementNowPlaying, "nowplaying");
@@ -400,18 +401,10 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioPlaylistL(const TDesC8& aXml, 
 		TPtrC8 radioAuth(tracks[i]->Element(KNamespace, KElementRadioAuth)->Content());
 		TPtrC8 musicBrainzId(tracks[i]->Element(KElementId)->Content());
 
-		CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, /**albumIDBuf,*/ musicBrainzId, image, location, durationSeconds, radioAuth));
+		CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, /**albumIDBuf,*/ musicBrainzId, image, location, durationSeconds, radioAuth, EFalse));
 		CleanupStack::PushL(track);
 		aPlaylist.AppendTrackL(track);
 		CleanupStack::Pop(track);
-
-		if (track->Album().String().Length() == 0)
-			{
-			// We do this so that the track knows for sure
-			// that there is no album name and will use the
-			// album art from the playlist
-			track->SetAlbumL(KNullDesC);
-			}
 
 		CleanupStack::PopAndDestroy(3, creatorBuf);
 		}
@@ -529,18 +522,13 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 				TPtrC8 identifier((*tracks)[i]->Element(KElementIdentifier)->Content());
 				TPtrC8 trackauth((*tracks)[i]->Element(KElementExtension)->Element(KElementTrackAuth)->Content());
 
-				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, trackauth));
+				TBool loved((*tracks)[i]->Element(KElementExtension)->Element(KElementLoved)->Content().Compare(KNumeralZero) != 0);
+				
+				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, trackauth, loved));
 				CleanupStack::PushL(track);
+				
 				aPlaylist.AppendTrackL(track);
 				CleanupStack::Pop(track);
-
-				if (track->Album().String().Length() == 0)
-					{
-					// We do this so that the track knows for sure
-					// that there is no album name and will use the
-					// album art from the playlist
-					track->SetAlbumL(KNullDesC);
-					}
 
 				CleanupStack::PopAndDestroy(3, creatorBuf);
 				}

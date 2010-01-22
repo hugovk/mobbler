@@ -632,17 +632,22 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 	TBool playStopDisabled(EFalse);
 	TBool skipDisabled(EFalse);
 	TBool moreDisabled(EFalse);
-	TBool love(EFalse);
+	CMobblerTrack::TMobblerLove love(CMobblerTrack::ENoLove);
 	
 	if (iAppUi.CurrentTrack())
 		{
 		love = iAppUi.CurrentTrack()->Love();
 		
-		if (iAppUi.CurrentTrack()->AlbumArt() && 
-			iAppUi.CurrentTrack()->AlbumArt()->Bitmap())
+		if (love != CMobblerTrack::ENoLove)
+			{
+			loveDisabled = ETrue;
+			}
+		
+		if (iAppUi.CurrentTrack()->Image() && 
+			iAppUi.CurrentTrack()->Image()->Bitmap())
 			{
 			// The current track has album art and it has finished loading
-			albumArt = iAppUi.CurrentTrack()->AlbumArt();
+			albumArt = iAppUi.CurrentTrack()->Image();
 			
 			if (iShowAlbumArtFullscreen)
 				{
@@ -660,17 +665,21 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 			{
 			// This is a music player track
 			banDisabled = ETrue;
-			skipDisabled = ETrue;
-			playStopDisabled = ETrue;
+			
+			if (!iAppUi.MusicListener().ControlsSupported())
+				{
+				skipDisabled = ETrue;
+				playStopDisabled = ETrue;
+				}
 			}
 		else
 			{
 			// This is a radio track
 			
-			if (iAppUi.RadioPlayer().NextTrack() && iAppUi.RadioPlayer().NextTrack()->AlbumArt() && iAppUi.RadioPlayer().NextTrack()->AlbumArt()->Bitmap())
+			if (iAppUi.RadioPlayer().NextTrack() && iAppUi.RadioPlayer().NextTrack()->Image() && iAppUi.RadioPlayer().NextTrack()->Image()->Bitmap())
 				{
 				// The next track has album art and it has finished loading
-				nextAlbumArt = iAppUi.RadioPlayer().NextTrack()->AlbumArt();
+				nextAlbumArt = iAppUi.RadioPlayer().NextTrack()->Image();
 				const_cast<CMobblerBitmap*>(nextAlbumArt)->ScaleL(rectAlbumArt.Size());
 				}
 			else
@@ -729,7 +738,7 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 	iAlbumArtTransition->DrawAlbumArtL(albumArt, nextAlbumArt, rectAlbumArt, iFingerDownPosition.iX - iFingerNowPosition.iX);
 	
 	// If the track has been loved, draw the love icon in the bottom right corner
-	if (love)
+	if (love != CMobblerTrack::ENoLove)
 		{
 		BitBltMobblerBitmapL(iMobblerBitmapLove, 
 				TPoint(rectAlbumArt.iBr.iX - iMobblerBitmapLove->SizeInPixels().iWidth - 4, rectAlbumArt.iBr.iY - iMobblerBitmapLove->SizeInPixels().iHeight - 4),
@@ -851,7 +860,8 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 	BitBltMobblerBitmapL(iMobblerBitmapNext, iPointSkip, TRect(TPoint(0, 0), iMobblerBitmapNext->SizeInPixels()), skipDisabled);
 	
 	// Draw either play or stop depending on if the radio playing
-	if (iAppUi.RadioPlayer().State() == CMobblerRadioPlayer::EIdle)
+	if (iAppUi.RadioPlayer().State() == CMobblerRadioPlayer::EIdle
+			&& !(iAppUi.MusicListener().ControlsSupported() && iAppUi.MusicListener().CurrentTrack()) )
 		{
 		// The radio is idle so display the play button
 		BitBltMobblerBitmapL(iMobblerBitmapPlay, iPointPlayStop, TRect(TPoint(0, 0), iMobblerBitmapPlay->SizeInPixels()), playStopDisabled);
@@ -981,13 +991,22 @@ TKeyResponse CMobblerStatusControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, T
 	switch (aKeyEvent.iCode)
 		{
 		case EKeyRightArrow: // skip to the next track
-			if (iAppUi.RadioPlayer().CurrentTrack() && !iAlbumArtTransition->IsActive())
+			
+			if (!iAlbumArtTransition->IsActive())
 				{
-				// Only call skip track if we are playing a radio track
-				// and we are not in the middle of an album art transition
-				
-				iAppUi.RadioPlayer().SkipTrackL();
+				if (iAppUi.RadioPlayer().CurrentTrack() )
+					{
+					// Only call skip track if we are playing a radio track
+					// and we are not in the middle of an album art transition
+					
+					iAppUi.RadioPlayer().SkipTrackL();
+					}
+				else if (iAppUi.MusicListener().CurrentTrack() && iAppUi.MusicListener().ControlsSupported())
+					{
+					iAppUi.MusicListener().SkipL();
+					}
 				}
+			
 			response = EKeyWasConsumed;
 			break;
 		case EKeyUpArrow: // love
@@ -1017,7 +1036,15 @@ TKeyResponse CMobblerStatusControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, T
 				}
 			else
 				{
-				const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandResumeRadio);
+				if (iAppUi.MusicListener().CurrentTrack() && iAppUi.MusicListener().ControlsSupported())
+					{
+					// there is a music player track playing so try to to stop it
+					iAppUi.MusicListener().StopL();
+					}
+				else
+					{
+					const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandResumeRadio);
+					}
 				}
 			response = EKeyWasConsumed;
 			break;
@@ -1073,18 +1100,18 @@ TKeyResponse CMobblerStatusControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, T
 		case '9':
 			if (!IsFifthEdition() && // 3rd edition only
 				iAppUi.CurrentTrack() &&
-				iAppUi.CurrentTrack()->AlbumArt())
+				iAppUi.CurrentTrack()->Image())
 				{
 				iShowAlbumArtFullscreen = !iShowAlbumArtFullscreen;
 				
 				if (iShowAlbumArtFullscreen)
 					{
-					const_cast<CMobblerBitmap*>(iAppUi.CurrentTrack()->AlbumArt())->ScaleL(iRectAlbumArt.Size());
+					const_cast<CMobblerBitmap*>(iAppUi.CurrentTrack()->Image())->ScaleL(iRectAlbumArt.Size());
 					}
 				else
 					{
 					TInt albumArtDimension(Min(Size().iWidth, Size().iHeight));
-					const_cast<CMobblerBitmap*>(iAppUi.CurrentTrack()->AlbumArt())->ScaleL(TSize(albumArtDimension, albumArtDimension));
+					const_cast<CMobblerBitmap*>(iAppUi.CurrentTrack()->Image())->ScaleL(TSize(albumArtDimension, albumArtDimension));
 					}
 				DoChangePaneTextL();
 				DrawDeferred();

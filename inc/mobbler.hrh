@@ -35,7 +35,7 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandAbout,
 	
 	EMobblerCommandTools,
-	EMobblerCommandViewScrobbleLog,
+	EMobblerCommandScrobbleLog,
 	EMobblerCommandScrobbleLogRemove,
 	
 	EMobblerCommandPlus,

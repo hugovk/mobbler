@@ -256,4 +256,30 @@ TMobblerMusicAppObserverCommand CMobblerMusicAppObserver::ConvertCommand(TMPlaye
 	return command;
 	}
 
+TBool CMobblerMusicAppObserver::ControlsSupported()
+	{
+	return EFalse;
+	}
+
+void CMobblerMusicAppObserver::PlayL()
+	{
+#ifndef __WINS__
+//	User::LeaveIfError(iEngine->HandleCommand(EMPlayerRCtrlCmdPlay));
+#endif
+	}
+
+void CMobblerMusicAppObserver::StopL()
+	{
+#ifndef __WINS__
+//	User::LeaveIfError(iEngine->HandleCommand(EMPlayerRCtrlCmdStop));
+#endif
+	}
+
+void CMobblerMusicAppObserver::SkipL()
+	{
+#ifndef __WINS__
+//	User::LeaveIfError(iEngine->HandleCommand(EMPlayerRCtrlCmdNextTrack));
+#endif
+	}
+
 // End of file

@@ -203,6 +203,7 @@ LIBRARY		http.lib
 LIBRARY		imageconversion.lib
 LIBRARY		inetprotutil.lib
 LIBRARY		mediaclientaudiostream.lib
+LIBRARY		mediaclientaudio.lib
 #ifndef WINS
 LIBRARY 	MetaDataUtility.lib 
 #endif

@@ -91,46 +91,16 @@ CMobblerGestureObserver5x::CMobblerGestureObserver5x()
 
 void CMobblerGestureObserver5x::ConstructL()
 	{
+#ifndef __SYMBIAN_SIGNED__
+	User::Leave(KErrNotSupported);
+#endif
+	
 	BaseConstructL();
 	
 	// Construct the channel
 	TSensrvChannelInfo accChannel(GetChannelL());
 	iSensrvChannel = CSensrvChannel::NewL(accChannel);
 	iSensrvChannel->OpenChannelL();	
-	
-	// Set up conditional monitoring
-	SetupConditionSetL();
-	iSensrvChannel->AddConditionL(*iConditions);
-	}
-
-void CMobblerGestureObserver5x::SetupConditionSetL()
-	{
-	// Using an OR set for upper and lower bounds
-	iConditions = CSensrvChannelConditionSet::NewL(ESensrvOrConditionSet);
-	
-	// Create the low pass filter for the high value
-	TSensrvAccelerometerAxisData highValLowerBound;
-	highValLowerBound.iTimeStamp = 0;
-	highValLowerBound.iAxisX = KFilterValue;
-	
-	TPckgC<TSensrvAccelerometerAxisData> highValLowerBoundPckg(highValLowerBound);
-	CSensrvChannelCondition* highFilter(CSensrvChannelCondition::NewLC(ESensrvSingleLimitCondition, 
-			ESensrvOperatorGreaterThan, TSensrvAccelerometerAxisData::EAxisX, highValLowerBoundPckg));
-	
-	iConditions->AddChannelConditionL(highFilter);
-	CleanupStack::Pop(highFilter);
-	
-	// Create low pass filter condition for low value end.
-	TSensrvAccelerometerAxisData lowValUpperBound;
-	lowValUpperBound.iTimeStamp = 0;
-	lowValUpperBound.iAxisX = (-1 * KFilterValue);
-	
-	TPckgC<TSensrvAccelerometerAxisData> lowValUpperBoundPckg(lowValUpperBound);
-	CSensrvChannelCondition* lowFilter(CSensrvChannelCondition::NewLC(ESensrvSingleLimitCondition, 
-			ESensrvOperatorLessThan, TSensrvAccelerometerAxisData::EAxisX, lowValUpperBoundPckg));
-	
-	iConditions->AddChannelConditionL(lowFilter);
-	CleanupStack::Pop(lowFilter);
 	}
 
 TSensrvChannelInfo CMobblerGestureObserver5x::GetChannelL()
@@ -170,7 +140,7 @@ void CMobblerGestureObserver5x::DoStartObservingL()
 	if (iSensrvChannel)
 		{
 		// Start listening to data
-		iSensrvChannel->StartConditionListeningL(this, KEventsPerCallback, KMaxTimeToCallbackMilliSeconds);
+		iSensrvChannel->StartDataListeningL(this, 1, 1, 0);
 		}
 	else
 		{
@@ -182,49 +152,37 @@ void CMobblerGestureObserver5x::DoStopObservingL()
 	{
 	if (iSensrvChannel)
 		{
-		User::LeaveIfError(iSensrvChannel->StopConditionListening());
+		User::LeaveIfError(iSensrvChannel->StopDataListening());
 		}
 	}
 
-void CMobblerGestureObserver5x::ConditionMet(CSensrvChannel& aChannel, CSensrvChannelConditionSet& aChannelConditionSet, 
-			TDesC8& aValue)
+void CMobblerGestureObserver5x::DataReceived(CSensrvChannel& aChannel, TInt aCount, TInt aDataLost)
 	{
-	if (aChannel.GetChannelInfo().iChannelType == KSensrvChannelTypeIdAccelerometerXYZAxisData)
+	if ( aChannel.GetChannelInfo().iChannelType == KSensrvChannelTypeIdAccelerometerXYZAxisData )
 		{
-		// Checking the size because the descriptor stuff looks dodgy
-		if (sizeof(TSensrvAccelerometerAxisData) == aValue.Size())
-			{
-			// Copy into a TPckgBuf
-			TPckgBuf<TSensrvAccelerometerAxisData> dataBuffer;
-			dataBuffer.Copy(aValue);
-			
-			TSensrvAccelerometerAxisData accData(dataBuffer());
-			
-			// Instantiate an event and deliver it to action delegates
-			TMobblerGestureEvent event(KAccelerometerSensorUID, Transform(accData.iAxisY),
-					Transform(accData.iAxisX), Transform(accData.iAxisZ));
-	
-			DelegateEvent(event);
-			}
-		if (iSensrvChannel)
-			{
-			// For some reason, you have to re-add this after every callback.
-			iSensrvChannel->AddConditionL(*iConditions);
-			}
+		TSensrvAccelerometerAxisData axisData;
+		TPckg<TSensrvAccelerometerAxisData> axisPackage( axisData );
+
+		aChannel.GetData(axisPackage);
+		
+		TMobblerGestureEvent event(KAccelerometerSensorUID, Transform(axisData.iAxisY),
+															Transform(axisData.iAxisX),
+															Transform(axisData.iAxisZ));
+		
+		DelegateEvent(event);
 		}
 	}
 
-void CMobblerGestureObserver5x::ConditionError(CSensrvChannel& /*aChannel*/, 
-		TSensrvErrorSeverity /*aError*/)
+void CMobblerGestureObserver5x::DataError(CSensrvChannel& /*aChannel*/, TSensrvErrorSeverity /*aError*/)
 	{
-	// May have missed an event, but let's not worry about it.
+	// do nothing
 	}
 
-void CMobblerGestureObserver5x::GetChannelConditionListenerInterfaceL(TUid /*aInterfaceUid*/, 
-		TAny*& /*aInterface*/)
+void CMobblerGestureObserver5x::GetDataListenerInterfaceL(TUid /*aInterfaceUid*/, TAny*& /*aInterface*/)
 	{
-	// Currently unused by sensor service.
+	// not implemented
 	}
+
 
 /*
  * Transform a Sensrv accelerometer value to an approximation of

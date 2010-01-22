@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <audioequalizerutility.h>
 #include <e32base.h>
 #include <mdaaudiooutputstream.h>
+#include <mdaaudiosampleplayer.h>  
 #include <mda\common\audio.h>
 
 #include "mobblershareddata.h"
@@ -37,7 +38,9 @@ class CAudioEqualizerUtility;
 
 TInt ThreadFunction(TAny* aData);
 
-class CMobblerAudioThread : public CActive, public MMdaAudioOutputStreamCallback
+class CMobblerAudioThread : public CActive,
+								public MMdaAudioOutputStreamCallback,
+								public MMdaAudioPlayerCallback
 	{
 public:
 	static CMobblerAudioThread* NewL(TAny* aData);
@@ -61,14 +64,24 @@ private:
     
     void SetEqualizerIndexL();
     
+    static TInt UpdatePlayerPosition(TAny* aRef);
+    
 private: // from MMdaAudioOutputStreamCallback
     void MaoscPlayComplete(TInt aError);
     void MaoscBufferCopied(TInt aError, const TDesC8& aBuffer);
     void MaoscOpenComplete(TInt aError);
     
+private: // from MMdaAudioPlayerCallback
+    void MapcInitComplete(TInt aError, const TTimeIntervalMicroSeconds& aDuration);
+    void MapcPlayComplete(TInt aError);
+    
 private:
-	CMdaAudioOutputStream* iStream;
+	CMdaAudioOutputStream* iStream; // for playing downloaded mp3s
+	CMdaAudioPlayerUtility* iPlayer; // for playing files found locally
 	CAudioEqualizerUtility* iEqualizer;
+	
+	CPeriodic* iPeriodic;
+	TCallBack iCallBack;
 
 	TMobblerSharedData& iShared;  // reference to shared data with client
 	

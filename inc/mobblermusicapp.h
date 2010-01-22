@@ -71,6 +71,11 @@ public:
 	virtual const TDesC& Artist() = 0;
 	virtual const TDesC& Album() = 0;
 	virtual TTimeIntervalSeconds Duration() = 0;
+	
+	virtual TBool ControlsSupported() = 0;
+	virtual void PlayL() = 0;
+	virtual void StopL() = 0;
+	virtual void SkipL() = 0;
 	};
 
 #endif // __MOBBLERMUSICAPP_H__

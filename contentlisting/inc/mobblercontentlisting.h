@@ -32,30 +32,75 @@ class CMobblerContentListing : public CMobblerContentListingInterface,
 							   public MCLFOperationObserver
 	{
 public:
+	enum TState
+		{
+		EMobblerClfModelOutdated,
+		EMobblerClfModelRefreshing,
+		EMobblerClfModelReady,
+		EMobblerClfModelError,
+		EMobblerClfModelClosing
+		};
+	
+	class CMobblerClfItem : public CBase
+		{
+	public:
+		static CMobblerClfItem* NewLC(const TDesC& aTitle, const TDesC& aAlbum, const TDesC& aArtist, const TDesC& aLocalFile);
+		~CMobblerClfItem();
+		
+		static TInt CompareClfItem(const CMobblerClfItem& aLeft, const CMobblerClfItem& aRight);
+		
+	private:
+		CMobblerClfItem();
+		void ConstructL(const TDesC& aTitle, const TDesC& aAlbum, const TDesC& aArtist, const TDesC& aLocalFile);
+		
+	public:
+		HBufC* iTitle;
+		HBufC* iAlbum;
+		HBufC* iArtist;
+		HBufC* iLocalFile;
+		TInt32 iTrackNumber;
+		
+		MMobblerContentListingObserver* iObserver;
+		};
+	
+	struct TSharedData
+		{
+	    MCLFOperationObserver* iObserver;
+	    RPointerArray<CMobblerClfItem> iClfItems;
+	    
+	    TState iState;
+		};
+	
+public:
 	static CMobblerContentListing* NewL();
 	~CMobblerContentListing();
 	
 private:
+	void RunL();
+	void DoCancel();
+	
+private:
 	CMobblerContentListing();
 	void ConstructL();
-	void FindAndSetAlbumNameL();
+	
+	void DoFindLocalTrackL();
+	
+	void RefreshL();
 
 private: // from CMobblerContentListingInterface
-	void SetObserver(MMobblerContentListingObserver& aObserver);
-	void FindAndSetAlbumNameL(const TDesC& aArtist, const TDesC& aTitle);
+	void FindLocalTrackL(const TDesC& aArtist, const TDesC& aTitle, MMobblerContentListingObserver* aObserver);
+	void CancelFindLocalTrack(MMobblerContentListingObserver* aObserver);
 
 protected: // from MCLFOperationObserver
-	void HandleOperationEventL(TCLFOperationEvent aOperationEvent,
-							   TInt aError);
+	void HandleOperationEventL(TCLFOperationEvent aOperationEvent, TInt aError);
 
 private:
-    MCLFContentListingEngine* iClfEngine;
-    MCLFItemListModel* iClfModel;
-	TBool iClfModelReady;
-	HBufC* iArtist;
-	HBufC* iTitle;
+	TBool iThreadCreated;
+	RThread iThread;
+	
+	TSharedData iSharedData;
 
-	MMobblerContentListingObserver* iObserver;
+	RPointerArray<CMobblerClfItem> iOperations;
 	};
 
 #endif // __MOBBLERCONTENTLISTING_H__

@@ -25,7 +25,7 @@
 &EN, FR, GE, SP, IT, SW, DA, NO, FI, AM, TU, RU, HU, DU, CS, SK, PL, ZH, AF, AR, BE, BG, CA, EL, HE, IN, LV, LT, BP, RO, SR
 
 ; Header
-#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 0, 8, 241
+#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 0, 9, 258
 
 ; Localised vendor names
 %{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}

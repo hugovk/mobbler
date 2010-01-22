@@ -80,7 +80,7 @@ CMobblerListControl* CMobblerListControl::CreateListL(CMobblerAppUi& aAppUi,
 		case EMobblerCommandPlaylistFetchUser:
 		case EMobblerCommandPlaylistFetchAlbum:
 		case EMobblerCommandSearchTrack:
-		case EMobblerCommandViewScrobbleLog:
+		case EMobblerCommandScrobbleLog:
 			self = new(ELeave) CMobblerTrackList(aAppUi, aWebServicesControl);
 			break;
 		case EMobblerCommandPlaylists:
@@ -225,7 +225,7 @@ HBufC* CMobblerListControl::NameL() const
 			format.Set(iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_SIMILAR_TRACKS));
 			text.Set(iText2->String());
 			break;
-		case EMobblerCommandViewScrobbleLog:
+		case EMobblerCommandScrobbleLog:
 			_LIT(KFormat, "%S");
 			format.Set(KFormat);
 			text.Set(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SCROBBLE_LOG));

@@ -45,8 +45,8 @@ const TInt KUpdateIntervalDays(7);
 #endif
 const TInt KMaxMobblerTextSize(255);
 
-const TInt KMobblerMinorVersion(8);
-const TInt KMobblerBuildNumber(241);
+const TInt KMobblerMinorVersion(9);
+const TInt KMobblerBuildNumber(258);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
@@ -82,6 +82,7 @@ class CMobblerString;
 class CMobblerTrack;
 class CMobblerWebServicesView;
 class CMobblerWebServicesHelper;
+class CMobblerContentListingInterface;
 
 
 class CMobblerSystemCloseGlobalQuery : public CActive
@@ -109,8 +110,7 @@ class CMobblerAppUi : public CAknViewAppUi,
 						public MMobblerSleepTimerNotify,
 						public MRemConCoreApiTargetObserver,
 						public MMobblerFlatDataObserverHelper,
-						public MMobblerGestures,
-						public MAknServerAppExitObserver
+						public MMobblerGestures
 	{
 public:
 	enum TDownloadAlbumArt
@@ -134,6 +134,7 @@ public:
 	CMobblerMusicAppListener& MusicListener() const;
 	CMobblerBitmapCollection& BitmapCollection() const;
 	CMobblerDestinationsInterface* Destinations() const;
+	CMobblerContentListingInterface* ContentListing() const;
 
 	CMobblerSettingItemListView& SettingView() const;
 	HBufC* MusicAppNameL() const;
@@ -207,10 +208,12 @@ private:
 
 	void LoadRadioStationsL();
 	void SaveRadioStationsL();
+	void LoadSearchTermsL();
+	void SaveSearchTermsL();
 	void SleepL();
 	TBool RadioStartableL() const;
 
-	void LaunchFileEmbeddedL(const TDesC& aFilename);
+	void LaunchFileL(const TDesC& aFilename);
 
 private: // from MMobblerSleepTimerNotify
 	void TimerExpiredL(TAny* aTimer, TInt aError);
@@ -230,9 +233,6 @@ private:
 
 private:
 	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
-
-private: // from MAknServerAppExitObserver
-	void HandleServerAppExit(TInt aReason);
 
 private: // from MAknWsEventObserver
 	void HandleWsEventL(const TWsEvent &aEvent, CCoeControl *aDestination);
@@ -268,6 +268,10 @@ private:
 	CPeriodic* iVolumeDownTimer;
 	TCallBack iVolumeUpCallBack;
 	TCallBack iVolumeDownCallBack;
+	
+	// content listing framework
+	CMobblerContentListingInterface* iContentListing;
+	TUid iContentListingDtorUid;
 
 	TInt iPreviousRadioStation;
 
@@ -275,6 +279,10 @@ private:
 	CMobblerString* iPreviousRadioTag;
 	CMobblerString* iPreviousRadioUser;
 	CMobblerString* iPreviousRadioPlaylistId;
+	CMobblerString* iPreviousSearchTrack;
+	CMobblerString* iPreviousSearchAlbum;
+	CMobblerString* iPreviousSearchArtist;
+	CMobblerString* iPreviousSearchTag;
 
 	CMobblerBitmapCollection* iBitmapCollection;
 

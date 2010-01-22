@@ -51,6 +51,7 @@ _LIT8(KUser, "user");
 
 // Others
 _LIT8(KOk, "ok");
+_LIT8(KNumeralZero, "0");
 _LIT8(KNumeralOne, "1");
 
 #endif // __MOBBLERLITERALS_H__

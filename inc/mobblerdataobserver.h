@@ -56,6 +56,8 @@ public:
 	static CMobblerFlatDataObserverHelper* NewL(CMobblerLastFmConnection& aConnection, MMobblerFlatDataObserverHelper& aObserver, TBool aShowWaitDialog);
 	~CMobblerFlatDataObserverHelper();
 	
+	void SetNotOwned();
+	
 private:
 	CMobblerFlatDataObserverHelper(CMobblerLastFmConnection& aConnection, MMobblerFlatDataObserverHelper& aObserver);
 	void ConstructL(TBool aShowWaitDialog);
@@ -69,6 +71,9 @@ private:
 	MMobblerFlatDataObserverHelper& iObserver;
 	
 	CAknWaitDialog* iWaitDialog;
+	
+	TBool iFinished;
+	TBool iNotOwned;
 	};
 	
 #endif // __MOBBLERDATAOBSERVER_H__

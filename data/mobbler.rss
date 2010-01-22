@@ -183,19 +183,19 @@ RESOURCE MENU_PANE r_mobbler_tag_submenu_pane
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandTrackRemoveTag;
-			},
-		MENU_ITEM
-			{
 			command = EMobblerCommandAlbumAddTag;
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandAlbumRemoveTag;
+			command = EMobblerCommandArtistAddTag;
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandArtistAddTag;
+			command = EMobblerCommandTrackRemoveTag;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandAlbumRemoveTag;
 			},
 		MENU_ITEM
 			{
@@ -362,6 +362,10 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			},
 		MENU_ITEM
 			{
+			command = EMobblerCommandPlusLyrics;
+			},
+		MENU_ITEM
+			{
 			command = EMobblerCommandPlusSimilar;
 			cascade = r_mobbler_plus_similar_submenu_pane;
 			},
@@ -377,10 +381,6 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 		MENU_ITEM
 			{
 			command = EMobblerCommandPlusArtistShoutbox;
-			},
-		MENU_ITEM
-			{
-			command = EMobblerCommandPlusLyrics;
 			},
 		// end of the plus option menu commands
 		MENU_ITEM
@@ -617,7 +617,7 @@ RESOURCE MENU_PANE r_mobbler_tools_submenu_pane
 		{
 		MENU_ITEM
 			{
-			command = EMobblerCommandViewScrobbleLog;
+			command = EMobblerCommandScrobbleLog;
 			},
 		MENU_ITEM
 			{

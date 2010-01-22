@@ -47,9 +47,12 @@ CMobblerTrackBase::CMobblerTrackBase()
 	{
 	}
 
-CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength)
-	:iTrackNumber(KErrUnknown), iStartTimeUTC(Time::NullTTime()), 
-	iTrackLength(aTrackLength), iTotalPlayed(0), 
+CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength, TBool aLoved)
+	:iLove(aLoved ? ELoved : ENoLove),
+	iTrackNumber(KErrUnknown),
+	iStartTimeUTC(Time::NullTTime()), 
+	iTrackLength(aTrackLength),
+	iTotalPlayed(0), 
 	iInitialPlaybackPosition(KErrUnknown)
 	{
 	}
@@ -84,6 +87,11 @@ void CMobblerTrackBase::BaseConstructL(const CMobblerTrackBase& aTrack)
 
 CMobblerTrackBase::~CMobblerTrackBase()
 	{
+	if (iLoveObserverHelper)
+		{
+		iLoveObserverHelper->SetNotOwned();
+		}
+	
 	delete iArtist;
 	delete iTitle;
 	delete iAlbum;
@@ -110,7 +118,7 @@ void CMobblerTrackBase::InternalizeL(RReadStream& aReadStream)
 	CleanupStack::PopAndDestroy();
 	iTitle = CMobblerString::NewL(*HBufC8::NewLC(aReadStream, KMaxTInt));
 	CleanupStack::PopAndDestroy();
-	iLove = aReadStream.ReadInt8L();
+	iLove = static_cast<TMobblerLove>(aReadStream.ReadInt8L());
 	delete iRadioAuth;
 	iRadioAuth = HBufC8::NewL(aReadStream, KMaxTInt);
 	delete iAlbum;
@@ -130,7 +138,7 @@ void CMobblerTrackBase::ExternalizeL(RWriteStream& aWriteStream) const
 	aWriteStream << iAlbum->String8();
 	}
 
-void CMobblerTrackBase::SetAlbumBaseL(const TDesC& aAlbum)
+void CMobblerTrackBase::SetAlbumL(const TDesC& aAlbum)
 	{
 	delete iAlbum;
 	iAlbum = CMobblerString::NewL(aAlbum);
@@ -177,14 +185,35 @@ const TDesC8& CMobblerTrackBase::RadioAuth() const
 	return *iRadioAuth;
 	}
 
-void CMobblerTrackBase::SetLove(TBool aLove)
+void CMobblerTrackBase::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
-	iLove = aLove;
+	if (aObserver == iLoveObserverHelper && aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+		{
+		iLove = ELoved;
+		}
 	}
 
-TBool CMobblerTrackBase::Love() const
+void CMobblerTrackBase::LoveTrackL()
+	{
+	if (iLove != ELoved)
+		{
+		iLove = ELove;
+	
+		// we have not already told Last.fm about this so do it now
+		delete iLoveObserverHelper;
+		iLoveObserverHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
+		static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->LastFmConnection().TrackLoveL(Artist().String8(), Title().String8(), *iLoveObserverHelper);
+		}
+	}
+
+CMobblerTrackBase::TMobblerLove CMobblerTrackBase::Love() const
 	{
 	return iLove;
+	}
+
+void CMobblerTrackBase::SetTrackLength(TTimeIntervalSeconds aTrackLength)
+	{
+	iTrackLength = aTrackLength;
 	}
 
 TTimeIntervalSeconds CMobblerTrackBase::TrackLength() const
