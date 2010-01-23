@@ -870,7 +870,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandPlusVisitLastFm:
 			HandleCommandL(EMobblerCommandVisitWebPage);			
 			break;
-		case EMobblerCommandPlusViewArtistBio:
+		case EMobblerCommandPlusArtistBiography:
 			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandArtistBio), currentTrack->Artist().String8());
 			break;
 		case EMobblerCommandPlusShareTrack:

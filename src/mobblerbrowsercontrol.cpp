@@ -56,8 +56,8 @@ _LIT8(KArtistInfoHtmlTemplate, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 		<title></title>\
 		<style type=\"text/css\">\
 			body, html {\
-				margin: 0px;\
-				padding: 0px 0px 2px 0px;\
+				margin: 0px 0px 2px 0px;\
+				padding: 0px;\
 				font-family: Arial, Helvetica, sans-serif;\
 				font-size: medium;\
 				color: #333333;\

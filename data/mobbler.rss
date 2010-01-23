@@ -344,7 +344,7 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusViewArtistBio;
+			command = EMobblerCommandPlusArtistBiography;
 			},
 		MENU_ITEM
 			{

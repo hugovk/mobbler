@@ -133,7 +133,7 @@ enum TMobblerSettingItemListViewCommands
 	
 	// plus menu commands
 	EMobblerCommandPlusVisitLastFm,
-	EMobblerCommandPlusViewArtistBio,
+	EMobblerCommandPlusArtistBiography,
 	EMobblerCommandPlusEvents,
 	EMobblerCommandPlusArtistShoutbox,
 	EMobblerCommandPlusPlaylistAddTrack,
