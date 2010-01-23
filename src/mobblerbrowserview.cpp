@@ -77,8 +77,6 @@ TUid CMobblerBrowserView::Id() const
 
 void CMobblerBrowserView::HandleCommandL(TInt aCommand)
 	{
-	//iWebServicesControl->HandleListCommandL(aCommand);
-
 	switch (aCommand)
 		{
 		case EAknSoftkeyBack:
@@ -92,11 +90,14 @@ void CMobblerBrowserView::HandleCommandL(TInt aCommand)
 		}
 	}
 
-void CMobblerBrowserView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid /*aCustomMessageId*/, const TDesC8& /*aCustomMessage*/)
+void CMobblerBrowserView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
 	if (!iBrowserControl)
 		{
-		iBrowserControl = CMobblerBrowserControl::NewL(AppUi()->ClientRect(), *static_cast<CMobblerAppUi*>(AppUi()));
+		iBrowserControl = CMobblerBrowserControl::NewL(	AppUi()->ClientRect(),
+														*static_cast<CMobblerAppUi*>(AppUi()),
+														aCustomMessageId,
+														aCustomMessage);
 		iBrowserControl->SetMopParent(AppUi());
 
 		iBrowserControl->ActivateL();

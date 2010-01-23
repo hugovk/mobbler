@@ -233,6 +233,7 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iBrowserLauncher;
 #endif
 	delete iAlarmTimer;
+	delete iArtistBiographyObserver;
 	delete iBitmapCollection;
 	delete iCheckForUpdatesObserver;
 	delete iDocHandler;
@@ -871,7 +872,13 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			HandleCommandL(EMobblerCommandVisitWebPage);			
 			break;
 		case EMobblerCommandPlusArtistBiography:
-			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandArtistBio), currentTrack->Artist().String8());
+			if (currentTrack)
+				{
+				delete iArtistBiographyObserver;
+				iArtistBiographyObserver = CMobblerFlatDataObserverHelper::NewL(
+											*iLastFmConnection, *this, ETrue);
+				iLastFmConnection->WebServicesCallL(KArtist, KGetInfo, CurrentTrack()->Artist().String8(), *iArtistBiographyObserver);
+				}
 			break;
 		case EMobblerCommandPlusShareTrack:
 		case EMobblerCommandPlusShareArtist:
@@ -1417,8 +1424,12 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 				{
 				LaunchFileL(KLyricsFilename);
 				}
+			} // else if (aObserver == iFetchLyricsObserver)
+		else if (aObserver == iArtistBiographyObserver)
+			{
+			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandPlusArtistBiography), aData);
 			}
-		}
+		} // 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 	}
 
 void CMobblerAppUi::HandleConnectCompleteL(TInt aError)

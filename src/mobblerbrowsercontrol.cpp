@@ -177,11 +177,11 @@ no-repeat fixed 5%% 20%%; \
 
 _LIT8(KHtmlDataType, "text/html");
 
-CMobblerBrowserControl* CMobblerBrowserControl::NewL(const TRect& aRect, CMobblerAppUi& aMobblerAppUi)
+CMobblerBrowserControl* CMobblerBrowserControl::NewL(const TRect& aRect, CMobblerAppUi& aMobblerAppUi, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
 	CMobblerBrowserControl* self(new(ELeave) CMobblerBrowserControl(aMobblerAppUi));
 	CleanupStack::PushL(self);
-	self->ConstructL(aRect);
+	self->ConstructL(aRect, aCustomMessageId, aCustomMessage);
 	CleanupStack::Pop(self);
 	return self;
 	}
@@ -191,10 +191,8 @@ CMobblerBrowserControl::CMobblerBrowserControl(CMobblerAppUi& aMobblerAppUi) :
 	{
 	}
 
-void CMobblerBrowserControl::ConstructL(const TRect& aRect)
+void CMobblerBrowserControl::ConstructL(const TRect& aRect, TUid /*aCustomMessageId*/, const TDesC8& aCustomMessage)
 	{
-	_LIT8(KGetInfo, "getinfo");
-	
 	CreateWindowL();
 	SetRect(aRect);
 	SetExtentToWholeScreen(); // Full screen
@@ -216,7 +214,46 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect)
 			TBrCtlDefs::ECapabilityDisplayScrollBar,
 			TBrCtlDefs::ECommandIdBase);
 
-	iAppUi.LastFmConnection().WebServicesCallL(KArtist, KGetInfo, iAppUi.CurrentTrack()->Artist().String8(), *this);
+	_LIT(KHttpDummy, "http://dummy");
+	HBufC8* tagsText(NULL);
+	HBufC8* similarArtistsText(NULL);
+	HBufC8* imageUrl(NULL);
+	HBufC8* artistInfo(NULL);
+
+	CMobblerParser::ParseArtistInfoL(aCustomMessage, artistInfo, imageUrl, tagsText, similarArtistsText);
+
+	CleanupStack::PushL(tagsText);
+	CleanupStack::PushL(imageUrl);
+	CleanupStack::PushL(artistInfo);
+	CleanupStack::PushL(similarArtistsText);
+
+	// Decide how big the artist picture should be taking into account the width
+	// of the application
+	TRect applicationRect(iAppUi.ApplicationRect());
+	TInt artistImageWidth((TInt)((TReal)applicationRect.Width() * 0.40));
+
+	HBufC8* artistInfoHtml = HBufC8::NewLC(KArtistInfoHtmlTemplate().Length() +
+			iAppUi.CurrentTrack()->Artist().String8().Length() +
+			tagsText->Length() +
+			similarArtistsText->Length() +
+			imageUrl->Length() +
+			3 +
+			artistInfo->Length());
+
+	TPtr8 artistHtmlPtr(artistInfoHtml->Des());
+	artistHtmlPtr.AppendFormat(KArtistInfoHtmlTemplate,
+			&(iAppUi.CurrentTrack()->Artist().String8()),
+			imageUrl,
+			artistImageWidth,
+			tagsText,
+			similarArtistsText,
+			artistInfo);
+	TDataType dataType(KHtmlDataType());
+	TUid uid;
+	uid.iUid = KCharacterSetIdentifierUtf8;
+	iBrCtlInterface->LoadDataL(KHttpDummy, artistHtmlPtr, dataType, uid);
+
+	CleanupStack::PopAndDestroy(5, tagsText);
 	}
 
 CMobblerBrowserControl::~CMobblerBrowserControl()
@@ -224,60 +261,6 @@ CMobblerBrowserControl::~CMobblerBrowserControl()
 	if (iBrCtlInterface)
 		{
 		delete iBrCtlInterface;
-		}
-	}
-
-void CMobblerBrowserControl::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
-	{
-	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
-		{
-		_LIT(KHttpDummy, "http://dummy");
-		HBufC8* tagsText(NULL);
-		HBufC8* similarArtistsText(NULL);
-		HBufC8* imageUrl(NULL);
-		HBufC8* artistInfo(NULL);
-
-		CMobblerParser::ParseArtistInfoL(aData, artistInfo, imageUrl, tagsText, similarArtistsText);
-
-		CleanupStack::PushL(tagsText);
-		CleanupStack::PushL(imageUrl);
-		CleanupStack::PushL(artistInfo);
-		CleanupStack::PushL(similarArtistsText);
-
-		// Decide how big the artist picture should be taking into account the width
-		// of the application
-		TRect applicationRect(iAppUi.ApplicationRect());
-		TInt artistImageWidth((TInt)((TReal)applicationRect.Width() * 0.40));
-
-		__ASSERT_DEBUG(artistImageWidth < 1000, User::Invariant());
-
-		HBufC8* artistInfoHtml = HBufC8::NewLC(KArtistInfoHtmlTemplate().Length() +
-								 iAppUi.CurrentTrack()->Artist().String8().Length() +
-								 tagsText->Length() +
-								 similarArtistsText->Length() +
-								 imageUrl->Length() +
-								 3 +
-								 artistInfo->Length());
-
-		TPtr8 artistHtmlPtr(artistInfoHtml->Des());
-		artistHtmlPtr.AppendFormat(KArtistInfoHtmlTemplate,
-									&(iAppUi.CurrentTrack()->Artist().String8()),
-									imageUrl,
-									artistImageWidth,
-									tagsText,
-									similarArtistsText,
-									artistInfo);
-		TDataType dataType(KHtmlDataType());
-		TUid uid;
-		uid.iUid = KCharacterSetIdentifierUtf8;
-		iBrCtlInterface->LoadDataL(KHttpDummy, artistHtmlPtr, dataType, uid);
-
-		CleanupStack::PopAndDestroy(5, tagsText);
-		}
-	else
-		{
-		CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
-		note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_ERROR));
 		}
 	}
 

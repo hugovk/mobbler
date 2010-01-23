@@ -29,19 +29,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class CBrCtlInterface;
 class CMobblerAppUi;
 
-class CMobblerBrowserControl : public CCoeControl, public MMobblerFlatDataObserver
+class CMobblerBrowserControl : public CCoeControl
 	{
 public:
-	static CMobblerBrowserControl* NewL(const TRect& aRect, CMobblerAppUi& aMobblerAppUi);
+	static CMobblerBrowserControl* NewL(const TRect& aRect, CMobblerAppUi& aMobblerAppUi, TUid aCustomMessageId, const TDesC8& aCustomMessage);
 	~CMobblerBrowserControl();
-
-public: // From MMobblerFlatDataObserver
-
-	virtual void DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
 
 private:
 	CMobblerBrowserControl(CMobblerAppUi& aAppUi);
-	void ConstructL(const TRect& aRect);
+	void ConstructL(const TRect& aRect, TUid aCustomMessageId, const TDesC8& aCustomMessage);
 
 	void SizeChanged();
 
