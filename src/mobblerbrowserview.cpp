@@ -80,6 +80,11 @@ void CMobblerBrowserView::HandleCommandL(TInt aCommand)
 	switch (aCommand)
 		{
 		case EAknSoftkeyBack:
+			// Change view layout back to normal (with title pane etc.)
+			if(StatusPane()->CurrentLayoutResId() != R_AVKON_STATUS_PANE_LAYOUT_USUAL)
+				{
+				StatusPane()->SwitchLayoutL(R_AVKON_STATUS_PANE_LAYOUT_USUAL);
+				}
 			AppUi()->ActivateLocalViewL(TUid::Uid(KMobblerStatusViewUid)); // switch back to the status view
 			break;
 		case EAknSoftkeyExit:
@@ -94,6 +99,11 @@ void CMobblerBrowserView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid aC
 	{
 	if (!iBrowserControl)
 		{
+		// Make the app fullscreen but show the softkeys
+		if (StatusPane()->CurrentLayoutResId() != R_AVKON_STATUS_PANE_LAYOUT_EMPTY)
+			{
+			StatusPane()->SwitchLayoutL(R_AVKON_STATUS_PANE_LAYOUT_EMPTY);
+			}
 		iBrowserControl = CMobblerBrowserControl::NewL(	AppUi()->ClientRect(),
 														*static_cast<CMobblerAppUi*>(AppUi()),
 														aCustomMessageId,

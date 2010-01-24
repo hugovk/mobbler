@@ -195,7 +195,6 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect, TUid /*aCustomMessag
 	{
 	CreateWindowL();
 	SetRect(aRect);
-	SetExtentToWholeScreen(); // Full screen
 
 	if (iBrCtlInterface)
 		{
@@ -296,7 +295,6 @@ void CMobblerBrowserControl::HandleResourceChange(TInt aType)
 		{
 		AknLayoutUtils::LayoutMetricsRect(AknLayoutUtils::EMainPane, rect);
 		SetRect(rect);
-		SetExtentToWholeScreen(); // Full screen
 		iAppUi.StatusPane()->MakeVisible(ETrue);
 		}
 
