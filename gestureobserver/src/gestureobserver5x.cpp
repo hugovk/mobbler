@@ -156,12 +156,12 @@ void CMobblerGestureObserver5x::DoStopObservingL()
 		}
 	}
 
-void CMobblerGestureObserver5x::DataReceived(CSensrvChannel& aChannel, TInt aCount, TInt aDataLost)
+void CMobblerGestureObserver5x::DataReceived(CSensrvChannel& aChannel, TInt /*aCount*/, TInt /*aDataLost*/)
 	{
 	if ( aChannel.GetChannelInfo().iChannelType == KSensrvChannelTypeIdAccelerometerXYZAxisData )
 		{
 		TSensrvAccelerometerAxisData axisData;
-		TPckg<TSensrvAccelerometerAxisData> axisPackage( axisData );
+		TPckg<TSensrvAccelerometerAxisData> axisPackage(axisData);
 
 		aChannel.GetData(axisPackage);
 		

@@ -77,7 +77,7 @@ void CMobblerSettingItemListSettings::LoadSettingValuesL()
 	TInt sleepTimerMinutes(KDefaultSleepTimerMinutes);
 	TTime nextUpdateCheck;
 	nextUpdateCheck.UniversalTime();
-	nextUpdateCheck += TTimeIntervalDays(KUpdateIntervalDays); // the default update check should be 7 days after install
+	nextUpdateCheck += TTimeIntervalHours(KUpdateIntervalHours); // the default update check should be 24 hours after install
 	CMobblerLastFmConnection::TMode mode(CMobblerLastFmConnection::EOffline);
 	TInt downloadAlbumArt(KDefaultDownloadAlbumArt);
 #ifdef _DEBUG

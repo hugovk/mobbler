@@ -74,6 +74,7 @@ RESOURCE :
 		/c32,8 $(ICONDIR)\play.svg \
 		/c32,8 $(ICONDIR)\next.svg \
 		/c32,8 $(ICONDIR)\speaker_low.svg \
+		/c32,8 $(ICONDIR)\speaker_high.svg \
 		/c32,8 $(ICONDIR)\drive_harddisk.svg
 		
 FREEZE : do_nothing

@@ -144,8 +144,6 @@ void DoContentListingRefreshL(CMobblerContentListing::TSharedData* aSharedData)
 
 TInt ThreadFunction(TAny* aRef)
 	{
-	__UHEAP_MARK;
-	
 	CTrapCleanup* cleanupStack(CTrapCleanup::New());
 	
 	CActiveScheduler* activeScheduler(new CActiveScheduler);
@@ -155,8 +153,6 @@ TInt ThreadFunction(TAny* aRef)
 
 	delete activeScheduler;
 	delete cleanupStack;
-	
-	__UHEAP_MARKEND;
 	
 	return error;
 	}
@@ -291,7 +287,7 @@ void CMobblerContentListing::DoFindLocalTrackL()
 		
 		for (TInt i(0) ; i < KOperationCount ; ++i)
 			{
-			position = iSharedData.iClfItems.FindInOrder(iOperations[i], order);
+			position = iSharedData.iClfItems.FindInOrder(iOperations[0], order);
 			
 			if (position != KErrNotFound)
 				{

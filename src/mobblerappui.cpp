@@ -235,7 +235,8 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iAlarmTimer;
 	delete iArtistBiographyObserver;
 	delete iBitmapCollection;
-	delete iCheckForUpdatesObserver;
+	delete iAutoCheckForUpdatesObserver;
+	delete iManualCheckForUpdatesObserver;
 	delete iDocHandler;
 	delete iFetchLyricsObserver;
 	delete iInterfaceSelector;
@@ -667,9 +668,9 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandCheckForUpdates:
 			{
-			delete iCheckForUpdatesObserver;
-			iCheckForUpdatesObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, EFalse);
-			iLastFmConnection->CheckForUpdateL(*iCheckForUpdatesObserver);
+			delete iManualCheckForUpdatesObserver;
+			iManualCheckForUpdatesObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, EFalse);
+			iLastFmConnection->CheckForUpdateL(*iManualCheckForUpdatesObserver);
 			}
 			break;
 		case EMobblerCommandEditSettings:
@@ -1264,13 +1265,14 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 	{
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
-		if (aObserver == iCheckForUpdatesObserver)
+		if ((aObserver == iAutoCheckForUpdatesObserver) ||
+			(aObserver == iManualCheckForUpdatesObserver))
 			{
 			// we have just sucessfully checked for updates
 			// so don't do it again for another week
 			TTime now;
 			now.UniversalTime();
-			now += TTimeIntervalDays(KUpdateIntervalDays);
+			now += TTimeIntervalHours(KUpdateIntervalHours);
 			iSettingView->SetNextUpdateCheckL(now);
 			
 			TVersion version;
@@ -1296,8 +1298,9 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 						iMobblerDownload->DownloadL(location, iLastFmConnection->IapId());
 						}
 					}
-				else
+				else if (aObserver == iManualCheckForUpdatesObserver)
 					{
+					// Only show this for manual updates
 					CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
 					note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_NO_UPDATE));
 					}
@@ -1453,9 +1456,9 @@ void CMobblerAppUi::HandleConnectCompleteL(TInt aError)
 			if (now > iSettingView->NextUpdateCheck())
 				{
 				// do an update check
-				delete iCheckForUpdatesObserver;
-				iCheckForUpdatesObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, EFalse);
-				iLastFmConnection->CheckForUpdateL(*iCheckForUpdatesObserver);
+				delete iAutoCheckForUpdatesObserver;
+				iAutoCheckForUpdatesObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, EFalse);
+				iLastFmConnection->CheckForUpdateL(*iAutoCheckForUpdatesObserver);
 				}
 			}
 		

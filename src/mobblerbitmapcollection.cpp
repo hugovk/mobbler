@@ -23,19 +23,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <icl/imagecodecdata.h>
 
-#include <mobbler.mbg>
-
 #include "mobblerappui.h"
 #include "mobblerbitmap.h"
 #include "mobblerbitmapcollection.h"
 
 #ifdef __SYMBIAN_SIGNED__
+#include <mobbler.mbg>
 #ifdef __WINS__
 _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler.mif");
 #else
 _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0x2002655A.mif");
 #endif // __WINS__
 #else // !__SYMBIAN_SIGNED__
+#include <ssmobbler.mbg>
 #ifdef __WINS__
 _LIT(KMobblerMifFile, "\\resource\\apps\\ssmobbler.mif");
 #else
@@ -168,31 +168,67 @@ CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObser
 				bitmap = CMobblerBitmap::NewL(aObserver, KPngAlarmIcon, KImageTypePNGUid);
 				break;
 			case EBitmapHarddiskIcon:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerDrive_harddisk, EMbmMobblerDrive_harddisk_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerDrive_harddisk, EMbmSsmobblerDrive_harddisk_mask);
+#endif
 				break;
 			case EBitmapMore:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerMore, EMbmMobblerMore_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerMore, EMbmSsmobblerMore_mask);
+#endif
 				break;
 			case EBitmapLove:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerLove, EMbmMobblerLove_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerLove, EMbmSsmobblerLove_mask);
+#endif
 				break;
 			case EBitmapBan:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerBan, EMbmMobblerBan_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerBan, EMbmSsmobblerBan_mask);
+#endif
 				break;
 			case EBitmapPlay:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerPlay, EMbmMobblerPlay_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerPlay, EMbmSsmobblerPlay_mask);
+#endif
 				break;
 			case EBitmapNext:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerNext, EMbmMobblerNext_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerNext, EMbmSsmobblerNext_mask);
+#endif
 				break;
 			case EBitmapStop:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerStop, EMbmMobblerStop_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerStop, EMbmSsmobblerStop_mask);
+#endif
 				break;
 			case EBitmapSpeakerHigh:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerSpeaker_high, EMbmMobblerSpeaker_high_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerSpeaker_high, EMbmSsmobblerSpeaker_high_mask);
+#endif
 				break;
 			case EBitmapSpeakerLow:
+#ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerSpeaker_low, EMbmMobblerSpeaker_low_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerSpeaker_low, EMbmSsmobblerSpeaker_low_mask);
+#endif
 				break;
 			case EBitmapMusicApp:
 				bitmap = CMobblerBitmap::NewL(aObserver, KMusicAppUid);

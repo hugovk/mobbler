@@ -411,11 +411,11 @@ RESOURCE MENU_PANE r_mobbler_plus_similar_submenu_pane
 		{
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusSimilarArtists;
+			command = EMobblerCommandPlusSimilarTracks;
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusSimilarTracks;
+			command = EMobblerCommandPlusSimilarArtists;
 			}
 		};
 	}
@@ -426,11 +426,11 @@ RESOURCE MENU_PANE r_mobbler_plus_top_submenu_pane
 		{
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusTopAlbums;
+			command = EMobblerCommandPlusTopTracks;
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusTopTracks;
+			command = EMobblerCommandPlusTopAlbums;
 			},
 		MENU_ITEM
 			{

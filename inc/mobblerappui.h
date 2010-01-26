@@ -39,14 +39,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 _LIT(KFormatTime, "%F%D %N %-B%J%:1%T%+B"); // 21 March 11:20 am
 
 #ifdef BETA_BUILD
-const TInt KUpdateIntervalDays(1);
+const TInt KUpdateIntervalHours(1);
 #else
-const TInt KUpdateIntervalDays(7);
+const TInt KUpdateIntervalHours(24);
 #endif
 const TInt KMaxMobblerTextSize(255);
 
 const TInt KMobblerMinorVersion(9);
-const TInt KMobblerBuildNumber(258);
+const TInt KMobblerBuildNumber(262);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
@@ -302,8 +302,9 @@ private:
 	CMobblerSleepTimer* iAlarmTimer;
 
 	CMobblerWebServicesHelper* iWebServicesHelper;
-	CMobblerFlatDataObserverHelper* iCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iArtistBiographyObserver;
+	CMobblerFlatDataObserverHelper* iAutoCheckForUpdatesObserver;
+	CMobblerFlatDataObserverHelper* iManualCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iFetchLyricsObserver;
 
 	CMobblerDestinationsInterface* iDestinations;
