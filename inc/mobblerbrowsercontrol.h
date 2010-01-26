@@ -24,8 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef __MOBBLERBROWSERCONTROL_H__
 #define __MOBBLERBROWSERCONTROL_H__
 
-#include "mobblerdataobserver.h"
-
 class CBrCtlInterface;
 class CMobblerAppUi;
 

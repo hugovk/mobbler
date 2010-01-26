@@ -167,6 +167,9 @@ CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObser
 			case EBitmapAlarmIcon:
 				bitmap = CMobblerBitmap::NewL(aObserver, KPngAlarmIcon, KImageTypePNGUid);
 				break;
+			case EBitmapHarddiskIcon:
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerDrive_harddisk, EMbmMobblerDrive_harddisk_mask);
+				break;
 			case EBitmapMore:
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerMore, EMbmMobblerMore_mask);
 				break;

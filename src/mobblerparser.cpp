@@ -403,6 +403,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioPlaylistL(const TDesC8& aXml, 
 
 		CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, /**albumIDBuf,*/ musicBrainzId, image, location, durationSeconds, radioAuth, EFalse));
 		CleanupStack::PushL(track);
+		track->FindLocalTrackL();
 		aPlaylist.AppendTrackL(track);
 		CleanupStack::Pop(track);
 
@@ -526,7 +527,7 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 				
 				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, trackauth, loved));
 				CleanupStack::PushL(track);
-				
+				track->FindLocalTrackL();
 				aPlaylist.AppendTrackL(track);
 				CleanupStack::Pop(track);
 

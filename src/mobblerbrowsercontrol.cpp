@@ -21,27 +21,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "mobblerbrowsercontrol.h"
-
-#include "mobbler.rsg.h"
-#include "mobbler_strings.rsg.h"
-#include "mobblerappui.h"
-#include "mobblerliterals.h"
-#include "mobblerlogging.h"
-#include "mobblerparser.h"
-#include "mobblerresourcereader.h"
-#include "mobblerstring.h"
-#include "mobblertrack.h"
-
-#include <aknnotewrappers.h>
 #include <brctlinterface.h>
 #include <charconv.h>
+
+#include "mobblerappui.h"
+#include "mobblerbrowsercontrol.h"
+#include "mobblerparser.h"
+#include "mobblerstring.h"
+#include "mobblertrack.h"
 
 /*
  * Format string specifiers are:
  *
  * %S - artist name
- * %S - image url
+ * %S - image URL
  * %d - image width
  * %S - tags
  * %S - similar artists
@@ -289,10 +282,9 @@ CCoeControl* CMobblerBrowserControl::ComponentControl(TInt aIndex) const
 
 void CMobblerBrowserControl::HandleResourceChange(TInt aType)
 	{
-	TRect rect;
-
 	if (aType == KEikDynamicLayoutVariantSwitch)
 		{
+		TRect rect;
 		AknLayoutUtils::LayoutMetricsRect(AknLayoutUtils::EMainPane, rect);
 		SetRect(rect);
 		iAppUi.StatusPane()->MakeVisible(ETrue);

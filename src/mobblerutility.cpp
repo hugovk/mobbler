@@ -21,13 +21,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "mobblerutility.h"
-
-#ifndef __WINS__  //s - TODO: see if this section is needed
-#include "mobblerappui.h"
-#include "mobblerstring.h"
-#endif //s
-
 #include <bautils.h>
 #include <coemain.h>
 #include <hal.h>
@@ -354,7 +347,7 @@ void MobblerUtility::StripUnwantedTagsFromHtml(TDes8& aHtml)
 		TInt endBracketPos = ptrFromPos.Locate('>');
 		if (endBracketPos == KErrNotFound)
 			{
-			break; // Html not well-formed, just stop
+			break; // HTML not well-formed, just stop
 			}
 		aHtml.Delete(pos, endBracketPos + 1);
 		}

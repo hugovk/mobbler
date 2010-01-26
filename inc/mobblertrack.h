@@ -63,6 +63,8 @@ public:
 	void Open();
 	void Release();
 	
+	void FindLocalTrackL();
+	
 	const CMobblerString& MbTrackId() const;
 	
 	const TDesC8& Mp3Location() const;

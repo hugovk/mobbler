@@ -247,6 +247,7 @@ void CMobblerStatusControl::LoadGraphicsL()
 	iMobblerBitmapScrobble = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapScrobble);
 	iMobblerBitmapTrackIcon = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapTrackIcon);
 	iMobblerBitmapAlarmIcon = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapAlarmIcon);
+	iMobblerBitmapHarddiskIcon = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapHarddiskIcon);
 	iMobblerBitmapMore = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapMore);
 	iMobblerBitmapLove = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapLove);
 	iMobblerBitmapBan = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapBan);
@@ -418,6 +419,7 @@ void CMobblerStatusControl::SetPositions()
 	iMobblerBitmapBan->SetSize(iControlSize);
 	iMobblerBitmapMore->SetSize(iControlSize);
 	iMobblerBitmapLove->SetSize(iControlSize);
+	iMobblerBitmapHarddiskIcon->SetSize(iControlSize);
 	iMobblerBitmapPlay->SetSize(iControlSize);
 	iMobblerBitmapNext->SetSize(iControlSize);
 	iMobblerBitmapStop->SetSize(iControlSize);
@@ -567,6 +569,7 @@ CMobblerStatusControl::~CMobblerStatusControl()
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapScrobble);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapTrackIcon);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapAlarmIcon);
+	iAppUi.BitmapCollection().Cancel(iMobblerBitmapHarddiskIcon);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapMore);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapLove);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapBan);
@@ -743,6 +746,14 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 		BitBltMobblerBitmapL(iMobblerBitmapLove, 
 				TPoint(rectAlbumArt.iBr.iX - iMobblerBitmapLove->SizeInPixels().iWidth - 4, rectAlbumArt.iBr.iY - iMobblerBitmapLove->SizeInPixels().iHeight - 4),
 				TRect(TPoint(0, 0), iMobblerBitmapLove->SizeInPixels()));
+		}
+	
+	// If the current track is a radio track, but we are playing it locally, draw the harddisk icon in the bottom left corner
+	if (iAppUi.RadioPlayer().CurrentTrack() && iAppUi.RadioPlayer().CurrentTrack()->LocalFile().Length() != 0)
+		{
+		BitBltMobblerBitmapL(iMobblerBitmapHarddiskIcon, 
+				TPoint(rectAlbumArt.iTl.iX + 4, rectAlbumArt.iBr.iY - iMobblerBitmapHarddiskIcon->SizeInPixels().iHeight - 4),
+				TRect(TPoint(0, 0), iMobblerBitmapHarddiskIcon->SizeInPixels()));
 		}
 	
 	if (fullscreenAlbumArtReady)

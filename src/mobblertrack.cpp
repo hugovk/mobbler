@@ -95,13 +95,6 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 	iMp3Location = aMp3Location.AllocL();
 	iPlaylistImageLocation = aImage.AllocL();
 	
-	if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ContentListing()
-			&& aTitle.Length() != 0
-			&& aArtist.Length() != 0)
-		{
-		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ContentListing()->FindLocalTrackL(Artist().String(), Title().String(), this);
-		}
-	
 	if (aRadioAuth.Length() == 0)
 		{
 		// This is a music player track
@@ -147,6 +140,15 @@ void CMobblerTrack::Release()
 	if (--iRefCount == 0)
 		{
 		delete this;
+		}
+	}
+void CMobblerTrack::FindLocalTrackL()
+	{
+	if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ContentListing()
+			&& Title().String().Length() != 0
+			&& Artist().String().Length() != 0)
+		{
+		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ContentListing()->FindLocalTrackL(Artist().String(), Title().String(), this);
 		}
 	}
 
