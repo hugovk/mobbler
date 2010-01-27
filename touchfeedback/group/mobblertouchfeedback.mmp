@@ -52,4 +52,4 @@ LIBRARY		apgrfx.lib
 LIBRARY		apparc.lib
 LIBRARY		euser.lib
 
-//LIBRARY		touchfeedback.lib
+LIBRARY		touchfeedback.lib

@@ -26,14 +26,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 PRJ_MMPFILES
 // application icon makefile
 gnumakefile icons.mk
-PRJ_MMPFILES
+
 // projects
 mobbler.mmp
-
 ..\mobblermusicapp30\group\mobblermusicapp30.mmp
-//..\touchfeedback\group\mobblertouchfeedback.mmp
+..\musicappobserver\group\musicappobserver.mmp
+..\musicappobservermpx\group\musicappobservermpx.mmp
+..\touchfeedback\group\mobblertouchfeedback.mmp
 ..\contentlisting\group\mobblercontentlisting.mmp
-//..\gestureobserver\group\gestureobserver3x.mmp
 ..\destinations\group\mobblerdestinations.mmp
 ..\gestureobserver\group\gestureobserver3x.mmp
 ..\gestureobserver\group\gestureobserver5x.mmp
