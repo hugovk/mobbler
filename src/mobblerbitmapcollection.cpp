@@ -174,6 +174,13 @@ CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObser
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerDrive_harddisk, EMbmSsmobblerDrive_harddisk_mask);
 #endif
 				break;
+			case EBitmapOnTour:
+#ifdef __SYMBIAN_SIGNED__
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerOn_tour, EMbmMobblerOn_tour_mask);
+#else
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerOn_tour, EMbmSsmobblerOn_tour_mask);
+#endif
+				break;
 			case EBitmapMore:
 #ifdef __SYMBIAN_SIGNED__
 				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerMore, EMbmMobblerMore_mask);

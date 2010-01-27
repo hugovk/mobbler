@@ -49,6 +49,7 @@ CMobblerTrackBase::CMobblerTrackBase()
 
 CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength, TBool aLoved)
 	:iLove(aLoved ? ELoved : ENoLove),
+	iOnTour(EFalse),
 	iTrackNumber(KErrUnknown),
 	iStartTimeUTC(Time::NullTTime()), 
 	iTrackLength(aTrackLength),

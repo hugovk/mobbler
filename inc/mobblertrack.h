@@ -138,6 +138,7 @@ private:
 	CMobblerFlatDataObserverHelper* iTrackInfoHelper;
 	CMobblerFlatDataObserverHelper* iAlbumInfoHelper;
 	CMobblerFlatDataObserverHelper* iArtistInfoHelper;
+	CMobblerFlatDataObserverHelper* iEventsInfoHelper;
 	};
 	
 #endif // __MOBBLERTRACK_H__

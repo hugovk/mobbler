@@ -179,6 +179,7 @@ public:
 	void ArtistGetTopTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	void ArtistAddTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
 	void ArtistRemoveTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
+	void ArtistGetEventsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	
 	void AlbumGetTagsL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	void AlbumAddTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);

@@ -116,6 +116,7 @@ private:
 	CMobblerBitmap* iMobblerBitmapTrackIcon;
 	CMobblerBitmap* iMobblerBitmapAlarmIcon;
 	CMobblerBitmap* iMobblerBitmapHarddiskIcon;
+	CMobblerBitmap* iMobblerBitmapOnTour;
 	CMobblerBitmap* iMobblerBitmapMusicAppIcon;
 	CMobblerBitmap* iMobblerBitmapAppIcon;
 	

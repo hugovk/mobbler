@@ -248,6 +248,7 @@ void CMobblerStatusControl::LoadGraphicsL()
 	iMobblerBitmapTrackIcon = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapTrackIcon);
 	iMobblerBitmapAlarmIcon = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapAlarmIcon);
 	iMobblerBitmapHarddiskIcon = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapHarddiskIcon);
+	iMobblerBitmapOnTour = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapOnTour);
 	iMobblerBitmapMore = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapMore);
 	iMobblerBitmapLove = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapLove);
 	iMobblerBitmapBan = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapBan);
@@ -420,6 +421,7 @@ void CMobblerStatusControl::SetPositions()
 	iMobblerBitmapMore->SetSize(iControlSize);
 	iMobblerBitmapLove->SetSize(iControlSize);
 	iMobblerBitmapHarddiskIcon->SetSize(TSize(iControlSize.iWidth / 2, iControlSize.iHeight / 2));
+	iMobblerBitmapOnTour->SetSize(iControlSize);
 	iMobblerBitmapPlay->SetSize(iControlSize);
 	iMobblerBitmapNext->SetSize(iControlSize);
 	iMobblerBitmapStop->SetSize(iControlSize);
@@ -570,6 +572,7 @@ CMobblerStatusControl::~CMobblerStatusControl()
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapTrackIcon);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapAlarmIcon);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapHarddiskIcon);
+	iAppUi.BitmapCollection().Cancel(iMobblerBitmapOnTour);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapMore);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapLove);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapBan);
@@ -744,7 +747,8 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 	if (love != CMobblerTrack::ENoLove)
 		{
 		BitBltMobblerBitmapL(iMobblerBitmapLove, 
-				TPoint(rectAlbumArt.iBr.iX - iMobblerBitmapLove->SizeInPixels().iWidth - 4, rectAlbumArt.iBr.iY - iMobblerBitmapLove->SizeInPixels().iHeight - 4),
+				TPoint(rectAlbumArt.iBr.iX - iMobblerBitmapLove->SizeInPixels().iWidth - 4, 
+					   rectAlbumArt.iBr.iY - iMobblerBitmapLove->SizeInPixels().iHeight - 4),
 				TRect(TPoint(0, 0), iMobblerBitmapLove->SizeInPixels()));
 		}
 	
@@ -754,6 +758,17 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 		BitBltMobblerBitmapL(iMobblerBitmapHarddiskIcon, 
 				TPoint(rectAlbumArt.iTl.iX + 4, rectAlbumArt.iBr.iY - iMobblerBitmapHarddiskIcon->SizeInPixels().iHeight - 4),
 				TRect(TPoint(0, 0), iMobblerBitmapHarddiskIcon->SizeInPixels()));
+		}
+	
+	// If the band is on tour, draw the on-tour thingy in the top right corner
+#ifndef __WINS__
+	if (iAppUi.CurrentTrack() && iAppUi.CurrentTrack()->OnTour())
+#endif
+		{
+		BitBltMobblerBitmapL(iMobblerBitmapOnTour, 
+							 TPoint(rectAlbumArt.iBr.iX - iMobblerBitmapOnTour->SizeInPixels().iWidth, 
+									rectAlbumArt.iTl.iY),
+							 TRect(TPoint(0, 0), iMobblerBitmapOnTour->SizeInPixels()));
 		}
 	
 	if (fullscreenAlbumArtReady)
