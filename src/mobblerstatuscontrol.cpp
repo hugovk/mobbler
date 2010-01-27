@@ -1183,9 +1183,6 @@ void CMobblerStatusControl::HandlePointerEventL(const TPointerEvent& aPointerEve
 				event.iCode = EKeyDownArrow;
 			else if (skipRect.Contains(aPointerEvent.iPosition))
 				event.iCode = EKeyRightArrow;
-			else if (onTourRect.Contains(aPointerEvent.iPosition) && 
-					iAppUi.CurrentTrack() && iAppUi.CurrentTrack()->OnTour())
-				const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandPlusEvents);
 			else if (iRectAlbumArt.Contains(aPointerEvent.iPosition))
 				{
 				if (iAppUi.RadioPlayer().CurrentTrack() && !iAlbumArtTransition->IsActive())
@@ -1233,6 +1230,7 @@ void CMobblerStatusControl::HandlePointerEventL(const TPointerEvent& aPointerEve
 				event.iCode = EKeyRightArrow;
 			else if (onTourRect.Contains(aPointerEvent.iPosition) && 
 					iAppUi.CurrentTrack() && iAppUi.CurrentTrack()->OnTour())
+				const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandPlusEvents);
 			
 			if (iAppUi.RadioPlayer().CurrentTrack())
 				{
