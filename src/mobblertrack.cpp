@@ -78,7 +78,8 @@ CMobblerTrack* CMobblerTrack::NewL(const TDesC8& aArtist,
 	}
 
 CMobblerTrack::CMobblerTrack(TTimeIntervalSeconds aTrackLength, TBool aLoved)
-	: CMobblerTrackBase(aTrackLength, aLoved)
+	: CMobblerTrackBase(aTrackLength, aLoved),
+	iOnTour(EFalse)
 	{
 	Open();
 	}

@@ -79,6 +79,8 @@ public:
 	
 	void FindBetterImageL();
 	const CMobblerBitmap* Image() const;
+
+	TBool OnTour() const { return iOnTour; }
 	
 private:
 	CMobblerTrack(TTimeIntervalSeconds aTrackLength, TBool aLoved);
@@ -135,6 +137,8 @@ private:
 	
 	TMobblerImageType iImageType;
 	
+	TBool iOnTour;
+
 	CMobblerFlatDataObserverHelper* iTrackInfoHelper;
 	CMobblerFlatDataObserverHelper* iAlbumInfoHelper;
 	CMobblerFlatDataObserverHelper* iArtistInfoHelper;

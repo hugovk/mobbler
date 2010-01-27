@@ -69,7 +69,6 @@ public:
 	TMobblerLove Love() const;
 	
 	//void LoveTrackL();
-	TBool OnTour() const { return iOnTour; }
 
 	TTimeIntervalSeconds ScrobbleDuration() const;
 	TTimeIntervalSeconds InitialPlaybackPosition() const;
@@ -101,7 +100,6 @@ protected: // from MMobblerFlatDataObserverHelper
 	
 protected:
 	TMobblerLove iLove;
-	TBool iOnTour;
 	
 private:
 	CMobblerString* iArtist;

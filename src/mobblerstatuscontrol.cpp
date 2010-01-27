@@ -429,6 +429,9 @@ void CMobblerStatusControl::SetPositions()
 	TSize speakerSize(KTextRectHeight, KTextRectHeight);
 	iMobblerBitmapSpeakerLow->SetSize(speakerSize);
 	iMobblerBitmapSpeakerHigh->SetSize(speakerSize);
+	
+	iPointOnTour = TPoint(iRectAlbumArt.iBr.iX - iMobblerBitmapOnTour->SizeInPixels().iWidth, 
+						  iRectAlbumArt.iTl.iY);
 	}
 
 void CMobblerStatusControl::HandleResourceChange(TInt aType)
@@ -765,9 +768,7 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 	if (iAppUi.CurrentTrack() && iAppUi.CurrentTrack()->OnTour())
 #endif
 		{
-		BitBltMobblerBitmapL(iMobblerBitmapOnTour, 
-							 TPoint(rectAlbumArt.iBr.iX - iMobblerBitmapOnTour->SizeInPixels().iWidth, 
-									rectAlbumArt.iTl.iY),
+		BitBltMobblerBitmapL(iMobblerBitmapOnTour, iPointOnTour,
 							 TRect(TPoint(0, 0), iMobblerBitmapOnTour->SizeInPixels()));
 		}
 	
@@ -1163,6 +1164,7 @@ void CMobblerStatusControl::HandlePointerEventL(const TPointerEvent& aPointerEve
 	TRect playStopRect(iPointPlayStop, iControlSize);
 	TRect banRect(iPointBan, iControlSize);
 	TRect skipRect(iPointSkip, iControlSize);
+	TRect onTourRect(iPointOnTour, iControlSize);
 	
 	TKeyEvent event;
 	event.iCode = EKeyNull;
@@ -1181,6 +1183,9 @@ void CMobblerStatusControl::HandlePointerEventL(const TPointerEvent& aPointerEve
 				event.iCode = EKeyDownArrow;
 			else if (skipRect.Contains(aPointerEvent.iPosition))
 				event.iCode = EKeyRightArrow;
+			else if (onTourRect.Contains(aPointerEvent.iPosition) && 
+					iAppUi.CurrentTrack() && iAppUi.CurrentTrack()->OnTour())
+				const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandPlusEvents);
 			else if (iRectAlbumArt.Contains(aPointerEvent.iPosition))
 				{
 				if (iAppUi.RadioPlayer().CurrentTrack() && !iAlbumArtTransition->IsActive())
@@ -1226,6 +1231,8 @@ void CMobblerStatusControl::HandlePointerEventL(const TPointerEvent& aPointerEve
 				event.iCode = EKeyDownArrow;
 			else if (skipRect.Contains(aPointerEvent.iPosition) && skipRect.Contains(iLastPointerEvent.iPosition))
 				event.iCode = EKeyRightArrow;
+			else if (onTourRect.Contains(aPointerEvent.iPosition) && 
+					iAppUi.CurrentTrack() && iAppUi.CurrentTrack()->OnTour())
 			
 			if (iAppUi.RadioPlayer().CurrentTrack())
 				{
