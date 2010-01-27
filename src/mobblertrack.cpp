@@ -52,9 +52,11 @@ const TPtrC KArtFileArray[] =
 
 _LIT(KArtistImageCache, "E:\\System\\Data\\Mobbler\\cache\\");
 
+_LIT8(KElementEvents, "events");
 _LIT8(KElementExtraLarge, "extralarge");
 _LIT8(KElementImages, "images");
 _LIT8(KElementSizes, "sizes");
+_LIT8(KElementTotal, "total");
 _LIT8(KElementTrack, "track");
 _LIT8(KElementUserLoved, "userloved");
 
@@ -76,7 +78,8 @@ CMobblerTrack* CMobblerTrack::NewL(const TDesC8& aArtist,
 	}
 
 CMobblerTrack::CMobblerTrack(TTimeIntervalSeconds aTrackLength, TBool aLoved)
-	: CMobblerTrackBase(aTrackLength, aLoved)
+	: CMobblerTrackBase(aTrackLength, aLoved),
+	iOnTour(EFalse)
 	{
 	Open();
 	}
@@ -108,6 +111,13 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 			static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().TrackGetInfoL(Title().String8(), Artist().String8(), aMbTrackId, *iTrackInfoHelper);
 			}
 		}
+
+	if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().Mode() == CMobblerLastFmConnection::EOnline)
+		{
+		delete iEventsInfoHelper;
+		iEventsInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
+		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().ArtistGetEventsL(Artist().String8(), *iEventsInfoHelper);
+		}
 	}
 
 CMobblerTrack::~CMobblerTrack()
@@ -115,6 +125,7 @@ CMobblerTrack::~CMobblerTrack()
 	delete iTrackInfoHelper;
 	delete iAlbumInfoHelper;
 	delete iArtistInfoHelper;
+	delete iEventsInfoHelper;
 	
 	if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ContentListing())
 		{
@@ -477,6 +488,37 @@ void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			CleanupStack::PopAndDestroy(2);
 			}
 		
+		}
+	else if (aObserver == iEventsInfoHelper)
+		{
+		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+			{
+			DUMPDATA(aData, _L("artistgetevents.xml"));
+			
+			// find out if the track has been loved
+			// create the XML reader and DOM fragment and associate them with each other
+			CSenXmlReader* xmlReader(CSenXmlReader::NewL());
+			CleanupStack::PushL(xmlReader);
+			CSenDomFragment* domFragment(CSenDomFragment::NewL());
+			CleanupStack::PushL(domFragment);
+			xmlReader->SetContentHandler(*domFragment);
+			domFragment->SetReader(*xmlReader);
+			
+			// parse the XML into the DOM fragment
+			xmlReader->ParseL(aData);
+			
+			CSenElement* eventsElement(domFragment->AsElement().Element(KElementEvents));
+			if (eventsElement && eventsElement->AttrValue(KElementTotal))
+				{
+				if (eventsElement->AttrValue(KElementTotal)->Compare(KNumeralZero))
+					{
+					iOnTour = ETrue;
+					LOG(_L8("ON TOUR"));
+					}
+				}
+			
+			CleanupStack::PopAndDestroy(2);
+			}
 		}
 	else if (aObserver == iAlbumInfoHelper)
 		{

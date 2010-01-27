@@ -63,7 +63,8 @@ RESOURCE :
 		/c32,8 $(ICONDIR)\next.svg \
 		/c32,8 $(ICONDIR)\speaker_low.svg \
 		/c32,8 $(ICONDIR)\speaker_high.svg \
-		/c32,8 $(ICONDIR)\drive_harddisk.svg
+		/c32,8 $(ICONDIR)\drive_harddisk.svg \
+		/c32,8 $(ICONDIR)\on_tour.svg
 		
 	mifconv $(SSICONTARGETFILENAME) /X /h$(SSHEADERFILENAME) \
 		/c32,8 $(ICONDIR)\mobbler_icon_weird.svg \
@@ -75,7 +76,8 @@ RESOURCE :
 		/c32,8 $(ICONDIR)\next.svg \
 		/c32,8 $(ICONDIR)\speaker_low.svg \
 		/c32,8 $(ICONDIR)\speaker_high.svg \
-		/c32,8 $(ICONDIR)\drive_harddisk.svg
+		/c32,8 $(ICONDIR)\drive_harddisk.svg \
+		/c32,8 $(ICONDIR)\on_tour.svg
 		
 FREEZE : do_nothing
 

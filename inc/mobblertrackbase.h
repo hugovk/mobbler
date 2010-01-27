@@ -68,6 +68,8 @@ public:
 	void LoveTrackL();
 	TMobblerLove Love() const;
 	
+	//void LoveTrackL();
+
 	TTimeIntervalSeconds ScrobbleDuration() const;
 	TTimeIntervalSeconds InitialPlaybackPosition() const;
 	TTimeIntervalSeconds PlaybackPosition() const;

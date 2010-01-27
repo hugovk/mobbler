@@ -116,6 +116,7 @@ private:
 	CMobblerBitmap* iMobblerBitmapTrackIcon;
 	CMobblerBitmap* iMobblerBitmapAlarmIcon;
 	CMobblerBitmap* iMobblerBitmapHarddiskIcon;
+	CMobblerBitmap* iMobblerBitmapOnTour;
 	CMobblerBitmap* iMobblerBitmapMusicAppIcon;
 	CMobblerBitmap* iMobblerBitmapAppIcon;
 	
@@ -143,6 +144,7 @@ private:
 	TPoint iPointBan;
 	TPoint iPointSkip;
 	TPoint iPointPlayStop;
+	TPoint iPointOnTour;
 	TSize iControlSize;
 	
 	TRect iRectTitleText;
