@@ -1090,11 +1090,15 @@ void CMobblerParser::ParseArtistTopTracksL(const TDesC8& aXml, CMobblerTrackList
 				KNullDesC8().AllocLC() :
 				items[i]->Element(KElementImage)->Content().AllocLC());
 		
+		HBufC8* playcount((items[i]->Element(KElementPlayCount) == NULL) ?
+				KNullDesC8().AllocLC() :
+				items[i]->Element(KElementPlayCount)->Content().AllocLC());
+		
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														*SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KElementName)->Content()),
-														items[i]->Element(KElementPlayCount)->Content(),
+														*playcount,
 														*image));
-		CleanupStack::PopAndDestroy(2);
+		CleanupStack::PopAndDestroy(3);
 		
 		CleanupStack::PushL(item);
 		aList.AppendL(item);
