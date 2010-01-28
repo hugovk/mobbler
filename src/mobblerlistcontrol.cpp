@@ -326,35 +326,43 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 				case EMobblerCommandUserTopArtists:
 				case EMobblerCommandArtistTopTracks:
 					{
-					TInt descriptionFormatId(0);
-
-					switch (iType)
+					HBufC* description;
+					if (iList[i]->Description()->String().Length() == 0)
 						{
-						case EMobblerCommandUserTopTags:
-						case EMobblerCommandArtistTopTags:
-							{
-							descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
-													R_MOBBLER_FORMAT_TIME_USED:
-													R_MOBBLER_FORMAT_TIMES_USED;
-							break;
-							}
-						case EMobblerCommandUserTopArtists:
-						case EMobblerCommandArtistTopTracks:
-							{
-							descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
-													R_MOBBLER_FORMAT_PLAY:
-													R_MOBBLER_FORMAT_PLAYS;
-							break;
-							}
-						default:
-							break;
+						description = KNullDesC().AllocLC();
 						}
+					else
+						{
+						TInt descriptionFormatId(0);
+					
+						switch (iType)
+							{
+							case EMobblerCommandUserTopTags:
+							case EMobblerCommandArtistTopTags:
+								{
+								descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
+														R_MOBBLER_FORMAT_TIME_USED:
+														R_MOBBLER_FORMAT_TIMES_USED;
+								break;
+								}
+							case EMobblerCommandUserTopArtists:
+							case EMobblerCommandArtistTopTracks:
+								{
+								descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
+														R_MOBBLER_FORMAT_PLAY:
+														R_MOBBLER_FORMAT_PLAYS;
+								break;
+								}
+							default:
+								break;
+							}
 
-					const TDesC& descriptionFormat(iAppUi.ResourceReader().ResourceL(descriptionFormatId));
-
-					HBufC* description(HBufC::NewLC(descriptionFormat.Length() + iList[i]->Description()->String().Length()));
-					description->Des().Format(descriptionFormat, &iList[i]->Description()->String());
-										
+						const TDesC& descriptionFormat(iAppUi.ResourceReader().ResourceL(descriptionFormatId));						
+				
+						description = HBufC::NewLC(descriptionFormat.Length() + iList[i]->Description()->String().Length());
+						description->Des().Format(descriptionFormat, &iList[i]->Description()->String());
+						}
+					
 					HBufC* format(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + iList[i]->Title()->String().Length() + description->Length()));
 					format->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), description);
 					iListBoxItems->AppendL(*format);
