@@ -46,7 +46,7 @@ const TInt KUpdateIntervalHours(24);
 const TInt KMaxMobblerTextSize(255);
 
 const TInt KMobblerMinorVersion(9);
-const TInt KMobblerBuildNumber(262);
+const TInt KMobblerBuildNumber(265);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
