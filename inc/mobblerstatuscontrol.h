@@ -144,7 +144,7 @@ private:
 	TPoint iPointBan;
 	TPoint iPointSkip;
 	TPoint iPointPlayStop;
-	TPoint iPointOnTour;
+	mutable TPoint iPointOnTour;
 	TSize iControlSize;
 	
 	TRect iRectTitleText;

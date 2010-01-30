@@ -668,6 +668,12 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 				rectAlbumArt = TRect(TPoint(x, 0), TSize(albumArtDimension, albumArtDimension));
 				}
 			const_cast<CMobblerBitmap*>(albumArt)->ScaleL(rectAlbumArt.Size());
+			
+			if (iPointOnTour.iY != rectAlbumArt.iTl.iY)
+				{
+				iPointOnTour = TPoint(rectAlbumArt.iBr.iX - iMobblerBitmapOnTour->SizeInPixels().iWidth, 
+									  rectAlbumArt.iTl.iY);
+				}
 			}
 		
 		if (iAppUi.CurrentTrack()->IsMusicPlayerTrack())
