@@ -181,6 +181,7 @@ public:
 	void OpenWebBrowserL(const TDesC& aUrl);
 	void GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const TDesC8& aLongitude);
 	TBool DetailsNeeded();
+	void ShowLyricsL(const TDesC8& aData);
 
 public: // CEikAppUi
 	void HandleCommandL(TInt aCommand);
@@ -298,7 +299,7 @@ private:
 	CMobblerWebServicesHelper* iWebServicesHelper;
 	CMobblerFlatDataObserverHelper* iAutoCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iManualCheckForUpdatesObserver;
-	CMobblerFlatDataObserverHelper* iFetchLyricsObserver;
+	CMobblerFlatDataObserverHelper* iLyricsObserver;
 	
 	CMobblerDestinationsInterface* iDestinations;
 	TUid iDestinationsDtorUid;

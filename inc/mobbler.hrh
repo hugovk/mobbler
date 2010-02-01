@@ -151,7 +151,7 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandPlusTopTracks,
 	EMobblerCommandPlusTopTags,
 	
-	EMobblerCommandPlusLyrics,
+	EMobblerCommandTrackLyrics,
 	
 	// radio commands
 	EMobblerCommandRadioStart,

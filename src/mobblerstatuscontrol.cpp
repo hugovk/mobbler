@@ -1122,7 +1122,7 @@ TKeyResponse CMobblerStatusControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, T
 #endif
 #ifdef _DEBUG
 		case '7':
-			const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandPlusLyrics);
+			const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandTrackLyrics);
 			response = EKeyWasConsumed;
 			break;
 #endif

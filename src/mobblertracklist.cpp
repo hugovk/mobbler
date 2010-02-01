@@ -107,6 +107,7 @@ CMobblerTrackList::~CMobblerTrackList()
 	delete iAlbumInfoObserver;
 	delete iWebServicesHelper;
 	delete iLoveObserver;
+	delete iLyricsObserver;
 	}
 
 void CMobblerTrackList::GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle)
@@ -167,6 +168,12 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 			iWebServicesHelper->TrackRemoveTagL(*track);
 			track->Release();
 			}
+			break;
+		case EMobblerCommandTrackLyrics:
+			delete iLyricsObserver;
+			iLyricsObserver = CMobblerFlatDataObserverHelper::NewL(
+									iAppUi.LastFmConnection(), *this, ETrue);
+			iAppUi.LastFmConnection().FetchLyricsL(artist, title, *iLyricsObserver);
 			break;
 		case EMobblerCommandTrackShare:
 		case EMobblerCommandArtistShare:
@@ -232,6 +239,8 @@ void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 		{
 		aCommands.AppendL(EMobblerCommandScrobbleLogRemove);
 		}
+
+	aCommands.AppendL(EMobblerCommandTrackLyrics);
 	}
 
 void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
@@ -267,6 +276,13 @@ void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 	else if (aObserver == iLoveObserver)
 		{
 		// Do nothing
+		}
+	else if (aObserver == iLyricsObserver)
+		{
+		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+			{
+			iAppUi.ShowLyricsL(aData);
+			}
 		}
 	}
 
