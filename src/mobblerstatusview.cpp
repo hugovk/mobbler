@@ -139,7 +139,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		
 		// the plus menu commands
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_VISIT_LASTFM_MENU,	EMobblerCommandPlusVisitLastFm);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_ARTIST_BIOGRAPHY,		EMobblerCommandPlusArtistBiography);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_BIOGRAPHY,			EMobblerCommandPlusArtistBiography);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SHARE,				EMobblerCommandPlusShare);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SIMILAR,				EMobblerCommandPlusSimilar);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TOP,					EMobblerCommandPlusTop);

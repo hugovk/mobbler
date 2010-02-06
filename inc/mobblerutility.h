@@ -40,7 +40,7 @@ public:
 	static void FixLyricsSpecialCharacters(TDes8& aText);
 	static void FixLyricsLineBreaks(TDes8& aText);
 	
-	static void StripUnwantedTagsFromHtml(TDes8& aHtml);
+	static void StripUnwantedTagsFromHtmlL(HBufC8*& aHtml);
 
 	};
 

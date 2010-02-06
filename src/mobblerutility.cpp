@@ -336,44 +336,74 @@ void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 	DUMPDATA(aText, _L("lyrics2.txt"));
 	}
 
-void MobblerUtility::StripUnwantedTagsFromHtml(TDes8& aHtml)
+void MobblerUtility::StripUnwantedTagsFromHtmlL(HBufC8*& aHtml)
 	{
 	_LIT8(KAnchorStart, "<a");
 
+	TPtr8 htmlPtr(aHtml->Des());
+
 	TInt pos(KErrNotFound);
-	while ((pos = aHtml.Find(KAnchorStart)) != KErrNotFound)
+	while ((pos = htmlPtr.Find(KAnchorStart)) != KErrNotFound)
 		{
-		TPtrC8 ptrFromPos = aHtml.MidTPtr(pos);
+		TPtrC8 ptrFromPos = htmlPtr.MidTPtr(pos);
 		TInt endBracketPos = ptrFromPos.Locate('>');
 		if (endBracketPos == KErrNotFound)
 			{
 			break; // HTML not well-formed, just stop
 			}
-		aHtml.Delete(pos, endBracketPos + 1);
+		htmlPtr.Delete(pos, endBracketPos + 1);
 		}
 
 	_LIT8(KAnchorEnd, "</a>");
-	while ((pos = aHtml.Find(KAnchorEnd)) != KErrNotFound)
+	while ((pos = htmlPtr.Find(KAnchorEnd)) != KErrNotFound)
 		{
-		aHtml.Delete(pos, KAnchorEnd().Length());
+		htmlPtr.Delete(pos, KAnchorEnd().Length());
 		}
 
-	_LIT8(KBandMemberTag, "[bandmember");
-	while ((pos = aHtml.Find(KBandMemberTag)) != KErrNotFound)
+	_LIT8(KBandMemberTag, "[bandmember]");
+	while ((pos = htmlPtr.Find(KBandMemberTag)) != KErrNotFound)
 		{
-		TPtrC8 ptrFromPos = aHtml.MidTPtr(pos);
+		TPtrC8 ptrFromPos = htmlPtr.MidTPtr(pos);
 		TInt endBracketPos = ptrFromPos.Locate(']');
 		if (endBracketPos == KErrNotFound)
 			{
 			break; // Tag not well-formed, just stop
 			}
-		aHtml.Delete(pos, endBracketPos + 1);
+		htmlPtr.Delete(pos, endBracketPos + 1);
 		}
 
 	_LIT8(KBandMemberEndTag, "[/bandmember]");
-	while ((pos = aHtml.Find(KBandMemberEndTag)) != KErrNotFound)
+	while ((pos = htmlPtr.Find(KBandMemberEndTag)) != KErrNotFound)
 		{
-		aHtml.Delete(pos, KBandMemberEndTag().Length());
+		htmlPtr.Delete(pos, KBandMemberEndTag().Length());
+		}
+
+	// It makes the tidying code easier to use <br /><br /> as paragraph
+	// breaks rather than <p>...</p>
+
+	// Calculate if the descriptor's maximum length is big
+	// enough to store the extra characters for the line breaks
+	// Finally, replace paragraph with newlines
+	_LIT8(KBrTag1, "<br /><br />");
+	_LIT8(KNewLine, "\x20\x0A");
+
+	// We don't want to keep growing the descriptor so do a quick
+	// scan of the HTML and see if there is enough space in the
+	// descriptor to store the extra <br />
+	// In most cases, we will have gained some space from stripping
+	// out anchors etc.
+	while ((pos = htmlPtr.Find(KNewLine)) != KErrNotFound)
+		{
+		htmlPtr.Delete(pos, KNewLine().Length());
+
+		if ((htmlPtr.Length() + KBrTag1().Length()) > htmlPtr.MaxLength())
+			{
+			CleanupStack::PushL(aHtml);
+			aHtml = aHtml->ReAllocL(htmlPtr.Length() + KBrTag1().Length() * 3); // 3 times so that we don't have to keep reallocating
+			CleanupStack::Pop();
+			htmlPtr.Set(aHtml->Des());
+			}
+		htmlPtr.Insert(pos, KBrTag1);
 		}
 	}
 

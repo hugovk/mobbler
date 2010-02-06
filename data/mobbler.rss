@@ -344,10 +344,6 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusArtistBiography;
-			},
-		MENU_ITEM
-			{
 			command = EMobblerCommandPlusShare;
 			cascade = r_mobbler_plus_share_submenu_pane;
 			},
@@ -377,6 +373,10 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 		MENU_ITEM
 			{
 			command = EMobblerCommandPlusEvents;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusArtistBiography;
 			},
 		MENU_ITEM
 			{
@@ -1044,7 +1044,7 @@ RESOURCE DIALOG r_mobbler_get_latest_language_dialog
 			{
 			type = EAknCtQuery;
 			id = EMobblerGetLatestLanguageNote;
-
+			
 			control = AVKON_CONFIRMATION_QUERY
 				{
 				layout = EConfirmationQueryLayout;

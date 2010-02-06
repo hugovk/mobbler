@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerappui.h"
 #include "mobblerbrowsercontrol.h"
+#include "mobblerlogging.h"
 #include "mobblerparser.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
@@ -161,7 +162,6 @@ no-repeat fixed 5%% 20%%; \
 		<a name=\"#similar_artists\"><p><strong>Similar Artists: </strong>%S</p></a>\
 		</div>\
 		<div id=\"body_text\">\
-\
 		<p>%S</p>\
 \
 		</div><!-- body_text -->\
@@ -240,6 +240,8 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect, TUid /*aCustomMessag
 			tagsText,
 			similarArtistsText,
 			artistInfo);
+	DUMPDATA(artistHtmlPtr, _L("artistbio.txt"));
+
 	TDataType dataType(KHtmlDataType());
 	TUid uid;
 	uid.iUid = KCharacterSetIdentifierUtf8;

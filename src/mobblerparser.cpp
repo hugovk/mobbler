@@ -1458,8 +1458,10 @@ void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, H
 	aArtistBio = HBufC8::NewLC(contentPtr.Length());
 	SenXmlUtils::DecodeHttpCharactersL(contentPtr, aArtistBio);
 
-	TPtr8 artistInfoPtr(aArtistBio->Des());
-	MobblerUtility::StripUnwantedTagsFromHtml(artistInfoPtr);
+	MobblerUtility::StripUnwantedTagsFromHtmlL(aArtistBio);
+	CleanupStack::Pop(); 	// StripUnwantedTagsFromHtmlL may reallocate the buffer
+							// hence the pointer may change
+	CleanupStack::PushL(aArtistBio);
 
 	// Get the image url
 	RPointerArray<CSenElement> imageArray;
@@ -1562,9 +1564,7 @@ void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, H
 			}
 		}
 
-	__ASSERT_DEBUG(aSimilarArtistsText, User::Invariant());
-	__ASSERT_DEBUG(aTagsText, User::Invariant());
-	__ASSERT_DEBUG(aImageUrl, User::Invariant());
+	// Must have something to display
 	__ASSERT_DEBUG(aArtistBio, User::Invariant());
 
 	CleanupStack::Pop(aSimilarArtistsText);
