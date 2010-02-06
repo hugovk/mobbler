@@ -678,10 +678,13 @@ TBool CMobblerTrack::FetchImageL(CMobblerFlatDataObserverHelper* aObserver, cons
 		}
 
 	const TInt KImageCount(imageArray.Count());
-	for (TInt i(0); i < KImageCount; ++i)
+	for (TInt i(KImageCount-1); i >= 0; --i)
 		{
 		if ((aObserver == iAlbumInfoHelper &&
 			 imageArray[i]->AttrValue(KElementSize)->Compare(KElementExtraLarge) == 0)
+				||
+			(aObserver == iAlbumInfoHelper &&
+			 imageArray[i]->AttrValue(KElementSize)->Compare(KElementLarge) == 0)
 				||
 			(aObserver == iArtistInfoHelper &&
 			 imageArray[i]->AttrValue(KElementName)->Compare(KElementLarge) == 0))
@@ -700,8 +703,8 @@ TBool CMobblerTrack::FetchImageL(CMobblerFlatDataObserverHelper* aObserver, cons
 					LOG(_L8("16 FetchImageL(artist)"));
 					FetchImageL(EMobblerImageTypeArtistRemote, imageArray[i]->Content());
 					}
+				break;
 				}
-			break;
 			}
 		}
 

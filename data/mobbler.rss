@@ -134,6 +134,10 @@ RESOURCE MENU_PANE r_mobbler_webservices_menu_pane
 			},
 		MENU_ITEM
 			{
+			command = EMobblerCommandTrackLyrics;
+			},
+		MENU_ITEM
+			{
 			command = EMobblerCommandAttendance;
 			cascade = r_mobbler_attendance_submenu_pane;
 			},
@@ -358,7 +362,7 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusLyrics;
+			command = EMobblerCommandTrackLyrics;
 			},
 		MENU_ITEM
 			{

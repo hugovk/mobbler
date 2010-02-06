@@ -238,7 +238,7 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iAutoCheckForUpdatesObserver;
 	delete iManualCheckForUpdatesObserver;
 	delete iDocHandler;
-	delete iFetchLyricsObserver;
+	delete iLyricsObserver;
 	delete iInterfaceSelector;
 	delete iLastFmConnection;
 	delete iMobblerDownload;
@@ -921,16 +921,16 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandPlusTopTags:
 			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopTags), currentTrack->Artist().String8());
 			break;
-		case EMobblerCommandPlusLyrics:
+		case EMobblerCommandTrackLyrics:
 			{
 			if (currentTrack)
 				{
-				delete iFetchLyricsObserver;
-				iFetchLyricsObserver = CMobblerFlatDataObserverHelper::NewL(
+				delete iLyricsObserver;
+				iLyricsObserver = CMobblerFlatDataObserverHelper::NewL(
 											*iLastFmConnection, *this, ETrue);
 				iLastFmConnection->FetchLyricsL(currentTrack->Artist().String8(), 
 												currentTrack->Title().String8(), 
-												*iFetchLyricsObserver);
+												*iLyricsObserver);
 				}
 			}
 			break;
@@ -1306,127 +1306,9 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 					}
 				}
 			}
-		else if (aObserver == iFetchLyricsObserver)
+		else if (aObserver == iLyricsObserver)
 			{
-			DUMPDATA(aData, _L("lyrics.xml"));
-			_LIT(KLyricsFilename, "C:\\System\\Data\\Mobbler\\lyrics.txt");
-			_LIT8(KElementSg, "sg"); // song
-			_LIT8(KElementTx, "tx"); // lyrics text
-			_LIT8(KElement200, "200");
-			_LIT8(KElement300, "300");
-			
-			RFileWriteStream file;
-			CleanupClosePushL(file);
-			CCoeEnv::Static()->FsSession().MkDirAll(KLyricsFilename);
-			User::LeaveIfError(file.Replace(CCoeEnv::Static()->FsSession(), KLyricsFilename, EFileWrite));
-			
-			// Create the XML reader and DOM fragement and associate them with each other
-			CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-			CleanupStack::PushL(xmlReader);
-			CSenDomFragment* domFragment(CSenDomFragment::NewL());
-			CleanupStack::PushL(domFragment);
-			xmlReader->SetContentHandler(*domFragment);
-			domFragment->SetReader(*xmlReader);
-			
-			xmlReader->ParseL(aData);
-			
-			// Get the status error code
-			TPtrC8 statusPtrC(domFragment->AsElement().Element(KElementStatus)->Content());
-			TBool success(ETrue);
-			
-			if ((statusPtrC.CompareF(KElement200) == 0) || 
-				(statusPtrC.CompareF(KElement300) == 0))
-				{
-				TPtrC8 lyricsPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementTx)->Content());
-				
-				HBufC8* lyricsBuf(HBufC8::NewLC(lyricsPtrC.Length()));
-				SenXmlUtils::DecodeHttpCharactersL(lyricsPtrC, lyricsBuf);
-				
-				TPtr8 lyricsPtr(lyricsBuf->Des());
-				MobblerUtility::FixLyricsLineBreaks(lyricsPtr);
-				file.WriteL(lyricsPtr);
-				CleanupStack::PopAndDestroy(lyricsBuf);
-				
-#ifdef PERMANENT_LYRICSFLY_ID_KEY
-				// Only link back to corrections with the permanent ID key.
-				// Temporary keys don't return correct checksums to prevent abuse.
-				_LIT8(KElementCs, "cs"); // checksum (for link back)
-				_LIT8(KElementId, "id"); // song ID (for link back)
-				_LIT8(KLinkBackFormat, "Make corrections:\r\nhttp://lyricsfly.com/search/correction.php?%S&id=%S\r\n");
-				
-				TPtrC8 checkSumPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementCs)->Content());
-				TPtrC8 idPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementId)->Content());
-				
-				HBufC8* linkBackBuf(HBufC8::NewLC(KLinkBackFormat().Length() + 
-												  checkSumPtrC.Length() + 
-												  idPtrC.Length()));
-				
-				linkBackBuf->Des().Format(KLinkBackFormat, &checkSumPtrC, &idPtrC);
-				LOG(*linkBackBuf);
-				
-				file.WriteL(*linkBackBuf);
-				CleanupStack::PopAndDestroy(linkBackBuf);
-#endif
-				}
-			else
-				{
-				CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
-				note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_LYRICS_NOT_FOUND));
-				success = EFalse;
-				
-//				TPtrC8 songPtrC(domFragment->AsElement().Element(KElementSg)->Content());
-//				file.WriteL(songPtrC);
-				}
-			
-#ifdef _DEBUG
-			_LIT8(KElement204, "204");
-			_LIT8(KElement400, "400");
-			_LIT8(KElement401, "401");
-			_LIT8(KElement402, "402");
-			_LIT8(KElement406, "406");
-			if (statusPtrC.CompareF(KElement200) == 0)
-				{
-				LOG(_L8("200 - ok"));
-				//LOG(_L8("    Results are returned. All parameters checked ok."));
-				}
-			else if (statusPtrC.CompareF(KElement204) == 0)
-				{
-				LOG(_L8("204 - NO CONTENT"));
-				//LOG(_L8("   Parameter query returned no results. All parameters checked ok."));
-				}
-			else if (statusPtrC.CompareF(KElement300) == 0)
-				{
-				LOG(_L8("300 - TESTING LIMITED"));
-				//LOG(_L8("    Temporary access. Limited content. All parameters checked ok."));
-				}
-			else if (statusPtrC.CompareF(KElement400) == 0)
-				{
-				LOG(_L8("400 - MISSING KEY"));
-				//LOG(_L8("   Parameter “i” missing. Authorization failed."));
-				}
-			else if (statusPtrC.CompareF(KElement401) == 0)
-				{
-				LOG(_L8("401 – UNAUTHORIZED"));
-				//LOG(_L8("   Parameter “i” invalid. Authorization failed."));
-				}
-			else if (statusPtrC.CompareF(KElement402) == 0)
-				{
-				LOG(_L8("402 - LIMITED TIME"));
-				//LOG(_L8("    This response is returned only if you query too soon. Limit query requests. Time of delay is shown in <delay> tag in milliseconds."));
-				}
-			else if (statusPtrC.CompareF(KElement406) == 0)
-				{
-				LOG(_L8("406 - QUERY TOO SHORT"));
-				//LOG(_L8("    Query request string is too short. All other parameters checked ok."));
-				}
-#endif // _DEBUG
-
-			CleanupStack::PopAndDestroy(2); // xmlReader & domFragment
-			CleanupStack::PopAndDestroy(&file);
-			if (success)
-				{
-				LaunchFileL(KLyricsFilename);
-				}
+			ShowLyricsL(aData);
 			} // else if (aObserver == iFetchLyricsObserver)
 		else if (aObserver == iArtistBiographyObserver)
 			{
@@ -2398,6 +2280,129 @@ TBool CMobblerAppUi::DetailsNeeded()
 		return ETrue;
 		}
 	return EFalse;
+	}
+
+void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
+	{
+	DUMPDATA(aData, _L("lyrics.xml"));
+	_LIT(KLyricsFilename, "C:\\System\\Data\\Mobbler\\Lyrics.txt");
+	_LIT8(KElementSg, "sg"); // song
+	_LIT8(KElementTx, "tx"); // lyrics text
+	_LIT8(KElement200, "200");
+	_LIT8(KElement300, "300");
+	
+	RFileWriteStream file;
+	CleanupClosePushL(file);
+	CCoeEnv::Static()->FsSession().MkDirAll(KLyricsFilename);
+	User::LeaveIfError(file.Replace(CCoeEnv::Static()->FsSession(), KLyricsFilename, EFileWrite));
+	
+	// Create the XML reader and DOM fragement and associate them with each other
+	CSenXmlReader* xmlReader(CSenXmlReader::NewL());
+	CleanupStack::PushL(xmlReader);
+	CSenDomFragment* domFragment(CSenDomFragment::NewL());
+	CleanupStack::PushL(domFragment);
+	xmlReader->SetContentHandler(*domFragment);
+	domFragment->SetReader(*xmlReader);
+	
+	xmlReader->ParseL(aData);
+	
+	// Get the status error code
+	TPtrC8 statusPtrC(domFragment->AsElement().Element(KElementStatus)->Content());
+	TBool success(ETrue);
+	
+	if ((statusPtrC.CompareF(KElement200) == 0) || 
+		(statusPtrC.CompareF(KElement300) == 0))
+		{
+		TPtrC8 lyricsPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementTx)->Content());
+		
+		HBufC8* lyricsBuf(HBufC8::NewLC(lyricsPtrC.Length()));
+		SenXmlUtils::DecodeHttpCharactersL(lyricsPtrC, lyricsBuf);
+		
+		TPtr8 lyricsPtr(lyricsBuf->Des());
+		MobblerUtility::FixLyricsLineBreaks(lyricsPtr);
+		file.WriteL(lyricsPtr);
+		CleanupStack::PopAndDestroy(lyricsBuf);
+		
+#ifdef PERMANENT_LYRICSFLY_ID_KEY
+		// Only link back to corrections with the permanent ID key.
+		// Temporary keys don't return correct checksums to prevent abuse.
+		_LIT8(KElementCs, "cs"); // checksum (for link back)
+		_LIT8(KElementId, "id"); // song ID (for link back)
+		_LIT8(KLinkBackFormat, "Make corrections:\r\nhttp://lyricsfly.com/search/correction.php?%S&id=%S\r\n");
+		
+		TPtrC8 checkSumPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementCs)->Content());
+		TPtrC8 idPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementId)->Content());
+		
+		HBufC8* linkBackBuf(HBufC8::NewLC(KLinkBackFormat().Length() + 
+										  checkSumPtrC.Length() + 
+										  idPtrC.Length()));
+		
+		linkBackBuf->Des().Format(KLinkBackFormat, &checkSumPtrC, &idPtrC);
+		LOG(*linkBackBuf);
+		
+		file.WriteL(*linkBackBuf);
+		CleanupStack::PopAndDestroy(linkBackBuf);
+#endif
+		}
+	else
+		{
+		CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
+		note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_LYRICS_NOT_FOUND));
+		success = EFalse;
+		
+//		TPtrC8 songPtrC(domFragment->AsElement().Element(KElementSg)->Content());
+//		file.WriteL(songPtrC);
+		}
+	
+#ifdef _DEBUG
+	_LIT8(KElement204, "204");
+	_LIT8(KElement400, "400");
+	_LIT8(KElement401, "401");
+	_LIT8(KElement402, "402");
+	_LIT8(KElement406, "406");
+	if (statusPtrC.CompareF(KElement200) == 0)
+		{
+		LOG(_L8("200 - ok"));
+		//LOG(_L8("    Results are returned. All parameters checked ok."));
+		}
+	else if (statusPtrC.CompareF(KElement204) == 0)
+		{
+		LOG(_L8("204 - NO CONTENT"));
+		//LOG(_L8("   Parameter query returned no results. All parameters checked ok."));
+		}
+	else if (statusPtrC.CompareF(KElement300) == 0)
+		{
+		LOG(_L8("300 - TESTING LIMITED"));
+		//LOG(_L8("    Temporary access. Limited content. All parameters checked ok."));
+		}
+	else if (statusPtrC.CompareF(KElement400) == 0)
+		{
+		LOG(_L8("400 - MISSING KEY"));
+		//LOG(_L8("   Parameter “i” missing. Authorization failed."));
+		}
+	else if (statusPtrC.CompareF(KElement401) == 0)
+		{
+		LOG(_L8("401 – UNAUTHORIZED"));
+		//LOG(_L8("   Parameter “i” invalid. Authorization failed."));
+		}
+	else if (statusPtrC.CompareF(KElement402) == 0)
+		{
+		LOG(_L8("402 - LIMITED TIME"));
+		//LOG(_L8("    This response is returned only if you query too soon. Limit query requests. Time of delay is shown in <delay> tag in milliseconds."));
+		}
+	else if (statusPtrC.CompareF(KElement406) == 0)
+		{
+		LOG(_L8("406 - QUERY TOO SHORT"));
+		//LOG(_L8("    Query request string is too short. All other parameters checked ok."));
+		}
+#endif // _DEBUG
+
+	CleanupStack::PopAndDestroy(2); // xmlReader & domFragment
+	CleanupStack::PopAndDestroy(&file);
+	if (success)
+		{
+		LaunchFileL(KLyricsFilename);
+		}
 	}
 
 // End of file
