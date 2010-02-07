@@ -115,6 +115,7 @@ SOURCE		mobbleraudiothread.cpp
 SOURCE		mobblerbitmap.cpp
 SOURCE		mobblerbitmapcollection.cpp
 SOURCE		mobblerbrowsercontrol.cpp
+SOURCE		mobblerbrowsercontrolspecialloadobserver.cpp
 SOURCE		mobblerbrowserview.cpp
 //SOURCE		mobblercontacts.cpp
 SOURCE		mobblerdataobserver.cpp

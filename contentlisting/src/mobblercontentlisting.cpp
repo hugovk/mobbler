@@ -312,7 +312,7 @@ void CMobblerContentListing::HandleOperationEventL(TCLFOperationEvent aOperation
 	{
 	if (aOperationEvent == ECLFRefreshComplete)
 		{
-		// this sould only be called by the other thread
+		// this should only be called by the other thread
 		CActiveScheduler::Stop();
 	
 		if (aError == KErrNone)

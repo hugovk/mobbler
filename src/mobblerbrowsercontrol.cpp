@@ -180,7 +180,7 @@ CMobblerBrowserControl* CMobblerBrowserControl::NewL(const TRect& aRect, CMobble
 	}
 
 CMobblerBrowserControl::CMobblerBrowserControl(CMobblerAppUi& aMobblerAppUi) :
-	iAppUi(aMobblerAppUi)
+	iAppUi(aMobblerAppUi), iBrowserLoadObserver(iAppUi.LastFmConnection())
 	{
 	}
 
@@ -204,7 +204,10 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect, TUid /*aCustomMessag
 			this,
 			brCtlRect,
 			TBrCtlDefs::ECapabilityDisplayScrollBar,
-			TBrCtlDefs::ECommandIdBase);
+			TBrCtlDefs::ECommandIdBase,
+			NULL,
+			NULL,
+			&iBrowserLoadObserver);
 
 	_LIT(KHttpDummy, "http://dummy");
 	HBufC8* tagsText(NULL);
@@ -245,6 +248,8 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect, TUid /*aCustomMessag
 	TDataType dataType(KHtmlDataType());
 	TUid uid;
 	uid.iUid = KCharacterSetIdentifierUtf8;
+
+
 	iBrCtlInterface->LoadDataL(KHttpDummy, artistHtmlPtr, dataType, uid);
 
 	CleanupStack::PopAndDestroy(5, tagsText);

@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //MACRO BETA_BUILD
 
 // uncomment this to build a version with protected UIDs for Symbian Signing
-#define SYMBIAN_SIGNED
+//#define SYMBIAN_SIGNED
 
 #ifdef SYMBIAN_SIGNED
 MACRO __SYMBIAN_SIGNED__

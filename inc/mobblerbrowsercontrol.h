@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef __MOBBLERBROWSERCONTROL_H__
 #define __MOBBLERBROWSERCONTROL_H__
 
+#include "mobblerbrowsercontrolspecialloadobserver.h"
+
 class CBrCtlInterface;
 class CMobblerAppUi;
 
@@ -50,6 +52,8 @@ private: // from CCoeControl
 
 private:
 	CMobblerAppUi& iAppUi;
+
+	TBrowserLoadObserver iBrowserLoadObserver;
 
 	CBrCtlInterface* iBrCtlInterface; // Owned
 	};

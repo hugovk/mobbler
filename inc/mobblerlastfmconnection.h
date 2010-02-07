@@ -119,6 +119,9 @@ public:
 
 	void SetBitRate(TInt aBitRate);
 
+	inline RSocketServ& SocketServ() { return iSocketServ; }
+	inline RConnection& Connection() { return iConnection; }
+
 	TLastFmMemberType MemberType() const;
 
 	// Scrobbler log access
