@@ -63,12 +63,12 @@
 "$(EPOCROOT)\epoc32\data\z\resource\plugins\mobblercontentlisting_0x2002656D.rsc"-"!:\resource\plugins\mobblercontentlisting_0x2002656D.rsc"
 
 ; Gesture plugin (uses sensor framework)
-;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0x20026566.dll"-"!:\sys\bin\gestureobserver3x_0x20026566.dll"
-;"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0x20026566.rsc"-"!:\resource\plugins\gestureobserver3x_0x20026566.rsc"
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0x20026566.dll"-"!:\sys\bin\gestureobserver3x_0x20026566.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0x20026566.rsc"-"!:\resource\plugins\gestureobserver3x_0x20026566.rsc"
 
 ; Gesture plugin (uses 2nd sensor framework)
-;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver5x_0x20026569.dll"-"!:\sys\bin\gestureobserver5x_0x20026569.dll"
-;"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver5x_0x20026569.rsc"-"!:\resource\plugins\gestureobserver5x_0x20026569.rsc"
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver5x_0x20026569.dll"-"!:\sys\bin\gestureobserver5x_0x20026569.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver5x_0x20026569.rsc"-"!:\resource\plugins\gestureobserver5x_0x20026569.rsc"
 
 ; Destinations (uses cmmanager.lib (3.2 onwards))
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblerdestinations_0x2002661F.dll"-"!:\sys\bin\mobblerdestinations_0x2002661F.dll"
