@@ -1,8 +1,8 @@
 /*
-mobblerutility.h
+mobblerbrowserview.h
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2009  Michael Coffey
 
 http://code.google.com/p/mobbler
 
@@ -21,29 +21,38 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MOBBLERUTILITY_H__
-#define __MOBBLERUTILITY_H__
+#ifndef __MOBBLERBROWSERVIEW_H_
+#define __MOBBLERBROWSERVIEW_H_
 
-#include <e32base.h>
+#include <aknview.h>
 
-class MobblerUtility
+class CMobblerBrowserControl;
+
+class CMobblerBrowserView : public CAknView
 	{
 public:
-	static TBool EqualizerSupported();
-	
-	static HBufC8* MD5LC(const TDesC8& aSource);
-	static HBufC8* URLEncodeLC(const TDesC8& aString);
-	
-	static TBuf8<2> LanguageL();
-	static TBuf<30> LocalLastFmDomainL();
+	static CMobblerBrowserView* NewL();
+	~CMobblerBrowserView();
 
-	static void FixLyricsSpecialCharacters(TDes8& aText);
-	static void FixLyricsLineBreaks(TDes8& aText);
-	
-	static void StripUnwantedTagsFromHtmlL(HBufC8*& aHtml);
+	TUid Id() const;
+	void HandleCommandL(TInt aCommand);
 
+private:
+	CMobblerBrowserView();
+	void ConstructL();
+
+	void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane);
+
+	void DoActivateL(const TVwsViewId& aPrevViewId, TUid aCustomMessageId, const TDesC8& aCustomMessage);
+	void DoDeactivate();
+	void HandleStatusPaneSizeChange();
+
+	void SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aResourceId, TInt aCommandId);
+
+private:
+	CMobblerBrowserControl* iBrowserControl;
 	};
 
-#endif // __MOBBLERUTILITY_H__
+#endif //__MOBBLERBROWSERVIEW_H_
 
 // End of file

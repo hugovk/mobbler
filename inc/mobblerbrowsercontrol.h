@@ -1,8 +1,8 @@
 /*
-mobblerwebservicescontrol.h
+mobblerbrowsercontrol.h
 
-mobbler, a last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+Copyright (C) 2009  Michael Coffey
 
 http://code.google.com/p/mobbler
 
@@ -21,57 +21,43 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MOBBLERWEBSERVICESCONTROL_H__
-#define __MOBBLERWEBSERVICESCONTROL_H__
+#ifndef __MOBBLERBROWSERCONTROL_H__
+#define __MOBBLERBROWSERCONTROL_H__
 
-#include <e32base.h>
+#include "mobblerbrowsercontrolspecialloadobserver.h"
 
-class CAknNavigationControlContainer;
-class CAknNavigationDecorator;
 class CBrCtlInterface;
 class CMobblerAppUi;
-class CMobblerListControl;
 
-class CMobblerWebServicesControl : public CCoeControl, public MMobblerConnectionStateObserver
+class CMobblerBrowserControl : public CCoeControl
 	{
 public:
-	static CMobblerWebServicesControl* NewL(CMobblerAppUi& aAppUi, const TRect& aRect, TUid aCustomMessageId, const TDesC8& aCustomMessage);
-	~CMobblerWebServicesControl();
-	
-	CMobblerListControl* TopControl();
-	
-	void HandleListCommandL(TInt aCommand);
-	
-	void ForwardL(CMobblerListControl* aListControl);
-	void BackL();
-	
-	void HandleListControlStateChangedL();
-	
+	static CMobblerBrowserControl* NewL(const TRect& aRect, CMobblerAppUi& aMobblerAppUi, TUid aCustomMessageId, const TDesC8& aCustomMessage);
+	~CMobblerBrowserControl();
+
 private:
-	CMobblerWebServicesControl(CMobblerAppUi& aAppUi);
+	CMobblerBrowserControl(CMobblerAppUi& aAppUi);
 	void ConstructL(const TRect& aRect, TUid aCustomMessageId, const TDesC8& aCustomMessage);
-		
-	void ChangePaneTextL();
-	
-private: // from MMobblerConnectionStateObserver
-	void HandleConnectionStateChangedL();
-	
+
+	void SizeChanged();
+
 private: // from CCoeControl
 	void Draw(const TRect& aRect) const;
-	
+
 	TInt CountComponentControls() const;
 	CCoeControl* ComponentControl(TInt aIndex) const;
+	void HandleResourceChange(TInt aType);
+
 	TKeyResponse OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode aEventCode);
-	
+
 private:
 	CMobblerAppUi& iAppUi;
-	RPointerArray<CMobblerListControl> iControls;
-	CBrCtlInterface* iBrCtlInterface;
-	
-	CAknNavigationControlContainer *iNaviContainer;
-	CAknNavigationDecorator* iNaviLabelDecorator;
+
+	TBrowserLoadObserver iBrowserLoadObserver;
+
+	CBrCtlInterface* iBrCtlInterface; // Owned
 	};
 
-#endif // __MOBBLERWEBSERVICESCONTROL_H__
+#endif // __MOBBLERBROWSERCONTROL_H__
 
 // End of file

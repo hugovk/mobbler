@@ -57,6 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler_strings.rsg.h"
 #include "mobblerappui.h"
 #include "mobblerbitmapcollection.h"
+#include "mobblerbrowserview.h"
 #include "mobblerliterals.h"
 #include "mobblerlogging.h"
 #include "mobblermusiclistener.h"
@@ -185,6 +186,7 @@ void CMobblerAppUi::ConstructL()
 	iAlarmTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
 	
 	iWebServicesView = CMobblerWebServicesView::NewL();
+	iBrowserView = CMobblerBrowserView::NewL();
 
 	iLastFmConnection->SetModeL(iSettingView->Mode());
 	iLastFmConnection->LoadCurrentTrackL();
@@ -202,6 +204,7 @@ void CMobblerAppUi::ConstructL()
 	UpdateAccelerometerGesturesL();
 	
 	AddViewL(iWebServicesView);
+	AddViewL(iBrowserView);
 	AddViewL(iSettingView);
 	AddViewL(iStatusView);
 	ActivateLocalViewL(iStatusView->Id());
@@ -230,6 +233,7 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iBrowserLauncher;
 #endif
 	delete iAlarmTimer;
+	delete iArtistBiographyObserver;
 	delete iBitmapCollection;
 	delete iAutoCheckForUpdatesObserver;
 	delete iManualCheckForUpdatesObserver;
@@ -863,9 +867,19 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				{
 				iStatusView->DisplayPlusMenuL();
 				}
+
 			break;
 		case EMobblerCommandPlusVisitLastFm:
-			HandleCommandL(EMobblerCommandVisitWebPage);
+			HandleCommandL(EMobblerCommandVisitWebPage);			
+			break;
+		case EMobblerCommandPlusArtistBiography:
+			if (currentTrack)
+				{
+				delete iArtistBiographyObserver;
+				iArtistBiographyObserver = CMobblerFlatDataObserverHelper::NewL(
+											*iLastFmConnection, *this, ETrue);
+				iLastFmConnection->WebServicesCallL(KArtist, KGetInfo, CurrentTrack()->Artist().String8(), *iArtistBiographyObserver);
+				}
 			break;
 		case EMobblerCommandPlusShareTrack:
 		case EMobblerCommandPlusShareArtist:
@@ -1295,8 +1309,12 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 		else if (aObserver == iLyricsObserver)
 			{
 			ShowLyricsL(aData);
+			} // else if (aObserver == iFetchLyricsObserver)
+		else if (aObserver == iArtistBiographyObserver)
+			{
+			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandPlusArtistBiography), aData);
 			}
-		}
+		} // 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 	}
 
 void CMobblerAppUi::HandleConnectCompleteL(TInt aError)

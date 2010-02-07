@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <e32base.h>
 #include <es_sock.h>
-#include <http/mhttptransactioncallback.h> 
+#include <http/mhttptransactioncallback.h>
 #include <http/rhttpsession.h>
 #include <mobbler/mobblerdestinationsinterface.h>
 
@@ -60,7 +60,7 @@ public:
 		EMember,
 		ESubscriber
 		};
-	
+
 	enum TTransactionError
 		{
 		ETransactionErrorNone,
@@ -68,7 +68,7 @@ public:
 		ETransactionErrorFailed,
 		ETransactionErrorCancel
 		};
-	
+
 	enum TRadioStation
 		{
 		EUnknown,
@@ -80,47 +80,50 @@ public:
 		EArtist,
 		ETag
 		};
-	
+
 	enum TMode
 		{
 		EOffline,
 		EOnline
 		};
-	
+
 	enum TState
 		{
 		ENone,
 		EConnecting,
 		EHandshaking
 		};
-	
+
 	enum TEventStatus
 		{
 		EAttending,
 		EMaybe,
 		ENotAttending
 		};
-	
+
 public:
-	static CMobblerLastFmConnection* NewL(MMobblerLastFmConnectionObserver& aObserver, 
-											const TDesC& aUsername, 
+	static CMobblerLastFmConnection* NewL(MMobblerLastFmConnectionObserver& aObserver,
+											const TDesC& aUsername,
 											const TDesC& aPassword,
-											TUint32 aIapId, 
+											TUint32 aIapId,
 											TInt aBitRate);
 	~CMobblerLastFmConnection();
-	
+
 	void SetDetailsL(const TDesC& aUsername, const TDesC& aPassword);
 	void SetModeL(TMode aMode);
 	TMode Mode() const;
 	TState State() const;
-	
+
 	void SetIapIdL(TUint32 aIadId);
 	TUint32 IapId() const;
-	
+
 	void SetBitRate(TInt aBitRate);
-	
+
+	inline RSocketServ& SocketServ() { return iSocketServ; }
+	inline RConnection& Connection() { return iConnection; }
+
 	TLastFmMemberType MemberType() const;
-	
+
 	// Scrobbler log access
 	TInt ScrobbleLogCount() const;
 	const CMobblerTrackBase& ScrobbleLogItem(TInt aIndex) const;
@@ -129,44 +132,44 @@ public:
 	// state observers
 	void AddStateChangeObserverL(MMobblerConnectionStateObserver* aObserver);
 	void RemoveStateChangeObserver(MMobblerConnectionStateObserver* aObserver);
-	
+
 	// Updates
 	void CheckForUpdateL(MMobblerFlatDataObserver& aObserver);
-	
+
 	// Scrobbling methods
 	void TrackStartedL(CMobblerTrack* aTrack);
 	void TrackStoppedL(const CMobblerTrackBase* aTrack);
-	
+
 	// Radio APIs
 	void SelectStationL(MMobblerFlatDataObserver* aObserver, TRadioStation aRadioStation, const TDesC8& aRadioText);
 	void RequestPlaylistL(MMobblerFlatDataObserver* aObserver);
-	
+
 	void RequestMp3L(MMobblerSegDataObserver& aObserver, const TDesC8& aMp3Location);
 	void RadioStop();
-	
+
 	void RequestImageL(MMobblerFlatDataObserver* aObserver, const TDesC8& aImageLocation);
 	void CancelTransaction(MMobblerFlatDataObserver* aObserver);
-	
+
 	// Web services APIs
 	void WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver);
-	
+
 	void ShoutL(const TDesC8& aClass, const TDesC8& aArgument, const TDesC8& aMessage);
-	
+
 	void TrackLoveL(const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver);
 	void TrackBanL(const TDesC8& aArtist, const TDesC8& aTrack);
-	
+
 	void TrackShareL(const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aTrack, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver);
 	void ArtistShareL(const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver);
 	void EventShareL(const TDesC8& aRecipient, const TDesC8& aEventId, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver);
-	
+
 	void EventAttendL(const TDesC8& aEventId, TEventStatus aEventStatus, MMobblerFlatDataObserver& aObserver);
-	
+
 	void RecommendedArtistsL(MMobblerFlatDataObserver& aObserver);
 	void RecommendedEventsL(MMobblerFlatDataObserver& aObserver);
-	
+
 	void RecentTracksL(const TDesC8& aUser, MMobblerFlatDataObserver& aObserver);
 	void SimilarTracksL(const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver);
-	
+
 	void SimilarArtistsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	void ArtistGetImageL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	
@@ -184,11 +187,11 @@ public:
 	void AlbumGetTagsL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	void AlbumAddTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
 	void AlbumRemoveTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
-	
+
 	void TrackGetInfoL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver);
 	void AlbumGetInfoL(const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver);
 	void AlbumGetInfoL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
-	
+
 	void PlaylistCreateL(const TDesC& aTitle, const TDesC& aDescription, MMobblerFlatDataObserver& aObserver);
 	void PlaylistFetchUserL(const TDesC8& aPlaylistId, MMobblerFlatDataObserver& aObserver);
 	void PlaylistFetchAlbumL(const TDesC8& aAlbumId, MMobblerFlatDataObserver& aObserver);
@@ -196,82 +199,82 @@ public:
 	
 	void FoursquareL(const TDesC8& aLongitude, const TDesC8& aLatitude, MMobblerFlatDataObserver& aObserver);
 	void FetchLyricsL(const TDesC8& aArtist, const TDesC8& aTitle, MMobblerFlatDataObserver& aObserver);
-	
+
 	TBool ExportQueueToLogFileL();
-	
+
 	TBool ScrobblingOn() { return iScrobblingOn; }
 	void ToggleScrobblingL();
-	
+
 	void LoadCurrentTrackL();
 	void SaveCurrentTrackL();
-	
+
 private:
 	void RunL();
 	void DoCancel();
-	
+
 private: // fomr MMobblerDestinationsInterfaceObserver
 	void PreferredCarrierAvailable();
 	void NewCarrierActive();
-	
+
 private: // from MHTTPTransactionCallback
 	void MHFRunL(RHTTPTransaction aTransaction, const THTTPEvent &aEvent);
 	TInt MHFRunError(TInt aError, RHTTPTransaction aTransaction, const THTTPEvent &aEvent);
-	
+
 private: // from MMobblerTransactionObserver
 	void TransactionResponseL(CMobblerTransaction* aTransaction, const TDesC8& aResponse);
 	void TransactionCompleteL(CMobblerTransaction* aTransaction);
 	void TransactionFailedL(CMobblerTransaction* aTransaction, const TDesC8& aStatus, TInt aStatusCode);
-	
+
 private:
 	void DoNowPlayingL();
 	TBool DoSubmitL();
-	
+
 	void ChangeStateL(TState aState);
 	void DoSetModeL(TMode aMode);
-	
+
 	// handshaking
 	void AuthenticateL();
-	
+
 	void ScrobbleHandshakeL();
 	void WebServicesHandshakeL();
 	void OldRadioHandshakeL();
 #ifdef BETA_BUILD
 	void BetaHandshakeL();
 #endif
-	
+
 	void HandleHandshakeErrorL(CMobblerLastFmError* aError);
-	
+
 private:
 	void ConstructL(const TDesC& aUsername, const TDesC& aPassword);
 	CMobblerLastFmConnection(MMobblerLastFmConnectionObserver& aObserver, TUint32 aIapId, TInt aBitRate);
-	
+
 private:  // utilities
 	void CreateAuthTokenL(TDes8& aHash, TTimeIntervalSeconds aUnixTimeStamp);
 	void StripOutTabs(TDes8& aString);
-	
+
 	// track queue methods
 	void LoadTrackQueueL();
 	void SaveTrackQueueL();
-	
+
 	void ConnectL();
 	void Disconnect();
-	
+
 	TBool Connected();
-	
+
 	CMobblerTransaction* CreateRequestPlaylistTransactionL(MMobblerFlatDataObserver* aObserver);
 	void AppendAndSubmitTransactionL(CMobblerTransaction* aTransaction);
 	void CloseTransactionsL(TBool aCloseTransactionArray);
-	
+
 	void DeleteCurrentTrackFile();
 
 private:
 	RHTTPSession iHTTPSession;
 	RSocketServ iSocketServ;
 	RConnection iConnection;
-	
+
 	TUint32 iIapId;
 	TUint32 iCurrentIapId;
-	
+
 	// authentication transactions
 	CMobblerTransaction* iHandshakeTransaction;
 	CMobblerTransaction* iWebServicesHandshakeTransaction;
@@ -280,53 +283,53 @@ private:
 	CMobblerTransaction* iBetaTestersTransaction;
 	TBool iIsBetaTester;
 #endif
-	
+
 	// Old radio things
 	HBufC8* iOldRadioSessionId;
 	HBufC8* iOldRadioBaseUrl;
 	HBufC8* iOldRadioBasePath;
-	
+
 	// scrobble transactions
 	CMobblerTransaction* iNowPlayingTransaction;
 	CMobblerTransaction* iSubmitTransaction;
-	
+
 	// audio transaction
 	RHTTPTransaction iRadioAudioTransaction;
 	MMobblerSegDataObserver* iTrackDownloadObserver;
 	HBufC8* iMp3Location;
-	
+
 	RPointerArray<CMobblerTransaction> iTransactions;
-	
+
 	TBool iSubscriber;
-	
+
 	CMobblerString* iUsername;
 	CMobblerString* iPassword;
-	
+
 	HBufC8* iScrobbleSessionId;
-	
+
 	HBufC8* iWebServicesSessionKey;
-	
+
 	HBufC8* iNowPlayingUrl;
 	HBufC8* iSubmitUrl;
-	
+
 	MMobblerLastFmConnectionObserver& iObserver;
-	
+
 	CMobblerTrackBase* iCurrentTrack;
-	
+
 	RPointerArray<CMobblerTrackBase> iTrackQueue;
-	
+
 	TMode iMode;
 	TState iState;
 	TBool iAuthenticated;
-	
+
 	TInt iBitRate;
 	TBool iScrobblingOn;
 	TBool iCurrentTrackSaved;
-	
+
 	RPointerArray<MMobblerConnectionStateObserver> iStateChangeObservers;
-	
+
 	TLastFmMemberType iMemberType;
-	
+
 	TBool i64KbpsWarningShown;
 	};
 

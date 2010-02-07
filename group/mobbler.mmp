@@ -49,7 +49,7 @@ Protected - Unprotected - Purpose
 0x20026569 - 0xA000B6D1 - gesture plug-in dll (5th edition)
 0x2002656A - 0xA000B6C2 - gesture plug-in 5th edition implementation
 0x2002656B - 0xA000B6C3 - web services view
-0x2002656C - 0xA000B6D4 - unused
+0x2002656C - 0xA000B6D4 - browser view
 0x2002656D - 0xA000BEB1 - content listing dll
 0x2002661D - 0xA000BEB2 - content listing interface
 0x2002661E - 0xA000BEB3 - content listing implementation
@@ -114,6 +114,9 @@ SOURCE		mobbleraudiocontrol.cpp
 SOURCE		mobbleraudiothread.cpp
 SOURCE		mobblerbitmap.cpp
 SOURCE		mobblerbitmapcollection.cpp
+SOURCE		mobblerbrowsercontrol.cpp
+SOURCE		mobblerbrowsercontrolspecialloadobserver.cpp
+SOURCE		mobblerbrowserview.cpp
 //SOURCE		mobblercontacts.cpp
 SOURCE		mobblerdataobserver.cpp
 SOURCE		mobblerdocument.cpp
@@ -170,6 +173,7 @@ LIBRARY		avkon.lib
 LIBRARY		bafl.lib
 LIBRARY		bitgdi.lib
 LIBRARY		bitmaptransforms.lib
+LIBRARY 	browserengine.lib
 #ifndef WINS
 LIBRARY		browserlauncher.lib
 #endif
