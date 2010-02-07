@@ -1,0 +1,247 @@
+/*
+mobbler.mmp
+
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+Copyright (C) 2008  Michael Coffey
+
+http://code.google.com/p/mobbler
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+#include "mobbler.mmh" 
+
+// Protected UIDS 0x2002655A - 0x2002656D
+//                0x2002661D - 0x20026626
+
+/* Mobbler UIDs
+
+Protected - Unprotected - Purpose
+
+0x2002655A - 0xA0007648 - Mobbler exe
+
+0x2002655B - 0xA0007CA8 - status view
+0x2002655C - 0xA0007CA9 - settings view
+0x2002655D - 0xA0007CAA - (DON'T USE)
+0x2002655E - !0xA0007CAB - music app observer 3.1 dll 
+0x2002655F - !0xA0007CAC - music app observer 3.1 implementation
+0x20026560 - !0xA0007CAD - ?
+0x20026561 - !0xA0007CAE - (DON'T USE)
+0x20026562 - !0xA0007CAF - music app observer 3.0 implementation
+0x20026563 - 0xA000B6CB - touch feedback dll
+0x20026564 - 0xA000B6CC - touch feedback interface
+0x20026565 - 0xA000B6CD - touch feedback implementation
+0x20026566 - 0xA000B6CE - gesture plug-in dll (3rd edition)
+0x20026567 - 0xA000B6CF - gesture plug-in interface
+0x20026568 - 0xA000B6D0 - gesture plug-in 3rd edition implementation
+0x20026569 - 0xA000B6D1 - gesture plug-in dll (5th edition)
+0x2002656A - 0xA000B6C2 - gesture plug-in 5th edition implementation
+0x2002656B - 0xA000B6C3 - web services view
+0x2002656C - 0xA000B6D4 - unused
+0x2002656D - 0xA000BEB1 - content listing dll
+0x2002661D - 0xA000BEB2 - content listing interface
+0x2002661E - 0xA000BEB3 - content listing implementation
+0x2002661F - 0xA000BEB4 - destinations dll
+0x20026620 - 0xA000BEB5 - destinations interface
+0x20026621 - 0xA000BEB6 - destinations implementation
+0x20026622 - 0xA000BEB7 - unused
+0x20026623 - 0xA000BEB8 - unused
+0x20026624 - 0xA000BEB9 - unused
+0x20026625 - 0xA000BEBA - unused
+0x20026626 - 0x???????? - unused
+0x20027114 - 0xA000D9F4 - mpx music app observer dll
+0x20027115 - 0xA000D9F5 - mpx music app observer implementation
+0x20027116 - 0xA000D9F6 - music app observer interface
+0x20027117 - 0xA000D9F7 - music app observer 3.0 dll
+0x20027118 - 0xA000D9F8 - unused
+0x20027119 - 0xA000D9F9 - unused
+0x2002711A - 0xA000D9FA - unused
+0x2002711B - 0xA000D9FB - unused
+0x2002711C - 0xA000D9FC - unused
+0x2002711D - 0xA000D9FD - unused
+
+
+
+*/
+
+#ifdef SYMBIAN_SIGNED
+
+TARGET			mobbler_0x2002655A.exe
+TARGETTYPE		exe
+UID				0x100039CE 0x2002655A
+SECUREID		0x2002655A
+
+#else // !SYMBIAN_SIGNED
+
+TARGET			mobbler_0xA0007648.exe
+TARGETTYPE		exe
+UID				0x100039CE 0xA0007648
+SECUREID		0xA0007648
+
+#endif
+
+
+#ifdef WINS
+LANG 01
+#else
+LANG 01 02 03 04 05 06 07 08 09 10 14 16 17 18 25 26 27 31 34 37 40 42 44 54 57 59 67 68 76 78 79 333 337 888
+#endif
+
+SOURCEPATH	..\src
+USERINCLUDE	..\inc
+SYSTEMINCLUDE	 \epoc32\include
+
+SOURCE		mobbler.cpp
+SOURCE		mobbleraccesspointsettingitem.cpp
+SOURCE		mobbleralbumarttransition.cpp
+SOURCE		mobbleralbumlist.cpp
+SOURCE		mobblerapplication.cpp
+SOURCE		mobblerappui.cpp
+SOURCE		mobblerartistlist.cpp
+SOURCE		mobbleraudiocontrol.cpp
+SOURCE		mobbleraudiothread.cpp
+SOURCE		mobblerbitmap.cpp
+SOURCE		mobblerbitmapcollection.cpp
+//SOURCE		mobblercontacts.cpp
+SOURCE		mobblerdataobserver.cpp
+SOURCE		mobblerdocument.cpp
+SOURCE		mobblerdownload.cpp
+SOURCE		mobblereventlist.cpp
+SOURCE		mobblerfriendlist.cpp
+SOURCE		mobblerincomingcallmonitor.cpp
+SOURCE		mobblerlastfmconnection.cpp
+SOURCE		mobblerlastfmerror.cpp
+SOURCE		mobblerlistcontrol.cpp
+SOURCE		mobblerlistitem.cpp
+SOURCE		mobblerlogging.cpp
+SOURCE		mobblermarquee.cpp
+SOURCE		mobblermusiclistener.cpp
+SOURCE		mobblernowplayingcallback.cpp
+SOURCE		mobblerparser.cpp
+SOURCE		mobblerplaylistlist.cpp
+SOURCE		mobblerradioplayer.cpp
+SOURCE		mobblerradioplaylist.cpp
+SOURCE		mobblerresourcereader.cpp
+SOURCE		mobblersettingitemlist.cpp
+SOURCE		mobblersettingitemlistsettings.cpp
+SOURCE		mobblersettingitemlistview.cpp
+SOURCE		mobblershoutbox.cpp
+SOURCE		mobblersleeptimer.cpp
+SOURCE		mobblerslidersettingitem.cpp
+SOURCE		mobblerstatuscontrol.cpp
+SOURCE		mobblerstatusview.cpp
+SOURCE		mobblerstring.cpp
+SOURCE		mobblertaglist.cpp
+SOURCE		mobblertimeout.cpp
+SOURCE		mobblertrack.cpp
+SOURCE		mobblertrackbase.cpp
+SOURCE		mobblertracklist.cpp
+SOURCE		mobblertransaction.cpp
+SOURCE		mobblerutility.cpp
+SOURCE		mobblerwebservicescontrol.cpp
+SOURCE		mobblerwebserviceshelper.cpp
+SOURCE		mobblerwebservicesquery.cpp
+SOURCE		mobblerwebservicesview.cpp
+
+LIBRARY		aknicon.lib
+LIBRARY		aknnotify.lib
+LIBRARY		aknskins.lib
+#ifdef SYMBIAN_SIGNED
+LIBRARY		aknswallpaperutils.lib
+#endif
+LIBRARY		apgrfx.lib
+LIBRARY		apparc.lib
+LIBRARY		apmime.lib	// TDataType
+LIBRARY		audioequalizereffect.lib
+LIBRARY		audioequalizerutility.lib
+LIBRARY		avkon.lib
+LIBRARY		bafl.lib
+LIBRARY		bitgdi.lib
+LIBRARY		bitmaptransforms.lib
+#ifndef WINS
+LIBRARY		browserlauncher.lib
+#endif
+LIBRARY		centralrepository.lib
+LIBRARY		charconv.lib
+//LIBRARY		cntmodel.lib
+//LIBRARY		cntview.lib
+LIBRARY		commdb.lib
+LIBRARY		commonengine.lib
+LIBRARY		commonui.lib	// CDocumentHandler
+LIBRARY		cone.lib
+LIBRARY		downloadmgr.lib
+LIBRARY		ecom.lib
+LIBRARY		efsrv.lib
+LIBRARY		egul.lib
+LIBRARY		eikcoctl.lib
+LIBRARY		eikcore.lib
+LIBRARY		eikctl.lib 
+LIBRARY		eikdlg.lib
+LIBRARY		esock.lib
+LIBRARY		estor.lib
+LIBRARY		euser.lib
+LIBRARY		fbscli.lib
+LIBRARY		gdi.lib
+LIBRARY		hal.lib
+LIBRARY		hash.lib
+LIBRARY		http.lib
+LIBRARY		imageconversion.lib
+LIBRARY		inetprotutil.lib
+LIBRARY		mediaclientaudiostream.lib
+LIBRARY		mediaclientaudio.lib
+#ifndef WINS
+LIBRARY 	MetaDataUtility.lib 
+#endif
+LIBRARY		RemConCoreApi.lib
+LIBRARY		RemConInterfaceBase.lib
+LIBRARY		senxml.lib
+LIBRARY		ws32.lib
+
+VENDORID	0
+
+EPOCSTACKSIZE 0x14000
+EPOCHEAPSIZE  0x100000 0xA00000
+
+START RESOURCE	..\data\mobbler.rss
+HEADER
+#ifdef SYMBIAN_SIGNED
+TARGET mobbler_0x2002655A
+#else
+TARGET mobbler_0xA0007648
+#endif
+TARGETPATH resource\apps
+END //RESOURCE
+
+START RESOURCE	..\data\mobbler_strings.rss
+HEADER
+#ifdef SYMBIAN_SIGNED
+TARGET mobbler_strings_0x2002655A
+#else
+TARGET mobbler_strings_0xA0007648
+#endif
+TARGETPATH resource\apps
+END //RESOURCE
+
+START RESOURCE	..\data\mobbler_reg.rss
+LANG 01
+#ifdef SYMBIAN_SIGNED
+TARGET mobbler_reg_0x2002655A
+#else
+TARGET mobbler_reg_0xA0007648
+#endif
+TARGETPATH \private\10003a3f\apps
+END //RESOURCE
+
+// End of file
