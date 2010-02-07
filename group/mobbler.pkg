@@ -52,20 +52,20 @@
 
 
 ; The Mobbler mpx music app observer
-;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\musicappobservermpx_0xA000D9F4.dll"-"!:\sys\bin\musicappobservermpx_0xA000D9F4.dll"
-;"$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobservermpx_0xA000D9F4.rsc"-"!:\resource\plugins\musicappobservermpx_0xA000D9F4.rsc"
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\musicappobservermpx_0xA000D9F4.dll"-"!:\sys\bin\musicappobservermpx_0xA000D9F4.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobservermpx_0xA000D9F4.rsc"-"!:\resource\plugins\musicappobservermpx_0xA000D9F4.rsc"
 
 ; 5th edition touch feedback
-;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblertouchfeedback_0xA000B6CB.dll"-"!:\sys\bin\mobblertouchfeedback_0xA000B6CB.dll"
-;"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblertouchfeedback_0xA000B6CB.rsc"-"!:\resource\plugins\mobblertouchfeedback_0xA000B6CB.rsc"
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblertouchfeedback_0xA000B6CB.dll"-"!:\sys\bin\mobblertouchfeedback_0xA000B6CB.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblertouchfeedback_0xA000B6CB.rsc"-"!:\resource\plugins\mobblertouchfeedback_0xA000B6CB.rsc"
 
 ; Content listing plugin
 "$(EPOCROOT)\epoc32\release\$(PLATFORM)\$(TARGET)\mobblercontentlisting_0xA000BEB1.dll"-"!:\sys\bin\mobblercontentlisting_0xA000BEB1.dll"
 "$(EPOCROOT)\epoc32\data\z\resource\plugins\mobblercontentlisting_0xA000BEB1.rsc"-"!:\resource\plugins\mobblercontentlisting_0xA000BEB1.rsc"
 
 ; Gesture plugin (uses sensor framework)
-;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0xA000B6CE.dll"-"!:\sys\bin\gestureobserver3x_0xA000B6CE.dll"
-;"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"-"!:\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0xA000B6CE.dll"-"!:\sys\bin\gestureobserver3x_0xA000B6CE.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"-"!:\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"
 
 ; Destinations (uses cmmanager.lib (3.2 onwards))
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblerdestinations_0xA000BEB4.dll"-"!:\sys\bin\mobblerdestinations_0xA000BEB4.dll"
