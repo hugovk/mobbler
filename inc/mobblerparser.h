@@ -81,8 +81,9 @@ public:
 	static void ParseShoutboxL(const TDesC8& aXml, CMobblerShoutbox& aObserver, RPointerArray<CMobblerListItem>& aList);
 
 	static void ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, HBufC8*& aImageUrl, HBufC8*& aTagsText, HBufC8*& aSimilarArtistsText);
-private:
-	static HBufC8* DecodeURIStringLC(const TDesC8& aString);
+
+//private:
+//	static HBufC8* DecodeURIStringLC(const TDesC8& aString);
 	};
 
 #endif // __MOBBLERPARSER_H__

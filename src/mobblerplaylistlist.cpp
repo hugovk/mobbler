@@ -39,9 +39,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerresourcereader.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
+#include "mobblerutility.h"
 
 _LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_playlist.png");
-_LIT8(KElementPlaylist, "playlist");
+_LIT8(KPlaylist, "playlist");
 
 CMobblerPlaylistList::CMobblerPlaylistList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -68,8 +69,7 @@ CMobblerListControl* CMobblerPlaylistList::HandleListCommandL(TInt aCommand)
 	switch (aCommand)
 		{
 		case EMobblerCommandRadioStart:
-			CMobblerString* playlistId(CMobblerString::NewL(iList[iListBox->CurrentItemIndex()]->Id()));
-			CleanupStack::PushL(playlistId);
+			CMobblerString* playlistId(CMobblerString::NewLC(iList[iListBox->CurrentItemIndex()]->Id()));
 			iAppUi.RadioStartL(EMobblerCommandRadioPlaylist, playlistId);
 			CleanupStack::PopAndDestroy(playlistId);
 			break;
@@ -134,25 +134,18 @@ void CMobblerPlaylistList::DataL(CMobblerFlatDataObserverHelper* aObserver, cons
 	if (aObserver == iPlaylistCreateObserver)
 		{
 		// refresh the playlist list
-		// Create the XML reader and DOM fragment and associate them with each other
-		CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-		CleanupStack::PushL(xmlReader);
-		CSenDomFragment* domFragment(CSenDomFragment::NewL());
-		CleanupStack::PushL(domFragment);
-		xmlReader->SetContentHandler(*domFragment);
-		domFragment->SetReader(*xmlReader);
+		// Parse the XML
+		CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+		CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 		
-		// Parse the XML into the DOM fragment
-		xmlReader->ParseL(aData);
-		
-		CSenElement* playlist(domFragment->AsElement().Element(KElementPlaylists)->Element(KElementPlaylist));
+		CSenElement* playlist(domFragment->AsElement().Element(KPlaylists)->Element(KPlaylist));
 		
 		CMobblerListItem* item(CMobblerListItem::NewL(*this,
-															playlist->Element(KElementTitle)->Content(),
-															playlist->Element(KElementDescription)->Content(),
-															playlist->Element(KElementImage)->Content()));
+													playlist->Element(KTitle)->Content(),
+													playlist->Element(KDescription)->Content(),
+													playlist->Element(KImage)->Content()));
 		
-		item->SetIdL(playlist->Element(KElementId)->Content());
+		item->SetIdL(playlist->Element(KId)->Content());
 		
 		iList.InsertL(item, 0);
 		

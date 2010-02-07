@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlogging.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
+#include "mobblerutility.h"
 
 const TPtrC KArtExtensionArray[] =
 	{
@@ -52,13 +53,11 @@ const TPtrC KArtFileArray[] =
 
 _LIT(KArtistImageCache, "E:\\System\\Data\\Mobbler\\cache\\");
 
-_LIT8(KElementEvents, "events");
-_LIT8(KElementExtraLarge, "extralarge");
-_LIT8(KElementImages, "images");
-_LIT8(KElementSizes, "sizes");
-_LIT8(KElementTotal, "total");
-_LIT8(KElementTrack, "track");
-_LIT8(KElementUserLoved, "userloved");
+_LIT8(KExtraLarge, "extralarge");
+_LIT8(KImages, "images");
+_LIT8(KSizes, "sizes");
+_LIT8(KTotal, "total");
+_LIT8(KUserLoved, "userloved");
 
 CMobblerTrack* CMobblerTrack::NewL(const TDesC8& aArtist,
 									const TDesC8& aTitle,
@@ -108,7 +107,7 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 			// can see if the track has been loved by this user
 			delete iTrackInfoHelper;
 			iTrackInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
-			static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().TrackGetInfoL(Title().String8(), Artist().String8(), aMbTrackId, *iTrackInfoHelper);
+			static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().GetInfoL(EMobblerCommandTrackGetInfo, Artist().String8(), KNullDesC8, Title().String8(), aMbTrackId, *iTrackInfoHelper);
 			}
 		}
 
@@ -116,7 +115,7 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 		{
 		delete iEventsInfoHelper;
 		iEventsInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
-		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().ArtistGetEventsL(Artist().String8(), *iEventsInfoHelper);
+		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().QueryLastFmL(EMobblerCommandArtistEvents, Artist().String8(), KNullDesC8, KNullDesC8, KNullDesC8, *iEventsInfoHelper);
 		}
 	}
 
@@ -467,22 +466,15 @@ void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 			{
 			// find out if the track has been loved
-			// create the XML reader and DOM fragment and associate them with each other
-			CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-			CleanupStack::PushL(xmlReader);
-			CSenDomFragment* domFragment(CSenDomFragment::NewL());
-			CleanupStack::PushL(domFragment);
-			xmlReader->SetContentHandler(*domFragment);
-			domFragment->SetReader(*xmlReader);
+			// Parse the XML
+			CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+			CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 			
-			// parse the XML into the DOM fragment
-			xmlReader->ParseL(aData);
-			
-			CSenElement* userLovedElement(domFragment->AsElement().Element(KElementTrack)->Element(KElementUserLoved));
+			CSenElement* userLovedElement(domFragment->AsElement().Element(KTrack)->Element(KUserLoved));
 			
 			if (userLovedElement)
 				{
-				iLove = userLovedElement->Content().Compare(KNumeralZero) != 0 ? ELoved : ENoLove;
+				iLove = userLovedElement->Content().Compare(K0) != 0 ? ELoved : ENoLove;
 				}
 			
 			CleanupStack::PopAndDestroy(2);
@@ -496,24 +488,17 @@ void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			DUMPDATA(aData, _L("artistgetevents.xml"));
 			
 			// find out if the track has been loved
-			// create the XML reader and DOM fragment and associate them with each other
-			CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-			CleanupStack::PushL(xmlReader);
-			CSenDomFragment* domFragment(CSenDomFragment::NewL());
-			CleanupStack::PushL(domFragment);
-			xmlReader->SetContentHandler(*domFragment);
-			domFragment->SetReader(*xmlReader);
+			// Parse the XML
+			CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+			CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 			
-			// parse the XML into the DOM fragment
-			xmlReader->ParseL(aData);
-			
-			CSenElement* eventsElement(domFragment->AsElement().Element(KElementEvents));
-			if (eventsElement && eventsElement->AttrValue(KElementTotal))
+			CSenElement* eventsElement(domFragment->AsElement().Element(KEvents));
+			if (eventsElement && eventsElement->AttrValue(KTotal))
 				{
-				if (eventsElement->AttrValue(KElementTotal)->Compare(KNumeralZero))
+				if (eventsElement->AttrValue(KTotal)->Compare(K0))
 					{
 					iOnTour = ETrue;
-					LOG(_L8("ON TOUR"));
+					LOG(_L8("On tour"));
 					}
 				}
 			
@@ -612,7 +597,7 @@ void CMobblerTrack::FetchAlbumInfoL()
 		{
 		delete iAlbumInfoHelper;
 		iAlbumInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
-		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().AlbumGetInfoL(Album().String8(), Artist().String8(), *iAlbumInfoHelper);
+		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().GetInfoL(EMobblerCommandAlbumGetInfo, Artist().String8(), Album().String8(), KNullDesC8, KNullDesC8, *iAlbumInfoHelper);
 		}
 	}
 
@@ -639,39 +624,32 @@ TBool CMobblerTrack::FetchImageL(CMobblerFlatDataObserverHelper* aObserver, cons
 	{
 	TBool found(EFalse);
 
-	// create the XML reader and DOM fragment and associate them with each other
-	CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-	CleanupStack::PushL(xmlReader);
-	CSenDomFragment* domFragment(CSenDomFragment::NewL());
-	CleanupStack::PushL(domFragment);
-	xmlReader->SetContentHandler(*domFragment);
-	domFragment->SetReader(*xmlReader);
-
-	// parse the XML into the DOM fragment
-	xmlReader->ParseL(aData);
+	// Parse the XML
+	CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+	CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 
 	RPointerArray<CSenElement> imageArray;
 	CleanupClosePushL(imageArray);
 
 	if (aObserver == iAlbumInfoHelper)
 		{
-		User::LeaveIfError(domFragment->AsElement().Element(KElementAlbum)->ElementsL(imageArray, KElementImage));
+		User::LeaveIfError(domFragment->AsElement().Element(KAlbum)->ElementsL(imageArray, KImage));
 		}
 	else
 		{
-		CSenElement* element(domFragment->AsElement().Element(KElementImages));
+		CSenElement* element(domFragment->AsElement().Element(KImages));
 
 		if (element)
 			{
-			element = element->Element(KElementImage);
+			element = element->Element(KImage);
 
 			if (element)
 				{
-				element = element->Element(KElementSizes);
+				element = element->Element(KSizes);
 
 				if (element)
 					{
-					User::LeaveIfError(element->ElementsL(imageArray, KElementSize));
+					User::LeaveIfError(element->ElementsL(imageArray, KSize));
 					}
 				}
 			}
@@ -681,13 +659,13 @@ TBool CMobblerTrack::FetchImageL(CMobblerFlatDataObserverHelper* aObserver, cons
 	for (TInt i(KImageCount-1); i >= 0; --i)
 		{
 		if ((aObserver == iAlbumInfoHelper &&
-			 imageArray[i]->AttrValue(KElementSize)->Compare(KElementExtraLarge) == 0)
+			 imageArray[i]->AttrValue(KSize)->Compare(KExtraLarge) == 0)
 				||
 			(aObserver == iAlbumInfoHelper &&
-			 imageArray[i]->AttrValue(KElementSize)->Compare(KElementLarge) == 0)
+			 imageArray[i]->AttrValue(KSize)->Compare(KLarge) == 0)
 				||
 			(aObserver == iArtistInfoHelper &&
-			 imageArray[i]->AttrValue(KElementName)->Compare(KElementLarge) == 0))
+			 imageArray[i]->AttrValue(KName)->Compare(KLarge) == 0))
 			{
 			if (imageArray[i]->Content().Length() > 0)
 				{

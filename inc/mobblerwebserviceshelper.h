@@ -44,13 +44,10 @@ public:
 	
 	void EventShareL(const TDesC8& aEventId);
 	
-	void TrackAddTagL(CMobblerTrack& aTrack);
+	void AddTagL(CMobblerTrack& aTrack, TInt aCommand);
+	
 	void TrackRemoveTagL(CMobblerTrack& aTrack);
-	
-	void AlbumAddTagL(CMobblerTrack& aTrack);
 	void AlbumRemoveTagL(CMobblerTrack& aTrack);
-	
-	void ArtistAddTagL(CMobblerTrack& aTrack);
 	void ArtistRemoveTagL(CMobblerTrack& aTrack);
 	
 private:

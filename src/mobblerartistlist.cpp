@@ -52,10 +52,10 @@ void CMobblerArtistList::ConstructL()
 			iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetTopArtists, iText1->String8(), *this);
 			break;
 		case EMobblerCommandRecommendedArtists:
-			iAppUi.LastFmConnection().RecommendedArtistsL(*this);
+			iAppUi.LastFmConnection().QueryLastFmL(iType, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, *this);
 			break;
 		case EMobblerCommandSimilarArtists:
-			iAppUi.LastFmConnection().SimilarArtistsL(iText1->String8(), *this);
+			iAppUi.LastFmConnection().SimilarL(iType, iText1->String8(), KNullDesC8, *this);
 			break;
 		case EMobblerCommandTagTopArtists:
 			iAppUi.LastFmConnection().WebServicesCallL(KTag, KGetTopArtists, iText1->String8(), *this);
@@ -93,21 +93,21 @@ CMobblerListControl* CMobblerArtistList::HandleListCommandL(TInt aCommand)
 		case EMobblerCommandArtistShare:
 			{
 			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
-			iWebServicesHelper->ArtistShareL(*track);            
+			iWebServicesHelper->ArtistShareL(*track);
 			track->Release();
 			}
 			break;
 		case EMobblerCommandArtistAddTag:
 			{
 			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
-			iWebServicesHelper->ArtistAddTagL(*track);            
+			iWebServicesHelper->AddTagL(*track, aCommand);
 			track->Release();
 			}
 			break;
 		case EMobblerCommandArtistRemoveTag:
 			{
 			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
-			iWebServicesHelper->ArtistRemoveTagL(*track);            
+			iWebServicesHelper->ArtistRemoveTagL(*track);
 			track->Release();
 			}
 			break;

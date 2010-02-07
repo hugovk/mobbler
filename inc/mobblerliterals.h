@@ -24,35 +24,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef __MOBBLERLITERALS_H__
 #define __MOBBLERLITERALS_H__
 
-// XML elements
-_LIT8(KElementAlbum, "album");
-_LIT8(KElementImage, "image");
-_LIT8(KElementDescription, "description");
-_LIT8(KElementError, "error");
-_LIT8(KElementFriends, "friends");
-_LIT8(KElementId, "id");
-_LIT8(KElementLarge, "large");
-_LIT8(KElementName, "name");
-_LIT8(KElementPlaylists, "playlists");
-_LIT8(KElementSize, "size");
-_LIT8(KElementStatus, "status");
-_LIT8(KElementTitle, "title");
-_LIT8(KElementVenue, "venue");
+GLREF_D const TPtrC8 K0;
+GLREF_D const TPtrC8 K1;
+GLREF_D const TPtrC8 KAlbum;
+GLREF_D const TPtrC8 KArtist;
+GLREF_D const TPtrC8 KDescription;
+GLREF_D const TPtrC8 KError;
+GLREF_D const TPtrC8 KEquals;
+GLREF_D const TPtrC8 KEvent;
+GLREF_D const TPtrC8 KEvents;
+GLREF_D const TPtrC8 KFriends;
+GLREF_D const TPtrC8 KGetFriends;
+GLREF_D const TPtrC8 KGetInfo;
+GLREF_D const TPtrC8 KGetPlaylists;
+GLREF_D const TPtrC8 KId;
+GLREF_D const TPtrC8 KImage;
+GLREF_D const TPtrC8 KLarge;
+GLREF_D const TPtrC8 KMbid;
+GLREF_D const TPtrC8 KName;
+GLREF_D const TPtrC8 KOk;
+GLREF_D const TPtrC8 KPlaylists;
+GLREF_D const TPtrC8 KSearch;
+GLREF_D const TPtrC8 KSize;
+GLREF_D const TPtrC8 KStation;
+GLREF_D const TPtrC8 KStatus;
+GLREF_D const TPtrC8 KTag;
+GLREF_D const TPtrC8 KTags;
+GLREF_D const TPtrC8 KTrack;
+GLREF_D const TPtrC8 KTitle;
+GLREF_D const TPtrC8 KUser;
+GLREF_D const TPtrC8 KVenue;
 
-// Web service call parameters
-_LIT8(KAlbum, "album");
-_LIT8(KArtist, "artist");
-_LIT8(KGetPlaylists, "getplaylists");
-_LIT8(KGetFriends, "getfriends");
-_LIT8(KGetInfo, "getinfo");
-_LIT8(KSearch, "search");
-_LIT8(KTag, "tag");
-_LIT8(KUser, "user");
-
-// Others
-_LIT8(KOk, "ok");
-_LIT8(KNumeralZero, "0");
-_LIT8(KNumeralOne, "1");
+GLREF_D const TPtrC KMapKmlFilename;
 
 #endif // __MOBBLERLITERALS_H__
 

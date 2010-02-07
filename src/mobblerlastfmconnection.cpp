@@ -49,31 +49,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerutility.h"
 #include "mobblerwebservicesquery.h"
 
-// the scheme of the Last.fm handshake
-_LIT8(KScheme, "http");
-
-// the Last.fm URL to send the handshake to
-_LIT8(KScrobbleHost, "post.audioscrobbler.com");
-_LIT8(KWebServicesHost, "ws.audioscrobbler.com");
-
-// The format for the handshake URL 
-_LIT8(KScrobbleQuery, "hs=true&p=1.2&c=mlr&v=0.1&u=%S&t=%d&a=%S");
-
-// Old radio defines
-_LIT8(KRadioStationQuery, "session=%S&url=%S&lang=%S");
-_LIT8(KRadioPlaylistQuery, "sk=%S&discovery=0&desktop=1.5.1");
-_LIT8(KRadioHost, "ws.audioscrobbler.com");
-_LIT8(KRadioPath, "/radio/handshake.php");
-_LIT8(KRadioQuery, "version=1.5.1&platform=symbian&username=%S&passwordmd5=%S&language=%S&player=mobbler");
-
-_LIT8(KRadioStationPersonal, "lastfm://user/%S/library");
-_LIT8(KRadioStationPlaylist, "lastfm://playlist/%S");
-_LIT8(KRadioStationLoved, "lastfm://user/%S/loved");
-_LIT8(KRadioStationArtist, "lastfm://artist/%S/similarartists");
-_LIT8(KRadioStationTag, "lastfm://globaltags/%S");
-_LIT8(KRadioStationNeighbours, "lastfm://user/%S/neighbours");
-_LIT8(KRadioStationRecommended, "lastfm://user/%S/recommended");
-
 #ifdef BETA_BUILD
 #include "mobblerbeta.h"
 #else
@@ -90,94 +65,20 @@ _LIT8(KLyricsflyIdKey, "1c0736f65ac693cbd-temporary.API.access");
 // The file name to store the queue of listened tracks
 _LIT(KTracksFile, "c:track_queue.dat");
 _LIT(KCurrentTrackFile, "c:current_track.dat");
-_LIT8(KLogFileHeader, "#AUDIOSCROBBLER/1.1\n#TZ/UTC\n#CLIENT/Mobbler ");
-_LIT8(KLogFileListenedRating, "L");
 _LIT8(KLogFileFieldSeperator, "\t");
-_LIT8(KLogFileEndOfLine, "\n");
 
 _LIT(KIapId, "IAP\\Id");
 
-_LIT8(KComponentTwoDotZero, "/2.0/");
-_LIT8(KComponentHttp, "http");
-_LIT8(KFieldAlbum, "album");
-_LIT8(KFieldArtist, "artist");
-_LIT8(KFieldTag, "tag");
-_LIT8(KFieldTags, "tags");
-_LIT8(KFieldAuthToken, "authToken");
-_LIT8(KFieldBitRate, "bitrate");
-_LIT8(KFieldDescription, "description");
-_LIT8(KFieldEvent, "event");
-_LIT8(KFieldLang, "lang");
-_LIT8(KFieldLimit, "limit");
-_LIT8(KFieldMbid, "mbid"); // == KElementMbid
-_LIT8(KFieldMessage, "message");
-_LIT8(KFieldPlaylistUrl, "playlistURL");
-_LIT8(KFieldPlaylistId, "playlistID");
-_LIT8(KFieldRecipient, "recipient");
-_LIT8(KFieldStatus, "status");
-_LIT8(KFieldStation, "station");
-_LIT8(KFieldSpeedMultiplier, "speed_multiplier");
-_LIT8(KFieldTrack, "track");
-_LIT8(KFieldTitle, "title");
-_LIT8(KFieldUser, "user");
-_LIT8(KFieldUsername, "username");
-_LIT8(KQueryAuthGetMobileSession, "auth.getMobileSession");
-_LIT8(KQueryTrackGetInfo, "track.getinfo");
+_LIT8(KHttp, "http");
+_LIT8(KMessage, "message");
+_LIT8(KPlaylistUrl, "playlistURL");
+_LIT8(KRecipient, "recipient");
+_LIT8(KUsername, "username");
 _LIT8(KQueryAlbumGetInfo, "album.getinfo");
-_LIT8(KQueryArtistGetImages, "artist.getimages");
-_LIT8(KQueryArtistGetSimilar, "artist.getsimilar");
-_LIT8(KQueryTrackGetTags, "track.gettags");
-_LIT8(KQueryTrackGetTopTags, "track.gettoptags");
-_LIT8(KQueryTrackAddTags, "track.addtags");
-_LIT8(KQueryTrackRemoveTag, "track.removetag");
-_LIT8(KQueryArtistShare, "artist.share");
-_LIT8(KQueryArtistGetTags, "artist.gettags");
-_LIT8(KQueryArtistGetTopTags, "artist.gettoptags");
-_LIT8(KQueryArtistAddTags, "artist.addtags");
-_LIT8(KQueryArtistRemoveTag, "artist.removetag");
-_LIT8(KQueryArtistGetEvents, "artist.getEvents");
-_LIT8(KQueryAlbumGetTags, "album.gettags");
-_LIT8(KQueryAlbumAddTags, "album.addtags");
-_LIT8(KQueryAlbumRemoveTag, "album.removetag");
-_LIT8(KQueryEventAttend, "event.attend");
-_LIT8(KQueryEventShare, "event.share");
-_LIT8(KQueryPlaylistAddTrack, "playlist.addtrack");
-_LIT8(KQueryPlaylistCreate, "playlist.create");
 _LIT8(KQueryPlaylistFetch, "playlist.fetch");
-_LIT8(KQueryRadioGetPlaylist, "radio.getPlaylist");
-_LIT8(KQueryRadioTune, "radio.tune");
-_LIT8(KQueryTrackBan, "track.ban");
-_LIT8(KQueryTrackGetSimilar, "track.getsimilar");
-_LIT8(KQueryTrackLove, "track.love");
-_LIT8(KQueryTrackShare, "track.share");
-_LIT8(KQueryUserGetRecentTracks, "user.getrecenttracks");
-_LIT8(KQueryUserGetRecommendedArtists, "user.getrecommendedartists");
-_LIT8(KQueryUserGetRecommendedEvents, "user.getrecommendedevents");
-_LIT8(KShoutFormat, "%S.shout");
-
-_LIT8(KNumeralTwo, "2");
-_LIT8(KAdjustPhp, "/adjust.php");
-_LIT8(KTwoDotZero, "2.0");
-_LIT8(KNumber64, "64"); 
-_LIT8(KNumber128, "128");
-_LIT8(KXspfDotPhp, "/xspf.php");
-_LIT8(KMobbler, "mobbler");
-
-_LIT8(KLowerA8, "a");
-_LIT8(KLowerB8, "b");
-_LIT8(KLowerL8, "l");
-_LIT8(KLowerM8, "m");
-_LIT8(KLowerN8, "n");
-_LIT8(KLowerS8, "s");
-_LIT8(KLowerT8, "t");
-_LIT8(KUpperL8, "L");
-_LIT8(KUpperP8, "P");
 
 // Last.fm can accept up to this many track in one submission
 const TInt KMaxSubmitTracks(50);
-
-const TInt KOfflineProfileId(5);
-
 
 CMobblerLastFmConnection* CMobblerLastFmConnection::NewL(MMobblerLastFmConnectionObserver& aObserver, 
 															const TDesC& aRecipient, 
@@ -292,8 +193,7 @@ void CMobblerLastFmConnection::SetDetailsL(const TDesC& aRecipient, const TDesC&
 		HBufC* usernameLower(HBufC::NewLC(aRecipient.Length()));
 		usernameLower->Des().Copy(aRecipient);
 		usernameLower->Des().LowerCase();
-		CMobblerString* tempUsername(CMobblerString::NewL(*usernameLower));
-		CleanupStack::PushL(tempUsername);
+		CMobblerString* tempUsername(CMobblerString::NewLC(*usernameLower));
 		CMobblerString* tempPassword(CMobblerString::NewL(aPassword));
 		CleanupStack::Pop(tempUsername);
 		delete iUsername;
@@ -423,7 +323,7 @@ void CMobblerLastFmConnection::NewCarrierActive()
 		RequestMp3L(*iTrackDownloadObserver, *iMp3Location);
 		}
 	}
-	
+
 void CMobblerLastFmConnection::RunL()
 	{
 	if (iStatus.Int() == KErrNone)
@@ -534,6 +434,7 @@ void CMobblerLastFmConnection::ConnectL()
 		repository->Get(KProEngActiveProfile, activeProfileId);
 		delete repository;
 		
+		const TInt KOfflineProfileId(5);
 		if (activeProfileId == KOfflineProfileId)
 			{
 			dbConnPrefs.SetBearerSet(ECommDbBearerWLAN);
@@ -592,12 +493,15 @@ void CMobblerLastFmConnection::OldRadioHandshakeL()
 	// get the phone language code
 	TBuf8<2> language(MobblerUtility::LanguageL());
 	
+	_LIT8(KRadioQuery, "version=1.5.1&platform=symbian&username=%S&passwordmd5=%S&language=%S&player=mobbler");
 	path->Des().AppendFormat(KRadioQuery, &iUsername->String8(), &passwordHashPtr, &language);
 	
 	CUri8* uri(CUri8::NewLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
+	uri->SetComponentL(KHttp, EUriScheme);
+	_LIT8(KRadioHost, "ws.audioscrobbler.com");
 	uri->SetComponentL(KRadioHost, EUriHost);
+	_LIT8(KRadioPath, "/radio/handshake.php");
 	uri->SetComponentL(KRadioPath, EUriPath);
 	uri->SetComponentL(*path, EUriQuery);
 	
@@ -624,16 +528,14 @@ void CMobblerLastFmConnection::WebServicesHandshakeL()
 	
 	HBufC8* authToken(MobblerUtility::MD5LC(*usernameAndPasswordHash));
 	
+	_LIT8(KQueryAuthGetMobileSession, "auth.getMobileSession");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryAuthGetMobileSession));
-	query->AddFieldL(KFieldAuthToken, *authToken);
-	query->AddFieldL(KFieldUsername, iUsername->String8());
+	_LIT8(KAuthToken, "authToken");
+	query->AddFieldL(KAuthToken, *authToken);
+	query->AddFieldL(KUsername, iUsername->String8());
 	HBufC8* queryText(query->GetQueryAuthLC());
 	
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	CUri8* uri(SetUpWebServicesUriLC());
 	uri->SetComponentL(*queryText, EUriQuery);
 	
 	delete iWebServicesHandshakeTransaction;
@@ -669,45 +571,19 @@ void CMobblerLastFmConnection::CheckForUpdateL(MMobblerFlatDataObserver& aObserv
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::TrackLoveL(const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackLove));
-	query->AddFieldL(KFieldTrack, aTrack);
-	query->AddFieldL(KFieldArtist, aArtist);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
 void CMobblerLastFmConnection::PlaylistCreateL(const TDesC& aTitle, const TDesC& aDescription, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryPlaylistCreate, "playlist.create");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryPlaylistCreate));
 	
-	CMobblerString* title(CMobblerString::NewL(aTitle));
-	CleanupStack::PushL(title);
-	query->AddFieldL(KFieldTitle, title->String8());
+	CMobblerString* title(CMobblerString::NewLC(aTitle));
+	query->AddFieldL(KTitle, title->String8());
 	CleanupStack::PopAndDestroy(title);
 	
-	CMobblerString* description(CMobblerString::NewL(aDescription));
-	CleanupStack::PushL(description);
-	query->AddFieldL(KFieldDescription, description->String8());
+	CMobblerString* description(CMobblerString::NewLC(aDescription));
+	query->AddFieldL(KDescription, description->String8());
 	CleanupStack::PopAndDestroy(description);
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
@@ -723,18 +599,13 @@ void CMobblerLastFmConnection::PlaylistFetchUserL(const TDesC8& aPlaylistId, MMo
 	{
 	_LIT8(KUserPlaylistFormat, "lastfm://playlist/%S");
 	
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryPlaylistFetch));
 	
 	HBufC8* playlistUrl(HBufC8::NewLC(KUserPlaylistFormat().Length() + aPlaylistId.Length()));
 	playlistUrl->Des().Format(KUserPlaylistFormat, &aPlaylistId);
-	query->AddFieldL(KFieldPlaylistUrl, *playlistUrl);
+	query->AddFieldL(KPlaylistUrl, *playlistUrl);
 	CleanupStack::PopAndDestroy(playlistUrl);
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -753,18 +624,13 @@ void CMobblerLastFmConnection::PlaylistFetchAlbumL(const TDesC8& aAlbumId, MMobb
 	{
 	_LIT8(KUserPlaylistFormat, "lastfm://playlist/album/%S");
 	
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryPlaylistFetch));
 	
 	HBufC8* playlistUrl(HBufC8::NewLC(KUserPlaylistFormat().Length() + aAlbumId.Length()));
 	playlistUrl->Des().Format(KUserPlaylistFormat, &aAlbumId);
-	query->AddFieldL(KFieldPlaylistUrl, *playlistUrl);
+	query->AddFieldL(KPlaylistUrl, *playlistUrl);
 	CleanupStack::PopAndDestroy(playlistUrl);
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -781,16 +647,14 @@ void CMobblerLastFmConnection::PlaylistFetchAlbumL(const TDesC8& aAlbumId, MMobb
 
 void CMobblerLastFmConnection::PlaylistAddTrackL(const TDesC8& aPlaylistId, const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryPlaylistAddTrack, "playlist.addtrack");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryPlaylistAddTrack));
-	query->AddFieldL(KFieldPlaylistId, aPlaylistId);
-	query->AddFieldL(KFieldTrack, aTrack);
-	query->AddFieldL(KFieldArtist, aArtist);
+	_LIT8(KPlaylistId, "playlistID");
+	query->AddFieldL(KPlaylistId, aPlaylistId);
+	query->AddFieldL(KTrack, aTrack);
+	query->AddFieldL(KArtist, aArtist);
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
 	transaction->SetFlatDataObserver(&aObserver);
@@ -803,39 +667,17 @@ void CMobblerLastFmConnection::PlaylistAddTrackL(const TDesC8& aPlaylistId, cons
 
 void CMobblerLastFmConnection::ShoutL(const TDesC8& aClass, const TDesC8& aArgument, const TDesC8& aMessage)
 	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
 	TBuf8<KMaxMobblerTextSize> signature;
+	_LIT8(KShoutFormat, "%S.shout");
 	signature.Format(KShoutFormat, &aClass);
 	
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(signature));
 	query->AddFieldL(aClass, aArgument);
-	query->AddFieldL(KFieldMessage, aMessage);
+	query->AddFieldL(KMessage, aMessage);
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::RecommendedArtistsL(MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryUserGetRecommendedArtists));
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
 	
 	CleanupStack::Pop(query);
 	CleanupStack::Pop(uri);
@@ -845,12 +687,9 @@ void CMobblerLastFmConnection::RecommendedArtistsL(MMobblerFlatDataObserver& aOb
 
 void CMobblerLastFmConnection::RecommendedEventsL(MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryUserGetRecommendedEvents, "user.getrecommendedevents");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryUserGetRecommendedEvents));
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
@@ -862,17 +701,14 @@ void CMobblerLastFmConnection::RecommendedEventsL(MMobblerFlatDataObserver& aObs
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void  CMobblerLastFmConnection::TrackBanL(const TDesC8& aArtist, const TDesC8& aTrack)
+void CMobblerLastFmConnection::TrackBanL(const TDesC8& aArtist, const TDesC8& aTrack)
 	{
-	CUri8* uri(CUri8::NewLC());
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryTrackBan, "track.ban");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackBan));
-	query->AddFieldL(KFieldTrack, aTrack);
-	query->AddFieldL(KFieldArtist, aArtist);
+	query->AddFieldL(KTrack, aTrack);
+	query->AddFieldL(KArtist, aArtist);
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
 	
@@ -882,44 +718,30 @@ void  CMobblerLastFmConnection::TrackBanL(const TDesC8& aArtist, const TDesC8& a
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::SimilarArtistsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::SimilarL(const TInt aCommand, const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistGetSimilar));
-	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
-	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack.Artist().String8())
-	
-	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
-	CleanupStack::PopAndDestroy(); // *query->GetQueryLC()
-	CleanupStack::PopAndDestroy(query); // *query->GetQueryLC()
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
+	CMobblerWebServicesQuery* query(NULL);
+	switch (aCommand)
+		{
+		case EMobblerCommandSimilarArtists:
+			_LIT8(KQueryArtistGetSimilar, "artist.getsimilar");
+			query = CMobblerWebServicesQuery::NewLC(KQueryArtistGetSimilar);
+			break;
+		case EMobblerCommandSimilarTracks:
+			_LIT8(KQueryTrackGetSimilar, "track.getsimilar");
+			query = CMobblerWebServicesQuery::NewLC(KQueryTrackGetSimilar);
+			query->AddFieldL(KTrack, *MobblerUtility::URLEncodeLC(aTrack));
+			CleanupStack::PopAndDestroy(); // URLEncodeLC()
+			break;
+		default:
+			// TODO panic
+			break;
+		}
 
-void CMobblerLastFmConnection::SimilarTracksL(const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackGetSimilar));
-	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
-	query->AddFieldL(KFieldTrack, *MobblerUtility::URLEncodeLC(aTrack));
-	CleanupStack::PopAndDestroy(2); // URLEncodeLC
+	query->AddFieldL(KArtist, *MobblerUtility::URLEncodeLC(aArtist));
+	CleanupStack::PopAndDestroy(); // URLEncodeLC()
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
 	CleanupStack::PopAndDestroy(); // *query->GetQueryLC()
@@ -1006,15 +828,11 @@ void CMobblerLastFmConnection::FetchLyricsL(const TDesC8& aArtist,
 
 void CMobblerLastFmConnection::RecentTracksL(const TDesC8& aUser, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryUserGetRecentTracks, "user.getrecenttracks");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryUserGetRecentTracks));
-	query->AddFieldL(KFieldUser, *MobblerUtility::URLEncodeLC(aUser));
+	query->AddFieldL(KUser, *MobblerUtility::URLEncodeLC(aUser));
 	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack.Artist().String8())
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -1031,16 +849,13 @@ void CMobblerLastFmConnection::RecentTracksL(const TDesC8& aUser, MMobblerFlatDa
 
 void CMobblerLastFmConnection::ArtistGetImageL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryArtistGetImages, "artist.getimages");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistGetImages));
-	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
-	query->AddFieldL(KFieldLimit, KNumeralOne);
+	query->AddFieldL(KArtist, *MobblerUtility::URLEncodeLC(aArtist));
+	_LIT8(KLimit, "limit");
+	query->AddFieldL(KLimit, K1);
 	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack.Artist().String8())
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -1055,17 +870,13 @@ void CMobblerLastFmConnection::ArtistGetImageL(const TDesC8& aArtist, MMobblerFl
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::ArtistGetTopTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
+/*void CMobblerLastFmConnection::ArtistGetTopTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryArtistGetTopTags, "artist.gettoptags");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistGetTopTags));
-	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
+	query->AddFieldL(KArtist, *MobblerUtility::URLEncodeLC(aArtist));
 	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack.Artist().String8())
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -1078,103 +889,17 @@ void CMobblerLastFmConnection::ArtistGetTopTagsL(const TDesC8& aArtist, MMobbler
 	CleanupStack::Pop(uri);
 	
 	AppendAndSubmitTransactionL(transaction);
-	}
+	}*/
 
-void CMobblerLastFmConnection::ArtistGetTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
+/*void CMobblerLastFmConnection::TrackGetTopTagsL(const TDesC8& aTrack, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistGetTags));
-	query->AddFieldL(KFieldArtist, aArtist);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::ArtistAddTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistAddTags));
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldTags, aTag);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::ArtistRemoveTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistRemoveTag));
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldTag, aTag);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::ArtistGetEventsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistGetEvents));
-	query->AddFieldL(KFieldArtist, aArtist);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::TrackGetTopTagsL(const TDesC8& aTrack, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
+	_LIT8(KQueryTrackGetTopTags, "track.gettoptags");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackGetTopTags));
-	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
+	query->AddFieldL(KArtist, *MobblerUtility::URLEncodeLC(aArtist));
 	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack.Artist().String8())
-	query->AddFieldL(KFieldTrack, *MobblerUtility::URLEncodeLC(aTrack));
+	query->AddFieldL(KTrack, *MobblerUtility::URLEncodeLC(aTrack));
 	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack.Artist().String8())
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -1187,108 +912,98 @@ void CMobblerLastFmConnection::TrackGetTopTagsL(const TDesC8& aTrack, const TDes
 	CleanupStack::Pop(uri);
 	
 	AppendAndSubmitTransactionL(transaction);
-	}
+	}*/
 
-void CMobblerLastFmConnection::TrackGetTagsL(const TDesC8& aTrack, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::QueryLastFmL(const TInt aCommand, 
+											const TDesC8& aArtist, 
+											const TDesC8& aAlbum, 
+											const TDesC8& aTrack, 
+											const TDesC8& aTag, 
+											MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackGetTags));
-	query->AddFieldL(KFieldTrack, aTrack);
-	query->AddFieldL(KFieldArtist, aArtist);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
+	CMobblerWebServicesQuery* query(NULL);
+	switch (aCommand)
+		{
+		case EMobblerCommandTrackLove:
+			_LIT8(KQueryTrackLove, "track.love");
+			query = CMobblerWebServicesQuery::NewLC(KQueryTrackLove);
+			query->AddFieldL(KTrack, aTrack);
+			query->AddFieldL(KArtist, aArtist);
+			break;
+		case EMobblerCommandRecommendedArtists:
+			_LIT8(KQueryUserGetRecommendedArtists, "user.getrecommendedartists");
+			query = CMobblerWebServicesQuery::NewLC(KQueryUserGetRecommendedArtists);
+			break;
+		case EMobblerCommandArtistEvents:
+			_LIT8(KQueryArtistGetEvents, "artist.getEvents");
+			query = CMobblerWebServicesQuery::NewLC(KQueryArtistGetEvents);
+			query->AddFieldL(KArtist, aArtist);
+			break;
+		case EMobblerCommandArtistAddTag:
+			_LIT8(KQueryArtistAddTags, "artist.addtags");
+			query = CMobblerWebServicesQuery::NewLC(KQueryArtistAddTags);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KTags, aTag);
+			break;
+		case EMobblerCommandAlbumAddTag:
+			_LIT8(KQueryAlbumAddTags, "album.addtags");
+			query = CMobblerWebServicesQuery::NewLC(KQueryAlbumAddTags);
+			query->AddFieldL(KAlbum, aAlbum);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KTags, aTag);
+			break;
+		case EMobblerCommandTrackAddTag:
+			_LIT8(KQueryTrackAddTags, "track.addtags");
+			query = CMobblerWebServicesQuery::NewLC(KQueryTrackAddTags);
+			query->AddFieldL(KTrack, aTrack);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KTags, aTag);
+			break;
 
-void CMobblerLastFmConnection::TrackAddTagL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackAddTags));
-	query->AddFieldL(KFieldTrack, aTrack);
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldTags, aTag);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
+		case EMobblerCommandArtistGetTags:
+			_LIT8(KQueryArtistGetTags, "artist.gettags");
+			query = CMobblerWebServicesQuery::NewLC(KQueryArtistGetTags);
+			query->AddFieldL(KArtist, aArtist);
+			break;
+		case EMobblerCommandAlbumGetTags:
+			_LIT8(KQueryAlbumGetTags, "album.gettags");
+			query = CMobblerWebServicesQuery::NewLC(KQueryAlbumGetTags);
+			query->AddFieldL(KAlbum, aAlbum);
+			query->AddFieldL(KArtist, aArtist);
+			break;
+		case EMobblerCommandTrackGetTags:
+			_LIT8(KQueryTrackGetTags, "track.gettags");
+			query = CMobblerWebServicesQuery::NewLC(KQueryTrackGetTags);
+			query->AddFieldL(KTrack, aTrack);
+			query->AddFieldL(KArtist, aArtist);
+			break;
 
-void CMobblerLastFmConnection::TrackRemoveTagL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackRemoveTag));
-	query->AddFieldL(KFieldTrack, aTrack);
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldTag, aTag);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::AlbumGetTagsL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryAlbumGetTags));
-	query->AddFieldL(KFieldAlbum, aAlbum);
-	query->AddFieldL(KFieldArtist, aArtist);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::AlbumAddTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryAlbumAddTags));
-	query->AddFieldL(KFieldAlbum, aAlbum);
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldTags, aTag);
+		case EMobblerCommandArtistRemoveTag:
+			_LIT8(KQueryArtistRemoveTag, "artist.removetag");
+			query = CMobblerWebServicesQuery::NewLC(KQueryArtistRemoveTag);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KTag, aTag);
+			break;
+		case EMobblerCommandAlbumRemoveTag:
+			_LIT8(KQueryAlbumRemoveTag, "album.removetag");
+			query = CMobblerWebServicesQuery::NewLC(KQueryAlbumRemoveTag);
+			query->AddFieldL(KAlbum, aAlbum);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KTag, aTag);
+			break;
+		case EMobblerCommandTrackRemoveTag:
+			_LIT8(KQueryTrackRemoveTag, "track.removetag");
+			query = CMobblerWebServicesQuery::NewLC(KQueryTrackRemoveTag);
+			query->AddFieldL(KTrack, aTrack);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KTag, aTag);
+			break;
+		default:
+			// TODO panic
+			break;
+		}
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
 	transaction->SetFlatDataObserver(&aObserver);
@@ -1299,50 +1014,45 @@ void CMobblerLastFmConnection::AlbumAddTagL(const TDesC8& aAlbum, const TDesC8& 
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::AlbumRemoveTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::GetInfoL(const TInt aCommand, const TDesC8& aArtist, const TDesC8& aAlbum, const TDesC8& aTrack, const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryAlbumRemoveTag));
-	query->AddFieldL(KFieldAlbum, aAlbum);
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldTag, aTag);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
+	CMobblerWebServicesQuery* query(NULL);
+	switch (aCommand)
+		{
+		case EMobblerCommandTrackGetInfo:
+			_LIT8(KQueryTrackGetInfo, "track.getinfo");
+			query = CMobblerWebServicesQuery::NewLC(KQueryTrackGetInfo);
 
-void CMobblerLastFmConnection::TrackGetInfoL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackGetInfo));
-	
-	query->AddFieldL(KFieldTrack, *MobblerUtility::URLEncodeLC(aTrack));
-	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aArtist)
-	
-	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
-	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aAlbum)
-	
-	query->AddFieldL(KFieldUsername, iUsername->String8());
+			query->AddFieldL(KTrack, *MobblerUtility::URLEncodeLC(aTrack));
+			CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack)
+			
+			query->AddFieldL(KUsername, iUsername->String8());
+			break;
+		case EMobblerCommandAlbumGetInfo:
+			query = CMobblerWebServicesQuery::NewLC(KQueryAlbumGetInfo);
+			
+			if (aAlbum.Length() > 0)
+				{
+				query->AddFieldL(KAlbum, *MobblerUtility::URLEncodeLC(aAlbum));
+				CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aAlbum)
+				}
+			break;
+		default:
+			// TODO panic
+			break;
+		}
 	
 	if (aMbId.Length() > 0)
 		{
-		query->AddFieldL(KFieldMbid, aMbId);
+		query->AddFieldL(KMbid, aMbId);
+		}
+
+	if (aArtist.Length() > 0)
+		{
+		query->AddFieldL(KArtist, *MobblerUtility::URLEncodeLC(aArtist));
+		CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aArtist)
 		}
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -1357,65 +1067,9 @@ void CMobblerLastFmConnection::TrackGetInfoL(const TDesC8& aTrack, const TDesC8&
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::AlbumGetInfoL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryAlbumGetInfo));
-	
-	query->AddFieldL(KFieldArtist, *MobblerUtility::URLEncodeLC(aArtist));
-	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aArtist)
-	
-	query->AddFieldL(KFieldAlbum, *MobblerUtility::URLEncodeLC(aAlbum));
-	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aAlbum)
-	
-	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
-	CleanupStack::PopAndDestroy(); // *query->GetQueryLC()
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::PopAndDestroy(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::AlbumGetInfoL(const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewL());
-	CleanupStack::PushL(uri);
-	
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryAlbumGetInfo));
-	query->AddFieldL(KFieldMbid, aMbId);
-	
-	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
-	CleanupStack::PopAndDestroy();
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::PopAndDestroy(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
 void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
 	_LIT8(KApiSignature, "%S.%S");
 	TBuf8<KMaxMobblerTextSize> apiSignature;
@@ -1423,15 +1077,15 @@ void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDes
 	
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(apiSignature));
 	
-	if (aClass.Compare(KFieldUser) == 0)
+	if (aClass.Compare(KUser) == 0)
 		{
 		if (aText.Length() == 0)
 			{
-			query->AddFieldL(KFieldUser, iUsername->String8());
+			query->AddFieldL(KUser, iUsername->String8());
 			}
 		else
 			{
-			query->AddFieldL(KFieldUser, aText);
+			query->AddFieldL(KUser, aText);
 			}
 		}
 	else
@@ -1452,72 +1106,43 @@ void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDes
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::TrackShareL(const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aTrack, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::ShareL(const TInt aCommand, const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aTrack, const TDesC8& aEventId, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTrackShare));
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldTrack, aTrack);
-	query->AddFieldL(KFieldRecipient, aRecipient);
+	CMobblerWebServicesQuery* query(NULL);
+	switch (aCommand)
+		{
+		case EMobblerCommandTrackShare:
+			_LIT8(KQueryTrackShare, "track.share");
+			query = CMobblerWebServicesQuery::NewLC(KQueryTrackShare);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KTrack, aTrack);
+			break;
+		case EMobblerCommandArtistShare:
+			_LIT8(KQueryArtistShare, "artist.share");
+			query = CMobblerWebServicesQuery::NewLC(KQueryArtistShare);
+			query->AddFieldL(KArtist, aArtist);
+			break;
+		case EMobblerCommandEventShare:
+			_LIT8(KQueryEventShare, "event.share");
+			query = CMobblerWebServicesQuery::NewLC(KQueryEventShare);
+			query->AddFieldL(KEvent, aEventId);
+			query->AddFieldL(KRecipient, aRecipient);
+			break;
+		default:
+			// TODO panic
+			break;
+		}
+	
+	query->AddFieldL(KRecipient, aRecipient);
 	
 	const TDesC& tagline(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_SHARE_TAGLINE));
 	HBufC8* message(HBufC8::NewLC(aMessage.Length() + tagline.Length()));
 	message->Des().Append(aMessage);
 	message->Des().Append(tagline);
-	query->AddFieldL(KFieldMessage, *message);
+	query->AddFieldL(KMessage, *message);
 	CleanupStack::PopAndDestroy(message);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::ArtistShareL(const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistShare));
-	query->AddFieldL(KFieldArtist, aArtist);
-	query->AddFieldL(KFieldRecipient, aRecipient);
-	
-	const TDesC& tagline(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_SHARE_TAGLINE));
-	HBufC8* message(HBufC8::NewLC(aMessage.Length() + tagline.Length()));
-	message->Des().Append(aMessage);
-	message->Des().Append(tagline);
-	query->AddFieldL(KFieldMessage, *message);
-	CleanupStack::PopAndDestroy(message);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::EventShareL(const TDesC8& aRecipient, const TDesC8& aEventId, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver)
-	{
-	CUri8* uri(CUri8::NewLC());
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryEventShare));
-	query->AddFieldL(KFieldEvent, aEventId);
-	query->AddFieldL(KFieldRecipient, aRecipient);
-	query->AddFieldL(KFieldMessage, aMessage);
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
 	transaction->SetFlatDataObserver(&aObserver);
@@ -1530,24 +1155,23 @@ void CMobblerLastFmConnection::EventShareL(const TDesC8& aRecipient, const TDesC
 
 void CMobblerLastFmConnection::EventAttendL(const TDesC8& aEventId, TEventStatus aEventStatus, MMobblerFlatDataObserver& aObserver)
 	{
-	CUri8* uri(CUri8::NewLC());
-	uri->SetComponentL(KScheme, EUriScheme);
-	uri->SetComponentL(KWebServicesHost, EUriHost);
-	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	CUri8* uri(SetUpWebServicesUriLC());
 	
+	_LIT8(KQueryEventAttend, "event.attend");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryEventAttend));
-	query->AddFieldL(KFieldEvent, aEventId);
+	query->AddFieldL(KEvent, aEventId);
 	
 	switch (aEventStatus)
 		{
 		case EAttending:
-			query->AddFieldL(KFieldStatus, KNumeralZero);
+			query->AddFieldL(KStatus, K0);
 			break;
 		case EMaybe:
-			query->AddFieldL(KFieldStatus, KNumeralOne);
+			query->AddFieldL(KStatus, K1);
 			break;
 		case ENotAttending:
-			query->AddFieldL(KFieldStatus, KNumeralTwo);
+			_LIT8(K2, "2");
+			query->AddFieldL(KStatus, K2);
 			break;
 		}
 	
@@ -1591,9 +1215,16 @@ void CMobblerLastFmConnection::SelectStationL(MMobblerFlatDataObserver* aObserve
 	
 	TPtr8 textPtr(text->Des());
 	
+	_LIT8(KRadioStationPersonal, "lastfm://user/%S/library");
+	_LIT8(KRadioStationPlaylist, "lastfm://playlist/%S");
+	_LIT8(KRadioStationLoved, "lastfm://user/%S/loved");
+	_LIT8(KRadioStationArtist, "lastfm://artist/%S/similarartists");
+	_LIT8(KRadioStationTag, "lastfm://globaltags/%S");
+	_LIT8(KRadioStationNeighbours, "lastfm://user/%S/neighbours");
+	_LIT8(KRadioStationRecommended, "lastfm://user/%S/recommended");
 	switch (aRadioStation)
 		{
-		case EPersonal:	radioUrl->Des().AppendFormat(KRadioStationPersonal, &textPtr); break;
+		case EPersonal: radioUrl->Des().AppendFormat(KRadioStationPersonal, &textPtr); break;
 		case EPlaylist: radioUrl->Des().AppendFormat(KRadioStationPlaylist, &textPtr); break;
 		case ERecommendations: radioUrl->Des().AppendFormat(KRadioStationRecommended, &textPtr); break;
 		case ENeighbourhood: radioUrl->Des().AppendFormat(KRadioStationNeighbours, &textPtr); break;
@@ -1607,15 +1238,13 @@ void CMobblerLastFmConnection::SelectStationL(MMobblerFlatDataObserver* aObserve
 	
 	if (iMemberType == ESubscriber || iMemberType == EMemberTypeUnknown)
 		{
-		CUri8* uri(CUri8::NewLC());
-	
-		uri->SetComponentL(KScheme, EUriScheme);
-		uri->SetComponentL(KWebServicesHost, EUriHost);
-		uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+		CUri8* uri(SetUpWebServicesUriLC());
 		
+		_LIT8(KQueryRadioTune, "radio.tune");
 		CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryRadioTune));
-		query->AddFieldL(KFieldLang, MobblerUtility::LanguageL());
-		query->AddFieldL(KFieldStation, *radioUrl);
+		_LIT8(KLang, "lang");
+		query->AddFieldL(KLang, MobblerUtility::LanguageL());
+		query->AddFieldL(KStation, *radioUrl);
 		
 		transaction = CMobblerTransaction::NewL(*this, ETrue, uri, query);
 		transaction->SetFlatDataObserver(aObserver);
@@ -1633,6 +1262,7 @@ void CMobblerLastFmConnection::SelectStationL(MMobblerFlatDataObserver* aObserve
 			HBufC8* path(HBufC8::NewLC(KMaxMobblerTextSize));
 			TPtr8 pathPtr(path->Des());
 			pathPtr.Copy(*iOldRadioBasePath);
+			_LIT8(KAdjustPhp, "/adjust.php");
 			pathPtr.Append(KAdjustPhp);
 			
 			TBuf8<2> language(MobblerUtility::LanguageL());
@@ -1643,11 +1273,12 @@ void CMobblerLastFmConnection::SelectStationL(MMobblerFlatDataObserver* aObserve
 			TPtr8 radioSessionIdPtr(iOldRadioSessionId->Des());
 			TPtr8 radioUrlPtr(radioUrl->Des());
 			
+			_LIT8(KRadioStationQuery, "session=%S&url=%S&lang=%S");
 			query->Des().AppendFormat(KRadioStationQuery, &radioSessionIdPtr, &radioUrlPtr, &language);
 			
 			CUri8* uri(CUri8::NewLC());
 			
-			uri->SetComponentL(KComponentHttp, EUriScheme);
+			uri->SetComponentL(KHttp, EUriScheme);
 			uri->SetComponentL(*iOldRadioBaseUrl, EUriHost);
 			uri->SetComponentL(pathPtr, EUriPath);
 			uri->SetComponentL(*query, EUriQuery);
@@ -1672,27 +1303,29 @@ void CMobblerLastFmConnection::RequestPlaylistL(MMobblerFlatDataObserver* aObser
 	
 	if (iMemberType == ESubscriber || iMemberType == EMemberTypeUnknown)
 		{
-		CUri8* uri(CUri8::NewLC());
+		CUri8* uri(SetUpWebServicesUriLC());
 		
-		uri->SetComponentL(KScheme, EUriScheme);
-		uri->SetComponentL(KWebServicesHost, EUriHost);
-		uri->SetComponentL(KComponentTwoDotZero, EUriPath);
-		
+		_LIT8(KQueryRadioGetPlaylist, "radio.getPlaylist");
 		CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryRadioGetPlaylist));
 		
 		//query->AddFieldL(_L8("rtp"), _L8("?"));
 		
 		// Always ask for the mp3 to be downloaded at twice the speed that it plays at.
 		// Should improve battery life by downloading for less time.
-		query->AddFieldL(KFieldSpeedMultiplier, KTwoDotZero);
+		_LIT8(KSpeedMultiplier, "speed_multiplier");
+		_LIT8(KTwoDotZero, "2.0");
+		query->AddFieldL(KSpeedMultiplier, KTwoDotZero);
 		
+		_LIT8(KBitRate, "bitrate");
 		switch (iBitRate)
 			{
 			case 0:
-				query->AddFieldL(KFieldBitRate, KNumber64);
+				_LIT8(K64, "64"); 
+				query->AddFieldL(KBitRate, K64);
 				break;
 			case 1:
-				query->AddFieldL(KFieldBitRate, KNumber128);
+				_LIT8(K128, "128");
+				query->AddFieldL(KBitRate, K128);
 				break;
 			default:
 				// TODO: should panic
@@ -1722,16 +1355,18 @@ void CMobblerLastFmConnection::RequestPlaylistL(MMobblerFlatDataObserver* aObser
 			HBufC8* path(HBufC8::NewLC(KMaxMobblerTextSize));
 			TPtr8 pathPtr(path->Des());
 			pathPtr.Copy(*iOldRadioBasePath);
+			_LIT8(KXspfDotPhp, "/xspf.php");
 			pathPtr.Append(KXspfDotPhp);
 			
 			TPtr8 radioSessionIdPtr(iOldRadioSessionId->Des());
 			
 			HBufC8* query(HBufC8::NewLC(KMaxMobblerTextSize));
+			_LIT8(KRadioPlaylistQuery, "sk=%S&discovery=0&desktop=1.5.1");
 			query->Des().AppendFormat(KRadioPlaylistQuery, &radioSessionIdPtr);
 			
 			CUri8* uri(CUri8::NewLC());
 			
-			uri->SetComponentL(KComponentHttp, EUriScheme);
+			uri->SetComponentL(KHttp, EUriScheme);
 			uri->SetComponentL(*iOldRadioBaseUrl, EUriHost);
 			uri->SetComponentL(pathPtr, EUriPath);
 			uri->SetComponentL(*query, EUriQuery);
@@ -1762,6 +1397,7 @@ void CMobblerLastFmConnection::RequestMp3L(MMobblerSegDataObserver& aObserver, c
 			iRadioAudioTransaction.Close();
 			iRadioAudioTransaction = iHTTPSession.OpenTransactionL(urimp3Parser, *this);
 			
+			_LIT8(KMobbler, "mobbler");
 			RStringF mobbler(iHTTPSession.StringPool().OpenFStringL(KMobbler));
 			iRadioAudioTransaction.Request().GetHeaderCollection().SetFieldL(iHTTPSession.StringPool().StringF(HTTP::EConnection, RHTTPSession::GetTable()), mobbler);
 			mobbler.Close();
@@ -1840,6 +1476,14 @@ void CMobblerLastFmConnection::DoNowPlayingL()
 			// create the from that will be sent to Last.fm
 			CHTTPFormEncoder* nowPlayingForm(CHTTPFormEncoder::NewL());
 			CleanupStack::PushL(nowPlayingForm);
+			
+			_LIT8(KLowerA8, "a");
+			_LIT8(KLowerB8, "b");
+			_LIT8(KLowerL8, "l");
+			_LIT8(KLowerM8, "m");
+			_LIT8(KLowerN8, "n");
+			_LIT8(KLowerS8, "s");
+			_LIT8(KLowerT8, "t");
 			
 			nowPlayingForm->AddFieldL(KLowerS8, *iScrobbleSessionId);
 			nowPlayingForm->AddFieldL(KLowerA8, iCurrentTrack->Artist().String8());
@@ -2000,8 +1644,10 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 				startTimeBuf.AppendNum(unixTimeStamp.Int());
 				submitForm->AddFieldL(i, startTimeBuf);
 				
+				_LIT8(KUpperL8, "L");
 				if (iTrackQueue[ii]->IsMusicPlayerTrack())
 					{
+					_LIT8(KUpperP8, "P");
 					submitForm->AddFieldL(o, KUpperP8);
 					}
 				else
@@ -2542,11 +2188,15 @@ void CMobblerLastFmConnection::ScrobbleHandshakeL()
 	CreateAuthTokenL(authTokenPtr, unixTimeStamp);
 	
 	HBufC8* path(HBufC8::NewLC(KMaxMobblerTextSize));
+	// The format for the handshake URL:
+	_LIT8(KScrobbleQuery, "hs=true&p=1.2&c=mlr&v=0.1&u=%S&t=%d&a=%S");
 	path->Des().AppendFormat(KScrobbleQuery, &iUsername->String8(), unixTimeStamp.Int(), &authTokenPtr);
 	
 	CUri8* uri(CUri8::NewLC());
 	
-	uri->SetComponentL(KScheme, EUriScheme);
+	uri->SetComponentL(KHttp, EUriScheme);
+	// The Last.fm URL to send the handshake to:
+	_LIT8(KScrobbleHost, "post.audioscrobbler.com");
 	uri->SetComponentL(KScrobbleHost, EUriHost);
 	uri->SetComponentL(*path, EUriQuery);
 	
@@ -2656,18 +2306,21 @@ TBool CMobblerLastFmConnection::ExportQueueToLogFileL()
 		return EFalse;
 		}
 	
+	_LIT(KLogFile, "c:\\Data\\Mobbler\\.scrobbler.log");
 	CCoeEnv::Static()->FsSession().MkDirAll(KLogFile);
 	
 	TInt errors(KErrNone);
 	RFile file;
 	CleanupClosePushL(file);
 	TInt replaceError(file.Replace(CCoeEnv::Static()->FsSession(), KLogFile, EFileWrite));
+	_LIT8(KLogFileEndOfLine, "\n");
 	if (replaceError != KErrNone)
 		{
 		return EFalse;
 		}
 	else
 		{
+		_LIT8(KLogFileHeader, "#AUDIOSCROBBLER/1.1\n#TZ/UTC\n#CLIENT/Mobbler ");
 		errors = file.Write(KLogFileHeader);
 		TBuf8<10> version;
 		version.Copy(KVersion.Name());
@@ -2719,6 +2372,7 @@ TBool CMobblerLastFmConnection::ExportQueueToLogFileL()
 		errors += file.Write(KLogFileFieldSeperator);
 		
 		// rating (L if listened at least 50% or S if skipped)
+		_LIT8(KLogFileListenedRating, "L");
 		errors += file.Write(KLogFileListenedRating);
 		errors += file.Write(KLogFileFieldSeperator);
 		
@@ -2841,6 +2495,20 @@ void CMobblerLastFmConnection::DeleteCurrentTrackFile()
 	{
 	CCoeEnv::Static()->FsSession().Delete(KCurrentTrackFile);
 	iCurrentTrackSaved = EFalse;
+	}
+
+CUri8* CMobblerLastFmConnection::SetUpWebServicesUriLC()
+	{
+	CUri8* uri(CUri8::NewLC());
+	
+	_LIT8(KComponentTwoDotZero, "/2.0/");
+	uri->SetComponentL(KHttp, EUriScheme);
+	// The Last.fm URL to send the handshake to:
+	_LIT8(KWebServicesHost, "ws.audioscrobbler.com");
+	uri->SetComponentL(KWebServicesHost, EUriHost);
+	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
+	
+	return uri;
 	}
 
 // End of file

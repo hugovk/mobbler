@@ -770,9 +770,7 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 		}
 	
 	// If the band is on tour, draw the on-tour thingy in the top right corner
-#ifndef __WINS__
 	if (iAppUi.CurrentTrack() && iAppUi.CurrentTrack()->OnTour())
-#endif
 		{
 		BitBltMobblerBitmapL(iMobblerBitmapOnTour, iPointOnTour,
 							 TRect(TPoint(0, 0), iMobblerBitmapOnTour->SizeInPixels()));

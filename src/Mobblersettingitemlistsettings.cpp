@@ -43,7 +43,9 @@ const TInt KDefaultSleepTimerMinutes(30);
 const TInt KDefaultDownloadAlbumArt(CMobblerAppUi::EOnlyRadio);
 const TInt KDefaultSleepTimerAction(CMobblerSettingItemListSettings::EGoOffline);
 const TInt KDefaultSleepTimerImmediacy(CMobblerSettingItemListSettings::EImmediately);
+
 _LIT(KDefaultAlarmTime, "070000."); // "HHMMSS."
+_LIT(KSettingsFile, "c:settings.ini");
 
 CMobblerSettingItemListSettings* CMobblerSettingItemListSettings::NewL()
 	{

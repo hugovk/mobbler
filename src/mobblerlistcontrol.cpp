@@ -42,9 +42,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerwebservicescontrol.h"
 
 _LIT(KDoubleLargeStyleListBoxTextFormat, "%d\t%S\t%S");
+_LIT(KSimpleFormat, "%S");
 _LIT(KRecentTracksTitleFormat, "%S - %S");
-_LIT(KPlaylistsFormat, "%S");
 _LIT(KOne, "1");
+_LIT(KTimeFormat, "%F%D %N %-B%J%:1%T%+B"); // 21 March 11:20 am
 
 const TTimeIntervalMinutes KMinutesInAnHour(60);
 const TTimeIntervalHours KHoursInOneDay(24);
@@ -226,13 +227,12 @@ HBufC* CMobblerListControl::NameL() const
 			text.Set(iText2->String());
 			break;
 		case EMobblerCommandScrobbleLog:
-			_LIT(KFormat, "%S");
-			format.Set(KFormat);
+			format.Set(KSimpleFormat);
 			text.Set(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SCROBBLE_LOG));
 			break;
 		case EMobblerCommandPlaylistFetchUser:
 		case EMobblerCommandPlaylistFetchAlbum:
-			format.Set(KPlaylistsFormat);
+			format.Set(KSimpleFormat);
 			break;
 		case EMobblerCommandPlaylists:
 			format.Set(iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_PLAYLISTS));
@@ -416,7 +416,7 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 						else
 							{
 							TPtr yeah(description->Des());
-							iList[i]->TimeLocal().FormatL(yeah, KFormatTime);
+							iList[i]->TimeLocal().FormatL(yeah, KTimeFormat);
 							}
 						}
 					

@@ -125,10 +125,15 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandTag,
 	EMobblerCommandTrackAddTag,
 	EMobblerCommandTrackRemoveTag,
+	EMobblerCommandTrackGetTags,
+	EMobblerCommandTrackGetInfo,
 	EMobblerCommandArtistAddTag,
 	EMobblerCommandArtistRemoveTag,
+	EMobblerCommandArtistGetTags,
 	EMobblerCommandAlbumAddTag,
 	EMobblerCommandAlbumRemoveTag,
+	EMobblerCommandAlbumGetTags,
+	EMobblerCommandAlbumGetInfo,
 	
 	// plus menu commands
 	EMobblerCommandPlusVisitLastFm,

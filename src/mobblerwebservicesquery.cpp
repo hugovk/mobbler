@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <chttpformencoder.h>
 
+#include "mobblerliterals.h"
 #include "mobblerutility.h"
 #include "mobblerwebservicesquery.h"
 
@@ -34,7 +35,6 @@ _LIT8(KMobblerParameterApiSig, "api_sig");
 _LIT8(KMobblerParameterMethod, "method");
 
 _LIT8(KAmpersand, "&");
-_LIT8(KEquals,    "=");
 
 CMobblerWebServicesQuery* CMobblerWebServicesQuery::NewLC(const TDesC8& aMethod)
 	{

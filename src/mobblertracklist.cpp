@@ -38,10 +38,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerstring.h"
 #include "mobblertrack.h"
 #include "mobblertracklist.h"
+#include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
 
 _LIT8(KGetTopTracks, "gettoptracks");
-_LIT8(KTrack, "track");
 
 CMobblerTrackList::CMobblerTrackList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -66,7 +66,7 @@ void CMobblerTrackList::ConstructL()
 			iAppUi.LastFmConnection().RecentTracksL(iText1->String8(), *this);
 			break;
 		case EMobblerCommandSimilarTracks:
-			iAppUi.LastFmConnection().SimilarTracksL(iText1->String8(), iText2->String8(), *this);
+			iAppUi.LastFmConnection().SimilarL(iType, iText1->String8(), iText2->String8(), *this);
 			break;
 		case EMobblerCommandPlaylistFetchUser:
 			iAppUi.LastFmConnection().PlaylistFetchUserL(iText2->String8(), *this);
@@ -77,7 +77,7 @@ void CMobblerTrackList::ConstructL()
 				// This is a MusicBrainz ID so fetch the Last.fm ID before getting the playlist
 				delete iAlbumInfoObserver;
 				iAlbumInfoObserver = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, EFalse);
-				iAppUi.LastFmConnection().AlbumGetInfoL(iText2->String8(), *iAlbumInfoObserver);
+				iAppUi.LastFmConnection().GetInfoL(EMobblerCommandAlbumGetInfo, KNullDesC8, KNullDesC8, KNullDesC8, iText2->String8(), *iAlbumInfoObserver);
 				}
 			else
 				{
@@ -153,12 +153,12 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 		case EMobblerCommandTrackLove:
 			delete iLoveObserver;
 			iLoveObserver = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().TrackLoveL(artist, title, *iLoveObserver);
+			iAppUi.LastFmConnection().QueryLastFmL(aCommand, artist, KNullDesC8, title, KNullDesC8, *iLoveObserver);
 			break;
 		case EMobblerCommandTrackAddTag:
 			{
 			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
-			iWebServicesHelper->TrackAddTagL(*track);
+			iWebServicesHelper->AddTagL(*track, aCommand);
 			track->Release();
 			}
 			break;
@@ -249,25 +249,17 @@ void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 		{
 		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 			{
-			// Create the XML reader and DOM fragment and associate them with each other
-			CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-			CleanupStack::PushL(xmlReader);
-			CSenDomFragment* domFragment(CSenDomFragment::NewL());
-			CleanupStack::PushL(domFragment);
-			xmlReader->SetContentHandler(*domFragment);
-			domFragment->SetReader(*xmlReader);
+			// Parse the XML
+			CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+			CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 			
-			// Parse the XML into the DOM fragment
-			xmlReader->ParseL(aData);
-				
 			if (aObserver == iAlbumInfoObserver)
-				{	
-				iAppUi.LastFmConnection().PlaylistFetchAlbumL(domFragment->AsElement().Element(KElementAlbum)->Element(KElementId)->Content(), *this);
+				{
+				iAppUi.LastFmConnection().PlaylistFetchAlbumL(domFragment->AsElement().Element(KAlbum)->Element(KId)->Content(), *this);
 				}
 			
 			CleanupStack::PopAndDestroy(2);
 			}
-	
 		else
 			{
 			// TODO

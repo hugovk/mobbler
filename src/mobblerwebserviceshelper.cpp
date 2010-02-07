@@ -41,9 +41,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
 #include "mobblertrack.h"
+#include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
-
-_LIT8(KElementTags, "tags");
 
 CMobblerWebServicesHelper* CMobblerWebServicesHelper::NewL(CMobblerAppUi& aAppUi)
 	{
@@ -91,8 +90,7 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 	iTrack = &aTrack;
 	iTrack->Open();
 	
-	CMobblerString* username(CMobblerString::NewL(iAppUi.SettingView().Username()));
-	CleanupStack::PushL(username);
+	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
 	
 	delete iFriendFetchObserverHelperTrackShare;
 	iFriendFetchObserverHelperTrackShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -106,8 +104,7 @@ void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 	iTrack = &aTrack;
 	iTrack->Open();
 	
-	CMobblerString* username(CMobblerString::NewL(iAppUi.SettingView().Username()));
-	CleanupStack::PushL(username);
+	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
 	
 	delete iFriendFetchObserverHelperArtistShare;
 	iFriendFetchObserverHelperArtistShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -121,8 +118,7 @@ void CMobblerWebServicesHelper::PlaylistAddL(CMobblerTrack& aTrack)
 	iTrack = &aTrack;
 	iTrack->Open();
 	
-	CMobblerString* username(CMobblerString::NewL(iAppUi.SettingView().Username()));
-	CleanupStack::PushL(username);
+	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
 	
 	delete iPlaylistFetchObserverHelper;
 	iPlaylistFetchObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -135,8 +131,7 @@ void CMobblerWebServicesHelper::EventShareL(const TDesC8& aEventId)
 	{
 	iEventId = aEventId.AllocL();
 	
-	CMobblerString* username(CMobblerString::NewL(iAppUi.SettingView().Username()));
-	CleanupStack::PushL(username);
+	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
 	
 	delete iFriendFetchObserverHelperEventShare;
 	iFriendFetchObserverHelperEventShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -145,23 +140,51 @@ void CMobblerWebServicesHelper::EventShareL(const TDesC8& aEventId)
 	CleanupStack::PopAndDestroy(username);
 	}
 
-void CMobblerWebServicesHelper::TrackAddTagL(CMobblerTrack& aTrack)
+void CMobblerWebServicesHelper::AddTagL(CMobblerTrack& aTrack, TInt aCommand)
 	{
 	TBuf<KMobblerMaxQueryDialogLength> tag;
 	
+	TInt resourceId(R_MOBBLER_TRACK_ADD_TAG_PROMPT);
+	switch (aCommand)
+		{
+//		case EMobblerCommandTrackAddTag:
+//			resourceId = R_MOBBLER_TRACK_ADD_TAG_PROMPT;
+//			break;
+		case EMobblerCommandAlbumAddTag:
+			resourceId = R_MOBBLER_ALBUM_ADD_TAG_PROMPT;
+			break;
+		case EMobblerCommandArtistAddTag:
+			resourceId = R_MOBBLER_ARTIST_ADD_TAG_PROMPT;
+			break;
+		default:
+			break;
+		}
+
 	CAknTextQueryDialog* tagDialog(new(ELeave) CAknTextQueryDialog(tag));
 	tagDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
-	tagDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_TRACK_ADD_TAG_PROMPT));
+	tagDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(resourceId));
 	tagDialog->SetPredictiveTextInputPermitted(ETrue);
 	
 	if (tagDialog->RunLD())
 		{
-		CMobblerString* tagString(CMobblerString::NewL(tag));
-		CleanupStack::PushL(tagString);
+		CMobblerString* tagString(CMobblerString::NewLC(tag));
 		
 		delete iTagAddHelper;
 		iTagAddHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-		iAppUi.LastFmConnection().TrackAddTagL(aTrack.Title().String8(), aTrack.Artist().String8(), tagString->String8(), *iTagAddHelper);
+		switch (aCommand)
+			{
+			case EMobblerCommandTrackAddTag:
+				iAppUi.LastFmConnection().QueryLastFmL(aCommand, aTrack.Artist().String8(), KNullDesC8, aTrack.Title().String8(),  tagString->String8(), *iTagAddHelper);
+				break;
+			case EMobblerCommandAlbumAddTag:
+				iAppUi.LastFmConnection().QueryLastFmL(aCommand, aTrack.Artist().String8(), aTrack.Album().String8(), KNullDesC8, tagString->String8(), *iTagAddHelper);
+				break;
+			case EMobblerCommandArtistAddTag:
+				iAppUi.LastFmConnection().QueryLastFmL(aCommand, aTrack.Artist().String8(), KNullDesC8, KNullDesC8, tagString->String8(), *iTagAddHelper);
+				break;
+			default:
+				break;
+			}
 		
 		CleanupStack::PopAndDestroy(tagString);
 		}
@@ -175,29 +198,7 @@ void CMobblerWebServicesHelper::TrackRemoveTagL(CMobblerTrack& aTrack)
 	// fetch the user's tags for this track
 	delete iTrackTagRemoveTagsHelper;
 	iTrackTagRemoveTagsHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().TrackGetTagsL(aTrack.Title().String8(), aTrack.Artist().String8(), *iTrackTagRemoveTagsHelper);
-	}
-
-void CMobblerWebServicesHelper::AlbumAddTagL(CMobblerTrack& aTrack)
-	{
-	TBuf<KMobblerMaxQueryDialogLength> tag;
-	
-	CAknTextQueryDialog* tagDialog(new(ELeave) CAknTextQueryDialog(tag));
-	tagDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
-	tagDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_ALBUM_ADD_TAG_PROMPT));
-	tagDialog->SetPredictiveTextInputPermitted(ETrue);
-	
-	if (tagDialog->RunLD())
-		{
-		CMobblerString* tagString(CMobblerString::NewL(tag));
-		CleanupStack::PushL(tagString);
-		
-		delete iTagAddHelper;
-		iTagAddHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-		iAppUi.LastFmConnection().AlbumAddTagL(aTrack.Album().String8(), aTrack.Artist().String8(), tagString->String8(), *iTagAddHelper);
-		
-		CleanupStack::PopAndDestroy(tagString);
-		}
+	iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandTrackGetTags, aTrack.Artist().String8(), KNullDesC8, aTrack.Title().String8(), KNullDesC8, *iTrackTagRemoveTagsHelper);
 	}
 
 void CMobblerWebServicesHelper::AlbumRemoveTagL(CMobblerTrack& aTrack)
@@ -208,29 +209,7 @@ void CMobblerWebServicesHelper::AlbumRemoveTagL(CMobblerTrack& aTrack)
 	// fetch the user's tags for this track
 	delete iAlbumTagRemoveTagsHelper;
 	iAlbumTagRemoveTagsHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().AlbumGetTagsL(aTrack.Album().String8(), aTrack.Artist().String8(), *iAlbumTagRemoveTagsHelper);
-	}
-
-void CMobblerWebServicesHelper::ArtistAddTagL(CMobblerTrack& aTrack)
-	{
-	TBuf<KMobblerMaxQueryDialogLength> tag;
-	
-	CAknTextQueryDialog* tagDialog(new(ELeave) CAknTextQueryDialog(tag));
-	tagDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
-	tagDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_ARTIST_ADD_TAG_PROMPT));
-	tagDialog->SetPredictiveTextInputPermitted(ETrue);
-	
-	if (tagDialog->RunLD())
-		{
-		CMobblerString* tagString(CMobblerString::NewL(tag));
-		CleanupStack::PushL(tagString);
-		
-		delete iTagAddHelper;
-		iTagAddHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-		iAppUi.LastFmConnection().ArtistAddTagL(aTrack.Artist().String8(), tagString->String8(), *iTagAddHelper);
-		
-		CleanupStack::PopAndDestroy(tagString);
-		}
+	iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandAlbumGetTags, aTrack.Artist().String8(), aTrack.Album().String8(), KNullDesC8, KNullDesC8, *iAlbumTagRemoveTagsHelper);
 	}
 
 void CMobblerWebServicesHelper::ArtistRemoveTagL(CMobblerTrack& aTrack)
@@ -241,7 +220,7 @@ void CMobblerWebServicesHelper::ArtistRemoveTagL(CMobblerTrack& aTrack)
 	// fetch the user's tags for this track
 	delete iArtistTagRemoveTagsHelper;
 	iArtistTagRemoveTagsHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().ArtistGetTagsL(aTrack.Artist().String8(), *iArtistTagRemoveTagsHelper);
+	iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandArtistGetTags, aTrack.Artist().String8(), KNullDesC8, KNullDesC8, KNullDesC8, *iArtistTagRemoveTagsHelper);
 	}
 
 /*
@@ -396,21 +375,14 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 	{
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
-		// create the XML reader and DOM fragment and associate them with each other 
-		CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-		CleanupStack::PushL(xmlReader);
-		CSenDomFragment* domFragment(CSenDomFragment::NewL());
-		CleanupStack::PushL(domFragment);
-		xmlReader->SetContentHandler(*domFragment);
-		domFragment->SetReader(*xmlReader);
-		
-		// parse the XML into the DOM fragment
-		xmlReader->ParseL(aData);
+		// Parse the XML
+		CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+		CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 		
 		if (aObserver == iShareObserverHelper ||
 				aObserver == iPlaylistAddObserverHelper)
 			{
-			if (domFragment->AsElement().AttrValue(KElementStatus)->Compare(KOk) == 0)
+			if (domFragment->AsElement().AttrValue(KStatus)->Compare(KOk) == 0)
 				{
 				// Everything worked
 				CAknConfirmationNote* note(new (ELeave) CAknConfirmationNote(EFalse));
@@ -420,8 +392,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				{
 				// There was an error so display it
 				CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
-				CMobblerString* string(CMobblerString::NewL(domFragment->AsElement().Element(KElementError)->Content()));
-				CleanupStack::PushL(string);
+				CMobblerString* string(CMobblerString::NewLC(domFragment->AsElement().Element(KError)->Content()));
 				note->ExecuteLD(string->String());
 				CleanupStack::Pop(string);
 				}
@@ -450,13 +421,12 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			
 			//items->AppendL(_L("From contacts...")); // TODO: REMOVE HARDCODED, LOCALISE IT
 			
-			RPointerArray<CSenElement>& users(domFragment->AsElement().Element(KElementFriends)->ElementsL());
+			RPointerArray<CSenElement>& users(domFragment->AsElement().Element(KFriends)->ElementsL());
 			
 			const TInt KUserCount(users.Count());
 			for (TInt i(0); i < KUserCount; ++i)
 				{
-				CMobblerString* user(CMobblerString::NewL(users[i]->Element(KElementName)->Content()));
-				CleanupStack::PushL(user);
+				CMobblerString* user(CMobblerString::NewLC(users[i]->Element(KName)->Content()));
 				items->AppendL(user->String());
 				CleanupStack::PopAndDestroy(user);
 				}
@@ -470,8 +440,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			
 			if (popup->ExecuteLD())
 				{
-				CMobblerString* recipient(CMobblerString::NewL((*items)[list->CurrentItemIndex()]));
-				CleanupStack::PushL(recipient);
+				CMobblerString* recipient(CMobblerString::NewLC((*items)[list->CurrentItemIndex()]));
 				
 				TBuf<KMobblerMaxQueryDialogLength> message;
 				
@@ -482,27 +451,26 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				
 				if (shoutDialog->RunLD())
 					{
-					CMobblerString* messageString(CMobblerString::NewL(message));
-					CleanupStack::PushL(messageString);
+					CMobblerString* messageString(CMobblerString::NewLC(message));
 					
 					if (aObserver == iFriendFetchObserverHelperTrackShare)
 						{
 						delete iShareObserverHelper;
 						iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().TrackShareL(recipient->String8(), iTrack->Artist().String8(), iTrack->Title().String8(), messageString->String8(), *iShareObserverHelper);
+						iAppUi.LastFmConnection().ShareL(EMobblerCommandTrackShare, recipient->String8(), iTrack->Artist().String8(), iTrack->Title().String8(), KNullDesC8, messageString->String8(), *iShareObserverHelper);
 						}
 					else if (aObserver == iFriendFetchObserverHelperArtistShare)
 						{
 						delete iShareObserverHelper;
 						iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().ArtistShareL(recipient->String8(), iTrack->Artist().String8(), messageString->String8(), *iShareObserverHelper);
+						iAppUi.LastFmConnection().ShareL(EMobblerCommandArtistShare, recipient->String8(), iTrack->Artist().String8(), KNullDesC8, KNullDesC8, messageString->String8(), *iShareObserverHelper);
 						}
 					else
 						{
 						// This must be sharing an event
 						delete iShareObserverHelper;
 						iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().EventShareL(recipient->String8(), *iEventId, messageString->String8(), *iShareObserverHelper);
+						iAppUi.LastFmConnection().ShareL(EMobblerCommandEventShare, recipient->String8(), KNullDesC8, KNullDesC8, *iEventId, messageString->String8(), *iShareObserverHelper);
 						}
 					
 					CleanupStack::PopAndDestroy(messageString);
@@ -516,7 +484,6 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 		else if (aObserver == iPlaylistFetchObserverHelper)
 			{
 			// parse and bring up an add to playlist popup menu
-			// create the XML reader and DOM fragment and associate them with each other 
 			CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
 			CleanupStack::PushL(list);
 			
@@ -533,13 +500,12 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
 			CleanupStack::PushL(items);
 			
-			RPointerArray<CSenElement>& playlists(domFragment->AsElement().Element(KElementPlaylists)->ElementsL());
+			RPointerArray<CSenElement>& playlists(domFragment->AsElement().Element(KPlaylists)->ElementsL());
 			
 			const TInt KPlaylistCount(playlists.Count());
 			for (TInt i(0); i < KPlaylistCount; ++i)
 				{
-				CMobblerString* playlist(CMobblerString::NewL(playlists[i]->Element(KElementTitle)->Content()));
-				CleanupStack::PushL(playlist);
+				CMobblerString* playlist(CMobblerString::NewLC(playlists[i]->Element(KTitle)->Content()));
 				items->AppendL(playlist->String());
 				CleanupStack::PopAndDestroy(playlist);
 				}
@@ -557,7 +523,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 					{
 					delete iPlaylistAddObserverHelper;
 					iPlaylistAddObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-					iAppUi.LastFmConnection().PlaylistAddTrackL(playlists[list->CurrentItemIndex()]->Element(KElementId)->Content(), iTrack->Artist().String8(), iTrack->Title().String8(), *iPlaylistAddObserverHelper);
+					iAppUi.LastFmConnection().PlaylistAddTrackL(playlists[list->CurrentItemIndex()]->Element(KId)->Content(), iTrack->Artist().String8(), iTrack->Title().String8(), *iPlaylistAddObserverHelper);
 					}
 				}
 			
@@ -567,7 +533,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				|| aObserver == iAlbumTagRemoveTagsHelper
 				|| aObserver == iArtistTagRemoveTagsHelper)
 			{
-			RPointerArray<CSenElement>& tags(domFragment->AsElement().Element(KElementTags)->ElementsL());
+			RPointerArray<CSenElement>& tags(domFragment->AsElement().Element(KTags)->ElementsL());
 			
 			const TInt KTagCount(tags.Count());
 			
@@ -578,8 +544,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				
 				for (TInt i(0) ; i < KTagCount ; ++i)
 					{
-					CMobblerString* tagName(CMobblerString::NewL(tags[i]->Element(KElementName)->Content()));
-					CleanupStack::PushL(tagName);
+					CMobblerString* tagName(CMobblerString::NewLC(tags[i]->Element(KName)->Content()));
 					textArray->AppendL(tagName->String());
 					CleanupStack::PopAndDestroy(tagName);
 					}
@@ -592,19 +557,24 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			 
 				if (tagRemoveDialog->RunLD())
 					{
-					// remove the tag!!!
-					CMobblerString* tagName(CMobblerString::NewL((*textArray)[index]));
-					CleanupStack::PushL(tagName);
+					// remove the tag!
+					CMobblerString* tagName(CMobblerString::NewLC((*textArray)[index]));
 					
 					delete iTagRemoveHelper;
 					iTagRemoveHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
 					
 					if (aObserver == iTrackTagRemoveTagsHelper)
-						iAppUi.LastFmConnection().TrackRemoveTagL(iTrack->Title().String8(), iTrack->Artist().String8(), tagName->String8(), *iTagRemoveHelper);
+						{
+						iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandTrackRemoveTag, iTrack->Artist().String8(), KNullDesC8, iTrack->Title().String8(), tagName->String8(), *iTagRemoveHelper);
+						}
 					else if (aObserver == iAlbumTagRemoveTagsHelper)
-						iAppUi.LastFmConnection().AlbumRemoveTagL(iTrack->Album().String8(), iTrack->Artist().String8(), tagName->String8(), *iTagRemoveHelper);
+						{
+						iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandAlbumRemoveTag, iTrack->Artist().String8(), iTrack->Album().String8(), KNullDesC8, tagName->String8(), *iTagRemoveHelper);
+						}
 					else if (aObserver == iArtistTagRemoveTagsHelper)
-						iAppUi.LastFmConnection().ArtistRemoveTagL(iTrack->Artist().String8(), tagName->String8(), *iTagRemoveHelper);
+						{
+						iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandArtistRemoveTag, iTrack->Artist().String8(), KNullDesC8, KNullDesC8, tagName->String8(), *iTagRemoveHelper);
+						}
 					
 					CleanupStack::PopAndDestroy(tagName);
 					}

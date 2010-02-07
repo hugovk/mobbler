@@ -30,9 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <http/rhttpsession.h>
 #include <mobbler/mobblerdestinationsinterface.h>
 
+#include "mobbler.hrh"
 #include "mobblerlastfmerror.h"
-
-_LIT(KLogFile, "c:\\Data\\Mobbler\\.scrobbler.log");
 
 class CHTTPFormEncoder;
 class CMobblerString;
@@ -155,42 +154,42 @@ public:
 
 	void ShoutL(const TDesC8& aClass, const TDesC8& aArgument, const TDesC8& aMessage);
 
-	void TrackLoveL(const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver);
 	void TrackBanL(const TDesC8& aArtist, const TDesC8& aTrack);
 
-	void TrackShareL(const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aTrack, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver);
-	void ArtistShareL(const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver);
-	void EventShareL(const TDesC8& aRecipient, const TDesC8& aEventId, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver);
+	void ShareL(const TInt aCommand, 
+				const TDesC8& aRecipient, 
+				const TDesC8& aArtist, 
+				const TDesC8& aTrack, 
+				const TDesC8& aEventId, 
+				const TDesC8& aMessage, 
+				MMobblerFlatDataObserver& aObserver);
 
 	void EventAttendL(const TDesC8& aEventId, TEventStatus aEventStatus, MMobblerFlatDataObserver& aObserver);
 
-	void RecommendedArtistsL(MMobblerFlatDataObserver& aObserver);
 	void RecommendedEventsL(MMobblerFlatDataObserver& aObserver);
 
 	void RecentTracksL(const TDesC8& aUser, MMobblerFlatDataObserver& aObserver);
-	void SimilarTracksL(const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver);
 
-	void SimilarArtistsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	void SimilarL(const TInt aCommand, 
+				  const TDesC8& aArtist, 
+				  const TDesC8& aTrack, 
+				  MMobblerFlatDataObserver& aObserver);
+	
 	void ArtistGetImageL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
 	
-	void TrackGetTagsL(const TDesC8& aTrack, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
-	void TrackGetTopTagsL(const TDesC8& aTrack, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
-	void TrackAddTagL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
-	void TrackRemoveTagL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
-	
-	void ArtistGetTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
-	void ArtistGetTopTagsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
-	void ArtistAddTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
-	void ArtistRemoveTagL(const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
-	void ArtistGetEventsL(const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
-	
-	void AlbumGetTagsL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
-	void AlbumAddTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
-	void AlbumRemoveTagL(const TDesC8& aAlbum, const TDesC8& aArtist, const TDesC8& aTag, MMobblerFlatDataObserver& aObserver);
+	void QueryLastFmL(const TInt aCommand, 
+					  const TDesC8& aArtist, 
+					  const TDesC8& aAlbum, 
+					  const TDesC8& aTrack, 
+					  const TDesC8& aTag, 
+					  MMobblerFlatDataObserver& aObserver);
 
-	void TrackGetInfoL(const TDesC8& aTrack, const TDesC8& aArtist, const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver);
-	void AlbumGetInfoL(const TDesC8& aMbId, MMobblerFlatDataObserver& aObserver);
-	void AlbumGetInfoL(const TDesC8& aAlbum, const TDesC8& aArtist, MMobblerFlatDataObserver& aObserver);
+	void GetInfoL(const TInt aCommand, 
+				  const TDesC8& aArtist, 
+				  const TDesC8& aAlbum, 
+				  const TDesC8& aTrack, 
+				  const TDesC8& aMbId, 
+				  MMobblerFlatDataObserver& aObserver);
 
 	void PlaylistCreateL(const TDesC& aTitle, const TDesC& aDescription, MMobblerFlatDataObserver& aObserver);
 	void PlaylistFetchUserL(const TDesC8& aPlaylistId, MMobblerFlatDataObserver& aObserver);
@@ -251,6 +250,7 @@ private:
 private:  // utilities
 	void CreateAuthTokenL(TDes8& aHash, TTimeIntervalSeconds aUnixTimeStamp);
 	void StripOutTabs(TDes8& aString);
+	CUri8* SetUpWebServicesUriLC();
 
 	// track queue methods
 	void LoadTrackQueueL();

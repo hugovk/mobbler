@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <coemain.h>
 #include <hal.h>
 #include <hash.h>
+#include <sendomfragment.h>
 
 #include "mobblerlogging.h"
 #include "mobblerutility.h"
@@ -300,8 +301,6 @@ void MobblerUtility::FixLyricsSpecialCharacters(TDes8& aText)
 
 void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 	{
-	DUMPDATA(aText, _L("lyrics0.txt"));
-	
 	// First, remove all Windows newlines
 	_LIT8(KCRLF,"\x0D\x0A");
 
@@ -320,8 +319,6 @@ void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 		aText.Delete(pos, KLF().Length());
 		}
 	
-	DUMPDATA(aText, _L("lyrics1.txt"));
-	
 	// Finally, replace [br] tags with newlines
 	_LIT8(KBrTag1, "[br]");
 	_LIT8(KBrTag2, "\r\n");
@@ -332,8 +329,6 @@ void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 		aText.Delete(pos, KBrTag1().Length());
 		aText.Insert(pos, KBrTag2);
 		}
-	
-	DUMPDATA(aText, _L("lyrics2.txt"));
 	}
 
 void MobblerUtility::StripUnwantedTagsFromHtmlL(HBufC8*& aHtml)
@@ -407,7 +402,18 @@ void MobblerUtility::StripUnwantedTagsFromHtmlL(HBufC8*& aHtml)
 		}
 	}
 
-
-
+CSenDomFragment* MobblerUtility::PrepareDomFragmentLC(CSenXmlReader& aXmlReader, const TDesC8& aXml)
+	{
+	// Create the DOM fragment and associate with the XML reader
+	CSenDomFragment* domFragment(CSenDomFragment::NewL());
+	CleanupStack::PushL(domFragment);
+	aXmlReader.SetContentHandler(*domFragment);
+	domFragment->SetReader(aXmlReader);
+	
+	// Parse the XML into the DOM fragment
+	aXmlReader.ParseL(aXml);
+	
+	return domFragment;
+	}
 
 // End of file

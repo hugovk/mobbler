@@ -40,19 +40,31 @@ const TChar KForbiddenCharacterArray[] =
 
 CMobblerString* CMobblerString::NewL(const TDesC& aString)
 	{
-	CMobblerString* self(new(ELeave) CMobblerString);
-	CleanupStack::PushL(self);
-	self->ConstructL(aString);
+	CMobblerString* self(NewLC(aString));
 	CleanupStack::Pop(self);
 	return self;
 	}
 
 CMobblerString* CMobblerString::NewL(const TDesC8& aString)
 	{
+	CMobblerString* self(NewLC(aString));
+	CleanupStack::Pop(self);
+	return self;
+	}
+
+CMobblerString* CMobblerString::NewLC(const TDesC& aString)
+	{
 	CMobblerString* self(new(ELeave) CMobblerString);
 	CleanupStack::PushL(self);
 	self->ConstructL(aString);
-	CleanupStack::Pop(self);
+	return self;
+	}
+
+CMobblerString* CMobblerString::NewLC(const TDesC8& aString)
+	{
+	CMobblerString* self(new(ELeave) CMobblerString);
+	CleanupStack::PushL(self);
+	self->ConstructL(aString);
 	return self;
 	}
 

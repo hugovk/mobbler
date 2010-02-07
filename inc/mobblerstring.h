@@ -31,6 +31,8 @@ class CMobblerString : public CBase
 public:
 	static CMobblerString* NewL(const TDesC& aString);
 	static CMobblerString* NewL(const TDesC8& aString);
+	static CMobblerString* NewLC(const TDesC& aString);
+	static CMobblerString* NewLC(const TDesC8& aString);
 	~CMobblerString();
 	
 	const TPtrC& String() const;

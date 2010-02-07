@@ -573,8 +573,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				
 			if (iLastFmConnection->Mode() == CMobblerLastFmConnection::EOnline)
 				{
-				CMobblerString* username(CMobblerString::NewL(iSettingView->Username()));
-				CleanupStack::PushL(username);
+				CMobblerString* username(CMobblerString::NewLC(iSettingView->Username()));
 				ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(aCommand), username->String8());
 				CleanupStack::PopAndDestroy(username);
 				}
@@ -654,8 +653,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				SaveSearchTermsL();
 				
 				// Do the search
-				CMobblerString* searchString(CMobblerString::NewL(search));
-				CleanupStack::PushL(searchString);
+				CMobblerString* searchString(CMobblerString::NewLC(search));
 				ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(aCommand), searchString->String8());
 				CleanupStack::PopAndDestroy(searchString);
 				}
@@ -758,8 +756,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			
 			if (artistDialog->RunLD())
 				{
-				CMobblerString* artistString(CMobblerString::NewL(artist));
-				CleanupStack::PushL(artistString);
+				CMobblerString* artistString(CMobblerString::NewLC(artist));
 				RadioStartL(EMobblerCommandRadioArtist, artistString);
 				CleanupStack::PopAndDestroy(artistString);
 				}
@@ -785,8 +782,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			
 			if (tagDialog->RunLD())
 				{
-				CMobblerString* tagString(CMobblerString::NewL(tag));
-				CleanupStack::PushL(tagString);
+				CMobblerString* tagString(CMobblerString::NewLC(tag));
 				RadioStartL(EMobblerCommandRadioTag, tagString);
 				CleanupStack::PopAndDestroy(tagString);
 				}
@@ -812,8 +808,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			
 			if (userDialog->RunLD())
 				{
-				CMobblerString* userString(CMobblerString::NewL(user));
-				CleanupStack::PushL(userString);
+				CMobblerString* userString(CMobblerString::NewLC(user));
 				RadioStartL(EMobblerCommandRadioUser, userString);
 				CleanupStack::PopAndDestroy(userString);
 				}
@@ -937,7 +932,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			case EMobblerCommandTrackAddTag:
 			if (CurrentTrack())
 				{
-				iWebServicesHelper->TrackAddTagL(*CurrentTrack());
+				iWebServicesHelper->AddTagL(*CurrentTrack(), aCommand);
 				}
 			break;
 		case EMobblerCommandTrackRemoveTag:
@@ -949,7 +944,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandAlbumAddTag:
 			if (CurrentTrack())
 				{
-				iWebServicesHelper->AlbumAddTagL(*CurrentTrack());
+				iWebServicesHelper->AddTagL(*CurrentTrack(), aCommand);
 				}
 			break;
 		case EMobblerCommandAlbumRemoveTag:
@@ -961,7 +956,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandArtistAddTag:
 			if (CurrentTrack())
 				{
-				iWebServicesHelper->ArtistAddTagL(*CurrentTrack());
+				iWebServicesHelper->AddTagL(*CurrentTrack(), aCommand);
 				}
 			break;
 		case EMobblerCommandArtistRemoveTag:
@@ -1089,6 +1084,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				}
 			else
 				{
+				_LIT(KLogFile, "c:\\Data\\Mobbler\\.scrobbler.log");
 				TBool okToReplaceLog(ETrue);
 				
 				if (BaflUtils::FileExists(CCoeEnv::Static()->FsSession(), KLogFile))
@@ -1309,7 +1305,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 		else if (aObserver == iLyricsObserver)
 			{
 			ShowLyricsL(aData);
-			} // else if (aObserver == iFetchLyricsObserver)
+			} // else if (aObserver == iLyricsObserver)
 		else if (aObserver == iArtistBiographyObserver)
 			{
 			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandPlusArtistBiography), aData);
@@ -1873,8 +1869,7 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 			case EMobblerCommandRadioArtist:			// intentional fall-through
 			case EMobblerCommandRadioTag:				// intentional fall-through
 			case EMobblerCommandRadioUser:				// intentional fall-through
-				CMobblerString* option(CMobblerString::NewL(iSettingView->AlarmOption()));
-				CleanupStack::PushL(option);
+				CMobblerString* option(CMobblerString::NewLC(iSettingView->AlarmOption()));
 				RadioStartL(station, option);
 				CleanupStack::PopAndDestroy(option);
 				break;
@@ -2024,7 +2019,7 @@ void CMobblerAppUi::HandleSingleShakeL(TMobblerShakeGestureDirection aDirection)
 		}
 	}
 
-void CMobblerAppUi::LaunchFileL(const TDesC& aFilename)
+TInt CMobblerAppUi::LaunchFileL(const TDesC& aFilename)
 	{
 	if (!iDocHandler)
 		{
@@ -2032,7 +2027,8 @@ void CMobblerAppUi::LaunchFileL(const TDesC& aFilename)
 		}
 	
 	TDataType emptyDataType = TDataType();
-	iDocHandler->OpenFileEmbeddedL(aFilename, emptyDataType);
+	TInt error(iDocHandler->OpenFileEmbeddedL(aFilename, emptyDataType));
+	return error;
 	}
 
 void CMobblerAppUi::GoToLastFmL(TInt aCommand, const TDesC8& aEventId)
@@ -2095,8 +2091,6 @@ void CMobblerAppUi::GoToLastFmL(TInt aCommand, const TDesC8& aEventId)
 
 void CMobblerAppUi::GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const TDesC8& aLongitude)
 	{
-	_LIT(KMapKmlFilename, "C:\\System\\Data\\Mobbler\\map.kml");
-	
 	CCoeEnv::Static()->FsSession().MkDirAll(KMapKmlFilename);
 	
 	_LIT8(KMapKmlFormat,	"<kml xmlns=\"http://earth.google.com/kml/2.0\">\r\n"
@@ -2121,22 +2115,15 @@ void CMobblerAppUi::GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const
 	
 	CleanupStack::PopAndDestroy(kmlFileContents);
 	
-	CDocumentHandler* docHandler(CDocumentHandler::NewL(CEikonEnv::Static()->Process()));
-	CleanupStack::PushL(docHandler);
-	TDataType emptyDataType = TDataType();
-	TInt error(docHandler->OpenFileEmbeddedL(KMapKmlFilename, emptyDataType));
-	CleanupStack::PopAndDestroy(docHandler);
+	TInt error(LaunchFileL(KMapKmlFilename));
 	
 	if (error != KErrNone)
 		{
 		_LIT(KMapURLFormat, "http://maptwits.com/displaymap.php?lat=%S&long=%S");
 		
-		CMobblerString* longitude(CMobblerString::NewL(aLongitude));
-		CleanupStack::PushL(longitude);
-		CMobblerString* latitude(CMobblerString::NewL(aLatitude));
-		CleanupStack::PushL(latitude);
-		CMobblerString* name(CMobblerString::NewL(aName));
-		CleanupStack::PushL(name);
+		CMobblerString* longitude(CMobblerString::NewLC(aLongitude));
+		CMobblerString* latitude(CMobblerString::NewLC(aLatitude));
+		CMobblerString* name(CMobblerString::NewLC(aName)); // TODO: should name be used?
 		
 		HBufC* url(HBufC::NewLC(KMapURLFormat().Length() + longitude->String().Length() + latitude->String().Length()));
 		
@@ -2286,34 +2273,28 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	{
 	DUMPDATA(aData, _L("lyrics.xml"));
 	_LIT(KLyricsFilename, "C:\\System\\Data\\Mobbler\\Lyrics.txt");
-	_LIT8(KElementSg, "sg"); // song
-	_LIT8(KElementTx, "tx"); // lyrics text
-	_LIT8(KElement200, "200");
-	_LIT8(KElement300, "300");
+	_LIT8(KSg, "sg"); // song
+	_LIT8(KTx, "tx"); // lyrics text
+	_LIT8(K200, "200");
+	_LIT8(K300, "300");
 	
 	RFileWriteStream file;
 	CleanupClosePushL(file);
 	CCoeEnv::Static()->FsSession().MkDirAll(KLyricsFilename);
 	User::LeaveIfError(file.Replace(CCoeEnv::Static()->FsSession(), KLyricsFilename, EFileWrite));
 	
-	// Create the XML reader and DOM fragement and associate them with each other
-	CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-	CleanupStack::PushL(xmlReader);
-	CSenDomFragment* domFragment(CSenDomFragment::NewL());
-	CleanupStack::PushL(domFragment);
-	xmlReader->SetContentHandler(*domFragment);
-	domFragment->SetReader(*xmlReader);
-	
-	xmlReader->ParseL(aData);
+	// Parse the XML
+	CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+	CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 	
 	// Get the status error code
-	TPtrC8 statusPtrC(domFragment->AsElement().Element(KElementStatus)->Content());
+	TPtrC8 statusPtrC(domFragment->AsElement().Element(KStatus)->Content());
 	TBool success(ETrue);
 	
-	if ((statusPtrC.CompareF(KElement200) == 0) || 
-		(statusPtrC.CompareF(KElement300) == 0))
+	if ((statusPtrC.CompareF(K200) == 0) || 
+		(statusPtrC.CompareF(K300) == 0))
 		{
-		TPtrC8 lyricsPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementTx)->Content());
+		TPtrC8 lyricsPtrC(domFragment->AsElement().Element(KSg)->Element(KTx)->Content());
 		
 		HBufC8* lyricsBuf(HBufC8::NewLC(lyricsPtrC.Length()));
 		SenXmlUtils::DecodeHttpCharactersL(lyricsPtrC, lyricsBuf);
@@ -2326,12 +2307,12 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 #ifdef PERMANENT_LYRICSFLY_ID_KEY
 		// Only link back to corrections with the permanent ID key.
 		// Temporary keys don't return correct checksums to prevent abuse.
-		_LIT8(KElementCs, "cs"); // checksum (for link back)
-		_LIT8(KElementId, "id"); // song ID (for link back)
+		_LIT8(KCs, "cs"); // checksum (for link back)
+		_LIT8(KId, "id"); // song ID (for link back)
 		_LIT8(KLinkBackFormat, "Make corrections:\r\nhttp://lyricsfly.com/search/correction.php?%S&id=%S\r\n");
 		
-		TPtrC8 checkSumPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementCs)->Content());
-		TPtrC8 idPtrC(domFragment->AsElement().Element(KElementSg)->Element(KElementId)->Content());
+		TPtrC8 checkSumPtrC(domFragment->AsElement().Element(KSg)->Element(KCs)->Content());
+		TPtrC8 idPtrC(domFragment->AsElement().Element(KSg)->Element(KId)->Content());
 		
 		HBufC8* linkBackBuf(HBufC8::NewLC(KLinkBackFormat().Length() + 
 										  checkSumPtrC.Length() + 
@@ -2350,47 +2331,47 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 		note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_LYRICS_NOT_FOUND));
 		success = EFalse;
 		
-//		TPtrC8 songPtrC(domFragment->AsElement().Element(KElementSg)->Content());
+//		TPtrC8 songPtrC(domFragment->AsElement().Element(KSg)->Content());
 //		file.WriteL(songPtrC);
 		}
 	
 #ifdef _DEBUG
-	_LIT8(KElement204, "204");
-	_LIT8(KElement400, "400");
-	_LIT8(KElement401, "401");
-	_LIT8(KElement402, "402");
-	_LIT8(KElement406, "406");
-	if (statusPtrC.CompareF(KElement200) == 0)
+	_LIT8(K204, "204");
+	_LIT8(K400, "400");
+	_LIT8(K401, "401");
+	_LIT8(K402, "402");
+	_LIT8(K406, "406");
+	if (statusPtrC.CompareF(K200) == 0)
 		{
 		LOG(_L8("200 - ok"));
 		//LOG(_L8("    Results are returned. All parameters checked ok."));
 		}
-	else if (statusPtrC.CompareF(KElement204) == 0)
+	else if (statusPtrC.CompareF(K204) == 0)
 		{
 		LOG(_L8("204 - NO CONTENT"));
 		//LOG(_L8("   Parameter query returned no results. All parameters checked ok."));
 		}
-	else if (statusPtrC.CompareF(KElement300) == 0)
+	else if (statusPtrC.CompareF(K300) == 0)
 		{
 		LOG(_L8("300 - TESTING LIMITED"));
 		//LOG(_L8("    Temporary access. Limited content. All parameters checked ok."));
 		}
-	else if (statusPtrC.CompareF(KElement400) == 0)
+	else if (statusPtrC.CompareF(K400) == 0)
 		{
 		LOG(_L8("400 - MISSING KEY"));
 		//LOG(_L8("   Parameter “i” missing. Authorization failed."));
 		}
-	else if (statusPtrC.CompareF(KElement401) == 0)
+	else if (statusPtrC.CompareF(K401) == 0)
 		{
 		LOG(_L8("401 – UNAUTHORIZED"));
 		//LOG(_L8("   Parameter “i” invalid. Authorization failed."));
 		}
-	else if (statusPtrC.CompareF(KElement402) == 0)
+	else if (statusPtrC.CompareF(K402) == 0)
 		{
 		LOG(_L8("402 - LIMITED TIME"));
 		//LOG(_L8("    This response is returned only if you query too soon. Limit query requests. Time of delay is shown in <delay> tag in milliseconds."));
 		}
-	else if (statusPtrC.CompareF(KElement406) == 0)
+	else if (statusPtrC.CompareF(K406) == 0)
 		{
 		LOG(_L8("406 - QUERY TOO SHORT"));
 		//LOG(_L8("    Query request string is too short. All other parameters checked ok."));

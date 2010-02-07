@@ -202,7 +202,7 @@ void CMobblerTrackBase::LoveTrackL()
 		// we have not already told Last.fm about this so do it now
 		delete iLoveObserverHelper;
 		iLoveObserverHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
-		static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->LastFmConnection().TrackLoveL(Artist().String8(), Title().String8(), *iLoveObserverHelper);
+		static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->LastFmConnection().QueryLastFmL(EMobblerCommandTrackLove, Artist().String8(), KNullDesC8, Title().String8(), KNullDesC8, *iLoveObserverHelper);
 		}
 	}
 

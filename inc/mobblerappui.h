@@ -36,8 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlastfmconnectionobserver.h"
 #include "mobblersleeptimer.h"
 
-_LIT(KFormatTime, "%F%D %N %-B%J%:1%T%+B"); // 21 March 11:20 am
-
 #ifdef BETA_BUILD
 const TInt KUpdateIntervalHours(1);
 #else
@@ -83,7 +81,6 @@ class CMobblerTrack;
 class CMobblerWebServicesView;
 class CMobblerWebServicesHelper;
 class CMobblerContentListingInterface;
-
 
 class CMobblerSystemCloseGlobalQuery : public CActive
 	{
@@ -184,6 +181,7 @@ public:
 	void GoToLastFmL(TInt aCommand, const TDesC8& aEventId = KNullDesC8);
 	void OpenWebBrowserL(const TDesC& aUrl);
 	void GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const TDesC8& aLongitude);
+	TInt LaunchFileL(const TDesC& aFilename);
 	TBool DetailsNeeded();
 	void ShowLyricsL(const TDesC8& aData);
 
@@ -213,8 +211,6 @@ private:
 	void SaveSearchTermsL();
 	void SleepL();
 	TBool RadioStartableL() const;
-
-	void LaunchFileL(const TDesC& aFilename);
 
 private: // from MMobblerSleepTimerNotify
 	void TimerExpiredL(TAny* aTimer, TInt aError);

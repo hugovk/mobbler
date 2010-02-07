@@ -42,9 +42,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
+#include "mobblerutility.h"
 
 _LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_user.png");
-_LIT8(KEvent, "event");
 _LIT8(KGetShouts, "getshouts");
 
 CMobblerShoutbox::CMobblerShoutbox(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
@@ -83,8 +83,7 @@ HBufC* CMobblerShoutbox::ShoutAtTextOwnerLC()
 
 	if (iText1->String().Length() == 0)
 		{
-		CMobblerString* name(CMobblerString::NewL(iAppUi.SettingView().Username()));
-		CleanupStack::PushL(name);
+		CMobblerString* name(CMobblerString::NewLC(iAppUi.SettingView().Username()));
 		shoutAtText = ShoutAtTextLC(name->String8());
 		CleanupStack::Pop(shoutAtText);
 		CleanupStack::PopAndDestroy(name);
@@ -108,8 +107,7 @@ HBufC* CMobblerShoutbox::ShoutAtTextLC(const TDesC8& aName)
 	const TDesC& format(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SHOUT_AT));
 	HBufC* text(HBufC::NewLC(format.Length() + aName.Length()));
 	
-	CMobblerString* name(CMobblerString::NewL(aName));
-	CleanupStack::PushL(name);
+	CMobblerString* name(CMobblerString::NewLC(aName));
 	text->Des().Format(format, &name->String());
 	CleanupStack::PopAndDestroy(name);
 	
@@ -156,8 +154,7 @@ CMobblerListControl* CMobblerShoutbox::HandleListCommandL(TInt aCommand)
 			
 			if (shoutDialog->RunLD())
 				{
-				CMobblerString* shout(CMobblerString::NewL(shoutMessage));
-				CleanupStack::PushL(shout);
+				CMobblerString* shout(CMobblerString::NewLC(shoutMessage));
 				switch (iType)
 					{
 					case EMobblerCommandUserShoutbox:
@@ -229,19 +226,12 @@ void CMobblerShoutbox::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, cons
 		{
 		DUMPDATA(aData, _L("usergetinfo.xml"));
 		
-		// Create the XML reader and DOM fragment and associate them with each other
-		CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-		CleanupStack::PushL(xmlReader);
-		CSenDomFragment* domFragment(CSenDomFragment::NewL());
-		CleanupStack::PushL(domFragment);
-		xmlReader->SetContentHandler(*domFragment);
-		domFragment->SetReader(*xmlReader);
+		// Parse the XML
+		CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+		CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 		
-		// Parse the XML into the DOM fragment
-		xmlReader->ParseL(aData);
-		
-		TPtrC8 name(domFragment->AsElement().Element(KUser)->Element(KElementName)->Content());
-		TPtrC8 imageLocation(domFragment->AsElement().Element(KUser)->Element(KElementImage)->Content());
+		TPtrC8 name(domFragment->AsElement().Element(KUser)->Element(KName)->Content());
+		TPtrC8 imageLocation(domFragment->AsElement().Element(KUser)->Element(KImage)->Content());
 		
 		// find the user in the list and add it
 		const TInt KCount(iList.Count());

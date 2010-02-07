@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerparser.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
+#include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
 
 #include "mobbler.hrh"
@@ -175,17 +176,11 @@ void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 			
 			if (iText1->String().CompareF(iAppUi.SettingView().Username()) == 0)
 				{
-				// Create the XML reader and DOM fragement and associate them with each other
-				CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-				CleanupStack::PushL(xmlReader);
-				CSenDomFragment* domFragment(CSenDomFragment::NewL());
-				CleanupStack::PushL(domFragment);
-				xmlReader->SetContentHandler(*domFragment);
-				domFragment->SetReader(*xmlReader);
+				// Parse the XML
+				CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+				CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 				
-				xmlReader->ParseL(aData);
-				
-				const TDesC8* statusText(domFragment->AsElement().AttrValue(KElementStatus));
+				const TDesC8* statusText(domFragment->AsElement().AttrValue(KStatus));
 				
 				if (iListBox && statusText && (statusText->CompareF(KOk) == 0))
 					{
@@ -216,8 +211,6 @@ void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 			}
 		else if (aObserver == iFoursquareHelper)
 			{
-			_LIT(KMapKmlFilename, "C:\\System\\Data\\Mobbler\\map.kml");
-			
 			CCoeEnv::Static()->FsSession().MkDirAll(KMapKmlFilename);
 			
 			_LIT8(KMapKmlStartFormat,		"<kml xmlns=\"http://earth.google.com/kml/2.0\">\r\n");	
@@ -231,39 +224,33 @@ void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 											"\t</Placemark>\r\n");
 			
 			_LIT8(KMapKmlEndFormat,			"</kml>\r\n");
-			_LIT8(KElementFirstName, 		"firstname");
-			_LIT8(KElementGeoLat, 			"geolat");
-			_LIT8(KElementGeoLong, 			"geolong");
-			_LIT8(KElementGroup, 			"group");
-			_LIT8(KElementText, 			"text");
+			_LIT8(KFirstName, 				"firstname");
+			_LIT8(KGeoLat, 					"geolat");
+			_LIT8(KGeoLong, 				"geolong");
+			_LIT8(KGroup, 					"group");
+			_LIT8(KText, 					"text");
 
 			RFileWriteStream file;
 			CleanupClosePushL(file);
 			file.Replace(CCoeEnv::Static()->FsSession(), KMapKmlFilename, EFileWrite);
 			
 			file.WriteL(KMapKmlStartFormat);
-
-			// Create the XML reader and DOM fragement and associate them with each other
-			CSenXmlReader* xmlReader(CSenXmlReader::NewL());
-			CleanupStack::PushL(xmlReader);
-			CSenDomFragment* domFragment(CSenDomFragment::NewL());
-			CleanupStack::PushL(domFragment);
-			xmlReader->SetContentHandler(*domFragment);
-			domFragment->SetReader(*xmlReader);
 			
-			xmlReader->ParseL(aData);
+			// Parse the XML
+			CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+			CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 			
-			RPointerArray<CSenElement>& tips(domFragment->AsElement().Element(KElementGroup)->ElementsL());
+			RPointerArray<CSenElement>& tips(domFragment->AsElement().Element(KGroup)->ElementsL());
 			
 			const TInt KTipCount(tips.Count());
 			for (TInt i(0); i < KTipCount; ++i)
 				{
-				TPtrC8 title(tips[i]->Element(KElementVenue)->Element(KElementName)->Content());
-				TPtrC8 firstname(tips[i]->Element(KUser)->Element(KElementFirstName)->Content());
-				TPtrC8 description(tips[i]->Element(KElementText)->Content());
+				TPtrC8 title(tips[i]->Element(KVenue)->Element(KName)->Content());
+				TPtrC8 firstname(tips[i]->Element(KUser)->Element(KFirstName)->Content());
+				TPtrC8 description(tips[i]->Element(KText)->Content());
 				
-				TPtrC8 longitude(tips[i]->Element(KElementVenue)->Element(KElementGeoLong)->Content());
-				TPtrC8 latitude(tips[i]->Element(KElementVenue)->Element(KElementGeoLat)->Content());
+				TPtrC8 longitude(tips[i]->Element(KVenue)->Element(KGeoLong)->Content());
+				TPtrC8 latitude(tips[i]->Element(KVenue)->Element(KGeoLat)->Content());
 				
 				// Add this tip to the KML file
 				HBufC8* placemark(HBufC8::NewLC(KMapKmlPlacemarkFormat().Length() + title.Length() + firstname.Length() + description.Length() + longitude.Length() + latitude.Length()));
@@ -277,11 +264,7 @@ void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 			file.WriteL(KMapKmlEndFormat);
 			CleanupStack::PopAndDestroy(&file);
 			
-			CDocumentHandler* docHandler(CDocumentHandler::NewL(CEikonEnv::Static()->Process()));
-			CleanupStack::PushL(docHandler);
-			TDataType emptyDataType = TDataType();
-			docHandler->OpenFileEmbeddedL(KMapKmlFilename, emptyDataType);
-			CleanupStack::PopAndDestroy(docHandler);
+			iAppUi.LaunchFileL(KMapKmlFilename);
 			}
 		}
 	}
