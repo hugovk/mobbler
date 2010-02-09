@@ -186,7 +186,9 @@ void CMobblerContacts::HandleContactViewEvent(const CContactViewBase& aView, con
 	// wait until both the views are ready and then build the lists 
 	if (iNumViews == 2 && !iListBuilt)
 		{
-		//TODO: temp added trap
+		// Trap error here rather than leaving.
+		// HandleContactViewEvent() cannot be made leaving because it is
+		// inherited from public interface MContactViewObserver
 		TRAPD(err, BuildListL());
 		CActiveScheduler::Stop();
 		if (err)
