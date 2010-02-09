@@ -1087,6 +1087,12 @@ void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDes
 			{
 			query->AddFieldL(KUser, aText);
 			}
+		
+		if (aMethod.Compare(KGetFriends) == 0)
+			{
+			// We are getting a user's friends so also ask for the most recent track
+			query->AddFieldL(KRecentTracks, K1);
+			}
 		}
 	else
 		{

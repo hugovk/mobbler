@@ -57,6 +57,8 @@ public:
 	static CMobblerLastFmError* ParseRadioPlaylistL(const TDesC8& aXml, CMobblerRadioPlaylist& aPlaylist);
 
 	static TInt ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion, TDes8& location);
+	
+	static TInt FriendOrder(const CMobblerListItem& aLeft, const CMobblerListItem& aRight);
 
 	static void ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aObserver, RPointerArray<CMobblerListItem>& aList);
 	static void ParseTopArtistsL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList);

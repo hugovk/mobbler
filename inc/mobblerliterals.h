@@ -44,6 +44,8 @@ GLREF_D const TPtrC8 KMbid;
 GLREF_D const TPtrC8 KName;
 GLREF_D const TPtrC8 KOk;
 GLREF_D const TPtrC8 KPlaylists;
+GLREF_D const TPtrC8 KRecentTrack;
+GLREF_D const TPtrC8 KRecentTracks;
 GLREF_D const TPtrC8 KSearch;
 GLREF_D const TPtrC8 KSize;
 GLREF_D const TPtrC8 KStation;

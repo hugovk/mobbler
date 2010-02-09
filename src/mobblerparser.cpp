@@ -70,7 +70,6 @@ _LIT8(KMatch, "match");
 _LIT8(KNowPlaying, "nowplaying");
 _LIT8(KPlayCount, "playcount");
 _LIT8(KRealName, "realname");
-_LIT8(KRecentTracks, "recenttracks");
 _LIT8(KRecommendations, "recommendations");
 _LIT8(KResults, "results");
 _LIT8(KSession, "session");
@@ -731,6 +730,11 @@ void CMobblerParser::ParseSearchTagL(const TDesC8& aXml, CMobblerTagList& aObser
 	CleanupStack::PopAndDestroy(2, xmlReader);
 	}
 
+TInt CMobblerParser::FriendOrder(const CMobblerListItem& aLeft, const CMobblerListItem& aRight)
+	{
+	return aLeft.Title()->String().CompareF(aRight.Title()->String());
+	}
+
 void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
 	DUMPDATA(aXml, _L("usergetfriends.xml"));
@@ -747,18 +751,43 @@ void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aO
 		HBufC8* image((items[i]->Element(KImage) == NULL) ?
 						KNullDesC8().AllocLC() :
 						items[i]->Element(KImage)->Content().AllocLC());
-
+		
+		HBufC8* description(NULL);
+		
+		if (items[i]->Element(KRecentTrack))
+			{	
+			HBufC8* title = SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KRecentTrack)->Element(KName)->Content());
+			HBufC8* artist = SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KRecentTrack)->Element(KArtist)->Element(KName)->Content());
+			
+			description = HBufC8::NewL(title->Length() + artist->Length() + 3);
+			description->Des().Append(*title);
+			description->Des().Append(_L(" - "));
+			description->Des().Append(*artist);
+			
+			CleanupStack::PopAndDestroy(2, title);
+			CleanupStack::PushL(description);
+			}
+		else
+			{
+			// they have not listened to any tracks yet so just put their realname in
+			description = items[i]->Element(KRealName)->Content().AllocLC();
+			}
+		
 		CMobblerListItem* item(CMobblerListItem::NewL(aObserver,
 														items[i]->Element(KName)->Content(),
-														items[i]->Element(KRealName)->Content(),
+														*description,
 														*image));
-
+		
+		CleanupStack::PopAndDestroy(description);
 		CleanupStack::PopAndDestroy(image);
 
 		CleanupStack::PushL(item);
 		aList.AppendL(item);
 		CleanupStack::Pop(item);
 		}
+	
+	TLinearOrder<CMobblerListItem> friendOrder(FriendOrder);
+	aList.Sort(friendOrder);
 
 	CleanupStack::PopAndDestroy(2, xmlReader);
 	}

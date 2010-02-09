@@ -43,6 +43,8 @@ GLDEF_D const TPtrC8 KMbid(_S8("mbid"));
 GLDEF_D const TPtrC8 KName(_S8("name"));
 GLDEF_D const TPtrC8 KOk(_S8("ok"));
 GLDEF_D const TPtrC8 KPlaylists(_S8("playlists"));
+GLDEF_D const TPtrC8 KRecentTrack(_S8("recenttrack"));
+GLDEF_D const TPtrC8 KRecentTracks(_S8("recenttracks"));
 GLDEF_D const TPtrC8 KSearch(_S8("search"));
 GLDEF_D const TPtrC8 KSize(_S8("size"));
 GLDEF_D const TPtrC8 KStation(_S8("station"));
