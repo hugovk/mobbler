@@ -127,6 +127,7 @@ public:
 	TInt ScrobbleLogCount() const;
 	const CMobblerTrackBase& ScrobbleLogItem(TInt aIndex) const;
 	void RemoveScrobbleLogItemL(TInt aIndex);
+	void ScrobbleTrackL(const CMobblerTrackBase* aTrack);
 	
 	// state observers
 	void AddStateChangeObserverL(MMobblerConnectionStateObserver* aObserver);
@@ -315,6 +316,7 @@ private:
 	MMobblerLastFmConnectionObserver& iObserver;
 
 	CMobblerTrackBase* iCurrentTrack;
+	CMobblerTrackBase* iUniversalScrobbledTrack;
 
 	RPointerArray<CMobblerTrackBase> iTrackQueue;
 

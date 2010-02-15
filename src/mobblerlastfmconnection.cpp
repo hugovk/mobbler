@@ -109,6 +109,7 @@ CMobblerLastFmConnection::~CMobblerLastFmConnection()
 	Cancel();
 	
 	delete iCurrentTrack;
+	delete iUniversalScrobbledTrack;
 	
 	iTrackQueue.ResetAndDestroy();
 	
@@ -2515,6 +2516,20 @@ CUri8* CMobblerLastFmConnection::SetUpWebServicesUriLC()
 	uri->SetComponentL(KComponentTwoDotZero, EUriPath);
 	
 	return uri;
+	}
+
+void CMobblerLastFmConnection::ScrobbleTrackL(const CMobblerTrackBase* aTrack)
+	{
+	delete iUniversalScrobbledTrack;
+	iUniversalScrobbledTrack = CMobblerTrackBase::NewL(*aTrack);
+	iObserver.HandleTrackQueuedL(*iUniversalScrobbledTrack);
+	iTrackQueue.AppendL(iUniversalScrobbledTrack);
+	
+	// Save the track queue and try to do a submission
+	SaveTrackQueueL();
+	DoSubmitL();
+
+	iUniversalScrobbledTrack = NULL;
 	}
 
 // End of file

@@ -116,6 +116,8 @@ enum TMobblerSettingItemListViewCommands
 	
 	EMobblerCommandTrackLove,
 	EMobblerCommandTrackBan,
+	EMobblerCommandTrackScrobble,
+	EMobblerCommandAlbumScrobble,
 	
 	EMobblerCommandShare,
 	EMobblerCommandTrackShare,

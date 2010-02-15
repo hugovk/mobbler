@@ -375,5 +375,7 @@ RESOURCE STRING r_mobbler_artist_add_tag_prompt			{ text = STR_mobbler_artist_ad
 ///////////////////////////////////////////////////////////////////////////////
 
 RESOURCE STRING r_mobbler_biography				{ text = STR_mobbler_biography; }
+RESOURCE STRING r_mobbler_scrobble_track_option	{ text = STR_mobbler_scrobble_track_option; }
+RESOURCE STRING r_mobbler_scrobble_album_option	{ text = STR_mobbler_scrobble_album_option; }
 
 // End of file

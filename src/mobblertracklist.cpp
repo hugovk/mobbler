@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerwebserviceshelper.h"
 
 _LIT8(KGetTopTracks, "gettoptracks");
+const TInt KAverageTrackLength(217); // == 3:37, median track length from two users' libraries
 
 CMobblerTrackList::CMobblerTrackList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
@@ -112,20 +113,25 @@ CMobblerTrackList::~CMobblerTrackList()
 
 void CMobblerTrackList::GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle)
 	{
+	GetArtistAndTitleName(iListBox->CurrentItemIndex(), aArtist, aTitle);
+	}
+
+void CMobblerTrackList::GetArtistAndTitleName(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aTitle)
+	{
 	if (iType == EMobblerCommandScrobbleLog)
 		{
-		if (iAppUi.LastFmConnection().ScrobbleLogCount() > iListBox->CurrentItemIndex()
+		if (iAppUi.LastFmConnection().ScrobbleLogCount() > aItemIndex
 				&& iAppUi.LastFmConnection().ScrobbleLogCount() > 0)
 			{
-			aArtist.Set(iAppUi.LastFmConnection().ScrobbleLogItem(iListBox->CurrentItemIndex()).Artist().String8());
-			aTitle.Set(iAppUi.LastFmConnection().ScrobbleLogItem(iListBox->CurrentItemIndex()).Title().String8());
+			aArtist.Set(iAppUi.LastFmConnection().ScrobbleLogItem(aItemIndex).Artist().String8());
+			aTitle.Set(iAppUi.LastFmConnection().ScrobbleLogItem(aItemIndex).Title().String8());
 			}
 		}
 	else
 		{
 		if (iList.Count() > 0)
 			{
-			aTitle.Set(iList[iListBox->CurrentItemIndex()]->Title()->String8());
+			aTitle.Set(iList[aItemIndex]->Title()->String8());
 			
 			if (iType == EMobblerCommandArtistTopTracks)
 				{
@@ -133,7 +139,7 @@ void CMobblerTrackList::GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle)
 				}
 			else
 				{
-				aArtist.Set(iList[iListBox->CurrentItemIndex()]->Description()->String8());
+				aArtist.Set(iList[aItemIndex]->Description()->String8());
 				}
 			}
 		}
@@ -147,13 +153,57 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 	TPtrC8 title(KNullDesC8);
 	
 	GetArtistAndTitleName(artist, title);
-		
+	
 	switch(aCommand)
 		{
 		case EMobblerCommandTrackLove:
 			delete iLoveObserver;
 			iLoveObserver = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
 			iAppUi.LastFmConnection().QueryLastFmL(aCommand, artist, KNullDesC8, title, KNullDesC8, *iLoveObserver);
+			break;
+		case EMobblerCommandTrackScrobble:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
+			TTime now;
+			now.UniversalTime();
+			track->SetStartTimeUTC(now);
+			iAppUi.LastFmConnection().ScrobbleTrackL(track);
+			track->Release();
+			}
+			break;
+		case EMobblerCommandAlbumScrobble:
+			{
+			// Get the list box items model
+			MDesCArray* listArray(iListBox->Model()->ItemTextArray());
+			CDesCArray* itemArray(static_cast<CDesCArray*>(listArray));
+			
+			// Number of items in the list
+			const TInt KCount(itemArray->Count());
+			
+			// Set up the initial scrobble time
+			TTime scrobbleTime;
+			scrobbleTime.UniversalTime();
+			scrobbleTime -= (TTimeIntervalSeconds)(KCount * KAverageTrackLength);
+			
+			// Get the album name
+			TBuf8<KMaxMobblerTextSize> album;
+			HBufC* albumBuf(NameL());
+			album.Append(*albumBuf);
+			delete albumBuf;
+			
+			// Scrobble each track
+			for (TInt i(0); i < KCount; ++i)
+				{
+				GetArtistAndTitleName(i, artist, title);
+				CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
+				
+				scrobbleTime += (TTimeIntervalSeconds)KAverageTrackLength;
+				track->SetStartTimeUTC(scrobbleTime);
+				
+				iAppUi.LastFmConnection().ScrobbleTrackL(track);
+				track->Release();
+				}
+			}
 			break;
 		case EMobblerCommandTrackAddTag:
 			{
@@ -224,6 +274,7 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
 	aCommands.AppendL(EMobblerCommandTrackLove);
+	aCommands.AppendL(EMobblerCommandTrackScrobble);
 	
 	aCommands.AppendL(EMobblerCommandShare);
 	aCommands.AppendL(EMobblerCommandTrackShare);
@@ -239,7 +290,11 @@ void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 		{
 		aCommands.AppendL(EMobblerCommandScrobbleLogRemove);
 		}
-
+	else if (iType == EMobblerCommandPlaylistFetchAlbum)
+		{
+		aCommands.AppendL(EMobblerCommandAlbumScrobble);
+		}
+	
 	aCommands.AppendL(EMobblerCommandTrackLyrics);
 	}
 
@@ -284,28 +339,28 @@ TInt CMobblerTrackList::ViewScrobbleLogCallBackL(TAny* aPtr)
 	return KErrNone;
 	}
 
-void CMobblerTrackList::ParseL(const TDesC8& aXML)
+void CMobblerTrackList::ParseL(const TDesC8& aXml)
 	{
 	switch (iType)
 		{
 		case EMobblerCommandArtistTopTracks:
-			CMobblerParser::ParseArtistTopTracksL(aXML, *this, iList);
+			CMobblerParser::ParseArtistTopTracksL(aXml, *this, iList);
 			break;
 		case EMobblerCommandUserTopTracks:
-			CMobblerParser::ParseUserTopTracksL(aXML, *this, iList);
+			CMobblerParser::ParseUserTopTracksL(aXml, *this, iList);
 			break;
 		case EMobblerCommandRecentTracks:
-			CMobblerParser::ParseRecentTracksL(aXML, *this, iList);
+			CMobblerParser::ParseRecentTracksL(aXml, *this, iList);
 			break;
 		case EMobblerCommandSimilarTracks:
-			CMobblerParser::ParseSimilarTracksL(aXML, *this, iList);
+			CMobblerParser::ParseSimilarTracksL(aXml, *this, iList);
 			break;
 		case EMobblerCommandPlaylistFetchUser:
 		case EMobblerCommandPlaylistFetchAlbum:
-			CMobblerParser::ParsePlaylistL(aXML, *this, iList);
+			CMobblerParser::ParsePlaylistL(aXml, *this, iList);
 			break;
 		case EMobblerCommandSearchTrack:
-			CMobblerParser::ParseSearchTrackL(aXML, *this, iList);
+			CMobblerParser::ParseSearchTrackL(aXml, *this, iList);
 			break;
 		case EMobblerCommandScrobbleLog:
 			{

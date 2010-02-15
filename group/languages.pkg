@@ -45,7 +45,7 @@
 
 ; Must be on the C: drive
 {
-"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings.rLANGUAGENUMBER"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.rLANGUAGENUMBER"
 }-"C:\resource\apps\mobbler_strings2.rsc"
 
 ; End of file

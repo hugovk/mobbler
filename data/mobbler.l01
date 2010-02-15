@@ -287,4 +287,5 @@ rls_string STR_mobbler_similar "Similar"
 rls_string STR_mobbler_top "Top"
 rls_string STR_mobbler_lyrics "Lyrics"
 rls_string STR_mobbler_lyrics_not_found "Lyrics not found"
-
+rls_string STR_mobbler_scrobble_track_option "Scrobble track"
+rls_string STR_mobbler_scrobble_album_option "Scrobble album"
