@@ -759,10 +759,8 @@ void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aO
 			HBufC8* title = SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KRecentTrack)->Element(KName)->Content());
 			HBufC8* artist = SenXmlUtils::DecodeHttpCharactersLC(items[i]->Element(KRecentTrack)->Element(KArtist)->Element(KName)->Content());
 			
-			description = HBufC8::NewL(title->Length() + artist->Length() + 3);
-			description->Des().Append(*title);
-			description->Des().Append(_L(" - "));
-			description->Des().Append(*artist);
+			description = HBufC8::NewL(title->Length() + artist->Length() + KEndashFormat.Length());
+			description->Des().Format(KEndashFormat, &title->Des(), &artist->Des());
 			
 			CleanupStack::PopAndDestroy(2, title);
 			CleanupStack::PushL(description);

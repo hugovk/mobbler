@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblereventlist.h"
 #include "mobblerfriendlist.h"
+#include "mobblerliterals.h"
 #include "mobblerlistcontrol.h"
 #include "mobblerlistitem.h"
 #include "mobblerplaylistlist.h"
@@ -43,7 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 _LIT(KDoubleLargeStyleListBoxTextFormat, "%d\t%S\t%S");
 _LIT(KSimpleFormat, "%S");
-_LIT(KRecentTracksTitleFormat, "%S - %S");
 _LIT(KOne, "1");
 _LIT(KTimeFormat, "%F%D %N %-B%J%:1%T%+B"); // 21 March 11:20 am
 
@@ -373,11 +373,11 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 
 				case EMobblerCommandRecentTracks:
 					{
-					HBufC* title(HBufC::NewLC(KRecentTracksTitleFormat().Length() +
+					HBufC* title(HBufC::NewLC(KEndashFormat.Length() +
 												iList[i]->Title()->String().Length() +
 												iList[i]->Description()->String().Length()));
 					
-					title->Des().Format(KRecentTracksTitleFormat, &iList[i]->Title()->String(), &iList[i]->Description()->String());
+					title->Des().Format(KEndashFormat, &iList[i]->Title()->String(), &iList[i]->Description()->String());
 
 					HBufC* description(HBufC::NewLC(50));
 					

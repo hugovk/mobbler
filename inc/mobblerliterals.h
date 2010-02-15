@@ -29,6 +29,7 @@ GLREF_D const TPtrC8 K1;
 GLREF_D const TPtrC8 KAlbum;
 GLREF_D const TPtrC8 KArtist;
 GLREF_D const TPtrC8 KDescription;
+GLREF_D const TPtrC8 KEndashFormat;
 GLREF_D const TPtrC8 KError;
 GLREF_D const TPtrC8 KEquals;
 GLREF_D const TPtrC8 KEvent;

@@ -29,6 +29,7 @@ GLDEF_D const TPtrC8 K1(_S8("1"));
 GLDEF_D const TPtrC8 KAlbum(_S8("album"));
 GLDEF_D const TPtrC8 KArtist(_S8("artist"));
 GLDEF_D const TPtrC8 KDescription(_S8("description"));
+GLREF_D const TPtrC8 KEndashFormat(_S8("%S - %S"));
 GLDEF_D const TPtrC8 KError(_S8("error"));
 GLDEF_D const TPtrC8 KEvent(_S8("event"));
 GLDEF_D const TPtrC8 KEvents(_S8("events"));
