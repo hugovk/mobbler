@@ -380,7 +380,7 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 		
 		if (emails->Count() == 1)
 			{
-			firstEmail.Set((*emails()[0]));
+			firstEmail.Set((*emails)[0]);
 			}
 		else
 			{
