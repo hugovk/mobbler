@@ -1,0 +1,8 @@
+syntax: regexp
+^.*\.sis
+^.*\.sisx
+^.*\.cproject
+^.*\.project
+^.*\.cer
+^.*\.key
+^.*ABLD\.BAT
