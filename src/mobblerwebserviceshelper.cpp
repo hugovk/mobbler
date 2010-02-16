@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler_strings.rsg.h"
 #include "mobblerappui.h"
 #include "mobblerbitmapcollection.h"
-//#include "mobblercontacts.h"
+#include "mobblercontacts.h"
 #include "mobblerliterals.h"
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
@@ -43,6 +43,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
+
+_LIT(KEllipsisText, "...");
 
 CMobblerWebServicesHelper* CMobblerWebServicesHelper::NewL(CMobblerAppUi& aAppUi)
 	{
@@ -85,18 +87,79 @@ CMobblerWebServicesHelper::~CMobblerWebServicesHelper()
 		}
 	}
 
+CMobblerWebServicesHelper::TShareSource CMobblerWebServicesHelper::ShareSourceL()
+	{
+	TShareSource shareSource(EShareCancelled);
+	
+	// parse and bring up an add to playlist popup menu
+	CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
+	CleanupStack::PushL(list);
+	
+	CAknPopupList* popup(CAknPopupList::NewL(list, R_AVKON_SOFTKEYS_OK_CANCEL, AknPopupLayouts::EMenuWindow));
+	CleanupStack::PushL(popup);
+	
+	list->ConstructL(popup, CEikListBox::ELeftDownInViewRect);
+	
+	popup->SetTitleL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SHARE));
+	
+	list->CreateScrollBarFrameL(ETrue);
+	list->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto);
+	
+	CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
+	CleanupStack::PushL(items);
+	
+	items->AppendL(_L("Last.fm friends..."));
+	items->AppendL(_L("Contacts..."));
+	
+	CleanupStack::Pop(items);
+	
+	list->Model()->SetItemTextArray(items);
+	list->Model()->SetOwnershipType(ELbmOwnsItemArray);
+	
+	CleanupStack::Pop(popup);
+	
+	if (popup->ExecuteLD())
+		{
+		list->CurrentItemIndex() == 0 ?
+			shareSource = EShareFromFriends:
+			shareSource = EShareFromContacts;
+		}
+	
+	CleanupStack::PopAndDestroy(list); //list
+	
+	return shareSource;
+	}
+
+
 void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 	{
 	iTrack = &aTrack;
 	iTrack->Open();
 	
-	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
+	TShareSource shareSource(ShareSourceL());
 	
-	delete iFriendFetchObserverHelperTrackShare;
-	iFriendFetchObserverHelperTrackShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, username->String8(), *iFriendFetchObserverHelperTrackShare);
-	
-	CleanupStack::PopAndDestroy(username);
+	if (shareSource == EShareFromFriends)
+		{
+		CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
+		
+		delete iFriendFetchObserverHelperTrackShare;
+		iFriendFetchObserverHelperTrackShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+		iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, username->String8(), *iFriendFetchObserverHelperTrackShare);
+		
+		CleanupStack::PopAndDestroy(username);
+		}
+	else if (shareSource == EShareFromContacts)
+		{
+		HBufC* contact(DisplayContactListL());
+		
+		if (contact)
+			{
+			CleanupStack::PushL(contact);
+			CMobblerString* contactString(CMobblerString::NewLC(*contact));
+			DoShareL(EMobblerCommandTrackShare, contactString->String8());
+			CleanupStack::PopAndDestroy(2, contact);
+			}
+		}
 	}
 
 void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
@@ -223,7 +286,6 @@ void CMobblerWebServicesHelper::ArtistRemoveTagL(CMobblerTrack& aTrack)
 	iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandArtistGetTags, aTrack.Artist().String8(), KNullDesC8, KNullDesC8, KNullDesC8, *iArtistTagRemoveTagsHelper);
 	}
 
-/*
 HBufC* CMobblerWebServicesHelper::DisplayEmailListL(const CDesCArray& aEmails)
 	{
 	CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
@@ -266,7 +328,7 @@ HBufC* CMobblerWebServicesHelper::DisplayEmailListL(const CDesCArray& aEmails)
 	
 	return email;
 	}
-*/
+
 void CMobblerWebServicesHelper::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
 	CActiveScheduler::Stop();
@@ -276,7 +338,7 @@ void CMobblerWebServicesHelper::BitmapResizedL(const CMobblerBitmap* /*aMobblerB
 	{
 	
 	}
-/*
+
 HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 	{
 	CMobblerContacts* contacts(CMobblerContacts::NewLC());
@@ -313,7 +375,17 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 		{
 		HBufC8* photo(contacts->GetPhotoAtL(i));
 		TPtrC name(contacts->GetNameAt(i));
-		TPtrC firstEmail(contacts->GetNameAt(i));
+		CDesCArray* emails(contacts->GetEmailsAtLC(list->CurrentItemIndex()));
+		TPtrC firstEmail(KNullDesC);
+		
+		if (emails->Count() == 1)
+			{
+			firstEmail.Set((*emails()[0]));
+			}
+		else
+			{
+			firstEmail.Set(KEllipsisText);
+			}
 		
 		if (photo)
 			{
@@ -327,15 +399,17 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 			CleanupStack::PopAndDestroy(photo);
 			
 			TBuf<1024> formatted;
-			formatted.Format(_L("%d\t%S\tyeah"), photoNumber++, &name); // TODO: "yeah" should be email address
+			formatted.Format(_L("%d\t%S\t%S"), photoNumber++, &name, &firstEmail);
 			items->AppendL(formatted);
 			}
 		else
 			{
 			TBuf<1024> formatted;
-			formatted.Format(_L("%d\t%S\tyeah"), 0, &name); // TODO: "yeah" should be email address
+			formatted.Format(_L("%d\t%S\t%S"), 0, &name, &firstEmail);
 			items->AppendL(formatted);
 			}
+		
+		CleanupStack::PopAndDestroy(emails);
 		}
 	
 	CleanupStack::Pop(items);
@@ -369,7 +443,43 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 	
 	return email;
 	}
-*/
+
+void CMobblerWebServicesHelper::DoShareL(TInt aCommand, const TDesC8& aRecipient)
+	{
+	TBuf<KMobblerMaxQueryDialogLength> message;
+	
+	CAknTextQueryDialog* shoutDialog(new(ELeave) CAknTextQueryDialog(message));
+	shoutDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
+	shoutDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_MESSAGE_PROMPT));
+	shoutDialog->SetPredictiveTextInputPermitted(ETrue);
+	
+	if (shoutDialog->RunLD())
+		{
+		CMobblerString* messageString(CMobblerString::NewLC(message));
+		
+		if (aCommand == EMobblerCommandTrackShare)
+			{
+			delete iShareObserverHelper;
+			iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+			iAppUi.LastFmConnection().ShareL(EMobblerCommandTrackShare, aRecipient, iTrack->Artist().String8(), iTrack->Title().String8(), KNullDesC8, messageString->String8(), *iShareObserverHelper);
+			}
+		else if (aCommand == EMobblerCommandArtistShare)
+			{
+			delete iShareObserverHelper;
+			iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+			iAppUi.LastFmConnection().ShareL(EMobblerCommandArtistShare, aRecipient, iTrack->Artist().String8(), KNullDesC8, KNullDesC8, messageString->String8(), *iShareObserverHelper);
+			}
+		else
+			{
+			// This must be sharing an event
+			delete iShareObserverHelper;
+			iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+			iAppUi.LastFmConnection().ShareL(EMobblerCommandEventShare, aRecipient, KNullDesC8, KNullDesC8, *iEventId, messageString->String8(), *iShareObserverHelper);
+			}
+		
+		CleanupStack::PopAndDestroy(messageString);
+		}
+	}
 
 void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
@@ -419,8 +529,6 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
 			CleanupStack::PushL(items);
 			
-			//items->AppendL(_L("From contacts...")); // TODO: REMOVE HARDCODED, LOCALISE IT
-			
 			RPointerArray<CSenElement>& users(domFragment->AsElement().Element(KFriends)->ElementsL());
 			
 			const TInt KUserCount(users.Count());
@@ -442,38 +550,18 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				{
 				CMobblerString* recipient(CMobblerString::NewLC((*items)[list->CurrentItemIndex()]));
 				
-				TBuf<KMobblerMaxQueryDialogLength> message;
-				
-				CAknTextQueryDialog* shoutDialog(new(ELeave) CAknTextQueryDialog(message));
-				shoutDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
-				shoutDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_MESSAGE_PROMPT));
-				shoutDialog->SetPredictiveTextInputPermitted(ETrue);
-				
-				if (shoutDialog->RunLD())
+				if (aObserver == iFriendFetchObserverHelperTrackShare)
 					{
-					CMobblerString* messageString(CMobblerString::NewLC(message));
-					
-					if (aObserver == iFriendFetchObserverHelperTrackShare)
-						{
-						delete iShareObserverHelper;
-						iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().ShareL(EMobblerCommandTrackShare, recipient->String8(), iTrack->Artist().String8(), iTrack->Title().String8(), KNullDesC8, messageString->String8(), *iShareObserverHelper);
-						}
-					else if (aObserver == iFriendFetchObserverHelperArtistShare)
-						{
-						delete iShareObserverHelper;
-						iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().ShareL(EMobblerCommandArtistShare, recipient->String8(), iTrack->Artist().String8(), KNullDesC8, KNullDesC8, messageString->String8(), *iShareObserverHelper);
-						}
-					else
-						{
-						// This must be sharing an event
-						delete iShareObserverHelper;
-						iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().ShareL(EMobblerCommandEventShare, recipient->String8(), KNullDesC8, KNullDesC8, *iEventId, messageString->String8(), *iShareObserverHelper);
-						}
-					
-					CleanupStack::PopAndDestroy(messageString);
+					DoShareL(EMobblerCommandTrackShare, recipient->String8());
+					}
+				else if (aObserver == iFriendFetchObserverHelperArtistShare)
+					{
+					DoShareL(EMobblerCommandArtistShare, recipient->String8());
+					}
+				else
+					{
+					// This must be sharing an event
+					DoShareL(EMobblerCommandEventShare, recipient->String8());
 					}
 				
 				CleanupStack::PopAndDestroy(recipient);
