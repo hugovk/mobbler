@@ -129,6 +129,7 @@ SOURCE		mobblerlastfmerror.cpp
 SOURCE		mobblerlistcontrol.cpp
 SOURCE		mobblerlistitem.cpp
 SOURCE		mobblerliterals.cpp
+SOURCE		mobblerlocation.cpp
 SOURCE		mobblerlogging.cpp
 SOURCE		mobblermarquee.cpp
 SOURCE		mobblermusiclistener.cpp
@@ -196,6 +197,7 @@ LIBRARY		eikctl.lib
 LIBRARY		eikdlg.lib
 LIBRARY		esock.lib
 LIBRARY		estor.lib
+LIBRARY		etel3rdparty.lib
 LIBRARY		euser.lib
 LIBRARY		fbscli.lib
 LIBRARY		gdi.lib

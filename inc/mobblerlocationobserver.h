@@ -1,8 +1,8 @@
 /*
-mobbler.mmh
+mobblerlocationobserver.h
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2009  Michael Coffey
+Copyright (C) 2008  Michael Coffey
 
 http://code.google.com/p/mobbler
 
@@ -21,20 +21,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-// uncomment this to use a beta build
-//MACRO BETA_BUILD
+#ifndef __MOBBLERLOCATIONOBSERVER_H__
+#define __MOBBLERLOCATIONOBSERVER_H__
 
-// uncomment this to build a version with protected UIDs for Symbian Signing
-#define SYMBIAN_SIGNED
+#include <e32base.h>
 
-#ifdef SYMBIAN_SIGNED
-MACRO __SYMBIAN_SIGNED__
-CAPABILITY	NetworkServices ReadUserData SwEvent ReadDeviceData WriteDeviceData Location
-#else
-CAPABILITY	NetworkServices ReadUserData
-#endif
+class MMobblerLocationObserver
+	{
+public:
+	virtual void HandleLocationCompleteL(const TDesC8& aAccuracy,
+											const TDesC8& aLatitude,
+											const TDesC8& aLongitude,
+											const TDesC8& aName) = 0;
+	};
 
-// uncomment this to use Mobbler's permanent user ID key for Lyricsfly
-MACRO PERMANENT_LYRICSFLY_ID_KEY
+#endif // __MOBBLERLOCATIONOBSERVER_H__
 
 // End of file

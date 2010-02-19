@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerdownload.h"
 #include "mobblergesturesinterface.h"
 #include "mobblerlastfmconnectionobserver.h"
+#include "mobblerlocationobserver.h"
 #include "mobblersleeptimer.h"
 
 #ifdef BETA_BUILD
@@ -71,6 +72,7 @@ class CMobblerBitmapCollection;
 class CMobblerBrowserView;
 class CMobblerDestinationsInterface;
 class CMobblerDownload;
+class CMobblerLocation;
 class CMobblerMusicAppListener;
 class CMobblerRadioPlayer;
 class CMobblerResourceReader;
@@ -107,7 +109,8 @@ class CMobblerAppUi : public CAknViewAppUi,
 						public MMobblerSleepTimerNotify,
 						public MRemConCoreApiTargetObserver,
 						public MMobblerFlatDataObserverHelper,
-						public MMobblerGestures
+						public MMobblerGestures,
+						public MMobblerLocationObserver
 	{
 public:
 	enum TDownloadAlbumArt
@@ -235,6 +238,9 @@ private: // from MAknWsEventObserver
 	void HandleWsEventL(const TWsEvent &aEvent, CCoeControl *aDestination);
 	void HandleSystemEventL(const TWsEvent& aEvent);
 
+private: // from MMobllerLocationObserver
+	void HandleLocationCompleteL(const TDesC8& aAccuracy, const TDesC8& aLatitude, const TDesC8& aLongitude, const TDesC8& aName);
+	
 private:
 	// the view classes
 	CMobblerSettingItemListView* iSettingView;
@@ -251,6 +257,9 @@ private:
 	// Gesture observer plugin
 	TUid iGesturePluginDtorUid;
 	CMobblerGesturesInterface* iGesturePlugin;
+	
+	// Location
+	CMobblerLocation* iLocation;
 
 	// The current track submit and queue count
 	TInt iTracksSubmitted;
@@ -303,6 +312,7 @@ private:
 	CMobblerFlatDataObserverHelper* iAutoCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iManualCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iLyricsObserver;
+	CMobblerFlatDataObserverHelper* iLocalEventsObserver;
 
 	CMobblerDestinationsInterface* iDestinations;
 	TUid iDestinationsDtorUid;

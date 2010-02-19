@@ -59,6 +59,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblerbrowserview.h"
 #include "mobblerliterals.h"
+#include "mobblerlocation.h"
 #include "mobblerlogging.h"
 #include "mobblermusiclistener.h"
 #include "mobblerparser.h"
@@ -203,6 +204,8 @@ void CMobblerAppUi::ConstructL()
 	TRAP_IGNORE(LoadGesturesPluginL());
 	UpdateAccelerometerGesturesL();
 	
+	iLocation = CMobblerLocation::NewL(*this);
+	
 	AddViewL(iWebServicesView);
 	AddViewL(iBrowserView);
 	AddViewL(iSettingView);
@@ -258,6 +261,8 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iVolumeDownTimer;
 	delete iVolumeUpTimer;
 	delete iWebServicesHelper;
+	delete iLocation;
+	delete iLocalEventsObserver;
 	
 	if (iContentListing)
 		{
@@ -578,6 +583,9 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				CleanupStack::PopAndDestroy(username);
 				}
 			
+			break;
+		case EMobblerCommandLocalEvents:
+			iLocation->GetLocationL();
 			break;
 		case EMobblerCommandSearchTrack:
 		case EMobblerCommandSearchAlbum:
@@ -1309,6 +1317,84 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 		else if (aObserver == iArtistBiographyObserver)
 			{
 			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandPlusArtistBiography), aData);
+			}
+		else if (aObserver == iLocalEventsObserver)
+			{
+			// create a map and open it
+
+			CCoeEnv::Static()->FsSession().MkDirAll(KMapKmlFilename);
+			
+			_LIT8(KMapKmlStartFormat,		"<kml xmlns=\"http://earth.google.com/kml/2.0\">\r\n"
+											"<Document>\r\n");	
+			
+			_LIT8(KMapKmlPlacemarkFormat,	"\t<Placemark>\r\n"
+											"\t\t<name>%S</name>\r\n"
+											"\t\t<description>\r\n"
+											"\t\t\t<![CDATA[\r\n"
+											"%S"
+											"\t\t\t]]>\r\n"
+											"</description>\r\n" 
+											"\t\t<Point>\r\n"
+											"\t\t\t<coordinates>%S,%S</coordinates>\r\n"
+											"\t\t</Point>\r\n"
+											"\t</Placemark>\r\n");
+			
+			_LIT8(KMapKmlEndFormat,			"</Document>\r\n"
+											"</kml>\r\n");
+			
+			_LIT8(KGeoNamespaceUri, 		"http://www.w3.org/2003/01/geo/wgs84_pos#");
+			
+			_LIT8(KVenue, 				"venue");
+			_LIT8(KLat, 				"lat");
+			_LIT8(KLong, 				"long");
+			_LIT8(KPoint,				"point");
+			_LIT8(KTitle,				"title");
+			_LIT8(KLocation,			"location");
+
+			RFileWriteStream file;
+			CleanupClosePushL(file);
+			file.Replace(CCoeEnv::Static()->FsSession(), KMapKmlFilename, EFileWrite);
+			
+			file.WriteL(KMapKmlStartFormat);
+			
+			// Parse the XML
+			CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+			CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
+			
+			RPointerArray<CSenElement>& events(domFragment->AsElement().Element(_L8("events"))->ElementsL());
+			
+			const TInt KEventCount(events.Count());
+			for (TInt i(0); i < KEventCount; ++i)
+				{
+				HBufC8* title(SenXmlUtils::DecodeHttpCharactersLC(events[i]->Element(KTitle)->Content()));
+				HBufC8* description(SenXmlUtils::DecodeHttpCharactersLC(events[i]->Element(KDescription)->Content()));
+				
+				// Get the location of the event
+				CSenElement* geoPoint(events[i]->Element(KVenue)->Element(KLocation)->Element(KGeoNamespaceUri, KPoint));
+				
+				TPtrC8 latitude(KNullDesC8);
+				TPtrC8 longitude(KNullDesC8);
+				
+				if (geoPoint)
+					{
+					latitude.Set(geoPoint->Element(KGeoNamespaceUri, KLat)->Content());
+					longitude.Set(geoPoint->Element(KGeoNamespaceUri, KLong)->Content());
+					}
+				
+				// Add this tip to the KML file
+				HBufC8* placemark(HBufC8::NewLC(KMapKmlPlacemarkFormat().Length() + title->Length() + description->Length() + longitude.Length() + latitude.Length()));
+				placemark->Des().Format(KMapKmlPlacemarkFormat, &title->Des(), &description->Des(), &longitude, &latitude);
+				file.WriteL(*placemark);
+				CleanupStack::PopAndDestroy(placemark);
+				CleanupStack::PopAndDestroy(2, title);
+				}
+			
+			CleanupStack::PopAndDestroy(2);	
+				
+			file.WriteL(KMapKmlEndFormat);
+			CleanupStack::PopAndDestroy(&file);
+			
+			LaunchFileL(KMapKmlFilename);
 			}
 		} // 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 	}
@@ -2133,6 +2219,13 @@ void CMobblerAppUi::GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const
 		
 		CleanupStack::PopAndDestroy(4);
 		}
+	}
+
+void CMobblerAppUi::HandleLocationCompleteL(const TDesC8& aAccuracy, const TDesC8& aLatitude, const TDesC8& aLongitude, const TDesC8& aName)
+	{
+	delete iLocalEventsObserver;
+	iLocalEventsObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);
+	iLastFmConnection->GeoGetEventsL(aLatitude, aLongitude, *iLocalEventsObserver);
 	}
 
 void CMobblerAppUi::OpenWebBrowserL(const TDesC& aUrl)
