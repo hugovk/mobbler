@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <e32base.h>
 #include <es_sock.h>
+#include <Etel3rdParty.h>
 #include <http/mhttptransactioncallback.h>
 #include <http/rhttpsession.h>
 #include <mobbler/mobblerdestinationsinterface.h>
@@ -207,6 +208,10 @@ public:
 
 	void LoadCurrentTrackL();
 	void SaveCurrentTrackL();
+	
+	// Google API
+	void GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver);
+	void GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver);
 
 private:
 	void RunL();

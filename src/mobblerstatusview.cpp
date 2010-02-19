@@ -194,6 +194,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TOP_TRACKS,				EMobblerCommandUserTopTracks);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_PLAYLISTS,				EMobblerCommandPlaylists);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EVENTS,					EMobblerCommandUserEvents);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_LOCAL_EVENTS,				EMobblerCommandLocalEvents);	
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EVENTS,					EMobblerCommandArtistEvents);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TOP_TAGS,					EMobblerCommandUserTopTags);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_RECENT_TRACKS,			EMobblerCommandRecentTracks);

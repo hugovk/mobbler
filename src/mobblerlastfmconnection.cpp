@@ -1433,6 +1433,52 @@ void CMobblerLastFmConnection::RequestImageL(MMobblerFlatDataObserver* aObserver
 		AppendAndSubmitTransactionL(transaction);
 		}
 	}
+void CMobblerLastFmConnection::GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver)
+	{
+	LOG2(_L8("Cell id"), aNetworkInfo.iCellId);
+	LOG2(_L8("LAC"), aNetworkInfo.iLocationAreaCode);
+	
+	_LIT(KApiKey, "5fqrIG5mGL0R4ll2KdoNJP1VmzcDf8ul2WFrREbv");
+	_LIT(KLocationUrlFormat, "http://cellid.labs.ericsson.net/xml/lookup?cellid=%08x&mnc=%S&mcc=%S&lac=%04x&key=%S");
+	
+	HBufC* url(HBufC::NewLC(1024));
+	url->Des().Format(KLocationUrlFormat, aNetworkInfo.iCellId, &aNetworkInfo.iNetworkId, &aNetworkInfo.iCountryCode, aNetworkInfo.iLocationAreaCode, &KApiKey());
+	CMobblerString* urlString(CMobblerString::NewLC(*url));
+	
+	TUriParser8 locationUrl;
+	locationUrl.Parse(urlString->String8());
+	CUri8* uri(CUri8::NewLC(locationUrl));
+	
+	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
+	
+	CleanupStack::Pop(uri);
+	CleanupStack::PopAndDestroy(2, url);
+	
+	transaction->SetFlatDataObserver(&aObserver);
+	AppendAndSubmitTransactionL(transaction);
+	}
+
+void CMobblerLastFmConnection::GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver)
+	{
+	CUri8* uri(SetUpWebServicesUriLC());
+	
+	_LIT8(KQueryGeoGetEvents, "geo.getevents");
+	_LIT8(KLongitude, "long");
+	_LIT8(KLatitude, "lat");
+	
+	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryGeoGetEvents));	
+	query->AddFieldL(KLongitude, aLongitude);
+	query->AddFieldL(KLatitude, aLatitude);
+	query->AddFieldL(_L8("distance"), _L8("10"));
+	
+	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, EFalse, uri, query));
+	
+	CleanupStack::Pop(query);
+	CleanupStack::Pop(uri);
+		
+	transaction->SetFlatDataObserver(&aObserver);
+	AppendAndSubmitTransactionL(transaction);
+	}
 
 void CMobblerLastFmConnection::CancelTransaction(MMobblerFlatDataObserver* aObserver)
 	{
