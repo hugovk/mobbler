@@ -388,6 +388,7 @@ void CMobblerStatusView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid /*a
 		}
 	
 	SettingsWizardL();
+	static_cast<CMobblerAppUi*>(AppUi())->LastFmConnection().CheckQueueAgeL();
 	}
 
 void CMobblerStatusView::DoDeactivate()

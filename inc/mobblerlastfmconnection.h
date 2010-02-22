@@ -208,8 +208,9 @@ public:
 
 	void LoadCurrentTrackL();
 	void SaveCurrentTrackL();
+	void CheckQueueAgeL();
 	
-	// Google API
+	// Ericsson API
 	void GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver);
 	void GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver);
 

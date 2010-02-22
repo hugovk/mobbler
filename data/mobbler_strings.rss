@@ -378,5 +378,6 @@ RESOURCE STRING r_mobbler_biography				{ text = STR_mobbler_biography; }
 RESOURCE STRING r_mobbler_scrobble_track_option	{ text = STR_mobbler_scrobble_track_option; }
 RESOURCE STRING r_mobbler_scrobble_album_option	{ text = STR_mobbler_scrobble_album_option; }
 RESOURCE STRING r_mobbler_local_events			{ text = STR_mobbler_local_events; }
+RESOURCE STRING r_mobbler_old_scrobbles_warning	{ text = STR_mobbler_old_scrobbles_warning; }
 
 // End of file

@@ -523,7 +523,6 @@ void CMobblerAppUi::HandleInstallStartedL()
 
 void CMobblerAppUi::HandleCommandL(TInt aCommand)
 	{
-	TApaTask task(iEikonEnv->WsSession());
 	const CMobblerTrack* const currentTrack(CurrentTrack());
 	const CMobblerTrack* const currentRadioTrack(iRadioPlayer->CurrentTrack());
 	
@@ -535,21 +534,27 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		{
 		case EAknSoftkeyExit:
 		case EEikCmdExit:
+			{
 			// Send application to the background to give the user
 			// a sense of a really fast shutdown. Sometimes the thread
 			// doesn't shut down instantly, so best to do this without
 			// interferring with the user's ability to do something
 			// else with their phone.
+			TApaTask task(iEikonEnv->WsSession());
 			task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
 			task.SendToBackground();
 			/// Check if scrobblable first and save queue
 			iLastFmConnection->TrackStoppedL(currentTrack);
 			iRadioPlayer->StopL();
 			Exit();
+			}
 			break;
 		case EAknSoftkeyBack:
+			{
+			TApaTask task(iEikonEnv->WsSession());
 			task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
 			task.SendToBackground();
+			}
 			break;
 		case EMobblerCommandOnline:
 			iLastFmConnection->SetModeL(CMobblerLastFmConnection::EOnline);
@@ -585,6 +590,10 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			
 			break;
 		case EMobblerCommandLocalEvents:
+			if (!iLocation)
+				{
+				iLocation = CMobblerLocation::NewL(*this);
+				}
 			iLocation->GetLocationL();
 			break;
 		case EMobblerCommandSearchTrack:
@@ -1325,7 +1334,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			CCoeEnv::Static()->FsSession().MkDirAll(KMapKmlFilename);
 			
 			_LIT8(KMapKmlStartFormat,		"<kml xmlns=\"http://earth.google.com/kml/2.0\">\r\n"
-											"<Document>\r\n");	
+											"<Document>\r\n");
 			
 			_LIT8(KMapKmlPlacemarkFormat,	"\t<Placemark>\r\n"
 											"\t\t<name>%S</name>\r\n"
@@ -1344,12 +1353,12 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			
 			_LIT8(KGeoNamespaceUri, 		"http://www.w3.org/2003/01/geo/wgs84_pos#");
 			
-			_LIT8(KVenue, 				"venue");
+//			_LIT8(KVenue, 				"venue");
 			_LIT8(KLat, 				"lat");
 			_LIT8(KLong, 				"long");
 			_LIT8(KPoint,				"point");
-			_LIT8(KTitle,				"title");
-			_LIT8(KLocation,			"location");
+//			_LIT8(KTitle,				"title");
+			_LIT8(KLocation,			"location"); // move to literals
 
 			RFileWriteStream file;
 			CleanupClosePushL(file);
@@ -1381,16 +1390,18 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 					longitude.Set(geoPoint->Element(KGeoNamespaceUri, KLong)->Content());
 					}
 				
-				// Add this tip to the KML file
+				// Add this event to the KML file
 				HBufC8* placemark(HBufC8::NewLC(KMapKmlPlacemarkFormat().Length() + title->Length() + description->Length() + longitude.Length() + latitude.Length()));
-				placemark->Des().Format(KMapKmlPlacemarkFormat, &title->Des(), &description->Des(), &longitude, &latitude);
+				TPtrC8 titlePtr(title->Des());
+				TPtrC8 descriptionPtr(description->Des());
+				placemark->Des().Format(KMapKmlPlacemarkFormat, &titlePtr, &descriptionPtr, &longitude, &latitude);
 				file.WriteL(*placemark);
 				CleanupStack::PopAndDestroy(placemark);
 				CleanupStack::PopAndDestroy(2, title);
 				}
 			
 			CleanupStack::PopAndDestroy(2);	
-				
+			
 			file.WriteL(KMapKmlEndFormat);
 			CleanupStack::PopAndDestroy(&file);
 			
@@ -2221,7 +2232,7 @@ void CMobblerAppUi::GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const
 		}
 	}
 
-void CMobblerAppUi::HandleLocationCompleteL(const TDesC8& aAccuracy, const TDesC8& aLatitude, const TDesC8& aLongitude, const TDesC8& aName)
+void CMobblerAppUi::HandleLocationCompleteL(const TDesC8& /*aAccuracy*/, const TDesC8& aLatitude, const TDesC8& aLongitude, const TDesC8& /*aName*/)
 	{
 	delete iLocalEventsObserver;
 	iLocalEventsObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);

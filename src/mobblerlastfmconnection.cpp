@@ -1435,7 +1435,7 @@ void CMobblerLastFmConnection::RequestImageL(MMobblerFlatDataObserver* aObserver
 	}
 void CMobblerLastFmConnection::GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver)
 	{
-	LOG2(_L8("Cell id"), aNetworkInfo.iCellId);
+	LOG2(_L8("Cell ID"), aNetworkInfo.iCellId);
 	LOG2(_L8("LAC"), aNetworkInfo.iLocationAreaCode);
 	
 	_LIT(KApiKey, "5fqrIG5mGL0R4ll2KdoNJP1VmzcDf8ul2WFrREbv");
@@ -1463,19 +1463,19 @@ void CMobblerLastFmConnection::GeoGetEventsL(const TDesC8& aLatitude, const TDes
 	CUri8* uri(SetUpWebServicesUriLC());
 	
 	_LIT8(KQueryGeoGetEvents, "geo.getevents");
-	_LIT8(KLongitude, "long");
-	_LIT8(KLatitude, "lat");
+	_LIT8(KLong, "long");
+	_LIT8(KLat, "lat");
 	
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryGeoGetEvents));	
-	query->AddFieldL(KLongitude, aLongitude);
-	query->AddFieldL(KLatitude, aLatitude);
-	query->AddFieldL(_L8("distance"), _L8("10"));
+	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryGeoGetEvents));
+	query->AddFieldL(KLong, aLongitude);
+	query->AddFieldL(KLat, aLatitude);
+	query->AddFieldL(_L8("distance"), _L8("10")); // TODO
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, EFalse, uri, query));
 	
 	CleanupStack::Pop(query);
 	CleanupStack::Pop(uri);
-		
+	
 	transaction->SetFlatDataObserver(&aObserver);
 	AppendAndSubmitTransactionL(transaction);
 	}
@@ -2318,6 +2318,27 @@ void CMobblerLastFmConnection::LoadTrackQueueL()
 		}
 	
 	CleanupStack::PopAndDestroy(&file);
+	}
+
+void CMobblerLastFmConnection::CheckQueueAgeL()
+	{
+	TTime now;
+	now.UniversalTime();
+	const TInt KTrackQueueCount(iTrackQueue.Count());
+	for (TInt i(0); i < KTrackQueueCount; ++i)
+		{
+		// For testing with 1 minute:
+//		TTimeIntervalMinutes minutesOld;
+//		now.MinutesFrom(iTrackQueue[i]->StartTimeUTC(), minutesOld);
+//		if (minutesOld.Int() > 1)
+		if (now.DaysFrom(iTrackQueue[i]->StartTimeUTC()).Int() > 12)
+			{
+			// Warn the user to scrobble soon
+			CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
+			note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_OLD_SCROBBLES_WARNING));
+			break;
+			}
+		}
 	}
 
 void CMobblerLastFmConnection::SaveTrackQueueL()
