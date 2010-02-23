@@ -79,7 +79,8 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandUserEvents,
 	EMobblerCommandLocalEvents,
 	EMobblerCommandArtistEvents,
-
+	EMobblerCommandArtistEventSingle,
+	
 	EMobblerCommandTagTopArtists,
 	
 	EMobblerCommandRecentTracks,

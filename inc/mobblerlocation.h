@@ -2,7 +2,7 @@
 mobblerlocation.h
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2010  Michael Coffey
 
 http://code.google.com/p/mobbler
 
@@ -23,8 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef __MOBBLERLOCATION_H__
 #define __MOBBLERLOCATION_H__
-
-#include <Etel3rdParty.h>
 
 #include "mobblerdataobserver.h"
 
@@ -57,8 +55,6 @@ private:
 	
 	MMobblerLocationObserver& iObserver;
 	};
-
-
 
 #endif // __MOBBLERLOCATION_H__
 

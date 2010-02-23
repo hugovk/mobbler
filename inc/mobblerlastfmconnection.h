@@ -339,6 +339,7 @@ private:
 	TLastFmMemberType iMemberType;
 
 	TBool i64KbpsWarningShown;
+	TInt iDayNoInYearOfLastAgeCheck;
 	};
 
 #endif // __MOBBLERLASTFMCONNECTION_H__

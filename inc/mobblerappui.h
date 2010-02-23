@@ -84,15 +84,15 @@ class CMobblerWebServicesView;
 class CMobblerWebServicesHelper;
 class CMobblerContentListingInterface;
 
-class CMobblerSystemCloseGlobalQuery : public CActive
+class CMobblerGlobalQuery : public CActive
 	{
 public:
-	static CMobblerSystemCloseGlobalQuery* NewL();
-	~CMobblerSystemCloseGlobalQuery();
+	static CMobblerGlobalQuery* NewL(TInt aResourceId);
+	~CMobblerGlobalQuery();
 
 private:
-	CMobblerSystemCloseGlobalQuery();
-	void ConstructL();
+	CMobblerGlobalQuery();
+	void ConstructL(TInt aResourceId);
 
 private: // from CActive
 	void RunL();
@@ -172,8 +172,8 @@ public:
 
 	CMobblerResourceReader& CMobblerAppUi::ResourceReader() const;
 
-	TBool SleepTimerActive() const { return iSleepTimer->IsActive(); }
-	TBool AlarmActive() const { return iAlarmTimer->IsActive(); }
+	TBool SleepTimerActive() const { return iSleepTimer ? iSleepTimer->IsActive() : EFalse; }
+	TBool AlarmActive()      const { return iAlarmTimer ? iAlarmTimer->IsActive() : EFalse; }
 	void RemoveSleepTimerL();
 	void RemoveAlarmL();
 	TBool SleepAfterTrackStopped() { return iSleepAfterTrackStopped; }
@@ -187,6 +187,7 @@ public:
 	TInt LaunchFileL(const TDesC& aFilename);
 	TBool DetailsNeeded();
 	void ShowLyricsL(const TDesC8& aData);
+	void WarnOldScrobblesL();
 
 public: // CEikAppUi
 	void HandleCommandL(TInt aCommand);
@@ -317,7 +318,8 @@ private:
 	CMobblerDestinationsInterface* iDestinations;
 	TUid iDestinationsDtorUid;
 
-	CMobblerSystemCloseGlobalQuery* iSystemCloseGlobalQuery;
+	CMobblerGlobalQuery* iSystemCloseGlobalQuery;
+	CMobblerGlobalQuery* iOldScrobbleGlobalQuery;
 
 #ifdef __SYMBIAN_SIGNED__
 	TBool iWallpaperSet;

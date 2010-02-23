@@ -2,7 +2,7 @@
 mobblerlocation.cpp
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2010  Michael Coffey
 
 http://code.google.com/p/mobbler
 
@@ -21,15 +21,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <s32mem.h>
 #include <sendomfragment.h>
-#include <sennamespace.h>
-#include <senxmlutils.h>
 
 #include "mobblerappui.h"
 #include "mobblerlocation.h"
 #include "mobblerlogging.h"
-#include "mobblerlocationobserver.h"
 #include "mobblerutility.h"
 
 CMobblerLocation* CMobblerLocation::NewL(MMobblerLocationObserver& aObserver)
@@ -85,7 +81,7 @@ void CMobblerLocation::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTra
 		CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
 		CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 
-		iObserver.HandleLocationCompleteL(domFragment->AsElement().Element(_L8("accuracy"))->Content(),
+		iObserver.HandleLocationCompleteL(domFragment->AsElement().Element(_L8("accuracy"))->Content(), // TODO literals
 											domFragment->AsElement().Element(_L8("latitude"))->Content(),
 											domFragment->AsElement().Element(_L8("longitude"))->Content(),
 											domFragment->AsElement().Element(_L8("name"))->Content());
@@ -97,6 +93,5 @@ void CMobblerLocation::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTra
 		LOG2(_L8("Transaction error"), aTransactionError);
 		}
 	}
-
 
 // End of file

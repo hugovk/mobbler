@@ -92,44 +92,44 @@ const TUid KContentListingImplUid = {0xA000BEB3};
 
 _LIT(KSpace, " ");
 
-CMobblerSystemCloseGlobalQuery* CMobblerSystemCloseGlobalQuery::NewL()
+CMobblerGlobalQuery* CMobblerGlobalQuery::NewL(TInt aResourceId)
 	{
-	CMobblerSystemCloseGlobalQuery* self(new(ELeave) CMobblerSystemCloseGlobalQuery);
+	CMobblerGlobalQuery* self(new(ELeave) CMobblerGlobalQuery());
 	CleanupStack::PushL(self);
-	self->ConstructL();
+	self->ConstructL(aResourceId);
 	CleanupStack::Pop(self);
 	return self;
 	}
 
-CMobblerSystemCloseGlobalQuery::CMobblerSystemCloseGlobalQuery()
+CMobblerGlobalQuery::CMobblerGlobalQuery()
 	:CActive(CActive::EPriorityStandard)
 	{
 	CActiveScheduler::Add(this);
 	}
 
-void CMobblerSystemCloseGlobalQuery::ConstructL()
+void CMobblerGlobalQuery::ConstructL(TInt aResourceId)
 	{
+	TInt softkeys(aResourceId == R_MOBBLER_CLOSE_QUERY ? 
+								 R_AVKON_SOFTKEYS_YES_NO : 
+								 R_AVKON_SOFTKEYS_OK_EMPTY);
 	iGlobalConfirmationQuery = CAknGlobalConfirmationQuery::NewL();
-	iMessage = static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_CLOSE_QUERY).AllocL();
-	iGlobalConfirmationQuery->ShowConfirmationQueryL(iStatus, *iMessage, R_AVKON_SOFTKEYS_YES_NO, R_QGN_NOTE_INFO_ANIM);
+	iMessage = static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(aResourceId).AllocL();
+	iGlobalConfirmationQuery->ShowConfirmationQueryL(iStatus, *iMessage, softkeys, R_QGN_NOTE_WARNING_ANIM);
 	SetActive();
 	}
 
-CMobblerSystemCloseGlobalQuery::~CMobblerSystemCloseGlobalQuery()
+CMobblerGlobalQuery::~CMobblerGlobalQuery()
 	{
 	delete iGlobalConfirmationQuery;
 	delete iMessage;
 	}
 
-void CMobblerSystemCloseGlobalQuery::RunL()
+void CMobblerGlobalQuery::RunL()
 	{
-	if (iStatus >= 0)
-		{
-		CActiveScheduler::Stop();
-		}
+	CActiveScheduler::Stop();
 	}
 
-void CMobblerSystemCloseGlobalQuery::DoCancel()
+void CMobblerGlobalQuery::DoCancel()
 	{
 	iGlobalConfirmationQuery->CancelConfirmationQuery();
 	}
@@ -176,15 +176,7 @@ void CMobblerAppUi::ConstructL()
 	
 	RProcess().SetPriority(EPriorityHigh);
 	
-#if !defined(__SYMBIAN_SIGNED__) && !defined(__WINS__)
-	iBrowserLauncher = CBrowserLauncher::NewL();
-#endif
 	LoadRadioStationsL();
-	
-	iMobblerDownload = CMobblerDownload::NewL(*this);
-	
-	iSleepTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
-	iAlarmTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
 	
 	iWebServicesView = CMobblerWebServicesView::NewL();
 	iBrowserView = CMobblerBrowserView::NewL();
@@ -196,6 +188,10 @@ void CMobblerAppUi::ConstructL()
 		{
 		// If the time has already passed, no problem, the timer will 
 		// simply expire immediately with KErrUnderflow.
+		if (!iAlarmTimer)
+			{
+			iAlarmTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
+			}
 		iAlarmTimer->At(iSettingView->AlarmTime());
 		}
 	
@@ -203,8 +199,6 @@ void CMobblerAppUi::ConstructL()
 	iGesturePlugin = NULL;
 	TRAP_IGNORE(LoadGesturesPluginL());
 	UpdateAccelerometerGesturesL();
-	
-	iLocation = CMobblerLocation::NewL(*this);
 	
 	AddViewL(iWebServicesView);
 	AddViewL(iBrowserView);
@@ -258,6 +252,7 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iResourceReader;
 	delete iSleepTimer;
 	delete iSystemCloseGlobalQuery;
+	delete iOldScrobbleGlobalQuery;
 	delete iVolumeDownTimer;
 	delete iVolumeUpTimer;
 	delete iWebServicesHelper;
@@ -882,7 +877,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 
 			break;
 		case EMobblerCommandPlusVisitLastFm:
-			HandleCommandL(EMobblerCommandVisitWebPage);			
+			HandleCommandL(EMobblerCommandVisitWebPage);
 			break;
 		case EMobblerCommandPlusArtistBiography:
 			if (currentTrack)
@@ -1308,6 +1303,10 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 					
 					if (yes)
 						{
+						if (!iMobblerDownload)
+							{
+							iMobblerDownload = CMobblerDownload::NewL(*this);
+							}
 						iMobblerDownload->DownloadL(location, iLastFmConnection->IapId());
 						}
 					}
@@ -1821,6 +1820,10 @@ void CMobblerAppUi::SetSleepTimerL(const TInt aMinutes)
 	LOG(aMinutes);
 	
 	TInt sleepMinutes(aMinutes);
+	if (!iSleepTimer)
+		{
+		iSleepTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
+		}
 	if (iSleepTimer->IsActive())
 		{
 		TTime now;
@@ -1879,6 +1882,10 @@ void CMobblerAppUi::SetAlarmTimerL(const TTime aTime)
 		}
 	
 	iSettingView->SetAlarmL(alarmTime);
+	if (!iAlarmTimer)
+		{
+		iAlarmTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
+		}
 	iAlarmTimer->At(alarmTime);
 	CEikonEnv::Static()->InfoMsg(_L("Alarm set"));
 	
@@ -2020,7 +2027,7 @@ void CMobblerAppUi::SleepL()
 
 void CMobblerAppUi::RemoveSleepTimerL()
 	{
-	if (iSleepTimer->IsActive())
+	if (iSleepTimer && iSleepTimer->IsActive())
 		{
 		iSleepTimer->Cancel();
 		CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
@@ -2030,7 +2037,7 @@ void CMobblerAppUi::RemoveSleepTimerL()
 
 void CMobblerAppUi::RemoveAlarmL()
 	{
-	if (iAlarmTimer->IsActive())
+	if (iAlarmTimer && iAlarmTimer->IsActive())
 		{
 		iAlarmTimer->Cancel();
 		iSettingView->SetAlarmL(EFalse);
@@ -2278,6 +2285,10 @@ void CMobblerAppUi::OpenWebBrowserL(const TDesC& aUrl)
 		}
 #else // !__SYMBIAN_SIGNED__
 #ifndef __WINS__
+	if (!iBrowserLauncher)
+		{
+		iBrowserLauncher = CBrowserLauncher::NewL();
+		}
 	iBrowserLauncher->LaunchBrowserEmbeddedL(url);
 #endif
 #endif // __SYMBIAN_SIGNED__
@@ -2293,7 +2304,7 @@ void CMobblerAppUi::HandleSystemEventL(const TWsEvent& aEvent)
 			{
 			if (!iSystemCloseGlobalQuery)
 				{
-				iSystemCloseGlobalQuery = CMobblerSystemCloseGlobalQuery::NewL();
+				iSystemCloseGlobalQuery = CMobblerGlobalQuery::NewL(R_MOBBLER_CLOSE_QUERY);
 				CActiveScheduler::Start();
 				
 				switch (iSystemCloseGlobalQuery->iStatus.Int())
@@ -2487,6 +2498,18 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	if (success)
 		{
 		LaunchFileL(KLyricsFilename);
+		}
+	}
+
+void CMobblerAppUi::WarnOldScrobblesL()
+	{
+	if (!iOldScrobbleGlobalQuery)
+		{
+		iOldScrobbleGlobalQuery = CMobblerGlobalQuery::NewL(R_MOBBLER_OLD_SCROBBLES_WARNING);
+		CActiveScheduler::Start();
+		
+		delete iOldScrobbleGlobalQuery;
+		iOldScrobbleGlobalQuery = NULL;
 		}
 	}
 

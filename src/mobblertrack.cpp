@@ -115,7 +115,7 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 		{
 		delete iEventsInfoHelper;
 		iEventsInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
-		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().QueryLastFmL(EMobblerCommandArtistEvents, Artist().String8(), KNullDesC8, KNullDesC8, KNullDesC8, *iEventsInfoHelper);
+		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().QueryLastFmL(EMobblerCommandArtistEventSingle, Artist().String8(), KNullDesC8, KNullDesC8, KNullDesC8, *iEventsInfoHelper);
 		}
 	}
 
@@ -247,7 +247,7 @@ void CMobblerTrack::FindLocalAlbumImageL()
 		CleanupStack::PopAndDestroy(2, metaDataUtility);
 #endif
 
-		// First check for %album%.jpg/gif/png
+		// If not found, check for %album%.jpg/gif/png
 		TFileName fileName;
 		if (!iImage && Album().String().Length() > 0)
 			{
@@ -281,30 +281,6 @@ void CMobblerTrack::FindLocalAlbumImageL()
 				iImage = CMobblerBitmap::NewL(*this, fileName);
 				iImageType = EMobblerImageTypeAlbumLocal;
 				break;
-				}
-			}
-		
-		if (Album().String().Length() > 0)
-			{
-			// First check for %album%.jpg/gif/png
-			if (!iImage && iLocalFile && Album().String().Length() > 0)
-				{
-				const TInt arraySize(sizeof(KArtExtensionArray) / sizeof(TPtrC));
-				for (TInt i(0); i < arraySize; ++i)
-					{
-					fileName.Copy(LocalFilePath());
-					fileName.Append(Album().SafeFsString(fileName.Length() +
-									KArtExtensionArray[i].Length()));
-					fileName.Append(KArtExtensionArray[i]);
-		
-					if (BaflUtils::FileExists(CCoeEnv::Static()->FsSession(), fileName))
-						{
-						LOG(_L8("Found %album%.jpg/gif/png"));
-						iImage = CMobblerBitmap::NewL(*this, fileName);
-						iImageType = EMobblerImageTypeAlbumLocal;
-						break;
-						}
-					}
 				}
 			}
 		}

@@ -44,8 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
 
-_LIT(KEllipsisText, "...");
-
 CMobblerWebServicesHelper* CMobblerWebServicesHelper::NewL(CMobblerAppUi& aAppUi)
 	{
 	CMobblerWebServicesHelper* self(new(ELeave) CMobblerWebServicesHelper(aAppUi));
@@ -108,8 +106,8 @@ CMobblerWebServicesHelper::TShareSource CMobblerWebServicesHelper::ShareSourceL(
 	CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
 	CleanupStack::PushL(items);
 	
-	items->AppendL(_L("Last.fm friends..."));
-	items->AppendL(_L("Contacts..."));
+	items->AppendL(_L("Last.fm friends...")); // TODO
+	items->AppendL(_L("Contacts...")); // TODO
 	
 	CleanupStack::Pop(items);
 	
@@ -129,7 +127,6 @@ CMobblerWebServicesHelper::TShareSource CMobblerWebServicesHelper::ShareSourceL(
 	
 	return shareSource;
 	}
-
 
 void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 	{
@@ -384,6 +381,7 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 			}
 		else
 			{
+			_LIT(KEllipsisText, "...");
 			firstEmail.Set(KEllipsisText);
 			}
 		
@@ -399,13 +397,13 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 			CleanupStack::PopAndDestroy(photo);
 			
 			TBuf<1024> formatted;
-			formatted.Format(_L("%d\t%S\t%S"), photoNumber++, &name, &firstEmail);
+			formatted.Format(_L("%d\t%S\t%S"), photoNumber++, &name, &firstEmail); // TODO
 			items->AppendL(formatted);
 			}
 		else
 			{
 			TBuf<1024> formatted;
-			formatted.Format(_L("%d\t%S\t%S"), 0, &name, &firstEmail);
+			formatted.Format(_L("%d\t%S\t%S"), 0, &name, &firstEmail); // TODO
 			items->AppendL(formatted);
 			}
 		

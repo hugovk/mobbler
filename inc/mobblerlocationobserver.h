@@ -2,7 +2,7 @@
 mobblerlocationobserver.h
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2010  Michael Coffey
 
 http://code.google.com/p/mobbler
 

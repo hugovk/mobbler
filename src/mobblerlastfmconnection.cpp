@@ -70,11 +70,10 @@ _LIT8(KLogFileFieldSeperator, "\t");
 _LIT(KIapId, "IAP\\Id");
 
 _LIT8(KHttp, "http");
+_LIT8(KLimit, "limit");
 _LIT8(KMessage, "message");
 _LIT8(KPlaylistUrl, "playlistURL");
-_LIT8(KRecipient, "recipient");
 _LIT8(KUsername, "username");
-_LIT8(KQueryAlbumGetInfo, "album.getinfo");
 _LIT8(KQueryPlaylistFetch, "playlist.fetch");
 
 // Last.fm can accept up to this many track in one submission
@@ -181,18 +180,18 @@ TUint32 CMobblerLastFmConnection::IapId() const
 	return iIapId;
 	}
 
-void CMobblerLastFmConnection::SetDetailsL(const TDesC& aRecipient, const TDesC& aPassword)
+void CMobblerLastFmConnection::SetDetailsL(const TDesC& aUsername, const TDesC& aPassword)
 	{
 	if (!iUsername
-			|| iUsername && iUsername->String().CompareF(aRecipient) != 0
+			|| iUsername && iUsername->String().CompareF(aUsername) != 0
 			|| !iPassword
 			|| iPassword && iPassword->String().Compare(aPassword) != 0)
 		{
 		// There is either no username or password set
 		// or there is a new user or password
 		
-		HBufC* usernameLower(HBufC::NewLC(aRecipient.Length()));
-		usernameLower->Des().Copy(aRecipient);
+		HBufC* usernameLower(HBufC::NewLC(aUsername.Length()));
+		usernameLower->Des().Copy(aUsername);
 		usernameLower->Des().LowerCase();
 		CMobblerString* tempUsername(CMobblerString::NewLC(*usernameLower));
 		CMobblerString* tempPassword(CMobblerString::NewL(aPassword));
@@ -855,7 +854,6 @@ void CMobblerLastFmConnection::ArtistGetImageL(const TDesC8& aArtist, MMobblerFl
 	_LIT8(KQueryArtistGetImages, "artist.getimages");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryArtistGetImages));
 	query->AddFieldL(KArtist, *MobblerUtility::URLEncodeLC(aArtist));
-	_LIT8(KLimit, "limit");
 	query->AddFieldL(KLimit, K1);
 	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTrack.Artist().String8())
 	
@@ -924,6 +922,7 @@ void CMobblerLastFmConnection::QueryLastFmL(const TInt aCommand,
 	{
 	CUri8* uri(SetUpWebServicesUriLC());
 	
+	_LIT8(KQueryArtistGetEvents, "artist.getEvents");
 	CMobblerWebServicesQuery* query(NULL);
 	switch (aCommand)
 		{
@@ -938,9 +937,13 @@ void CMobblerLastFmConnection::QueryLastFmL(const TInt aCommand,
 			query = CMobblerWebServicesQuery::NewLC(KQueryUserGetRecommendedArtists);
 			break;
 		case EMobblerCommandArtistEvents:
-			_LIT8(KQueryArtistGetEvents, "artist.getEvents");
 			query = CMobblerWebServicesQuery::NewLC(KQueryArtistGetEvents);
 			query->AddFieldL(KArtist, aArtist);
+			break;
+		case EMobblerCommandArtistEventSingle:
+			query = CMobblerWebServicesQuery::NewLC(KQueryArtistGetEvents);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KLimit, K1);
 			break;
 		case EMobblerCommandArtistAddTag:
 			_LIT8(KQueryArtistAddTags, "artist.addtags");
@@ -1032,6 +1035,7 @@ void CMobblerLastFmConnection::GetInfoL(const TInt aCommand, const TDesC8& aArti
 			query->AddFieldL(KUsername, iUsername->String8());
 			break;
 		case EMobblerCommandAlbumGetInfo:
+			_LIT8(KQueryAlbumGetInfo, "album.getinfo");
 			query = CMobblerWebServicesQuery::NewLC(KQueryAlbumGetInfo);
 			
 			if (aAlbum.Length() > 0)
@@ -1135,13 +1139,13 @@ void CMobblerLastFmConnection::ShareL(const TInt aCommand, const TDesC8& aRecipi
 			_LIT8(KQueryEventShare, "event.share");
 			query = CMobblerWebServicesQuery::NewLC(KQueryEventShare);
 			query->AddFieldL(KEvent, aEventId);
-			query->AddFieldL(KRecipient, aRecipient);
 			break;
 		default:
 			// TODO panic
 			break;
 		}
 	
+	_LIT8(KRecipient, "recipient");
 	query->AddFieldL(KRecipient, aRecipient);
 	
 	const TDesC& tagline(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_SHARE_TAGLINE));
@@ -1619,6 +1623,7 @@ void CMobblerLastFmConnection::TrackStoppedL(const CMobblerTrackBase* aTrack)
 			iObserver.HandleTrackQueuedL(*iCurrentTrack);
 			iTrackQueue.AppendL(iCurrentTrack);
 			iCurrentTrack = NULL;
+			CheckQueueAgeL();
 			}
 		}
 	
@@ -2320,27 +2325,6 @@ void CMobblerLastFmConnection::LoadTrackQueueL()
 	CleanupStack::PopAndDestroy(&file);
 	}
 
-void CMobblerLastFmConnection::CheckQueueAgeL()
-	{
-	TTime now;
-	now.UniversalTime();
-	const TInt KTrackQueueCount(iTrackQueue.Count());
-	for (TInt i(0); i < KTrackQueueCount; ++i)
-		{
-		// For testing with 1 minute:
-//		TTimeIntervalMinutes minutesOld;
-//		now.MinutesFrom(iTrackQueue[i]->StartTimeUTC(), minutesOld);
-//		if (minutesOld.Int() > 1)
-		if (now.DaysFrom(iTrackQueue[i]->StartTimeUTC()).Int() > 12)
-			{
-			// Warn the user to scrobble soon
-			CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
-			note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_OLD_SCROBBLES_WARNING));
-			break;
-			}
-		}
-	}
-
 void CMobblerLastFmConnection::SaveTrackQueueL()
 	{
 	CCoeEnv::Static()->FsSession().MkDirAll(KTracksFile);
@@ -2367,6 +2351,33 @@ void CMobblerLastFmConnection::SaveTrackQueueL()
 		}
 	
 	CleanupStack::PopAndDestroy(&file);
+	}
+
+void CMobblerLastFmConnection::CheckQueueAgeL()
+	{
+	TTime now;
+	now.UniversalTime();
+	TInt dayNoInYear(now.DayNoInYear());
+	
+	if (iDayNoInYearOfLastAgeCheck != dayNoInYear)
+		{
+		iDayNoInYearOfLastAgeCheck = dayNoInYear;
+		
+		const TInt KTrackQueueCount(iTrackQueue.Count());
+		for (TInt i(0); i < KTrackQueueCount; ++i)
+			{
+/*			// For testing with 1 minute:
+			TTimeIntervalMinutes minutesOld;
+			now.MinutesFrom(iTrackQueue[i]->StartTimeUTC(), minutesOld);
+			if (minutesOld.Int() > 1)*/
+			if (now.DaysFrom(iTrackQueue[i]->StartTimeUTC()).Int() > 12)
+				{
+				// Warn the user to scrobble soon
+				static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->WarnOldScrobblesL();
+				break;
+				}
+			}
+		}
 	}
 
 TBool CMobblerLastFmConnection::ExportQueueToLogFileL()
