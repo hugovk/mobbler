@@ -22,22 +22,22 @@
 ;
 
 ; Languages
-&EN, FR, GE, SP, IT, SW, DA, NO, FI, AM, TU, RU, HU, DU, CS, SK, PL, ZH, AF, AR, BE, BG, CA, EL, HE, IN, LV, LT, BP, RO, SR
+&EN, FR, GE, SP, IT, SW, DA, NO, FI, AM, TU, RU, HU, DU, CS, SK, PL, ZH, JA, AF, AR, BE, BG, CA, EL, HE, IN, LV, LT, BP, RO, SR
 
 ; Header
-#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0x2002655A), 1, 9, 265
+#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0x2002655A), 1, 9, 265
 
 ; Localised vendor names
-%{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}
+%{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}
 
 ; Unique vendor name
 :"Mobbler"
 
 ; Supports Series 60 v 3.0
-[0x101F7961], 0, 0, 0, {"Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID"}
+[0x101F7961], 0, 0, 0, {"Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID"}
 
 ; Supports S60 release 5.0
-[0x1028315F], 0, 0, 0, {"Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID"}
+[0x1028315F], 0, 0, 0, {"Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID"}
 
 ; The Mobbler application
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobbler_0x2002655A.exe"-"!:\sys\bin\mobbler_0x2002655A.exe"
@@ -109,6 +109,7 @@
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x2002655A.r26"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x2002655A.r27"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x2002655A.r31"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x2002655A.r32"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x2002655A.r34"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x2002655A.r37"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x2002655A.r40"
@@ -144,6 +145,7 @@
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.r26"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.r27"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.r31"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.r32"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.r34"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.r37"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0x2002655A.r40"
