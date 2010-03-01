@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerradioplayer.h"
 #include "mobblerradioplaylist.h"
 #include "mobblerresourcereader.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 #include "mobblersettingitemlistview.h"
@@ -51,6 +52,7 @@ CMobblerRadioPlayer* CMobblerRadioPlayer::NewL(CMobblerLastFmConnection& aSubmit
 												TInt aVolume,
 												TInt aBitRate)
 	{
+    TRACER_AUTO;
 	CMobblerRadioPlayer* self(new(ELeave) CMobblerRadioPlayer(aSubmitter, aPreBufferSize, aEqualizerIndex, aVolume, aBitRate));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -71,11 +73,13 @@ CMobblerRadioPlayer::CMobblerRadioPlayer(CMobblerLastFmConnection& aLastFmConnec
 	iEqualizerIndex(aEqualizerIndex),
 	iBitRate(aBitRate)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerRadioPlayer::ConstructL()
 	{
+    TRACER_AUTO;
 	iIncomingCallMonitor = CMobblerIncomingCallMonitor::NewL(*this);
 	iStation = CMobblerString::NewL(KNullDesC);
 	User::LeaveIfError(iTimer.CreateLocal());
@@ -85,6 +89,7 @@ void CMobblerRadioPlayer::ConstructL()
 
 CMobblerRadioPlayer::~CMobblerRadioPlayer()
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.Close();
 	
@@ -100,6 +105,7 @@ CMobblerRadioPlayer::~CMobblerRadioPlayer()
 
 void CMobblerRadioPlayer::RunL()
 	{
+    TRACER_AUTO;
 	if (iStatus.Int() == KErrNone)
 		{
 		if (!CurrentTrack())
@@ -112,16 +118,19 @@ void CMobblerRadioPlayer::RunL()
 
 void CMobblerRadioPlayer::DoCancel()
 	{
+    TRACER_AUTO;
 	iTimer.Cancel();
 	}
 
 void CMobblerRadioPlayer::AddObserverL(MMobblerRadioStateChangeObserver* aObserver)
 	{
+    TRACER_AUTO;
 	iObservers.InsertInAddressOrder(aObserver);
 	}
 
 void CMobblerRadioPlayer::RemoveObserver(MMobblerRadioStateChangeObserver* aObserver)
 	{
+    TRACER_AUTO;
 	TInt position(iObservers.FindInAddressOrder(aObserver));
 	
 	if (position != KErrNotFound)
@@ -132,6 +141,7 @@ void CMobblerRadioPlayer::RemoveObserver(MMobblerRadioStateChangeObserver* aObse
 
 void CMobblerRadioPlayer::DoChangeStateL(TState aState)
 	{
+    TRACER_AUTO;
 	iState = aState;
 	
 	const TInt KObserverCount(iObservers.Count());
@@ -160,6 +170,7 @@ void CMobblerRadioPlayer::DoChangeStateL(TState aState)
 
 void CMobblerRadioPlayer::DoChangeTransactionStateL(TTransactionState aTransactionState)
 	{
+    TRACER_AUTO;
 	iTransactionState = aTransactionState;
 	
 	const TInt KObserverCount(iObservers.Count());
@@ -171,6 +182,7 @@ void CMobblerRadioPlayer::DoChangeTransactionStateL(TTransactionState aTransacti
 
 void CMobblerRadioPlayer::HandleConnectionStateChangedL()
 	{
+    TRACER_AUTO;
 	switch (iLastFmConnection.State())
 		{
 		case ENone:
@@ -203,6 +215,7 @@ void CMobblerRadioPlayer::HandleConnectionStateChangedL()
 
 void CMobblerRadioPlayer::HandleAudioPositionChangeL()
 	{
+    TRACER_AUTO;
 	// if we are finished downloading
 	// and only have the prebuffer amount of time left of the track
 	// then start downloading the next track
@@ -236,6 +249,7 @@ void CMobblerRadioPlayer::HandleAudioPositionChangeL()
 
 void CMobblerRadioPlayer::HandleAudioFinishedL(CMobblerAudioControl* aAudioControl)
 	{
+    TRACER_AUTO;
 	if (iState == EPlaying)
 		{
 		// We are playing and the track has finished for some reason so try to go to the next one
@@ -262,16 +276,19 @@ void CMobblerRadioPlayer::HandleAudioFinishedL(CMobblerAudioControl* aAudioContr
 
 CMobblerRadioPlayer::TState CMobblerRadioPlayer::State() const
 	{
+    TRACER_AUTO;
 	return iState;
 	}
 
 CMobblerRadioPlayer::TTransactionState CMobblerRadioPlayer::TransactionState() const
 	{
+    TRACER_AUTO;
 	return iTransactionState;
 	}
 
 void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioStation, const CMobblerString* aRadioText)
 	{
+    TRACER_AUTO;
 	delete iStation;
 	iStation = NULL;
 	
@@ -342,6 +359,7 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 
 void CMobblerRadioPlayer::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	switch (iTransactionState)
 		{
 		case ESelectingStation:
@@ -450,6 +468,7 @@ void CMobblerRadioPlayer::DataL(const TDesC8& aData, CMobblerLastFmConnection::T
 
 void CMobblerRadioPlayer::SkipTrackL()
 	{
+    TRACER_AUTO;
 	if 	(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SleepAfterTrackStopped())
 		{
 		DoStopL(ETrue);
@@ -499,6 +518,7 @@ void CMobblerRadioPlayer::SkipTrackL()
 			
 			if (track->StartTimeUTC() == Time::NullTTime())
 				{
+    TRACER_AUTO;
 				// we haven't set the start time for this track yet
 				// so this must be the first time we are writing data
 				// to the output stream.  Set the start time now.
@@ -528,6 +548,7 @@ void CMobblerRadioPlayer::SkipTrackL()
 
 void CMobblerRadioPlayer::UpdateVolume()
 	{
+    TRACER_AUTO;
 	if (iCurrentAudioControl)
 		{
 		iCurrentAudioControl->SetVolume(iVolume);
@@ -542,6 +563,7 @@ void CMobblerRadioPlayer::UpdateVolume()
 
 void CMobblerRadioPlayer::VolumeUp()
 	{
+    TRACER_AUTO;
 	TInt volume(Volume());
 	TInt maxVolume(MaxVolume());
 	iVolume = Min(volume + (maxVolume / 10), maxVolume);
@@ -551,6 +573,7 @@ void CMobblerRadioPlayer::VolumeUp()
 
 void CMobblerRadioPlayer::VolumeDown()
 	{
+    TRACER_AUTO;
 	TInt volume(Volume());
 	TInt maxVolume(MaxVolume());
 	iVolume = Max(volume - (maxVolume / 10), 0);
@@ -560,6 +583,7 @@ void CMobblerRadioPlayer::VolumeDown()
 
 void CMobblerRadioPlayer::SetVolume(TInt aVolume)
 	{
+    TRACER_AUTO;
 	iVolume = Min(aVolume, MaxVolume());
 	iVolume = Max(iVolume, 0);
 	
@@ -568,6 +592,7 @@ void CMobblerRadioPlayer::SetVolume(TInt aVolume)
 
 TInt CMobblerRadioPlayer::Volume() const
 	{
+    TRACER_AUTO;
 	TInt volume(iVolume);
 	
 	if (iCurrentAudioControl)
@@ -580,6 +605,7 @@ TInt CMobblerRadioPlayer::Volume() const
 
 TInt CMobblerRadioPlayer::MaxVolume() const
 	{
+    TRACER_AUTO;
 	TInt maxVolume(iMaxVolume);
 	
 	if (iCurrentAudioControl)
@@ -599,16 +625,19 @@ TInt CMobblerRadioPlayer::MaxVolume() const
 
 TInt CMobblerRadioPlayer::EqualizerIndex() const
 	{
+    TRACER_AUTO;
 	return iEqualizerIndex;
 	}
 
 const CMobblerString& CMobblerRadioPlayer::Station() const
 	{
+    TRACER_AUTO;
 	return *iStation;
 	}
 
 void CMobblerRadioPlayer::SetPreBufferSize(TTimeIntervalSeconds aPreBufferSize)
 	{
+    TRACER_AUTO;
 	iPreBufferSize = aPreBufferSize;
 	if (iCurrentAudioControl)
 		{
@@ -618,6 +647,7 @@ void CMobblerRadioPlayer::SetPreBufferSize(TTimeIntervalSeconds aPreBufferSize)
 
 void CMobblerRadioPlayer::SetBitRateL(TInt aBitRate)
 	{
+    TRACER_AUTO;
 	if (aBitRate != iBitRate)
 		{
 		// The sample rate has changed so we need to
@@ -641,6 +671,7 @@ void CMobblerRadioPlayer::SetBitRateL(TInt aBitRate)
 
 void CMobblerRadioPlayer::RequestPlaylistL(TBool aCancelPrevious)
 	{
+    TRACER_AUTO;
 	if (aCancelPrevious && iTransactionState == EFetchingPlaylist)
 		{
 		// Cancel the previous fetch playlist transaction
@@ -656,11 +687,13 @@ void CMobblerRadioPlayer::RequestPlaylistL(TBool aCancelPrevious)
 
 void CMobblerRadioPlayer::StopL()
 	{
+    TRACER_AUTO;
 	DoStopL(ETrue);
 	}
 
 void CMobblerRadioPlayer::DoStopL(TBool aFullStop)
 	{
+    TRACER_AUTO;
 	// Try to submit the last played track
 	SubmitCurrentTrackL();
 
@@ -727,6 +760,7 @@ void CMobblerRadioPlayer::DoStopL(TBool aFullStop)
 
 CMobblerTrack* CMobblerRadioPlayer::CurrentTrack()
 	{
+    TRACER_AUTO;
 	if (iCurrentAudioControl && 
 		(!iCurrentAudioControl->DownloadComplete() || iCurrentAudioControl->Playing()) && 
 		iPlaylist->Count() > 0)
@@ -739,6 +773,7 @@ CMobblerTrack* CMobblerRadioPlayer::CurrentTrack()
 
 CMobblerTrack* CMobblerRadioPlayer::NextTrack()
 	{
+    TRACER_AUTO;
 	if (iPlaylist->Count() > 1)
 		{
 		return (*iPlaylist)[1];
@@ -749,6 +784,7 @@ CMobblerTrack* CMobblerRadioPlayer::NextTrack()
 
 void CMobblerRadioPlayer::SubmitCurrentTrackL()
 	{
+    TRACER_AUTO;
 	if (iCurrentAudioControl && (!iCurrentAudioControl->DownloadComplete() || iCurrentAudioControl->Playing()))
 		{
 		iLastFmConnection.TrackStoppedL(CurrentTrack());
@@ -757,6 +793,7 @@ void CMobblerRadioPlayer::SubmitCurrentTrackL()
 
 void CMobblerRadioPlayer::HandleIncomingCallL(TPSTelephonyCallState aPSTelephonyCallState)
 	{
+    TRACER_AUTO;
 	switch (aPSTelephonyCallState)
 		{
 		case EPSTelephonyCallStateAlerting:
@@ -789,6 +826,7 @@ void CMobblerRadioPlayer::HandleIncomingCallL(TPSTelephonyCallState aPSTelephony
 
 void CMobblerRadioPlayer::SetEqualizer(TInt aIndex)
 	{
+    TRACER_AUTO;
 	iEqualizerIndex = aIndex;
 	if (iCurrentAudioControl)
 		{
@@ -802,6 +840,7 @@ void CMobblerRadioPlayer::SetEqualizer(TInt aIndex)
 
 TBool CMobblerRadioPlayer::HasPlaylist() const
 	{
+    TRACER_AUTO;
 	return (iPlaylist->Count() > 0);
 	}
 

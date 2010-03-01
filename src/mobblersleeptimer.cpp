@@ -22,15 +22,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #include "mobblersleeptimer.h"
+#include "mobblertracer.h"
 
 CMobblerSleepTimer::CMobblerSleepTimer(const TInt aPriority, 
 									   MMobblerSleepTimerNotify& aNotify)
 :CActive(aPriority), iNotify(aNotify)
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerSleepTimer::~CMobblerSleepTimer()
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.Close();
 	}
@@ -38,6 +41,7 @@ CMobblerSleepTimer::~CMobblerSleepTimer()
 CMobblerSleepTimer* CMobblerSleepTimer::NewL(const TInt aPriority,
 											 MMobblerSleepTimerNotify& aNotify)
 	{
+    TRACER_AUTO;
 	CMobblerSleepTimer* timer(new (ELeave) CMobblerSleepTimer(aPriority, 
 																aNotify));
 	CleanupStack::PushL(timer);
@@ -48,12 +52,14 @@ CMobblerSleepTimer* CMobblerSleepTimer::NewL(const TInt aPriority,
 
 void CMobblerSleepTimer::ConstructL(void)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	iTimer.CreateLocal();
 	}
 
 void CMobblerSleepTimer::After(TTimeIntervalMicroSeconds32 aInterval)
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.After(iStatus, aInterval);
 	SetActive();
@@ -61,6 +67,7 @@ void CMobblerSleepTimer::After(TTimeIntervalMicroSeconds32 aInterval)
 
 void CMobblerSleepTimer::At(const TTime& aTime)
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.At(iStatus, aTime);
 	SetActive();
@@ -68,6 +75,7 @@ void CMobblerSleepTimer::At(const TTime& aTime)
 
 void CMobblerSleepTimer::AtUTC(const TTime& aUtcTime)
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.AtUTC(iStatus, aUtcTime);
 	SetActive();
@@ -75,6 +83,7 @@ void CMobblerSleepTimer::AtUTC(const TTime& aUtcTime)
 
 void CMobblerSleepTimer::Inactivity(TTimeIntervalSeconds aSeconds)
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.Inactivity(iStatus, aSeconds);
 	SetActive();
@@ -82,11 +91,13 @@ void CMobblerSleepTimer::Inactivity(TTimeIntervalSeconds aSeconds)
 
 void CMobblerSleepTimer::DoCancel()
 	{
+    TRACER_AUTO;
 	iTimer.Cancel();
 	}
  
 void CMobblerSleepTimer::RunL()
 	{
+    TRACER_AUTO;
 	iNotify.TimerExpiredL(this, iStatus.Int());
 	}
 

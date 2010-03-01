@@ -26,14 +26,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbleraccesspointsettingitem.h"
 #include "mobblerappui.h"
 #include "mobblerdestinationsinterface.h"
+#include "mobblertracer.h"
 
 CMobblerAccessPointSettingItem::CMobblerAccessPointSettingItem(TInt aIdentifier, TInt& aValue)
 		:CAknEnumeratedTextPopupSettingItem(aIdentifier, aValue), iValue(aValue)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerAccessPointSettingItem::LoadL()
 	{
+    TRACER_AUTO;
 	CArrayPtr<CAknEnumeratedText>* texts(EnumeratedTextArray());
 	TInt selectedIndex(IndexFromValue(iValue));
 
@@ -53,6 +56,7 @@ void CMobblerAccessPointSettingItem::LoadL()
 
 TInt CMobblerAccessPointSettingItem::LoadIapListL()
 	{
+    TRACER_AUTO;
 	TInt firstIapId(KErrNotFound);
 	
 	CMobblerDestinationsInterface* destinations(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->Destinations());
@@ -109,6 +113,7 @@ TInt CMobblerAccessPointSettingItem::LoadIapListL()
 
 void CMobblerAccessPointSettingItem::CreateAndExecuteSettingPageL()
 	{
+    TRACER_AUTO;
 	CAknSettingPage* dlg(CreateSettingPageL());
 
 	SetSettingPage(dlg);
@@ -122,6 +127,7 @@ void CMobblerAccessPointSettingItem::CreateAndExecuteSettingPageL()
 
 void CMobblerAccessPointSettingItem::CompleteConstructionL()
 	{
+    TRACER_AUTO;
 	CAknEnumeratedTextPopupSettingItem::CompleteConstructionL();
 	}
 

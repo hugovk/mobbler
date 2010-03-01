@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler.rsg.h"
 #include "mobbler_strings.rsg.h"
 #include "mobblerresourcereader.h"
+#include "mobblertracer.h"
 
 #ifdef __SYMBIAN_SIGNED__
 
@@ -83,6 +84,7 @@ const TDesC& CMobblerResourceReader::CMobblerResource::String() const
 
 CMobblerResourceReader* CMobblerResourceReader::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerResourceReader* self(new(ELeave) CMobblerResourceReader());
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -93,11 +95,13 @@ CMobblerResourceReader* CMobblerResourceReader::NewL()
 CMobblerResourceReader::CMobblerResourceReader()
 	:CActive(CActive::EPriorityStandard), iLinearOrder(CMobblerResource::Compare)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerResourceReader::ConstructL()
 	{
+    TRACER_AUTO;
 	iStringNotFoundInResouce = KStringNotFoundInResouce().AllocL();
 	
 	User::LeaveIfError(iTimer.CreateLocal());
@@ -112,6 +116,7 @@ void CMobblerResourceReader::ConstructL()
 
 CMobblerResourceReader::~CMobblerResourceReader()
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.Close();
 	
@@ -124,6 +129,7 @@ CMobblerResourceReader::~CMobblerResourceReader()
 
 void CMobblerResourceReader::RunL()
 	{
+    TRACER_AUTO;
 	if (iStatus.Int() == KErrNone)
 		{
 		iResourceFile.Close();
@@ -133,11 +139,13 @@ void CMobblerResourceReader::RunL()
 
 void CMobblerResourceReader::DoCancel()
 	{
+    TRACER_AUTO;
 	iTimer.Cancel();
 	}
 
 const TDesC& CMobblerResourceReader::ResourceL(TInt aResourceId)
 	{
+    TRACER_AUTO;
 	TInt position(iResources.FindInOrder(aResourceId, CMobblerResource::Compare));
 	
 	if (position != KErrNotFound)

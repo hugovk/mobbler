@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <chttpformencoder.h>
 
 #include "mobblerliterals.h"
+#include "mobblertracer.h"
 #include "mobblerutility.h"
 #include "mobblerwebservicesquery.h"
 
@@ -38,6 +39,7 @@ _LIT8(KAmpersand, "&");
 
 CMobblerWebServicesQuery* CMobblerWebServicesQuery::NewLC(const TDesC8& aMethod)
 	{
+    TRACER_AUTO;
 	CMobblerWebServicesQuery* self(new(ELeave) CMobblerWebServicesQuery());
 	CleanupStack::PushL(self);
 	self->ConstructL(aMethod);
@@ -47,16 +49,19 @@ CMobblerWebServicesQuery* CMobblerWebServicesQuery::NewLC(const TDesC8& aMethod)
 
 CMobblerWebServicesQuery::CMobblerWebServicesQuery()
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerWebServicesQuery::ConstructL(const TDesC8& aMethod)
 	{
+    TRACER_AUTO;
 	AddFieldL(KMobblerParameterMethod, aMethod);
 	AddFieldL(KMobblerParameterApiKey, KMobblerApiKey);
 	}
 
 CMobblerWebServicesQuery::~CMobblerWebServicesQuery()
 	{
+    TRACER_AUTO;
 	const TInt KFieldCount(iFields.Count());
 	for (TInt i(0); i < KFieldCount; ++i)
 		{
@@ -69,6 +74,7 @@ CMobblerWebServicesQuery::~CMobblerWebServicesQuery()
 
 void CMobblerWebServicesQuery::AddFieldL(const TDesC8& aParameter, const TDesC8& aValue)
 	{
+    TRACER_AUTO;
 	TMobblerWebServicesQueryField field;
 	field.iParameter = aParameter.AllocL();
 	field.iValue = aValue.AllocL();
@@ -78,6 +84,7 @@ void CMobblerWebServicesQuery::AddFieldL(const TDesC8& aParameter, const TDesC8&
 
 HBufC8* CMobblerWebServicesQuery::GetQueryAuthLC() const
 	{
+    TRACER_AUTO;
 	HBufC8* queryText(HBufC8::NewLC(1024));
 	HBufC8* apiSig(HBufC8::NewLC(1024));
 	
@@ -116,6 +123,7 @@ HBufC8* CMobblerWebServicesQuery::GetQueryAuthLC() const
 
 HBufC8* CMobblerWebServicesQuery::GetQueryLC() const
 	{
+    TRACER_AUTO;
 	HBufC8* queryText(HBufC8::NewLC(1024));
 	
 	// add all the fields
@@ -134,6 +142,7 @@ HBufC8* CMobblerWebServicesQuery::GetQueryLC() const
 
 CHTTPFormEncoder* CMobblerWebServicesQuery::GetFormLC() const
 	{
+    TRACER_AUTO;
 	CHTTPFormEncoder* form(CHTTPFormEncoder::NewL());
 	CleanupStack::PushL(form);
 	
@@ -164,6 +173,7 @@ CHTTPFormEncoder* CMobblerWebServicesQuery::GetFormLC() const
 
 TInt CMobblerWebServicesQuery::Compare(const TMobblerWebServicesQueryField& aLeft, const TMobblerWebServicesQueryField& aRight)
 	{
+    TRACER_AUTO;
 	return aLeft.iParameter->Compare(*aRight.iParameter);
 	}
 

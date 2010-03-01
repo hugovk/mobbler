@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerparser.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
 
@@ -47,10 +48,12 @@ const TUid KGoogleMapsUid = {0x2000CEA3};
 CMobblerEventList::CMobblerEventList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerEventList::ConstructL()
 	{
+    TRACER_AUTO;
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultEventImage);
 	
 	switch (iType)
@@ -71,6 +74,7 @@ void CMobblerEventList::ConstructL()
 
 CMobblerEventList::~CMobblerEventList()
 	{
+    TRACER_AUTO;
 	delete iAttendanceHelper;
 	delete iAttendanceHelperNo;
 	delete iWebServicesHelper;
@@ -79,6 +83,7 @@ CMobblerEventList::~CMobblerEventList()
 
 CMobblerListControl* CMobblerEventList::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	switch (aCommand)
@@ -133,6 +138,7 @@ CMobblerListControl* CMobblerEventList::HandleListCommandL(TInt aCommand)
 
 void CMobblerEventList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
+    TRACER_AUTO;
 	aCommands.AppendL(EMobblerCommandView);
 	aCommands.AppendL(EMobblerCommandEventShoutbox);
 	aCommands.AppendL(EMobblerCommandVisitWebPage);
@@ -165,6 +171,7 @@ void CMobblerEventList::SupportedCommandsL(RArray<TInt>& aCommands)
 
 void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		if (aObserver == iAttendanceHelperNo &&
@@ -271,6 +278,7 @@ void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 
 void CMobblerEventList::ParseL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	CMobblerParser::ParseEventsL(aXml, *this, iList);
 	}
 

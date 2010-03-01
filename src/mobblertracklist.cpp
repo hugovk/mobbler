@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerparser.h"
 #include "mobblerresourcereader.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblertracklist.h"
 #include "mobblerutility.h"
@@ -47,10 +48,12 @@ const TInt KAverageTrackLength(217); // == 3:37, median track length from two us
 CMobblerTrackList::CMobblerTrackList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerTrackList::ConstructL()
 	{
+    TRACER_AUTO;
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultTrackImage);
 	
 	iWebServicesHelper = CMobblerWebServicesHelper::NewL(iAppUi);
@@ -104,6 +107,7 @@ void CMobblerTrackList::ConstructL()
 
 CMobblerTrackList::~CMobblerTrackList()
 	{
+    TRACER_AUTO;
 	delete iAsyncCallBack;
 	delete iAlbumInfoObserver;
 	delete iWebServicesHelper;
@@ -113,11 +117,13 @@ CMobblerTrackList::~CMobblerTrackList()
 
 void CMobblerTrackList::GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle)
 	{
+    TRACER_AUTO;
 	GetArtistAndTitleName(iListBox->CurrentItemIndex(), aArtist, aTitle);
 	}
 
 void CMobblerTrackList::GetArtistAndTitleName(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aTitle)
 	{
+    TRACER_AUTO;
 	if (iType == EMobblerCommandScrobbleLog)
 		{
 		if (iAppUi.LastFmConnection().ScrobbleLogCount() > aItemIndex
@@ -147,6 +153,7 @@ void CMobblerTrackList::GetArtistAndTitleName(const TInt aItemIndex, TPtrC8& aAr
 
 CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	TPtrC8 artist(KNullDesC8);
@@ -273,6 +280,7 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 
 void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
+    TRACER_AUTO;
 	aCommands.AppendL(EMobblerCommandTrackLove);
 	aCommands.AppendL(EMobblerCommandTrackScrobble);
 	
@@ -300,6 +308,7 @@ void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 
 void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aObserver == iAlbumInfoObserver)
 		{
 		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
@@ -335,12 +344,14 @@ void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 
 TInt CMobblerTrackList::ViewScrobbleLogCallBackL(TAny* aPtr)
 	{
+    TRACER_AUTO;
 	static_cast<CMobblerTrackList*>(aPtr)->CMobblerListControl::DataL(KNullDesC8, CMobblerLastFmConnection::ETransactionErrorNone);
 	return KErrNone;
 	}
 
 void CMobblerTrackList::ParseL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	switch (iType)
 		{
 		case EMobblerCommandArtistTopTracks:

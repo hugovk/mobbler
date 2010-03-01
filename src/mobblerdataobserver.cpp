@@ -28,12 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblerdataobserver.h"
 #include "mobblerresourcereader.h"
+#include "mobblertracer.h"
 
 CMobblerFlatDataObserverHelper* CMobblerFlatDataObserverHelper::NewL(
 									CMobblerLastFmConnection& aConnection,
 									MMobblerFlatDataObserverHelper& aObserver,
 									TBool aShowWaitDialog)
 	{
+    TRACER_AUTO;
 	CMobblerFlatDataObserverHelper* self(new(ELeave) CMobblerFlatDataObserverHelper(aConnection, aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL(aShowWaitDialog);
@@ -44,10 +46,12 @@ CMobblerFlatDataObserverHelper* CMobblerFlatDataObserverHelper::NewL(
 CMobblerFlatDataObserverHelper::CMobblerFlatDataObserverHelper(CMobblerLastFmConnection& aConnection, MMobblerFlatDataObserverHelper& aObserver)
 	:iConnection(aConnection), iObserver(aObserver)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerFlatDataObserverHelper::ConstructL(TBool aShowWaitDialog)
 	{
+    TRACER_AUTO;
 	if (aShowWaitDialog)
 		{
 		iWaitDialog = new (ELeave) CAknWaitDialog((REINTERPRET_CAST(CEikDialog**, &iWaitDialog)), ETrue);
@@ -59,6 +63,7 @@ void CMobblerFlatDataObserverHelper::ConstructL(TBool aShowWaitDialog)
 
 CMobblerFlatDataObserverHelper::~CMobblerFlatDataObserverHelper()
 	{
+    TRACER_AUTO;
 	iConnection.CancelTransaction(this);
 	
 	if(iWaitDialog)
@@ -69,6 +74,7 @@ CMobblerFlatDataObserverHelper::~CMobblerFlatDataObserverHelper()
 
 void CMobblerFlatDataObserverHelper::SetNotOwned()
 	{
+    TRACER_AUTO;
 	if (iFinished)
 		{
 		// the transaction has already finished so just delete this now 
@@ -83,6 +89,7 @@ void CMobblerFlatDataObserverHelper::SetNotOwned()
 
 void CMobblerFlatDataObserverHelper::DialogDismissedL(TInt aButtonId)
 	{
+    TRACER_AUTO;
 	iWaitDialog = NULL;
 	
 	if (aButtonId == EAknSoftkeyCancel)
@@ -93,6 +100,7 @@ void CMobblerFlatDataObserverHelper::DialogDismissedL(TInt aButtonId)
 
 void CMobblerFlatDataObserverHelper::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	iFinished = ETrue;
 	
 	if (iWaitDialog)

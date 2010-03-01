@@ -28,11 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlistcontrol.h"
 #include "mobblerresourcereader.h"
 #include "mobblershoutbox.h"
+#include "mobblertracer.h"
 #include "mobblerwebservicescontrol.h"
 #include "mobblerwebservicesview.h"
 
 CMobblerWebServicesView* CMobblerWebServicesView::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerWebServicesView* self(new(ELeave) CMobblerWebServicesView);
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -42,20 +44,24 @@ CMobblerWebServicesView* CMobblerWebServicesView::NewL()
 
 CMobblerWebServicesView::CMobblerWebServicesView()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerWebServicesView::~CMobblerWebServicesView()
 	{
+    TRACER_AUTO;
 	delete iWebServicesControl;
 	}
 
 void CMobblerWebServicesView::ConstructL()
 	{
+    TRACER_AUTO;
 	BaseConstructL(R_MOBBLER_WEBSERVICES_VIEW);
 	}
 
 void CMobblerWebServicesView::SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aResourceId, TInt aCommandId)
 	{
+    TRACER_AUTO;
 	HBufC* menuText(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(aResourceId).AllocLC());
 
 	const TInt KTextLimit(CEikMenuPaneItem::SData::ENominalTextLength);
@@ -72,6 +78,7 @@ void CMobblerWebServicesView::SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aRe
 
 void CMobblerWebServicesView::FilterMenuItemL(CEikMenuPane* aMenuPane, TInt aIndex, const RArray<TInt>& aSupportedCommands)
 	{
+    TRACER_AUTO;
 	TInt position(0);
 	if (aMenuPane->MenuItemExists(aIndex, position))
 		{
@@ -90,6 +97,7 @@ void CMobblerWebServicesView::FilterMenuItemL(CEikMenuPane* aMenuPane, TInt aInd
 
 void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane)
 	{
+    TRACER_AUTO;
 	// First load the menu text so as not to confuse any dimming logic
 	if (aResourceId == R_MOBBLER_WEBSERVICES_MENU_PANE)
 		{
@@ -243,11 +251,13 @@ void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* a
 
 TUid CMobblerWebServicesView::Id() const
 	{
+    TRACER_AUTO;
 	return TUid::Uid(KMobblerWebServicesViewUid);
 	}
 
 void CMobblerWebServicesView::HandleCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	iWebServicesControl->HandleListCommandL(aCommand);
 	
 	// let the app ui handle the event
@@ -274,6 +284,7 @@ void CMobblerWebServicesView::HandleCommandL(TInt aCommand)
 
 void CMobblerWebServicesView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
+    TRACER_AUTO;
 	if (!iWebServicesControl)
 		{
 		// create the first view
@@ -288,6 +299,7 @@ void CMobblerWebServicesView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUi
 
 void CMobblerWebServicesView::DoDeactivate()
 	{
+    TRACER_AUTO;
 	if (iWebServicesControl)
 		{
 		// deactivate the top control
@@ -299,6 +311,7 @@ void CMobblerWebServicesView::DoDeactivate()
 
 void CMobblerWebServicesView::HandleStatusPaneSizeChange()
 	{
+    TRACER_AUTO;
 	CAknView::HandleStatusPaneSizeChange();
 	}
 

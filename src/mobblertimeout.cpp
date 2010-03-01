@@ -23,9 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerappui.h"
 #include "mobblertimeout.h"
+#include "mobblertracer.h"
 
 CMobblerTimeout* CMobblerTimeout::NewL(const TTimeIntervalMicroSeconds32& aTimeoutTime)
 	{
+    TRACER_AUTO;
 	CMobblerTimeout* self(new(ELeave) CMobblerTimeout(aTimeoutTime));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -36,22 +38,26 @@ CMobblerTimeout* CMobblerTimeout::NewL(const TTimeIntervalMicroSeconds32& aTimeo
 CMobblerTimeout::CMobblerTimeout(const TTimeIntervalMicroSeconds32& aTimeoutTime)
 	:CActive(CActive::EPriorityStandard), iTimeoutTime(aTimeoutTime)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerTimeout::ConstructL()
 	{
+    TRACER_AUTO;
 	User::LeaveIfError(iTimer.CreateLocal());
 	}
 
 CMobblerTimeout::~CMobblerTimeout()
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.Close();
 	}
 	
 void CMobblerTimeout::Reset()
 	{
+    TRACER_AUTO;
 	Cancel();
 	iTimer.After(iStatus, iTimeoutTime);
 	SetActive();
@@ -59,16 +65,19 @@ void CMobblerTimeout::Reset()
 
 TBool CMobblerTimeout::TimedOut() const
 	{
+    TRACER_AUTO;
 	return !IsActive();
 	}
 	
 void CMobblerTimeout::RunL()
 	{
+    TRACER_AUTO;
 	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->StatusDrawDeferred();
 	}
 
 void CMobblerTimeout::DoCancel()
 	{
+    TRACER_AUTO;
 	iTimer.Cancel();
 	}
 

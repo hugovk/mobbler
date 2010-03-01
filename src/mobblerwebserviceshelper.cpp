@@ -40,12 +40,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
 
 CMobblerWebServicesHelper* CMobblerWebServicesHelper::NewL(CMobblerAppUi& aAppUi)
 	{
+    TRACER_AUTO;
 	CMobblerWebServicesHelper* self(new(ELeave) CMobblerWebServicesHelper(aAppUi));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -56,14 +58,17 @@ CMobblerWebServicesHelper* CMobblerWebServicesHelper::NewL(CMobblerAppUi& aAppUi
 CMobblerWebServicesHelper::CMobblerWebServicesHelper(CMobblerAppUi& aAppUi)
 	:iAppUi(aAppUi)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerWebServicesHelper::ConstructL()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerWebServicesHelper::~CMobblerWebServicesHelper()
 	{
+    TRACER_AUTO;
 	delete iTagAddHelper;
 	delete iTagRemoveHelper;
 	
@@ -87,6 +92,7 @@ CMobblerWebServicesHelper::~CMobblerWebServicesHelper()
 
 CMobblerWebServicesHelper::TShareSource CMobblerWebServicesHelper::ShareSourceL()
 	{
+    TRACER_AUTO;
 	TShareSource shareSource(EShareCancelled);
 	
 	// parse and bring up an add to playlist popup menu
@@ -130,6 +136,7 @@ CMobblerWebServicesHelper::TShareSource CMobblerWebServicesHelper::ShareSourceL(
 
 void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 	{
+    TRACER_AUTO;
 	iTrack = &aTrack;
 	iTrack->Open();
 	
@@ -161,6 +168,7 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 
 void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 	{
+    TRACER_AUTO;
 	iTrack = &aTrack;
 	iTrack->Open();
 	
@@ -175,6 +183,7 @@ void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 
 void CMobblerWebServicesHelper::PlaylistAddL(CMobblerTrack& aTrack)
 	{
+    TRACER_AUTO;
 	iTrack = &aTrack;
 	iTrack->Open();
 	
@@ -189,6 +198,7 @@ void CMobblerWebServicesHelper::PlaylistAddL(CMobblerTrack& aTrack)
 
 void CMobblerWebServicesHelper::EventShareL(const TDesC8& aEventId)
 	{
+    TRACER_AUTO;
 	iEventId = aEventId.AllocL();
 	
 	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
@@ -202,6 +212,7 @@ void CMobblerWebServicesHelper::EventShareL(const TDesC8& aEventId)
 
 void CMobblerWebServicesHelper::AddTagL(CMobblerTrack& aTrack, TInt aCommand)
 	{
+    TRACER_AUTO;
 	TBuf<KMobblerMaxQueryDialogLength> tag;
 	
 	TInt resourceId(R_MOBBLER_TRACK_ADD_TAG_PROMPT);
@@ -252,6 +263,7 @@ void CMobblerWebServicesHelper::AddTagL(CMobblerTrack& aTrack, TInt aCommand)
 
 void CMobblerWebServicesHelper::TrackRemoveTagL(CMobblerTrack& aTrack)
 	{
+    TRACER_AUTO;
 	iTrack = &aTrack;
 	iTrack->Open();
 	
@@ -263,6 +275,7 @@ void CMobblerWebServicesHelper::TrackRemoveTagL(CMobblerTrack& aTrack)
 
 void CMobblerWebServicesHelper::AlbumRemoveTagL(CMobblerTrack& aTrack)
 	{
+    TRACER_AUTO;
 	iTrack = &aTrack;
 	iTrack->Open();
 	
@@ -274,6 +287,7 @@ void CMobblerWebServicesHelper::AlbumRemoveTagL(CMobblerTrack& aTrack)
 
 void CMobblerWebServicesHelper::ArtistRemoveTagL(CMobblerTrack& aTrack)
 	{
+    TRACER_AUTO;
 	iTrack = &aTrack;
 	iTrack->Open();
 	
@@ -285,6 +299,7 @@ void CMobblerWebServicesHelper::ArtistRemoveTagL(CMobblerTrack& aTrack)
 
 HBufC* CMobblerWebServicesHelper::DisplayEmailListL(const CDesCArray& aEmails)
 	{
+    TRACER_AUTO;
 	CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
 	CleanupStack::PushL(list);
 	
@@ -328,16 +343,19 @@ HBufC* CMobblerWebServicesHelper::DisplayEmailListL(const CDesCArray& aEmails)
 
 void CMobblerWebServicesHelper::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Stop();
 	}
 
 void CMobblerWebServicesHelper::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	
 	}
 
 HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 	{
+    TRACER_AUTO;
 	CMobblerContacts* contacts(CMobblerContacts::NewLC());
 	
 	CAknDoubleLargeGraphicPopupMenuStyleListBox* list(new(ELeave) CAknDoubleLargeGraphicPopupMenuStyleListBox);
@@ -444,6 +462,7 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 
 void CMobblerWebServicesHelper::DoShareL(TInt aCommand, const TDesC8& aRecipient)
 	{
+    TRACER_AUTO;
 	TBuf<KMobblerMaxQueryDialogLength> message;
 	
 	CAknTextQueryDialog* shoutDialog(new(ELeave) CAknTextQueryDialog(message));
@@ -481,6 +500,7 @@ void CMobblerWebServicesHelper::DoShareL(TInt aCommand, const TDesC8& aRecipient
 
 void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		// Parse the XML

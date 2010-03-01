@@ -33,9 +33,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblersettingitemlist.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerslidersettingitem.h"
+#include "mobblertracer.h"
 
 CMobblerSettingItemListView* CMobblerSettingItemListView::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerSettingItemListView* self(new(ELeave) CMobblerSettingItemListView);
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -46,16 +48,19 @@ CMobblerSettingItemListView* CMobblerSettingItemListView::NewL()
 CMobblerSettingItemListView::CMobblerSettingItemListView()
 	: iOrdinal(1)
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerSettingItemListView::~CMobblerSettingItemListView()
 	{
+    TRACER_AUTO;
 	delete iMobblerSettingItemList;
 	delete iSettings;
 	}
 
 void CMobblerSettingItemListView::ConstructL()
 	{
+    TRACER_AUTO;
 	BaseConstructL(R_MOBBLER_SETTING_ITEM_LIST_VIEW);
 	iSettings = CMobblerSettingItemListSettings::NewL();
 	iSettings->LoadSettingValuesL();
@@ -63,11 +68,13 @@ void CMobblerSettingItemListView::ConstructL()
 
 TUid CMobblerSettingItemListView::Id() const
 	{
+    TRACER_AUTO;
 	return TUid::Uid(KMobblerSettingsViewUid);
 	}
 
 void CMobblerSettingItemListView::HandleCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	// let the app ui handle the event
 	if (aCommand == EAknSoftkeyOk)
 		{
@@ -122,6 +129,7 @@ void CMobblerSettingItemListView::HandleCommandL(TInt aCommand)
 
 void CMobblerSettingItemListView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid aCustomMessageId, const TDesC8& /*aCustomMessage*/)
 	{
+    TRACER_AUTO;
 	iSettingsToSet = (TSettingsToSet)aCustomMessageId.iUid;
 	
 	if ((iSettingsToSet == ESleepTimer && 
@@ -165,6 +173,7 @@ void CMobblerSettingItemListView::DoActivateL(const TVwsViewId& /*aPrevViewId*/,
 
 void CMobblerSettingItemListView::DoDeactivate()
 	{
+    TRACER_AUTO;
 	if (iMobblerSettingItemList)
 		{
 		AppUi()->RemoveFromStack(iMobblerSettingItemList);
@@ -175,6 +184,7 @@ void CMobblerSettingItemListView::DoDeactivate()
 
 void CMobblerSettingItemListView::SetDetailsL(const TDesC& aUsername, const TDesC& aPassword)
 	{
+    TRACER_AUTO;
 	iSettings->SetUsername(aUsername);
 	iSettings->SetPassword(aPassword);
 	iSettings->SaveSettingValuesL();
@@ -182,42 +192,49 @@ void CMobblerSettingItemListView::SetDetailsL(const TDesC& aUsername, const TDes
 
 void CMobblerSettingItemListView::SetEqualizerIndexL(TInt aIndex)
 	{
+    TRACER_AUTO;
 	iSettings->SetEqualizerIndex(aIndex);
 	iSettings->SaveSettingValuesL();
 	}
 
 void CMobblerSettingItemListView::SetVolumeL(TInt aVolume)
 	{
+    TRACER_AUTO;
 	iSettings->SetVolume(aVolume);
 	iSettings->SaveSettingValuesL();
 	}
 
 void CMobblerSettingItemListView::SetSleepTimerMinutesL(TInt aSleepTimerMinutes)
 	{
+    TRACER_AUTO;
 	iSettings->SetSleepTimerMinutes(aSleepTimerMinutes);
 	iSettings->SaveSettingValuesL();
 	}
 
 void CMobblerSettingItemListView::SetNextUpdateCheckL(TTime aNextUpdateCheck)
 	{
+    TRACER_AUTO;
 	iSettings->SetNextUpdateCheck(aNextUpdateCheck);
 	iSettings->SaveSettingValuesL();
 	}
 
 void CMobblerSettingItemListView::SetModeL(CMobblerLastFmConnection::TMode aMode)
 	{
+    TRACER_AUTO;
 	iSettings->SetMode(aMode);
 	iSettings->SaveSettingValuesL();
 	}
 
 void CMobblerSettingItemListView::SetAlarmL(TBool aAlarmOn)
 	{
+    TRACER_AUTO;
 	iSettings->SetAlarmOn(aAlarmOn);
 	iSettings->SaveSettingValuesL();
 	}
 
 void CMobblerSettingItemListView::SetAlarmL(TTime aAlarmTime)
 	{
+    TRACER_AUTO;
 	iSettings->SetAlarmOn(ETrue);
 	iSettings->SetAlarmTime(aAlarmTime);
 	iSettings->SaveSettingValuesL();
@@ -225,16 +242,19 @@ void CMobblerSettingItemListView::SetAlarmL(TTime aAlarmTime)
 
 void CMobblerSettingItemListView::HandleStatusPaneSizeChange()
 	{
+    TRACER_AUTO;
 	CAknView::HandleStatusPaneSizeChange();
 	}
 
 TBool CMobblerSettingItemListView::HandleChangeSelectedSettingItemL(TInt /*aCommand*/)
 	{
+    TRACER_AUTO;
 	return ETrue;
 	}
 
 void CMobblerSettingItemListView::LoadListL()
 	{
+    TRACER_AUTO;
 	iIsNumberedStyle = iMobblerSettingItemList->IsNumberedStyle();
 	iIcons = iMobblerSettingItemList->ListBox()->ItemDrawer()->FormattedCellData()->IconArray();
 
@@ -403,6 +423,7 @@ void CMobblerSettingItemListView::CreateTextItemL(TDes& aText,
 												  const TInt aTitleResource, 
 												  const TInt aPageResource)
 	{
+    TRACER_AUTO;
 	CAknTextSettingItem* item(new (ELeave) CAknTextSettingItem(iOrdinal, aText));
 	CleanupStack::PushL(item);
 	
@@ -420,6 +441,7 @@ void CMobblerSettingItemListView::CreatePasswordItemL(TDes& aPassword,
 													  const TInt aTitleResource, 
 													  const TInt aPageResource)
 	{
+    TRACER_AUTO;
 	CAknPasswordSettingItem* item(new (ELeave) CAknPasswordSettingItem(
 						iOrdinal, CAknPasswordSettingItem::EAlpha, aPassword));
 	CleanupStack::PushL(item);
@@ -439,6 +461,7 @@ void CMobblerSettingItemListView::CreateIapItemL(TInt& aIapId,
 												 const TInt aPageResource,
 												 const TBool aAlwaysAsk)
 	{
+    TRACER_AUTO;
 	// To avoid "Setting Item Lis 6" panic
 	TInt tempIapId(aIapId);
 	aIapId = 0;
@@ -495,6 +518,7 @@ void CMobblerSettingItemListView::CreateSliderItemL(TInt& aSliderValue,
 													const TInt aResourceSingular,
 													const TInt aResourcePlural)
 	{
+    TRACER_AUTO;
 	CMobblerSliderSettingItem* item(new (ELeave) CMobblerSliderSettingItem(
 				iOrdinal, aSliderValue, aResourceSingular, aResourcePlural));
 	CleanupStack::PushL(item);
@@ -513,6 +537,7 @@ void CMobblerSettingItemListView::CreateBinaryItemL(TBool& aBinaryValue,
 													const TInt aFirstEnumResource,
 													const TInt aSecondEnumResource)
 	{
+    TRACER_AUTO;
 	CAknBinaryPopupSettingItem* item(new (ELeave) 
 				CAknBinaryPopupSettingItem(iOrdinal, aBinaryValue));
 	CleanupStack::PushL(item);
@@ -553,6 +578,7 @@ void CMobblerSettingItemListView::CreateEnumItemL(TInt& aEnumId,
 												 const TInt aPageResource,
 												 RArray<TInt>& aEnumResources)
 	{
+    TRACER_AUTO;
 	// To avoid "Setting Item Lis 6" panic. If it occurs, double check settings
 	// are loaded from file in the same order they're saved.
 	TInt tempEnumId(aEnumId);
@@ -595,6 +621,7 @@ void CMobblerSettingItemListView::CreateTimeItemL(TTime& aValue,
 													const TInt aTitleResource, 
 													const TInt aPageResource)
 	{
+    TRACER_AUTO;
 	CAknTimeOrDateSettingItem* item(new (ELeave) 
 				CAknTimeOrDateSettingItem(iOrdinal, CAknTimeOrDateSettingItem::ETime, aValue));
 	CleanupStack::PushL(item);
@@ -613,6 +640,7 @@ void CMobblerSettingItemListView::CreateVolumeItemL(TInt& aValue,
 													const TInt aTitleResource, 
 													const TInt aPageResource)
 	{
+    TRACER_AUTO;
 	if (aValue < 1)
 		{
 		aValue = 1;
@@ -635,6 +663,7 @@ void CMobblerSettingItemListView::CreateIntegerItemL(TInt& aIntegerValue,
 													const TInt aTitleResource, 
 													const TInt aPageResource)
 	{
+    TRACER_AUTO;
 	CAknIntegerEdwinSettingItem* item(new (ELeave) CAknIntegerEdwinSettingItem(
 													iOrdinal, aIntegerValue));
 	CleanupStack::PushL(item);

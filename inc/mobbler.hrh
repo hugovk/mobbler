@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define __MOBBLER_HRH__
 
 #define KMobblerMaxQueryDialogLength 1000
-#define KMobblerMaxUsernameLength 15
+#define KMobblerMaxUsernameLength 32
 #define KMobblerMaxPasswordLength 30
 
 enum TMobblerSettingItemListViewCommands

@@ -26,9 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbrowsercontrol.h"
 #include "mobblerbrowserview.h"
 #include "mobblerresourcereader.h"
+#include "mobblertracer.h"
 
 CMobblerBrowserView* CMobblerBrowserView::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerBrowserView* self(new (ELeave) CMobblerBrowserView);
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -38,20 +40,24 @@ CMobblerBrowserView* CMobblerBrowserView::NewL()
 
 CMobblerBrowserView::CMobblerBrowserView()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerBrowserView::~CMobblerBrowserView()
 	{
+    TRACER_AUTO;
 	delete iBrowserControl;
 	}
 
 void CMobblerBrowserView::ConstructL()
 	{
+    TRACER_AUTO;
 	BaseConstructL(R_MOBBLER_BROWSER_VIEW);
 	}
 
 void CMobblerBrowserView::SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aResourceId, TInt aCommandId)
 	{
+    TRACER_AUTO;
 	HBufC* menuText(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(aResourceId).AllocLC());
 
 	const TInt KTextLimit(CEikMenuPaneItem::SData::ENominalTextLength);
@@ -68,15 +74,18 @@ void CMobblerBrowserView::SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aResour
 
 void CMobblerBrowserView::DynInitMenuPaneL(TInt /*aResourceId*/, CEikMenuPane* /*aMenuPane*/)
 	{
+    TRACER_AUTO;
 	}
 
 TUid CMobblerBrowserView::Id() const
 	{
+    TRACER_AUTO;
 	return TUid::Uid(KMobblerBrowserViewUid);
 	}
 
 void CMobblerBrowserView::HandleCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	switch (aCommand)
 		{
 		case EAknSoftkeyBack:
@@ -97,6 +106,7 @@ void CMobblerBrowserView::HandleCommandL(TInt aCommand)
 
 void CMobblerBrowserView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
+    TRACER_AUTO;
 	if (!iBrowserControl)
 		{
 		// Make the app fullscreen but show the softkeys
@@ -117,6 +127,7 @@ void CMobblerBrowserView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid aC
 
 void CMobblerBrowserView::DoDeactivate()
 	{
+    TRACER_AUTO;
 	if (iBrowserControl)
 		{
 		AppUi()->RemoveFromStack(iBrowserControl);
@@ -127,6 +138,7 @@ void CMobblerBrowserView::DoDeactivate()
 
 void CMobblerBrowserView::HandleStatusPaneSizeChange()
 	{
+    TRACER_AUTO;
 	CAknView::HandleStatusPaneSizeChange();
 	}
 

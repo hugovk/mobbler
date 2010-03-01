@@ -23,9 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerappui.h"
 #include "mobblerdocument.h"
+#include "mobblertracer.h"
 
 CMobblerDocument* CMobblerDocument::NewL(CEikApplication& aApp)
 	{
+    TRACER_AUTO;
 	CMobblerDocument* self(NewLC(aApp));
 	CleanupStack::Pop(self);
 	return self;
@@ -33,6 +35,7 @@ CMobblerDocument* CMobblerDocument::NewL(CEikApplication& aApp)
 
 CMobblerDocument* CMobblerDocument::NewLC(CEikApplication& aApp)
 	{
+    TRACER_AUTO;
 	CMobblerDocument* self(new(ELeave) CMobblerDocument(aApp));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -42,19 +45,23 @@ CMobblerDocument* CMobblerDocument::NewLC(CEikApplication& aApp)
 
 void CMobblerDocument::ConstructL()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerDocument::CMobblerDocument(CEikApplication& aApp)
 	:CAknDocument(aApp)
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerDocument::~CMobblerDocument()
 	{
+    TRACER_AUTO;
 	}
 
 CEikAppUi* CMobblerDocument::CreateAppUiL()
 	{
+    TRACER_AUTO;
 	return new(ELeave) CMobblerAppUi;
 	}
 

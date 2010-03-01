@@ -26,9 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <imageconversion.h>
 
 #include "mobblerbitmap.h"
+#include "mobblertracer.h"
 
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TDesC& aMifFileName, TInt aBitmapIndex, TInt iMaskIndex)
 	{
+    TRACER_AUTO;
 	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL(aMifFileName, aBitmapIndex, iMaskIndex);
@@ -38,6 +40,7 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TD
 
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, TUid aAppUid)
 	{
+    TRACER_AUTO;
 	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL(aAppUid);
@@ -47,6 +50,7 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, TUid aAp
 
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TDesC& aFileName, const TUid aFileUid)
 	{
+    TRACER_AUTO;
 	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL(aFileName, aFileUid);
@@ -56,6 +60,7 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TD
 
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TDesC8& aData, const TUid aFileUid)
 	{
+    TRACER_AUTO;
 	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL(aData, aFileUid);
@@ -66,11 +71,13 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TD
 CMobblerBitmap::CMobblerBitmap(MMobblerBitmapObserver* aObserver)
 	:CActive(CActive::EPriorityStandard), iObserver(aObserver), iRefCount(1)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 CMobblerBitmap::~CMobblerBitmap()
 	{
+    TRACER_AUTO;
 	Cancel();
 	
 	if (iScaledBitmap)
@@ -91,11 +98,13 @@ CMobblerBitmap::~CMobblerBitmap()
 
 void CMobblerBitmap::Open() const
 	{
+    TRACER_AUTO;
 	++iRefCount;
 	}
 
 void CMobblerBitmap::Close() const
 	{
+    TRACER_AUTO;
 	if (this && --iRefCount == 0)
 		{
 		delete this;
@@ -104,6 +113,7 @@ void CMobblerBitmap::Close() const
 
 void CMobblerBitmap::SetCallbackCancelled(TBool aCallbackCancelled)
 	{
+    TRACER_AUTO;
 	if (aCallbackCancelled)
 		{
 		iObserver = NULL;
@@ -112,6 +122,7 @@ void CMobblerBitmap::SetCallbackCancelled(TBool aCallbackCancelled)
 
 void CMobblerBitmap::SetObserver(MMobblerBitmapObserver& aObserver)
 	{
+    TRACER_AUTO;
 	iObserver = &aObserver;
 	}
 
@@ -121,6 +132,7 @@ CFbsBitmap* CMobblerBitmap::Bitmap(TBool aOriginalPlease) const
 CFbsBitmap* CMobblerBitmap::Bitmap() const
 #endif
 	{
+    TRACER_AUTO;
 	CFbsBitmap* bitmap(NULL);
 	
 	if (iBitmapLoaded)
@@ -139,6 +151,7 @@ CFbsBitmap* CMobblerBitmap::Bitmap() const
 
 CFbsBitmap* CMobblerBitmap::BitmapGrayL() const
 	{
+    TRACER_AUTO;
 	CFbsBitmap* bitmap(NULL);
 	
 	if (iBitmapLoaded)
@@ -166,6 +179,7 @@ CFbsBitmap* CMobblerBitmap::BitmapGrayL() const
 
 CFbsBitmap* CMobblerBitmap::Mask() const
 	{
+    TRACER_AUTO;
 	CFbsBitmap* mask(NULL);
 	
 	if (iBitmapLoaded)
@@ -178,6 +192,7 @@ CFbsBitmap* CMobblerBitmap::Mask() const
 
 void CMobblerBitmap::SetSize(TSize aSize)
 	{
+    TRACER_AUTO;
 	if (this)
 		{
 		AknIconUtils::SetSize(iBitmap, aSize);
@@ -188,6 +203,7 @@ void CMobblerBitmap::SetSize(TSize aSize)
 
 TSize CMobblerBitmap::SizeInPixels() const
 	{
+    TRACER_AUTO;
 	TSize returnSize(0, 0);
 	
 	if (this && iBitmap)
@@ -200,6 +216,7 @@ TSize CMobblerBitmap::SizeInPixels() const
 	
 void CMobblerBitmap::ConstructL(const TDesC& aFileName, const TUid aFileUid)
 	{
+    TRACER_AUTO;
 	TFileName fileName;
 	if (aFileName[0] == '\\')
 		{
@@ -238,6 +255,7 @@ void CMobblerBitmap::ConstructL(const TDesC& aFileName, const TUid aFileUid)
 
 void CMobblerBitmap::ConstructL(const TDesC8& aData, const TUid aFileUid)
 	{
+    TRACER_AUTO;
 	iData = aData.AllocL();
 	
 	iImageDecoder = CImageDecoder::DataNewL(CCoeEnv::Static()->FsSession(), *iData, CImageDecoder::EOptionAlwaysThread, aFileUid, TUid::Null(), TUid::Null());
@@ -262,6 +280,7 @@ void CMobblerBitmap::ConstructL(const TDesC8& aData, const TUid aFileUid)
 
 void CMobblerBitmap::ConstructL(TUid aAppUid)
 	{
+    TRACER_AUTO;
 	CFbsBitmap* bitmap(NULL);
 	CFbsBitmap* mask(NULL);
 	AknsUtils::CreateAppIconLC(AknsUtils::SkinInstance(), aAppUid,  EAknsAppIconTypeContext, bitmap, mask);
@@ -273,6 +292,7 @@ void CMobblerBitmap::ConstructL(TUid aAppUid)
 	
 void CMobblerBitmap::ConstructL(const TDesC& aMifFileName, TInt aBitmapIndex, TInt aMaskIndex)
 	{
+    TRACER_AUTO;
 	// Find which drive the mif file is on
 	iMifFileName = HBufC::NewL(aMifFileName.Length() + 2);
 	TParse parse;
@@ -292,6 +312,7 @@ void CMobblerBitmap::ConstructL(const TDesC& aMifFileName, TInt aBitmapIndex, TI
 
 void CMobblerBitmap::RunL()
 	{
+    TRACER_AUTO;
 	if (!iBitmapScaler)
 		{
 		delete iImageDecoder;
@@ -340,6 +361,7 @@ void CMobblerBitmap::RunL()
 
 void CMobblerBitmap::DoCancel()
 	{
+    TRACER_AUTO;
 	if (iImageDecoder)
 		{
 		iImageDecoder->Cancel();
@@ -353,6 +375,7 @@ void CMobblerBitmap::DoCancel()
 
 void CMobblerBitmap::ScaleL(TSize aSize)
 	{
+    TRACER_AUTO;
 	if (iBitmapLoaded && iScaleStatus != EMobblerScalePending
 			&& !LongSidesEqual(iBitmap->SizeInPixels(), aSize))
 		{
@@ -383,11 +406,13 @@ void CMobblerBitmap::ScaleL(TSize aSize)
 
 CMobblerBitmap::TMobblerScaleStatus CMobblerBitmap::ScaleStatus() const
 	{
+    TRACER_AUTO;
 	return iScaleStatus;
 	}
 
 TBool CMobblerBitmap::LongSidesEqual(TSize aLeftSize, TSize aRightSize)
 	{
+    TRACER_AUTO;
 	TInt width(aLeftSize.iWidth);
 	TInt height(aLeftSize.iHeight);
 	

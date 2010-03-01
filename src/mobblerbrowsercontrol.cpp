@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlogging.h"
 #include "mobblerparser.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 
 /*
@@ -172,6 +173,7 @@ _LIT8(KHtmlDataType, "text/html");
 
 CMobblerBrowserControl* CMobblerBrowserControl::NewL(const TRect& aRect, CMobblerAppUi& aMobblerAppUi, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
+    TRACER_AUTO;
 	CMobblerBrowserControl* self(new(ELeave) CMobblerBrowserControl(aMobblerAppUi));
 	CleanupStack::PushL(self);
 	self->ConstructL(aRect, aCustomMessageId, aCustomMessage);
@@ -182,10 +184,12 @@ CMobblerBrowserControl* CMobblerBrowserControl::NewL(const TRect& aRect, CMobble
 CMobblerBrowserControl::CMobblerBrowserControl(CMobblerAppUi& aMobblerAppUi) :
 	iAppUi(aMobblerAppUi), iBrowserLoadObserver(iAppUi.LastFmConnection())
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerBrowserControl::ConstructL(const TRect& aRect, TUid /*aCustomMessageId*/, const TDesC8& aCustomMessage)
 	{
+    TRACER_AUTO;
 	CreateWindowL();
 	SetRect(aRect);
 
@@ -257,6 +261,7 @@ void CMobblerBrowserControl::ConstructL(const TRect& aRect, TUid /*aCustomMessag
 
 CMobblerBrowserControl::~CMobblerBrowserControl()
 	{
+    TRACER_AUTO;
 	if (iBrCtlInterface)
 		{
 		delete iBrCtlInterface;
@@ -265,6 +270,7 @@ CMobblerBrowserControl::~CMobblerBrowserControl()
 
 void CMobblerBrowserControl::SizeChanged()
 	{
+    TRACER_AUTO;
 	if (iBrCtlInterface)
 		{
 		iBrCtlInterface->SetRect(Rect());
@@ -273,11 +279,13 @@ void CMobblerBrowserControl::SizeChanged()
 
 TInt CMobblerBrowserControl::CountComponentControls() const
 	{
+    TRACER_AUTO;
 	return 1;
 	}
 
 CCoeControl* CMobblerBrowserControl::ComponentControl(TInt aIndex) const
 	{
+    TRACER_AUTO;
 	switch (aIndex)
 		{
 		case 0:
@@ -289,6 +297,7 @@ CCoeControl* CMobblerBrowserControl::ComponentControl(TInt aIndex) const
 
 void CMobblerBrowserControl::HandleResourceChange(TInt aType)
 	{
+    TRACER_AUTO;
 	if (aType == KEikDynamicLayoutVariantSwitch)
 		{
 		TRect rect;
@@ -302,12 +311,14 @@ void CMobblerBrowserControl::HandleResourceChange(TInt aType)
 
 void CMobblerBrowserControl::Draw(const TRect& /*aRect*/) const
 	{
+    TRACER_AUTO;
 	CWindowGc& gc(SystemGc());
 	gc.Clear(Rect());
 	}
 
 TKeyResponse CMobblerBrowserControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode aEventCode)
 	{
+    TRACER_AUTO;
 	// This is a hack because the CBrCtlInterface which is part of the
 	// platform makes both the left and right arrow keys scroll the page
 	// up which is counter-intuitive. So change right to down before passing

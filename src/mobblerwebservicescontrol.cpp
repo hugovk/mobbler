@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlistcontrol.h"
 #include "mobblerresourcereader.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblerwebservicescontrol.h"
 
@@ -36,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 CMobblerWebServicesControl* CMobblerWebServicesControl::NewL(CMobblerAppUi& aAppUi, const TRect& aRect, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
+    TRACER_AUTO;
 	CMobblerWebServicesControl* self(new(ELeave) CMobblerWebServicesControl(aAppUi));
 	CleanupStack::PushL(self);
 	self->ConstructL(aRect, aCustomMessageId, aCustomMessage);
@@ -46,10 +48,12 @@ CMobblerWebServicesControl* CMobblerWebServicesControl::NewL(CMobblerAppUi& aApp
 CMobblerWebServicesControl::CMobblerWebServicesControl(CMobblerAppUi& aAppUi)
 	:iAppUi(aAppUi)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerWebServicesControl::ConstructL(const TRect& aRect, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
+    TRACER_AUTO;
 	CreateWindowL(); // This is a window owning control
 	InitComponentArrayL();
 	SetRect(aRect);
@@ -90,6 +94,7 @@ void CMobblerWebServicesControl::ConstructL(const TRect& aRect, TUid aCustomMess
 
 CMobblerWebServicesControl::~CMobblerWebServicesControl()
 	{
+    TRACER_AUTO;
 	iAppUi.LastFmConnection().RemoveStateChangeObserver(this);
 	
 	// remove the top control from the stack
@@ -102,11 +107,13 @@ CMobblerWebServicesControl::~CMobblerWebServicesControl()
 
 CMobblerListControl* CMobblerWebServicesControl::TopControl()
 	{
+    TRACER_AUTO;
 	return iControls[iControls.Count() - 1];
 	}
 
 void CMobblerWebServicesControl::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(iControls[iControls.Count() - 1]->HandleListCommandL(aCommand));
 	
 	if (list)
@@ -128,16 +135,19 @@ void CMobblerWebServicesControl::HandleListCommandL(TInt aCommand)
 
 void CMobblerWebServicesControl::HandleConnectionStateChangedL()
 	{
+    TRACER_AUTO;
 	ChangePaneTextL();
 	}
 
 void CMobblerWebServicesControl::HandleListControlStateChangedL()
 	{
+    TRACER_AUTO;
 	ChangePaneTextL();
 	}
 
 void CMobblerWebServicesControl::ChangePaneTextL()
 	{
+    TRACER_AUTO;
 	TBuf<KMaxMobblerTextSize> text;
 	
 	text.AppendFill('>', Max(0, iControls.Count() - 1));
@@ -185,6 +195,7 @@ void CMobblerWebServicesControl::ChangePaneTextL()
 
 void CMobblerWebServicesControl::ForwardL(CMobblerListControl* aListControl)
 	{
+    TRACER_AUTO;
 	// remove the top control
 	iAppUi.RemoveFromStack(iControls[iControls.Count() - 1]);
 
@@ -201,6 +212,7 @@ void CMobblerWebServicesControl::ForwardL(CMobblerListControl* aListControl)
 
 void CMobblerWebServicesControl::BackL()
 	{
+    TRACER_AUTO;
 	if (iControls.Count() == 1)
 		{
 		// switch back to the staus view
@@ -224,6 +236,7 @@ void CMobblerWebServicesControl::BackL()
 
 TKeyResponse CMobblerWebServicesControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode /*aEventCode*/)
 	{
+    TRACER_AUTO;
 	TKeyResponse response(EKeyWasNotConsumed);
 	RArray<TInt> commands;
 	CleanupClosePushL(commands);
@@ -259,17 +272,20 @@ TKeyResponse CMobblerWebServicesControl::OfferKeyEventL(const TKeyEvent& aKeyEve
 
 void CMobblerWebServicesControl::Draw(const TRect& /*aRect*/) const
 	{
+    TRACER_AUTO;
 	CWindowGc& gc(SystemGc());
    	gc.Clear(Rect());
 	}
 
 CCoeControl* CMobblerWebServicesControl::ComponentControl(TInt /*aIndex*/) const
 	{
+    TRACER_AUTO;
 	return iControls[iControls.Count() - 1];
 	}
  
 TInt CMobblerWebServicesControl::CountComponentControls() const
 	{
+    TRACER_AUTO;
 	return 1;
 	}
 

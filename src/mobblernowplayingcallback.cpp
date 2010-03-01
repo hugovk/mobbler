@@ -23,9 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblermusiclistener.h"
 #include "mobblernowplayingcallback.h"
+#include "mobblertracer.h"
 
 CMobblerNowPlayingCallback* CMobblerNowPlayingCallback::NewL(CMobblerMusicAppListener& aMusicListener)
 	{
+    TRACER_AUTO;
 	CMobblerNowPlayingCallback* self(new(ELeave) CMobblerNowPlayingCallback(aMusicListener));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -35,23 +37,27 @@ CMobblerNowPlayingCallback* CMobblerNowPlayingCallback::NewL(CMobblerMusicAppLis
 
 CMobblerNowPlayingCallback::~CMobblerNowPlayingCallback()
 	{
+    TRACER_AUTO;
 	Cancel();
 	}
 
 CMobblerNowPlayingCallback::CMobblerNowPlayingCallback(CMobblerMusicAppListener& aMusicListener)
 	:CTimer(EPriorityStandard), iMusicListener(aMusicListener)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerNowPlayingCallback::ConstructL()
 	{
+    TRACER_AUTO;
 	this->CTimer::ConstructL();
 	After(KNowPlayingCallbackDelay);
 	}
 
 void CMobblerNowPlayingCallback::RunL()
 	{
+    TRACER_AUTO;
 	if (iStatus.Int() == KErrNone)
 		{
 		iMusicListener.NowPlayingL();

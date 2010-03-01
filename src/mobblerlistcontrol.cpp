@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblershoutbox.h"
 #include "mobblerstring.h"
 #include "mobblertaglist.h"
+#include "mobblertracer.h"
 #include "mobblertracklist.h"
 #include "mobblerwebservicescontrol.h"
 
@@ -56,6 +57,7 @@ CMobblerListControl* CMobblerListControl::CreateListL(CMobblerAppUi& aAppUi,
 		const TDesC8& aText1, 
 		const TDesC8& aText2)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* self(NULL);
 	
 	switch (aType)
@@ -116,10 +118,12 @@ CMobblerListControl* CMobblerListControl::CreateListL(CMobblerAppUi& aAppUi,
 CMobblerListControl::CMobblerListControl(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:iAppUi(aAppUi), iWebServicesControl(aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerListControl::ConstructListL(TInt aType, const TDesC8& aText1, const TDesC8& aText2)
 	{
+    TRACER_AUTO;
 	iType = aType;
 	iText1 = CMobblerString::NewL(aText1);
 	iText2 = CMobblerString::NewL(aText2);
@@ -137,6 +141,7 @@ void CMobblerListControl::ConstructListL(TInt aType, const TDesC8& aText1, const
 
 void CMobblerListControl::MakeListBoxL()
 	{
+    TRACER_AUTO;
 	delete iListBox;
 	iListBox = new(ELeave) CAknDoubleLargeStyleListBox();
 	
@@ -163,6 +168,7 @@ void CMobblerListControl::MakeListBoxL()
 
 CMobblerListControl::~CMobblerListControl()
 	{
+    TRACER_AUTO;
 	iAppUi.LastFmConnection().CancelTransaction(this);
 	
 	const TInt KListCount(iList.Count());
@@ -181,16 +187,19 @@ CMobblerListControl::~CMobblerListControl()
 
 TInt CMobblerListControl::Count() const
 	{
+    TRACER_AUTO;
 	return iList.Count();
 	}
 
 TInt CMobblerListControl::Type() const
 	{
+    TRACER_AUTO;
 	return iType;
 	}
 
 HBufC* CMobblerListControl::NameL() const
 	{
+    TRACER_AUTO;
 	TPtrC format(KNullDesC);
 	TPtrC text(iText1->String());
 	
@@ -268,6 +277,7 @@ HBufC* CMobblerListControl::NameL() const
 
 void CMobblerListControl::UpdateIconArrayL()
 	{
+    TRACER_AUTO;
 	if (iDefaultImage && iDefaultImage->Bitmap() && iList.Count() > 0)
 		{
 		// only update the icons if we have loaded the default icon
@@ -308,6 +318,7 @@ void CMobblerListControl::UpdateIconArrayL()
 
 void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		iState = ENormal;
@@ -385,6 +396,7 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 					
 					if (itemTime == Time::NullTTime())
 						{
+    TRACER_AUTO;
 						// this means that the track is playling now
 						description->Des().Copy(iAppUi.ResourceReader().ResourceL(R_MOBBLER_NOW_LISTENING));
 						}
@@ -477,12 +489,14 @@ void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TT
 
 void CMobblerListControl::SizeChanged()
 	{
+    TRACER_AUTO;
 	TRAP_IGNORE(MakeListBoxL());
 	TRAP_IGNORE(UpdateIconArrayL());
 	}
 
 void CMobblerListControl::HandleResourceChange(TInt aType)
 	{
+    TRACER_AUTO;
 	TRect rect;
 	
 	if (aType == KEikDynamicLayoutVariantSwitch)
@@ -497,6 +511,7 @@ void CMobblerListControl::HandleResourceChange(TInt aType)
 
 void CMobblerListControl::HandleScrollEventL(CEikScrollBar* aScrollBar, TEikScrollEvent aEventType)
 	{
+    TRACER_AUTO;
 	// There has been a scrollbar event so we now
 	// may be viewing different list box items
 	RequestImagesL();
@@ -506,6 +521,7 @@ void CMobblerListControl::HandleScrollEventL(CEikScrollBar* aScrollBar, TEikScro
 
 void CMobblerListControl::RequestImagesL() const
 	{
+    TRACER_AUTO;
 	// Request images for items that are being displayed plus two each side
 	
 	if (iList.Count() > 0)
@@ -526,31 +542,37 @@ void CMobblerListControl::RequestImagesL() const
 
 void CMobblerListControl::RequestImageL(TInt aIndex) const
 	{
+    TRACER_AUTO;
 	iAppUi.LastFmConnection().RequestImageL(iList[aIndex], iList[aIndex]->ImageLocation());
 	}
 
 CMobblerListControl::TState CMobblerListControl::State() const
 	{
+    TRACER_AUTO;
 	return iState;
 	}
 
 void CMobblerListControl::HandleLoadedL()
 	{
+    TRACER_AUTO;
 	UpdateIconArrayL();
 	}
 
 void CMobblerListControl::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	UpdateIconArrayL();
 	}
 
 void CMobblerListControl::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	UpdateIconArrayL();
 	}
 
 void CMobblerListControl::HandleListBoxEventL(CEikListBox* /*aListBox*/, TListBoxEvent aEventType)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	RequestImagesL();
@@ -577,6 +599,7 @@ void CMobblerListControl::HandleListBoxEventL(CEikListBox* /*aListBox*/, TListBo
 
 TKeyResponse CMobblerListControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode aEventCode)
 	{
+    TRACER_AUTO;
 	RequestImagesL();
 	
 	switch(aKeyEvent.iCode)
@@ -610,17 +633,20 @@ TKeyResponse CMobblerListControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEv
 
 void CMobblerListControl::Draw(const TRect& /*aRect*/) const
 	{
+    TRACER_AUTO;
 	CWindowGc& gc(SystemGc());
 	gc.Clear(Rect());
 	}
 
 CCoeControl* CMobblerListControl::ComponentControl(TInt /*aIndex*/) const
 	{
+    TRACER_AUTO;
 	return iListBox;
 	}
  
 TInt CMobblerListControl::CountComponentControls() const
 	{
+    TRACER_AUTO;
 	return 1;
 	}
 

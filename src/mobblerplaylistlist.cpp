@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerplaylistlist.h"
 #include "mobblerresourcereader.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 
@@ -47,10 +48,12 @@ _LIT8(KPlaylist, "playlist");
 CMobblerPlaylistList::CMobblerPlaylistList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerPlaylistList::ConstructL()
 	{
+    TRACER_AUTO;
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultPlaylistImage);
 	
 	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetPlaylists, iText1->String8(), *this);
@@ -58,12 +61,14 @@ void CMobblerPlaylistList::ConstructL()
 
 CMobblerPlaylistList::~CMobblerPlaylistList()
 	{
+    TRACER_AUTO;
 	delete iPlaylistCreateObserver;
 	delete iPlaylistAddObserver;
 	}
 
 CMobblerListControl* CMobblerPlaylistList::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	switch (aCommand)
@@ -131,6 +136,7 @@ CMobblerListControl* CMobblerPlaylistList::HandleListCommandL(TInt aCommand)
 
 void CMobblerPlaylistList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError /*aError*/)
 	{
+    TRACER_AUTO;
 	if (aObserver == iPlaylistCreateObserver)
 		{
 		// refresh the playlist list
@@ -159,6 +165,7 @@ void CMobblerPlaylistList::DataL(CMobblerFlatDataObserverHelper* aObserver, cons
 
 void CMobblerPlaylistList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
+    TRACER_AUTO;
 	if (iAppUi.CurrentTrack())
 		{
 		aCommands.AppendL(EMobblerCommandPlaylistAddTrack);
@@ -172,6 +179,7 @@ void CMobblerPlaylistList::SupportedCommandsL(RArray<TInt>& aCommands)
 
 void CMobblerPlaylistList::ParseL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	CMobblerParser::ParsePlaylistsL(aXml, *this, iList);
 	}
 

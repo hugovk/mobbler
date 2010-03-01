@@ -26,31 +26,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerappui.h"
 #include "mobblersettingitemlist.h"
+#include "mobblertracer.h"
 
 CMobblerSettingItemList::CMobblerSettingItemList(CMobblerSettingItemListSettings& aSettings, MEikCommandObserver* aCommandObserver)
 	:iSettings(aSettings), iCommandObserver(aCommandObserver)
 	{
+    TRACER_AUTO;
 	}
 
 
 CMobblerSettingItemList::~CMobblerSettingItemList()
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerSettingItemList::EditItemL(TInt aIndex, TBool aCalledFromMenu)
 	{
+    TRACER_AUTO;
 	CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);
 	(*SettingItemArray())[aIndex]->StoreL();
 	}
 
 void CMobblerSettingItemList::HandleResourceChange(TInt aType)
 	{
+    TRACER_AUTO;
 	CAknSettingItemList::HandleResourceChange(aType);
 	SetRect(iAvkonViewAppUi->View(TUid::Uid(KMobblerSettingsViewUid))->ClientRect());
 	}
 
 TKeyResponse CMobblerSettingItemList::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode aType)
 	{
+    TRACER_AUTO;
 	if ( aKeyEvent.iCode == EKeyLeftArrow 
 		|| aKeyEvent.iCode == EKeyRightArrow )
 		{
@@ -63,6 +69,7 @@ TKeyResponse CMobblerSettingItemList::OfferKeyEventL(const TKeyEvent& aKeyEvent,
 
 void CMobblerSettingItemList::SizeChanged()
 	{
+    TRACER_AUTO;
 	}
 
 // End of file

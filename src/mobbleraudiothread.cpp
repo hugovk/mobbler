@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobbleraudiothread.h"
 #include "mobblershareddata.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 
@@ -61,6 +62,7 @@ TInt ThreadFunction(TAny* aData)
 
 CMobblerAudioThread* CMobblerAudioThread::NewL(TAny* aData)
 	{
+    TRACER_AUTO;
 	CMobblerAudioThread* self(new(ELeave) CMobblerAudioThread(aData));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -71,6 +73,7 @@ CMobblerAudioThread* CMobblerAudioThread::NewL(TAny* aData)
 CMobblerAudioThread::CMobblerAudioThread(TAny* aData)
 	:CActive(CActive::EPriorityStandard), iShared(*static_cast<TMobblerSharedData*>(aData))
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	
 	iShared.iPlaying = EFalse;
@@ -79,11 +82,13 @@ CMobblerAudioThread::CMobblerAudioThread(TAny* aData)
 
 void CMobblerAudioThread::ConstructL()
 	{
+    TRACER_AUTO;
 	Request();
 	}
 
 CMobblerAudioThread::~CMobblerAudioThread()
 	{
+    TRACER_AUTO;
 	Cancel();
 	
 	if (iStream)
@@ -105,6 +110,7 @@ CMobblerAudioThread::~CMobblerAudioThread()
 
 void CMobblerAudioThread::Request()
 	{
+    TRACER_AUTO;
 	iShared.iCmdStatus = &iStatus;
 	iStatus = KRequestPending;
 	SetActive();
@@ -112,6 +118,7 @@ void CMobblerAudioThread::Request()
 
 void CMobblerAudioThread::RunL()
 	{
+    TRACER_AUTO;
 	switch (iStatus.Int())
 		{
 		case ECmdSetVolume:
@@ -174,12 +181,14 @@ void CMobblerAudioThread::RunL()
 
 void CMobblerAudioThread::DoCancel()
 	{
+    TRACER_AUTO;
 	TRequestStatus* status(&iStatus);
 	User::RequestComplete(status, KErrCancel);
 	}
 
 TInt CMobblerAudioThread::RunError(TInt /*aError*/)
 	{
+    TRACER_AUTO;
 	// There was an error in the RunL so just end the thread
 	
 	if (!iActiveSchedulerStopped)
@@ -192,6 +201,7 @@ TInt CMobblerAudioThread::RunError(TInt /*aError*/)
 
 void CMobblerAudioThread::DestroyAudio()
 	{
+    TRACER_AUTO;
 	if (!iActiveSchedulerStopped)
 		{
 		iActiveSchedulerStopped = ETrue;
@@ -201,6 +211,7 @@ void CMobblerAudioThread::DestroyAudio()
 
 void CMobblerAudioThread::SetVolume()
 	{
+    TRACER_AUTO;
 	if (iStream)
 		{
 		iStream->SetVolume(iShared.iAudioDataSettings.iVolume);
@@ -213,6 +224,7 @@ void CMobblerAudioThread::SetVolume()
 
 void CMobblerAudioThread::SetEqualizerIndexL()
 	{
+    TRACER_AUTO;
 	if (iEqualizer)
 		{
 		if (iShared.iEqualizerIndex < 0)
@@ -229,6 +241,7 @@ void CMobblerAudioThread::SetEqualizerIndexL()
 
 TBool CMobblerAudioThread::PreBufferFilled() const
 	{
+    TRACER_AUTO;
 	TBool preBufferedFilled(EFalse);
 	
 	if (iShared.iTrack->DataSize() != 1)
@@ -254,6 +267,7 @@ TBool CMobblerAudioThread::PreBufferFilled() const
 
 void CMobblerAudioThread::FillBufferL(TBool aDataAdded)
 	{
+    TRACER_AUTO;
 	if (iShared.iPlaying)
 		{
 		if (aDataAdded)
@@ -279,6 +293,7 @@ void CMobblerAudioThread::FillBufferL(TBool aDataAdded)
 
 void CMobblerAudioThread::MaoscBufferCopied(TInt /*aError*/, const TDesC8& /*aBuffer*/)
 	{
+    TRACER_AUTO;
 	delete iBuffer[0];
 	iBuffer.Remove(0);
 	
@@ -309,6 +324,7 @@ void CMobblerAudioThread::MaoscBufferCopied(TInt /*aError*/, const TDesC8& /*aBu
 
 void CMobblerAudioThread::MaoscOpenComplete(TInt /*aError*/)
 	{
+    TRACER_AUTO;
 	TRAP_IGNORE(iStream->SetDataTypeL(KMMFFourCCCodeMP3));
 	iStream->SetAudioPropertiesL(iShared.iAudioDataSettings.iSampleRate, iShared.iAudioDataSettings.iChannels);
 	iStream->SetVolume(iShared.iAudioDataSettings.iVolume);
@@ -322,10 +338,12 @@ void CMobblerAudioThread::MaoscOpenComplete(TInt /*aError*/)
 
 void CMobblerAudioThread::MaoscPlayComplete(TInt /*aError*/)
 	{
+    TRACER_AUTO;
 	}
 
 TInt CMobblerAudioThread::UpdatePlayerPosition(TAny* aRef)
 	{
+    TRACER_AUTO;
 	TTimeIntervalMicroSeconds playerPosition;
 	TInt error(static_cast<CMobblerAudioThread*>(aRef)->iPlayer->GetPosition(playerPosition));
 	if (error == KErrNone)
@@ -338,6 +356,7 @@ TInt CMobblerAudioThread::UpdatePlayerPosition(TAny* aRef)
 
 void CMobblerAudioThread::MapcInitComplete(TInt aError, const TTimeIntervalMicroSeconds& aDuration)
 	{
+    TRACER_AUTO;
 	if (aError == KErrNone)
 		{
 		iShared.iPlaying = ETrue;
@@ -363,6 +382,7 @@ void CMobblerAudioThread::MapcInitComplete(TInt aError, const TTimeIntervalMicro
 
 void CMobblerAudioThread::MapcPlayComplete(TInt /*aError*/)
 	{
+    TRACER_AUTO;
 	if (!iActiveSchedulerStopped)
 		{
 		iActiveSchedulerStopped = ETrue;

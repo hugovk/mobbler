@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler_strings.rsg.h"
 #include "mobblerresourcereader.h"
 #include "mobblerslidersettingitem.h"
+#include "mobblertracer.h"
 
 CMobblerSliderSettingItem::CMobblerSliderSettingItem(TInt aIdentifier,
 													 TInt& aSliderValue,
@@ -35,6 +36,7 @@ CMobblerSliderSettingItem::CMobblerSliderSettingItem(TInt aIdentifier,
 	  iResourceIdSingular(aResourceId),
 	  iResourceIdPlural(aResourceId)
   	{
+    TRACER_AUTO;
   	}
 
 CMobblerSliderSettingItem::CMobblerSliderSettingItem(TInt aIdentifier,
@@ -45,10 +47,12 @@ CMobblerSliderSettingItem::CMobblerSliderSettingItem(TInt aIdentifier,
 	  iResourceIdSingular(aResourceIdSingular),
 	  iResourceIdPlural(aResourceIdPlural)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerSliderSettingItem::CreateAndExecuteSettingPageL()
 	{
+    TRACER_AUTO;
 	CAknSettingPage* dlg(CreateSettingPageL());
 
 	SetSettingPage(dlg);
@@ -65,11 +69,13 @@ void CMobblerSliderSettingItem::CreateAndExecuteSettingPageL()
 
 CFbsBitmap* CMobblerSliderSettingItem::CreateBitmapL()
 	{
+    TRACER_AUTO;
 	return NULL;
 	}
 
 const TDesC& CMobblerSliderSettingItem::SettingTextL()
 	{
+    TRACER_AUTO;
 	iText.Format(InternalSliderValue() == 1?
 			static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(iResourceIdSingular):
 			static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(iResourceIdPlural),

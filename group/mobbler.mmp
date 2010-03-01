@@ -200,7 +200,6 @@ LIBRARY		estor.lib
 LIBRARY		etel3rdparty.lib
 LIBRARY		euser.lib
 LIBRARY		fbscli.lib
-LIBRARY		flogger.lib
 LIBRARY		gdi.lib
 LIBRARY		hal.lib
 LIBRARY		hash.lib
@@ -216,6 +215,8 @@ LIBRARY		RemConCoreApi.lib
 LIBRARY		RemConInterfaceBase.lib
 LIBRARY		senxml.lib
 LIBRARY		ws32.lib
+
+DEBUGLIBRARY	flogger.lib
 
 VENDORID	0
 

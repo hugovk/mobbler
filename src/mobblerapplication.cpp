@@ -24,14 +24,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerapplication.h"
 #include "mobblerappui.h"
 #include "mobblerdocument.h"
+#include "mobblertracer.h"
 
 CApaDocument* CMobblerApplication::CreateDocumentL()
 	{
+    TRACER_AUTO;
 	return CMobblerDocument::NewL(*this);
 	}
 
 TUid CMobblerApplication::AppDllUid() const
 	{
+    TRACER_AUTO;
 	return TUid::Uid(KMobblerAppUid);
 	}
 

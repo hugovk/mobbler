@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerliterals.h"
 #include "mobblerlogging.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 
@@ -69,6 +70,7 @@ CMobblerTrack* CMobblerTrack::NewL(const TDesC8& aArtist,
 									const TDesC8& aRadioAuth,
 									TBool aLoved)
 	{
+    TRACER_AUTO;
 	CMobblerTrack* self(new(ELeave) CMobblerTrack(aTrackLength, aLoved));
 	CleanupStack::PushL(self);
 	self->ConstructL(aArtist, aTitle, aAlbum, aMbTrackId, aImage, aMp3Location, aRadioAuth);
@@ -80,6 +82,7 @@ CMobblerTrack::CMobblerTrack(TTimeIntervalSeconds aTrackLength, TBool aLoved)
 	: CMobblerTrackBase(aTrackLength, aLoved),
 	iOnTour(EFalse)
 	{
+    TRACER_AUTO;
 	Open();
 	}
 
@@ -91,6 +94,7 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 		const TDesC8& aMp3Location,
 		const TDesC8& aRadioAuth)
 	{
+    TRACER_AUTO;
 	BaseConstructL(aTitle, aArtist, aAlbum, aRadioAuth);
 	
 	iMbTrackId = CMobblerString::NewL(aMbTrackId);
@@ -121,6 +125,7 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 
 CMobblerTrack::~CMobblerTrack()
 	{
+    TRACER_AUTO;
 	delete iTrackInfoHelper;
 	delete iAlbumInfoHelper;
 	delete iArtistInfoHelper;
@@ -142,11 +147,13 @@ CMobblerTrack::~CMobblerTrack()
 
 void CMobblerTrack::Open()
 	{
+    TRACER_AUTO;
 	++iRefCount;
 	}
 
 void CMobblerTrack::Release()
 	{
+    TRACER_AUTO;
 	if (--iRefCount == 0)
 		{
 		delete this;
@@ -154,6 +161,7 @@ void CMobblerTrack::Release()
 	}
 void CMobblerTrack::FindLocalTrackL()
 	{
+    TRACER_AUTO;
 	if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ContentListing()
 			&& Title().String().Length() != 0
 			&& Artist().String().Length() != 0)
@@ -164,28 +172,33 @@ void CMobblerTrack::FindLocalTrackL()
 
 void CMobblerTrack::SetDataSize(TInt aDataSize)
 	{
+    TRACER_AUTO;
 	iDataSize = aDataSize;
 	}
 
 TInt CMobblerTrack::DataSize() const
 	{
+    TRACER_AUTO;
 	// if we don't know the data size then return 1
 	return (iDataSize == KErrNotFound) || (iDataSize == 0) ? 1 : iDataSize;
 	}
 
 void CMobblerTrack::BufferAdded(TInt aBufferSize)
 	{
+    TRACER_AUTO;
 	iBuffered += aBufferSize;
 	}
 
 TInt CMobblerTrack::Buffered() const
 	{
+    TRACER_AUTO;
 	// if we don't know the data size then return 0
 	return (iDataSize == KErrNotFound) ? 0 : iBuffered;
 	}
 
 void CMobblerTrack::FindBetterImageL()
 	{
+    TRACER_AUTO;
 	if (iImageType == EMobblerImageTypeArtistLocal
 			|| iImageType == EMobblerImageTypeNone)
 		{
@@ -208,6 +221,7 @@ void CMobblerTrack::FindBetterImageL()
 
 void CMobblerTrack::FindLocalAlbumImageL()
 	{
+    TRACER_AUTO;
 	if (iLocalFile && iLocalFile->Length() > 0)
 		{
 		// This track was found on the phone!
@@ -288,6 +302,7 @@ void CMobblerTrack::FindLocalAlbumImageL()
 
 void CMobblerTrack::FindLocalArtistImageL()
 	{
+    TRACER_AUTO;
 	LOG(_L8("CMobblerTrack::FindLocalArtistImageL"));
 	TFileName fileName;
 	
@@ -332,6 +347,7 @@ void CMobblerTrack::FindLocalArtistImageL()
 
 void CMobblerTrack::HandleFindLocalTrackCompleteL(TInt aTrackNumber, const TDesC& aAlbum, const TDesC& aLocalFile)
 	{
+    TRACER_AUTO;
 	LOG(_L8("CMobblerTrack::HandleFindLocalTrackCompleteL"));
 	LOG(aAlbum);
 	LOG(aLocalFile);
@@ -388,11 +404,13 @@ void CMobblerTrack::HandleFindLocalTrackCompleteL(TInt aTrackNumber, const TDesC
 
 const TDesC8& CMobblerTrack::Mp3Location() const
 	{
+    TRACER_AUTO;
 	return *iMp3Location;
 	}
 
 void CMobblerTrack::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->StatusDrawDeferred();
 #ifdef __SYMBIAN_SIGNED__
 	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SetAlbumArtAsWallpaper(ETrue);
@@ -401,10 +419,12 @@ void CMobblerTrack::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 
 void CMobblerTrack::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	}
 
 const TDesC& CMobblerTrack::LocalFile() const
 	{
+    TRACER_AUTO;
 	if (iLocalFile)
 		{
 		return *iLocalFile;
@@ -415,6 +435,7 @@ const TDesC& CMobblerTrack::LocalFile() const
 
 TPtrC CMobblerTrack::LocalFilePath() const
 	{
+    TRACER_AUTO;
 	if (iLocalFile)
 		{
 		TParse parse;
@@ -427,16 +448,19 @@ TPtrC CMobblerTrack::LocalFilePath() const
 
 const CMobblerBitmap* CMobblerTrack::Image() const
 	{
+    TRACER_AUTO;
 	return iImage;
 	}
 
 const CMobblerString& CMobblerTrack::MbTrackId() const
 	{
+    TRACER_AUTO;
 	return *iMbTrackId;
 	}
 
 void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aObserver == iTrackInfoHelper)
 		{
 		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
@@ -542,6 +566,7 @@ void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 
 void CMobblerTrack::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		LOG(_L8("9 DataL album art fetched"));
@@ -558,6 +583,7 @@ void CMobblerTrack::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransa
 
 TBool CMobblerTrack::OkToDownloadAlbumArt() const
 	{
+    TRACER_AUTO;
 	TInt downloadAlbumArt(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->DownloadAlbumArt());
 
 	TBool okToDownloadAlbumArt((downloadAlbumArt == CMobblerAppUi::EOnlyRadio && !IsMusicPlayerTrack())
@@ -569,6 +595,7 @@ TBool CMobblerTrack::OkToDownloadAlbumArt() const
 
 void CMobblerTrack::FetchAlbumInfoL()
 	{
+    TRACER_AUTO;
 	if (OkToDownloadAlbumArt())
 		{
 		delete iAlbumInfoHelper;
@@ -579,6 +606,7 @@ void CMobblerTrack::FetchAlbumInfoL()
 
 void CMobblerTrack::FetchArtistInfoL()
 	{
+    TRACER_AUTO;
 	if (OkToDownloadAlbumArt())
 		{
 		delete iArtistInfoHelper;
@@ -589,6 +617,7 @@ void CMobblerTrack::FetchArtistInfoL()
 
 void CMobblerTrack::FetchImageL(TMobblerImageType aImageType, const TDesC8& aImageLocation)
 	{
+    TRACER_AUTO;
 	if (OkToDownloadAlbumArt())
 		{
 		iImageType = aImageType;
@@ -598,6 +627,7 @@ void CMobblerTrack::FetchImageL(TMobblerImageType aImageType, const TDesC8& aIma
 
 TBool CMobblerTrack::FetchImageL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData)
 	{
+    TRACER_AUTO;
 	TBool found(EFalse);
 
 	// Parse the XML
@@ -671,6 +701,7 @@ TBool CMobblerTrack::FetchImageL(CMobblerFlatDataObserverHelper* aObserver, cons
 
 void CMobblerTrack::SaveAlbumArtL(const TDesC8& aData)
 	{
+    TRACER_AUTO;
 	if ((iLocalFile && iLocalFile->Length() > 0)
 			||
 		(iImageType == EMobblerImageTypeArtistRemote && IsMusicPlayerTrack()))
@@ -729,6 +760,7 @@ void CMobblerTrack::SaveAlbumArtL(const TDesC8& aData)
 
 TBool CMobblerTrack::DownloadAlbumImageL()
 	{
+    TRACER_AUTO;
 	TBool fetching(EFalse);
 	
 	if (Album().String().Length() != 0)

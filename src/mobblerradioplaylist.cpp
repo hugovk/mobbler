@@ -23,10 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerradioplaylist.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 
 CMobblerRadioPlaylist* CMobblerRadioPlaylist::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerRadioPlaylist* self(new(ELeave) CMobblerRadioPlaylist());
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -36,30 +38,36 @@ CMobblerRadioPlaylist* CMobblerRadioPlaylist::NewL()
 
 CMobblerRadioPlaylist::CMobblerRadioPlaylist()
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerRadioPlaylist::ConstructL()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerRadioPlaylist::~CMobblerRadioPlaylist()
 	{
+    TRACER_AUTO;
 	Reset();
 	}
 
 void CMobblerRadioPlaylist::AppendTrackL(CMobblerTrack* aTrack)
 	{
+    TRACER_AUTO;
 	iPlaylist.AppendL(aTrack);
 	}
 
 void CMobblerRadioPlaylist::RemoveAndReleaseTrack(TInt aTrackIndex)
 	{
+    TRACER_AUTO;
 	iPlaylist[aTrackIndex]->Release();
 	iPlaylist.Remove(aTrackIndex);
 	}
 
 void CMobblerRadioPlaylist::Reset()
 	{
+    TRACER_AUTO;
 	for (TInt i(iPlaylist.Count() - 1) ; i >= 0 ; --i)
 		{
 		iPlaylist[i]->Release();
@@ -70,6 +78,7 @@ void CMobblerRadioPlaylist::Reset()
 
 TInt CMobblerRadioPlaylist::Count() const
 	{
+    TRACER_AUTO;
 	return iPlaylist.Count();
 	}
 

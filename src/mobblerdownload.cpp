@@ -28,9 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler_strings.rsg.h"
 #include "mobblerappui.h"
 #include "mobblerresourcereader.h"
+#include "mobblertracer.h"
 
 CMobblerDownload* CMobblerDownload::NewL(MMobblerDownloadObserver& aDownloadObserver)
 	{
+    TRACER_AUTO;
 	CMobblerDownload* self(new(ELeave) CMobblerDownload(aDownloadObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -41,16 +43,19 @@ CMobblerDownload* CMobblerDownload::NewL(MMobblerDownloadObserver& aDownloadObse
 CMobblerDownload::CMobblerDownload(MMobblerDownloadObserver& aDownloadObserver)
 	:iDownloadObserver(aDownloadObserver)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerDownload::ConstructL()
 	{
+    TRACER_AUTO;
 	iDownloadMgr.ConnectL(TUid::Uid(KMobblerAppUid), *this, EFalse);
 	iDownloadMgr.DeleteAll();
 	}
 
 CMobblerDownload::~CMobblerDownload()
 	{
+    TRACER_AUTO;
 	if (iWait)
 		{
 		iWait->ProcessFinishedL();
@@ -61,6 +66,7 @@ CMobblerDownload::~CMobblerDownload()
 
 void CMobblerDownload::DownloadL(const TDesC8& aDownloadUrl, TUint32 aIap)
 	{
+    TRACER_AUTO;
 	User::LeaveIfError(iDownloadMgr.SetIntAttribute(EDlMgrIap, aIap)); 
 	RHttpDownload& download(iDownloadMgr.CreateDownloadL(aDownloadUrl));
 	
@@ -81,6 +87,7 @@ void CMobblerDownload::DownloadL(const TDesC8& aDownloadUrl, TUint32 aIap)
 
 void CMobblerDownload::HandleDMgrEventL(RHttpDownload& aDownload, THttpDownloadEvent aEvent)
 	{
+    TRACER_AUTO;
 	if(EHttpContentTypeReceived == aEvent.iProgressState)
 		{
 		// Start download again if content-type is acceptable 

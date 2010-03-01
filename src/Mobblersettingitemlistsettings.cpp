@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerstring.h"
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistsettings.h"
+#include "mobblertracer.h"
 
 const TInt KDefaultBufferSizeSeconds(5);
 const TInt KDefaultScrobblePercent(50);
@@ -49,6 +50,7 @@ _LIT(KSettingsFile, "c:settings.ini");
 
 CMobblerSettingItemListSettings* CMobblerSettingItemListSettings::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerSettingItemListSettings* self(new(ELeave) CMobblerSettingItemListSettings);
 	return self;
 	}
@@ -56,14 +58,17 @@ CMobblerSettingItemListSettings* CMobblerSettingItemListSettings::NewL()
 CMobblerSettingItemListSettings::CMobblerSettingItemListSettings()
 	:iBufferSize(KDefaultBufferSizeSeconds)
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerSettingItemListSettings::~CMobblerSettingItemListSettings()
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerSettingItemListSettings::LoadSettingValuesL()
 	{
+    TRACER_AUTO;
 	RFile file;
 	CleanupClosePushL(file);
 	TInt openError(file.Open(CCoeEnv::Static()->FsSession(), KSettingsFile, EFileRead | EFileShareAny));
@@ -214,6 +219,7 @@ void CMobblerSettingItemListSettings::LoadSettingValuesL()
 
 void CMobblerSettingItemListSettings::SaveSettingValuesL()
 	{
+    TRACER_AUTO;
 	RFile file;
 	CleanupClosePushL(file);
 	CCoeEnv::Static()->FsSession().MkDirAll(KSettingsFile);

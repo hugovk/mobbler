@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerlistitem.h"
 #include "mobblerliterals.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
@@ -39,10 +40,12 @@ _LIT8(KGetTopAlbums, "gettopalbums");
 CMobblerAlbumList::CMobblerAlbumList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerAlbumList::ConstructL()
 	{
+    TRACER_AUTO;
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultAlbumImage);
 	
 	iWebServicesHelper = CMobblerWebServicesHelper::NewL(iAppUi);
@@ -65,11 +68,13 @@ void CMobblerAlbumList::ConstructL()
 
 CMobblerAlbumList::~CMobblerAlbumList()
 	{
+    TRACER_AUTO;
 	delete iWebServicesHelper;
 	}
 
 CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	switch (aCommand)
@@ -100,6 +105,7 @@ CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
 
 void CMobblerAlbumList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
+    TRACER_AUTO;
 	aCommands.AppendL(EMobblerCommandOpen);
 	
 	aCommands.AppendL(EMobblerCommandTag);
@@ -109,10 +115,12 @@ void CMobblerAlbumList::SupportedCommandsL(RArray<TInt>& aCommands)
 
 void CMobblerAlbumList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError /*aError*/)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerAlbumList::ParseL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	switch (iType)
 		{
 		case EMobblerCommandUserTopAlbums:

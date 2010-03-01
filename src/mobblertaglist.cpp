@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerparser.h"
 #include "mobblerstring.h"
 #include "mobblertaglist.h"
+#include "mobblertracer.h"
 
 _LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_tag.png");
 _LIT8(KGetTopTags, "gettoptags");
@@ -37,10 +38,12 @@ _LIT8(KGetTopTags, "gettoptags");
 CMobblerTagList::CMobblerTagList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerTagList::ConstructL()
 	{
+    TRACER_AUTO;
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultTagImage);
 	
 	switch (iType)
@@ -61,10 +64,12 @@ void CMobblerTagList::ConstructL()
 
 CMobblerTagList::~CMobblerTagList()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerListControl* CMobblerTagList::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	switch (aCommand)
@@ -81,11 +86,13 @@ CMobblerListControl* CMobblerTagList::HandleListCommandL(TInt aCommand)
 
 void CMobblerTagList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
+    TRACER_AUTO;
 	aCommands.AppendL(EMobblerCommandRadioStart);
 	}
 
 void CMobblerTagList::ParseL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	switch (iType)
 		{
 		case EMobblerCommandUserTopTags:

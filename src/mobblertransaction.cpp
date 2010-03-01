@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <http/rhttpheaders.h>
 #include <httpstringconstants.h>
 
+#include "mobblertracer.h"
 #include "mobblertransaction.h"
 #include "mobblerwebservicesquery.h"
 
@@ -36,6 +37,7 @@ _LIT8(KFormEncoding, "application/x-www-form-urlencoded");
 
 CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnection, CUri8* aURI)
 	{
+    TRACER_AUTO;
 	CMobblerTransaction* self(new(ELeave) CMobblerTransaction(aConnection, EFalse));
 	CleanupStack::PushL(self);
 	self->ConstructL(aURI);
@@ -45,6 +47,7 @@ CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnec
 
 CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnection, TBool aRequiresAuthentication, CUri8* aURI, CHTTPFormEncoder* aForm)
 	{
+    TRACER_AUTO;
 	CMobblerTransaction* self(new(ELeave) CMobblerTransaction(aConnection, aRequiresAuthentication));
 	CleanupStack::PushL(self);
 	self->ConstructL(aURI, aForm);
@@ -57,6 +60,7 @@ CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnec
 											   CUri8* aURI, 
 											   CMobblerWebServicesQuery* aQuery)
 	{
+    TRACER_AUTO;
 	CMobblerTransaction* self(new(ELeave) CMobblerTransaction(aConnection, aRequiresAuthentication));
 	CleanupStack::PushL(self);
 	self->ConstructL(aURI, aQuery);
@@ -66,6 +70,7 @@ CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnec
 
 CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnection, TBool aRequiresAuthentication)
 	{
+    TRACER_AUTO;
 	CMobblerTransaction* self(new(ELeave) CMobblerTransaction(aConnection, aRequiresAuthentication));
 	//CleanupStack::PushL(self);
 	//self->ConstructL();
@@ -76,32 +81,38 @@ CMobblerTransaction* CMobblerTransaction::NewL(CMobblerLastFmConnection& aConnec
 CMobblerTransaction::CMobblerTransaction(CMobblerLastFmConnection& aConnection, TBool aRequiresAuthentication)
 	:iConnection(aConnection), iRequiresAuthentication(aRequiresAuthentication)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerTransaction::ConstructL(CUri8* aUri)
 	{
+    TRACER_AUTO;
 	iURI = aUri;
 	}
 
 void CMobblerTransaction::ConstructL(CUri8* aUri, CHTTPFormEncoder* aForm)
 	{
+    TRACER_AUTO;
 	iForm = aForm;
 	iURI = aUri;
 	}
 
 void CMobblerTransaction::ConstructL(CUri8* aUri, CMobblerWebServicesQuery* aQuery)
 	{
+    TRACER_AUTO;
 	iQuery = aQuery;
 	iURI = aUri;
 	}
 
 RHTTPTransaction& CMobblerTransaction::Transaction()
 	{
+    TRACER_AUTO;
 	return iTransaction;
 	}
 
 void CMobblerTransaction::SubmitL()
 	{
+    TRACER_AUTO;
 	delete iBuffer;
 	iBuffer = CBufFlat::NewL(KBufferGranularity);
 	
@@ -145,6 +156,7 @@ void CMobblerTransaction::SubmitL()
 
 CMobblerTransaction::~CMobblerTransaction()
 	{
+    TRACER_AUTO;
 	iTransaction.Close();
 	delete iBuffer;
 	delete iForm;
@@ -154,11 +166,13 @@ CMobblerTransaction::~CMobblerTransaction()
 
 void CMobblerTransaction::Cancel()
 	{
+    TRACER_AUTO;
 	iTransaction.Cancel();
 	}
 
 void CMobblerTransaction::MHFRunL(RHTTPTransaction aTransaction, const THTTPEvent& aEvent)
 	{
+    TRACER_AUTO;
 	// it must be a transaction event
 	TPtrC8 nextDataPartPtr;
 	
@@ -171,6 +185,7 @@ void CMobblerTransaction::MHFRunL(RHTTPTransaction aTransaction, const THTTPEven
 			THTTPHdrVal locationValue;			
 			if( headers.GetField(iConnection.iHTTPSession.StringPool().StringF(HTTP::ELocation, RHTTPSession::GetTable()), 0, locationValue) == KErrNone )
 				{
+    TRACER_AUTO;
 				// This is a redirect so ask for the new location
 				
 				const TDesC8& urides(locationValue.StrF().DesC());
@@ -207,6 +222,7 @@ void CMobblerTransaction::MHFRunL(RHTTPTransaction aTransaction, const THTTPEven
 
 TInt CMobblerTransaction::MHFRunError(TInt aError, RHTTPTransaction /*aTransaction*/, const THTTPEvent& /*aEvent*/)
 	{
+    TRACER_AUTO;
 	_LIT8(KMHFRunError, "MHFRunError");
 	iConnection.TransactionFailedL(this, KMHFRunError, aError);
 	return KErrNone;
@@ -214,16 +230,19 @@ TInt CMobblerTransaction::MHFRunError(TInt aError, RHTTPTransaction /*aTransacti
 
 void CMobblerTransaction::SetFlatDataObserver(MMobblerFlatDataObserver* aFlatDataObserver)
 	{
+    TRACER_AUTO;
 	iFlatDataObserver = aFlatDataObserver;
 	}
 
 MMobblerFlatDataObserver* CMobblerTransaction::FlatDataObserver()
 	{
+    TRACER_AUTO;
 	return iFlatDataObserver;
 	}
 
 TBool CMobblerTransaction::RequiresAuthentication() const
 	{
+    TRACER_AUTO;
 	return iRequiresAuthentication;
 	}
 

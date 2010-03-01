@@ -22,12 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #include "mobblerbrowsercontrolspecialloadobserver.h"
-
 #include "mobblerlastfmconnection.h"
+#include "mobblertracer.h"
 
 TBrowserLoadObserver::TBrowserLoadObserver(CMobblerLastFmConnection& aLastFmConnection)
 	: iLastFmConnection(aLastFmConnection)
 	{
+    TRACER_AUTO;
 	}
 
 /*
@@ -40,6 +41,7 @@ void TBrowserLoadObserver::NetworkConnectionNeededL(TInt* aConnectionPtr,
 	                                              TBool* aNewConn,
 	                                              TApBearerType* aBearerType)
 	{
+    TRACER_AUTO;
 	*aNewConn = EFalse;
 	*aBearerType = EApBearerTypeAllBearers;
 
@@ -52,11 +54,13 @@ void TBrowserLoadObserver::NetworkConnectionNeededL(TInt* aConnectionPtr,
 
 TBool TBrowserLoadObserver::HandleRequestL(RArray<TUint>* /*aTypeArray*/, CDesCArrayFlat* /*aDesArray*/)
 	{
+    TRACER_AUTO;
 	return EFalse;
 	}
 
 TBool TBrowserLoadObserver::HandleDownloadL(RArray<TUint>* /*aTypeArray*/, CDesCArrayFlat* /*aDesArray*/)
 	{
+    TRACER_AUTO;
 	return EFalse;
 	}
 

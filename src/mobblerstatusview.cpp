@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerresourcereader.h"
 #include "mobblerstatuscontrol.h"
 #include "mobblerstatusview.h"
+#include "mobblertracer.h"
 #include "mobblerutility.h"
 
 _LIT(KShortcut0, " (0)");
@@ -44,6 +45,7 @@ _LIT(KShortcut8, " (8)");
 
 CMobblerStatusView* CMobblerStatusView::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerStatusView* self(new(ELeave) CMobblerStatusView);
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -53,31 +55,37 @@ CMobblerStatusView* CMobblerStatusView::NewL()
 
 CMobblerStatusView::CMobblerStatusView()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerStatusView::~CMobblerStatusView()
 	{
+    TRACER_AUTO;
 	delete iMobblerStatusControl;
 	iMobblerStatusControl = NULL;
 	}
 
 void CMobblerStatusView::ConstructL()
 	{
+    TRACER_AUTO;
 	BaseConstructL(R_MOBBLER_STATUS_VIEW);
 	SetupStatusPaneL();
 	}
 
 void CMobblerStatusView::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/) 
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerStatusView::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerStatusView::SetMenuItemTextL(CEikMenuPane* aMenuPane,
 										  TInt aResourceId, TInt aCommandId)
 	{
+    TRACER_AUTO;
 	HBufC* menuText(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(aResourceId).AllocLC());
 
 	const TInt KTextLimit(CEikMenuPaneItem::SData::ENominalTextLength);
@@ -116,12 +124,14 @@ void CMobblerStatusView::SetMenuItemTextL(CEikMenuPane* aMenuPane,
 
 void CMobblerStatusView::DisplayPlusMenuL()
 	{
+    TRACER_AUTO;
 	iDisplayPlusMenu = ETrue;
 	MenuBar()->TryDisplayMenuBarL();
 	}
 
 void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane)
 	{
+    TRACER_AUTO;
 	// First load the menu text so as not to confuse any dimming logic
 	if (aResourceId == R_MOBBLER_STATUS_MENU_PANE)
 		{
@@ -362,17 +372,20 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 
 TUid CMobblerStatusView::Id() const
 	{
+    TRACER_AUTO;
 	return TUid::Uid(KMobblerStatusViewUid);
 	}
 
 void CMobblerStatusView::HandleCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	// let the app ui handle the event
 	AppUi()->HandleCommandL(aCommand);
 	}
 
 void CMobblerStatusView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid /*aCustomMessageId*/, const TDesC8& /*aCustomMessage*/)
 	{
+    TRACER_AUTO;
 	if (!iMobblerStatusControl)
 		{
 		iMobblerStatusControl = CMobblerStatusControl::NewL(ClientRect(), *static_cast<CMobblerAppUi*>(AppUi()));
@@ -393,6 +406,7 @@ void CMobblerStatusView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid /*a
 
 void CMobblerStatusView::DoDeactivate()
 	{
+    TRACER_AUTO;
 	if (iMobblerStatusControl)
 		{
 		AppUi()->RemoveFromStack(iMobblerStatusControl);
@@ -403,12 +417,14 @@ void CMobblerStatusView::DoDeactivate()
 
 void CMobblerStatusView::HandleStatusPaneSizeChange()
 	{
+    TRACER_AUTO;
 	CAknView::HandleStatusPaneSizeChange();
 	TRAP_IGNORE(SetupStatusPaneL()); 
 	}
 
 void CMobblerStatusView::SetupStatusPaneL()
 	{
+    TRACER_AUTO;
 	TUid contextPaneUid(TUid::Uid(EEikStatusPaneUidContext));
 	CEikStatusPaneBase::TPaneCapabilities subPaneContext(StatusPane()->PaneCapabilities(contextPaneUid));
 	
@@ -434,6 +450,7 @@ void CMobblerStatusView::SetupStatusPaneL()
 
 void CMobblerStatusView::DrawDeferred() const
 	{
+    TRACER_AUTO;
 	if (iMobblerStatusControl)
 		{
 		iMobblerStatusControl->DrawDeferred();
@@ -442,6 +459,7 @@ void CMobblerStatusView::DrawDeferred() const
 
 void CMobblerStatusView::DrawNow() const
 	{
+    TRACER_AUTO;
 	if (iMobblerStatusControl)
 		{
 		iMobblerStatusControl->DrawNow();
@@ -450,11 +468,13 @@ void CMobblerStatusView::DrawNow() const
 
 CMobblerStatusControl* CMobblerStatusView::StatusControl()
 	{
+    TRACER_AUTO;
 	return iMobblerStatusControl;
 	}
 
 void CMobblerStatusView::SettingsWizardL()
 	{
+    TRACER_AUTO;
 	if (static_cast<CMobblerAppUi*>(AppUi())->DetailsNeeded())
 		{
 		// Display info note

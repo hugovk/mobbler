@@ -23,10 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerappui.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrackbase.h"
 
 CMobblerTrackBase* CMobblerTrackBase::NewL(const CMobblerTrackBase& aTrack)
 	{
+    TRACER_AUTO;
 	CMobblerTrackBase* self(new(ELeave) CMobblerTrackBase);
 	CleanupStack::PushL(self);
 	self->BaseConstructL(aTrack);
@@ -36,6 +38,7 @@ CMobblerTrackBase* CMobblerTrackBase::NewL(const CMobblerTrackBase& aTrack)
 
 CMobblerTrackBase* CMobblerTrackBase::NewL(RReadStream& aReadStream)
 	{
+    TRACER_AUTO;
 	CMobblerTrackBase* self(new(ELeave) CMobblerTrackBase);
 	CleanupStack::PushL(self);
 	self->InternalizeL(aReadStream);
@@ -45,6 +48,7 @@ CMobblerTrackBase* CMobblerTrackBase::NewL(RReadStream& aReadStream)
 
 CMobblerTrackBase::CMobblerTrackBase()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength, TBool aLoved)
@@ -55,6 +59,7 @@ CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength, TBool aL
 	iTotalPlayed(0), 
 	iInitialPlaybackPosition(KErrUnknown)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerTrackBase::BaseConstructL(const TDesC8& aTitle,
@@ -62,6 +67,7 @@ void CMobblerTrackBase::BaseConstructL(const TDesC8& aTitle,
 		const TDesC8& aAlbum,
 		const TDesC8& aRadioAuth)
 	{
+    TRACER_AUTO;
 	iArtist = CMobblerString::NewL(aArtist);
 	iTitle = CMobblerString::NewL(aTitle);
 	iAlbum = CMobblerString::NewL(aAlbum);
@@ -70,6 +76,7 @@ void CMobblerTrackBase::BaseConstructL(const TDesC8& aTitle,
 
 void CMobblerTrackBase::BaseConstructL(const CMobblerTrackBase& aTrack)
 	{
+    TRACER_AUTO;
 	iArtist = CMobblerString::NewL(aTrack.Artist().String());
 	iTitle = CMobblerString::NewL(aTrack.Title().String());
 	iAlbum = CMobblerString::NewL(aTrack.Album().String());
@@ -87,6 +94,7 @@ void CMobblerTrackBase::BaseConstructL(const CMobblerTrackBase& aTrack)
 
 CMobblerTrackBase::~CMobblerTrackBase()
 	{
+    TRACER_AUTO;
 	if (iLoveObserverHelper)
 		{
 		iLoveObserverHelper->SetNotOwned();
@@ -108,6 +116,7 @@ TBool CMobblerTrackBase::operator==(const CMobblerTrackBase& aTrack) const
 
 void CMobblerTrackBase::InternalizeL(RReadStream& aReadStream)
 	{
+    TRACER_AUTO;
 	TInt high(aReadStream.ReadInt32L());
 	TInt low(aReadStream.ReadInt32L());
 	iStartTimeUTC = MAKE_TINT64(high, low);
@@ -128,6 +137,7 @@ void CMobblerTrackBase::InternalizeL(RReadStream& aReadStream)
 
 void CMobblerTrackBase::ExternalizeL(RWriteStream& aWriteStream) const
 	{
+    TRACER_AUTO;
 	aWriteStream.WriteInt32L(I64HIGH(iStartTimeUTC.Int64()));
 	aWriteStream.WriteInt32L(I64LOW(iStartTimeUTC.Int64()));
 	aWriteStream.WriteInt32L(iTrackLength.Int());
@@ -140,53 +150,63 @@ void CMobblerTrackBase::ExternalizeL(RWriteStream& aWriteStream) const
 
 void CMobblerTrackBase::SetAlbumL(const TDesC& aAlbum)
 	{
+    TRACER_AUTO;
 	delete iAlbum;
 	iAlbum = CMobblerString::NewL(aAlbum);
 	}
 
 void CMobblerTrackBase::SetStartTimeUTC(const TTime& aStartTimeUTC)
 	{
+    TRACER_AUTO;
 	iStartTimeUTC = aStartTimeUTC;
 	iTrackPlaying = ETrue;
 	}
 
 const TTime& CMobblerTrackBase::StartTimeUTC() const
 	{
+    TRACER_AUTO;
 	return iStartTimeUTC;
 	}
 
 const CMobblerString& CMobblerTrackBase::Artist() const
 	{
+    TRACER_AUTO;
 	return *iArtist;
 	}
 
 const CMobblerString& CMobblerTrackBase::Title() const
 	{
+    TRACER_AUTO;
 	return *iTitle;
 	}
 
 const CMobblerString& CMobblerTrackBase::Album() const
 	{
+    TRACER_AUTO;
 	return *iAlbum;
 	}
 
 TInt CMobblerTrackBase::TrackNumber() const
 	{
+    TRACER_AUTO;
 	return iTrackNumber;
 	}
 
 void CMobblerTrackBase::SetTrackNumber(TInt aTrackNumber)
 	{
+    TRACER_AUTO;
 	iTrackNumber = aTrackNumber;
 	}
 
 const TDesC8& CMobblerTrackBase::RadioAuth() const
 	{
+    TRACER_AUTO;
 	return *iRadioAuth;
 	}
 
 void CMobblerTrackBase::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aObserver == iLoveObserverHelper && aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		iLove = ELoved;
@@ -195,6 +215,7 @@ void CMobblerTrackBase::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 
 void CMobblerTrackBase::LoveTrackL()
 	{
+    TRACER_AUTO;
 	if (iLove != ELoved)
 		{
 		iLove = ELove;
@@ -208,32 +229,38 @@ void CMobblerTrackBase::LoveTrackL()
 
 CMobblerTrackBase::TMobblerLove CMobblerTrackBase::Love() const
 	{
+    TRACER_AUTO;
 	return iLove;
 	}
 
 void CMobblerTrackBase::SetTrackLength(TTimeIntervalSeconds aTrackLength)
 	{
+    TRACER_AUTO;
 	iTrackLength = aTrackLength;
 	}
 
 TTimeIntervalSeconds CMobblerTrackBase::TrackLength() const
 	{
+    TRACER_AUTO;
 	return iTrackLength.Int() == 0 ? 1 : iTrackLength;
 	}
 	
 TBool CMobblerTrackBase::IsMusicPlayerTrack() const
 	{
+    TRACER_AUTO;
 	return (iRadioAuth->Compare(KNullDesC8) == 0);
 	}
 
 TTimeIntervalSeconds CMobblerTrackBase::ScrobbleDuration() const
 	{
+    TRACER_AUTO;
 	TInt scrobblePercent(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->ScrobblePercent());
 	return (TTimeIntervalSeconds)Min(240, (TrackLength().Int() *  scrobblePercent / 100));
 	}
 
 TTimeIntervalSeconds CMobblerTrackBase::InitialPlaybackPosition() const
 	{
+    TRACER_AUTO;
 	if (iInitialPlaybackPosition.Int() == KErrUnknown)
 		{
 		return 0;
@@ -246,11 +273,13 @@ TTimeIntervalSeconds CMobblerTrackBase::InitialPlaybackPosition() const
 
 TTimeIntervalSeconds CMobblerTrackBase::PlaybackPosition() const
 	{
+    TRACER_AUTO;
 	return iPlaybackPosition;
 	}
 
 void CMobblerTrackBase::SetPlaybackPosition(TTimeIntervalSeconds aPlaybackPosition)
 	{
+    TRACER_AUTO;
 	iPlaybackPosition = aPlaybackPosition;
 
 	if (iInitialPlaybackPosition.Int() == KErrUnknown)
@@ -275,32 +304,38 @@ void CMobblerTrackBase::SetPlaybackPosition(TTimeIntervalSeconds aPlaybackPositi
 
 void CMobblerTrackBase::SetTotalPlayed(TTimeIntervalSeconds aTotalPlayed)
 	{
+    TRACER_AUTO;
 	iTotalPlayed = aTotalPlayed;
 	iTrackPlaying = EFalse;
 	}
 
 TTimeIntervalSeconds CMobblerTrackBase::TotalPlayed() const
 	{
+    TRACER_AUTO;
 	return iTotalPlayed;
 	}
 
 void CMobblerTrackBase::SetScrobbled()
 	{
+    TRACER_AUTO;
 	iScrobbled = ETrue;
 	}
 
 TBool CMobblerTrackBase::Scrobbled() const
 	{
+    TRACER_AUTO;
 	return iScrobbled;
 	}
 
 void CMobblerTrackBase::SetTrackPlaying(TBool aTrackPlaying)
 	{
+    TRACER_AUTO;
 	iTrackPlaying = aTrackPlaying;
 	}
 
 TBool CMobblerTrackBase::TrackPlaying() const
 	{
+    TRACER_AUTO;
 	return iTrackPlaying;
 	}
 	

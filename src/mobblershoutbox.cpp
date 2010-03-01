@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblerutility.h"
 
 _LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_user.png");
@@ -50,10 +51,12 @@ _LIT8(KGetShouts, "getshouts");
 CMobblerShoutbox::CMobblerShoutbox(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerShoutbox::ConstructL()
 	{
+    TRACER_AUTO;
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultUserImage);
 	
 	switch (iType)
@@ -74,11 +77,13 @@ void CMobblerShoutbox::ConstructL()
 
 CMobblerShoutbox::~CMobblerShoutbox()
 	{
+    TRACER_AUTO;
 	iHelpers.ResetAndDestroy();
 	}
 
 HBufC* CMobblerShoutbox::ShoutAtTextOwnerLC()
 	{
+    TRACER_AUTO;
 	HBufC* shoutAtText(NULL);
 
 	if (iText1->String().Length() == 0)
@@ -99,11 +104,13 @@ HBufC* CMobblerShoutbox::ShoutAtTextOwnerLC()
 
 HBufC* CMobblerShoutbox::ShoutAtTextUserLC()
 	{
+    TRACER_AUTO;
 	return ShoutAtTextLC(iList[iListBox->CurrentItemIndex()]->Title()->String8());
 	}
 
 HBufC* CMobblerShoutbox::ShoutAtTextLC(const TDesC8& aName)
 	{
+    TRACER_AUTO;
 	const TDesC& format(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SHOUT_AT));
 	HBufC* text(HBufC::NewLC(format.Length() + aName.Length()));
 	
@@ -116,6 +123,7 @@ HBufC* CMobblerShoutbox::ShoutAtTextLC(const TDesC8& aName)
 
 CMobblerListControl* CMobblerShoutbox::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	CAknTextQueryDialog* shoutDialog(NULL);
@@ -197,6 +205,7 @@ CMobblerListControl* CMobblerShoutbox::HandleListCommandL(TInt aCommand)
 
 void CMobblerShoutbox::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
+    TRACER_AUTO;
 	aCommands.AppendL(EMobblerCommandOpen);
 	aCommands.AppendL(EMobblerCommandShout);
 	aCommands.AppendL(EMobblerCommandShoutUser);
@@ -205,11 +214,13 @@ void CMobblerShoutbox::SupportedCommandsL(RArray<TInt>& aCommands)
 
 void CMobblerShoutbox::ParseL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	CMobblerParser::ParseShoutboxL(aXml, *this, iList);
 	}
 
 void CMobblerShoutbox::RequestImageL(TInt aIndex) const
 	{
+    TRACER_AUTO;
 	// do user.getInfo for this user
 	// when we receive that we can fetch the actual image
 	CMobblerFlatDataObserverHelper* helper(CMobblerFlatDataObserverHelper::NewL(const_cast<CMobblerShoutbox*>(this)->iAppUi.LastFmConnection(), *const_cast<CMobblerShoutbox*>(this), EFalse));
@@ -222,6 +233,7 @@ void CMobblerShoutbox::RequestImageL(TInt aIndex) const
 
 void CMobblerShoutbox::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		DUMPDATA(aData, _L("usergetinfo.xml"));

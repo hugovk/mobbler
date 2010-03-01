@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #include "mobblerincomingcallmonitor.h"
+#include "mobblertracer.h"
 
 // Telephony call handling PS UID
 const TUid KPSUidTelephonyCallHandling = {0x101F8787};
@@ -31,6 +32,7 @@ const TUint32 KTelephonyCallState(0x00000004);
 
 CMobblerIncomingCallMonitor* CMobblerIncomingCallMonitor::NewL(MMobblerIncomingCallMonitorObserver& aObserver)
 	{
+    TRACER_AUTO;
 	CMobblerIncomingCallMonitor* self(new(ELeave) CMobblerIncomingCallMonitor(aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -41,11 +43,13 @@ CMobblerIncomingCallMonitor* CMobblerIncomingCallMonitor::NewL(MMobblerIncomingC
 CMobblerIncomingCallMonitor::CMobblerIncomingCallMonitor(MMobblerIncomingCallMonitorObserver& aObserver)
 	:CActive(EPriorityStandard), iObserver(aObserver)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerIncomingCallMonitor::ConstructL()
 	{
+    TRACER_AUTO;
 	iProperty.Attach(KPSUidTelephonyCallHandling, KTelephonyCallState);
 	iProperty.Subscribe(iStatus);
 	SetActive();
@@ -54,12 +58,14 @@ void CMobblerIncomingCallMonitor::ConstructL()
 
 CMobblerIncomingCallMonitor::~CMobblerIncomingCallMonitor()
 	{
+    TRACER_AUTO;
 	Cancel();
 	iProperty.Close();
 	}
 
 void CMobblerIncomingCallMonitor::RunL()
 	{
+    TRACER_AUTO;
 	if (iStatus.Int() == KErrNone)
 		{
 		// register for more notifications
@@ -74,6 +80,7 @@ void CMobblerIncomingCallMonitor::RunL()
 
 void CMobblerIncomingCallMonitor::DoCancel()
 	{
+    TRACER_AUTO;
 	iProperty.Cancel();
 	}
 

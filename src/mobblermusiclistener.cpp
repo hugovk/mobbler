@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblernowplayingcallback.h"
 #include "mobblerradioplayer.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 
 #ifdef __SYMBIAN_SIGNED__
@@ -39,6 +40,7 @@ const TUid KMobblerMusicAppInterfaceUid = {0xA000D9F6};
 
 CMobblerMusicAppListener* CMobblerMusicAppListener::NewL(CMobblerLastFmConnection& aSubmitter)
 	{
+    TRACER_AUTO;
 	CMobblerMusicAppListener* self(new(ELeave) CMobblerMusicAppListener(aSubmitter));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -49,10 +51,12 @@ CMobblerMusicAppListener* CMobblerMusicAppListener::NewL(CMobblerLastFmConnectio
 CMobblerMusicAppListener::CMobblerMusicAppListener(CMobblerLastFmConnection& aSubmitter)
 	:iLastFmConnection(aSubmitter)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerMusicAppListener::ConstructL()
 	{
+    TRACER_AUTO;
 	RImplInfoPtrArray implInfoPtrArray;
 	CleanupClosePushL(implInfoPtrArray);
 	
@@ -88,6 +92,7 @@ void CMobblerMusicAppListener::ConstructL()
 
 CMobblerMusicAppListener::~CMobblerMusicAppListener()
 	{
+    TRACER_AUTO;
 	if (iCurrentTrack)
 		{
 		iCurrentTrack->Release();
@@ -113,11 +118,13 @@ CMobblerMusicAppListener::~CMobblerMusicAppListener()
 
 void CMobblerMusicAppListener::AddObserverL(MMobblerMusicAppListenerObserver* aObserver)
 	{
+    TRACER_AUTO;
 	iObservers.InsertInAddressOrderL(aObserver);
 	}
 
 void CMobblerMusicAppListener::RemoveObserver(MMobblerMusicAppListenerObserver* aObserver)
 	{
+    TRACER_AUTO;
 	TInt position(iObservers.FindInAddressOrder(aObserver));
 	
 	if (position != KErrNotFound)
@@ -128,6 +135,7 @@ void CMobblerMusicAppListener::RemoveObserver(MMobblerMusicAppListenerObserver* 
 
 void CMobblerMusicAppListener::NotifyChangeL()
 	{
+    TRACER_AUTO;
 	const TInt KObserverCount(iObservers.Count());
 	for (TInt i(0); i < KObserverCount; ++i)
 		{
@@ -137,11 +145,13 @@ void CMobblerMusicAppListener::NotifyChangeL()
 
 CMobblerTrack* CMobblerMusicAppListener::CurrentTrack()
 	{
+    TRACER_AUTO;
 	return iCurrentTrack;
 	}
 
 void CMobblerMusicAppListener::HandleTrackChangeL(const TDesC& /*aTrack*/)
 	{
+    TRACER_AUTO;
 	iLastFmConnection.TrackStoppedL(iCurrentTrack);
 	
 	if (iCurrentTrack)
@@ -157,6 +167,7 @@ void CMobblerMusicAppListener::HandleTrackChangeL(const TDesC& /*aTrack*/)
 
 void CMobblerMusicAppListener::HandleMusicStateChangeL(TInt aState)
 	{
+    TRACER_AUTO;
 	if (aState == EPlayerPlaying || aState == EPlayerPaused)
 		{
 		ScheduleNowPlayingL();
@@ -177,6 +188,7 @@ void CMobblerMusicAppListener::HandleMusicStateChangeL(TInt aState)
 
 void CMobblerMusicAppListener::ScheduleNowPlayingL()
 	{
+    TRACER_AUTO;
 	if (iNowPlayingCallback && iNowPlayingCallback->IsActive())
 		{
 		// We are already waiting for a callback so let that happen
@@ -190,6 +202,7 @@ void CMobblerMusicAppListener::ScheduleNowPlayingL()
 
 HBufC* CMobblerMusicAppListener::MusicAppNameL() const
 	{
+    TRACER_AUTO;
 	HBufC* musicAppName(NULL);
 	
 	const TInt KMusicAppCount(iMobblerMusicApps.Count());
@@ -213,6 +226,7 @@ HBufC* CMobblerMusicAppListener::MusicAppNameL() const
 
 void CMobblerMusicAppListener::NowPlayingL()
 	{
+    TRACER_AUTO;
 	if (static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->
 												RadioPlayer().CurrentTrack())
 		{
@@ -242,7 +256,7 @@ void CMobblerMusicAppListener::NowPlayingL()
 		// find the first music app observer that is playing a track
 		TInt musicAppIndex(KErrNotFound);
 		const TInt KMusicAppCount(iMobblerMusicApps.Count());
-		for (TInt i(0) ; i < KMusicAppCount ; ++i)
+		for (TInt i(0); i < KMusicAppCount; ++i)
 			{
 			if (iMobblerMusicApps[i]->PlayerState() == EPlayerPlaying)
 				{
@@ -296,10 +310,12 @@ void CMobblerMusicAppListener::NowPlayingL()
 
 void CMobblerMusicAppListener::PlayerStateChangedL(TMobblerMusicAppObserverState aState)
 	{
+    TRACER_AUTO;
 	TMobblerMusicAppObserverState oldState(iMusicPlayerState);
 	TMobblerMusicAppObserverState newState(aState);
 	iMusicPlayerState = newState;
 	
+	 // Not playing -> playing
 	if ((oldState != EPlayerPlaying) && 
 		(newState == EPlayerPlaying))
 		{
@@ -312,6 +328,7 @@ void CMobblerMusicAppListener::PlayerStateChangedL(TMobblerMusicAppObserverState
 			}
 		ScheduleNowPlayingL();
 		}
+	 // Playing -> not playing
 	else if ((oldState == EPlayerPlaying) && 
 			 (newState != EPlayerPlaying))
 		{
@@ -332,6 +349,7 @@ void CMobblerMusicAppListener::PlayerStateChangedL(TMobblerMusicAppObserverState
 		ScheduleNowPlayingL();
 		}
 	
+	 //  -> non-playing/paused state
 	if ((newState != EPlayerPlaying) && 
 		(newState != EPlayerPaused))
 		{
@@ -353,6 +371,7 @@ void CMobblerMusicAppListener::PlayerStateChangedL(TMobblerMusicAppObserverState
 
 void CMobblerMusicAppListener::TrackInfoChangedL(const TDesC& /*aTitle*/, const TDesC& /*aArtist*/)
 	{
+    TRACER_AUTO;
 	iLastFmConnection.TrackStoppedL(iCurrentTrack);
 	
 	if (iCurrentTrack)
@@ -366,6 +385,7 @@ void CMobblerMusicAppListener::TrackInfoChangedL(const TDesC& /*aTitle*/, const 
 
 void CMobblerMusicAppListener::CommandReceivedL(TMobblerMusicAppObserverCommand aCommand)
 	{
+    TRACER_AUTO;
 	if (aCommand == EPlayerCmdPlay)
 		{
 		ScheduleNowPlayingL();
@@ -387,6 +407,7 @@ void CMobblerMusicAppListener::CommandReceivedL(TMobblerMusicAppObserverCommand 
 
 void CMobblerMusicAppListener::PlayerPositionL(TTimeIntervalSeconds aPlayerPosition)
 	{
+    TRACER_AUTO;
 	if (iCurrentTrack)
 		{
 		if (iCurrentTrack->PlaybackPosition() != aPlayerPosition)
@@ -400,11 +421,13 @@ void CMobblerMusicAppListener::PlayerPositionL(TTimeIntervalSeconds aPlayerPosit
 
 TBool CMobblerMusicAppListener::IsPlaying() const
 	{
+    TRACER_AUTO;
 	return (iCurrentTrack && iMusicPlayerState == EPlayerPlaying);
 	}
 
 TBool CMobblerMusicAppListener::ControlsSupported()
 	{
+    TRACER_AUTO;
 	// find the first music app observer that is playing a track
 	TInt musicAppIndex(KErrNotFound);
 	const TInt KMusicAppCount(iMobblerMusicApps.Count());
@@ -422,6 +445,7 @@ TBool CMobblerMusicAppListener::ControlsSupported()
 
 void CMobblerMusicAppListener::PlayL()
 	{
+    TRACER_AUTO;
 	// find the first music app observer that is playing a track
 	TInt musicAppIndex(KErrNotFound);
 	const TInt KMusicAppCount(iMobblerMusicApps.Count());
@@ -442,6 +466,7 @@ void CMobblerMusicAppListener::PlayL()
 
 void CMobblerMusicAppListener::StopL()
 	{
+    TRACER_AUTO;
 	// find the first music app observer that is playing a track
 	TInt musicAppIndex(KErrNotFound);
 	const TInt KMusicAppCount(iMobblerMusicApps.Count());
@@ -462,6 +487,7 @@ void CMobblerMusicAppListener::StopL()
 
 void CMobblerMusicAppListener::SkipL()
 	{
+    TRACER_AUTO;
 	// find the first music app observer that is playing a track
 	TInt musicAppIndex(KErrNotFound);
 	const TInt KMusicAppCount(iMobblerMusicApps.Count());

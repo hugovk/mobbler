@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblerbitmap.h"
 #include "mobblerbitmapcollection.h"
+#include "mobblertracer.h"
 
 #ifdef __SYMBIAN_SIGNED__
 #include <mobbler.mbg>
@@ -114,6 +115,7 @@ CMobblerBitmap* CMobblerBitmapCollection::CBitmapCollectionItem::Bitmap() const
 	
 CMobblerBitmapCollection* CMobblerBitmapCollection::NewL()
 	{
+    TRACER_AUTO;
 	CMobblerBitmapCollection* self(new(ELeave) CMobblerBitmapCollection());
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -123,10 +125,12 @@ CMobblerBitmapCollection* CMobblerBitmapCollection::NewL()
 
 CMobblerBitmapCollection::CMobblerBitmapCollection()
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerBitmapCollection::ConstructL()
 	{
+    TRACER_AUTO;
 	// load the list box default images because if we
 	// populate the list box before the image decodes
 	// the phone will hang.
@@ -141,11 +145,13 @@ void CMobblerBitmapCollection::ConstructL()
 
 CMobblerBitmapCollection::~CMobblerBitmapCollection()
 	{
+    TRACER_AUTO;
 	iBitmaps.ResetAndDestroy();
 	}
 	
 CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObserver, TInt aId) const
 	{
+    TRACER_AUTO;
 	CMobblerBitmap* bitmap(NULL);
 	
 	TInt position(iBitmaps.FindInOrder(aId, CBitmapCollectionItem::Compare));
@@ -286,6 +292,7 @@ CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObser
 
 void CMobblerBitmapCollection::Cancel(CMobblerBitmap* aBitmap) const
 	{
+    TRACER_AUTO;
 	// Cancel all the callbacks for this observer
 	const TInt KBitmapCount(iBitmaps.Count());
 	for (TInt i(0); i < KBitmapCount; ++i)
@@ -300,10 +307,12 @@ void CMobblerBitmapCollection::Cancel(CMobblerBitmap* aBitmap) const
 
 void CMobblerBitmapCollection::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerBitmapCollection::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
+    TRACER_AUTO;
 	}
 
 // End of file

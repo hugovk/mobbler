@@ -26,11 +26,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <cntview.h>
 
 #include "mobblercontacts.h"
+#include "mobblertracer.h"
 
 _LIT(KMobbler, "Mobbler");
 
 CMobblerContacts* CMobblerContacts::NewLC()
 	{
+    TRACER_AUTO;
 	CMobblerContacts* self(new(ELeave) CMobblerContacts());
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -39,10 +41,12 @@ CMobblerContacts* CMobblerContacts::NewLC()
 
 CMobblerContacts::CMobblerContacts()
 	{
+    TRACER_AUTO;
 	}
 
 CMobblerContacts::~CMobblerContacts()
 	{
+    TRACER_AUTO;
 	if(iFilteredView)
 		{
 		iFilteredView->Close(*this);
@@ -57,6 +61,7 @@ CMobblerContacts::~CMobblerContacts()
 
 void CMobblerContacts::ConstructL()
 	{
+    TRACER_AUTO;
 	iDb = CContactDatabase::OpenL();
 	RContactViewSortOrder sortOrder;
 	CleanupClosePushL(sortOrder);
@@ -73,16 +78,19 @@ void CMobblerContacts::ConstructL()
 
 TInt CMobblerContacts::Count() const
 	{
+    TRACER_AUTO;
 	return iNameList->Count();
 	}
 
 TPtrC CMobblerContacts::GetNameAt(TInt aIndex) const
 	{
+    TRACER_AUTO;
 	return (*iNameList)[aIndex];
 	}
 
 CDesCArray* CMobblerContacts::GetEmailsAtLC(TInt aIndex) const
 	{
+    TRACER_AUTO;
 	const TInt KArrayGranularity(5);
 	CDesCArray* emailList(new(ELeave) CDesCArrayFlat(KArrayGranularity));
 	CleanupStack::PushL(emailList);
@@ -108,6 +116,7 @@ CDesCArray* CMobblerContacts::GetEmailsAtLC(TInt aIndex) const
 
 HBufC8* CMobblerContacts::GetPhotoAtL(TInt aIndex) const
 	{
+    TRACER_AUTO;
 	const CViewContact& viewContact(iFilteredView->ContactAtL(aIndex));
 	CContactItem* contact(iDb->ReadContactLC(viewContact.Id()));
 	
@@ -129,6 +138,7 @@ HBufC8* CMobblerContacts::GetPhotoAtL(TInt aIndex) const
 
 void CMobblerContacts::BuildListL()
 	{
+    TRACER_AUTO;
 	const TInt KNumContacts(iFilteredView->CountL());
 	iNameList = new(ELeave) CDesCArrayFlat(KNumContacts);
 	
@@ -173,6 +183,7 @@ void CMobblerContacts::BuildListL()
 
 void CMobblerContacts::HandleContactViewEvent(const CContactViewBase& aView, const TContactViewEvent& aEvent)
 	{
+    TRACER_AUTO;
 	if (&aView == iRemoteView && aEvent.iEventType == TContactViewEvent::EReady)
 		{
 		++iNumViews;

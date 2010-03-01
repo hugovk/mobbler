@@ -28,12 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblerbitmap.h"
 #include "mobblerstatuscontrol.h"
+#include "mobblertracer.h"
 
 const TTimeIntervalMicroSeconds32 KMobblerAlbumArtInterval(50000);
 const TInt KTotalSlideTime(750000);
 
 CMobblerAlbumArtTransition* CMobblerAlbumArtTransition::NewL(CMobblerStatusControl& aStatusControl)
 	{
+    TRACER_AUTO;
 	CMobblerAlbumArtTransition* self(new(ELeave) CMobblerAlbumArtTransition(aStatusControl));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -44,14 +46,17 @@ CMobblerAlbumArtTransition* CMobblerAlbumArtTransition::NewL(CMobblerStatusContr
 CMobblerAlbumArtTransition::CMobblerAlbumArtTransition(CMobblerStatusControl& aStatusControl)
 	:iStatusControl(aStatusControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerAlbumArtTransition::ConstructL()
 	{
+    TRACER_AUTO;
 	}
 
 TInt CMobblerAlbumArtTransition::Clamp(TInt aValue, TInt aMin, TInt aMax) const
 	{
+    TRACER_AUTO;
 	// Restrict value to the bounds of min and max.
 	// If value is less than min, return min.
 	// If value is more than max, return max.
@@ -73,6 +78,7 @@ TInt CMobblerAlbumArtTransition::Clamp(TInt aValue, TInt aMin, TInt aMax) const
 
 TInt CMobblerAlbumArtTransition::Slide(TInt aTime, TInt aTotal, TInt aStart, TInt aEnd) const
 	{
+    TRACER_AUTO;
 	TReal output;
 	Math::Sin(output, ((Clamp(aTime, 0, aTotal) / static_cast<TReal>(aTotal)) * KPi) - (KPi / 2));
 	return static_cast<TInt>(((output + 1) / 2) * (aEnd - aStart));
@@ -80,6 +86,7 @@ TInt CMobblerAlbumArtTransition::Slide(TInt aTime, TInt aTotal, TInt aStart, TIn
 
 TInt CMobblerAlbumArtTransition::SlideAmount(TInt aWidth) const
 	{
+    TRACER_AUTO;
 	TInt tickPeriod;
 	HAL::Get(HAL::ESystemTickPeriod, tickPeriod);
 	TInt timeSoFar((iNowTickCount  - iStartTickCount) * tickPeriod);
@@ -88,6 +95,7 @@ TInt CMobblerAlbumArtTransition::SlideAmount(TInt aWidth) const
 
 CMobblerAlbumArtTransition::~CMobblerAlbumArtTransition()
 	{
+    TRACER_AUTO;
 	const TInt KAlbumArtCount(iAlbumArt.Count());
 	for (TInt i(0); i < KAlbumArtCount; ++i)
 		{
@@ -101,11 +109,13 @@ CMobblerAlbumArtTransition::~CMobblerAlbumArtTransition()
 
 TBool CMobblerAlbumArtTransition::IsActive() const
 	{
+    TRACER_AUTO;
 	return (iTimer != NULL);
 	}
 
 void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlbumArt, const CMobblerBitmap* aNextAlbumArt, TRect aAlbumArtRect, TInt aSlideAmount)
 	{
+    TRACER_AUTO;
 	// Try to put any new album art in the list
 	
 	if (iAlbumArt.Find(aCurrentAlbumArt) == KErrNotFound)
@@ -199,6 +209,7 @@ void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlb
 
 /*TRect CMobblerAlbumArtTransition::ScaledRect(TRect aDestRect, TRect aSourceRect)
 	{
+    TRACER_AUTO;
 	TRect destRect(aDestRect);
 	TInt width(aSourceRect.Width());
 	TInt height(aSourceRect.Height());
@@ -217,6 +228,7 @@ void CMobblerAlbumArtTransition::DrawAlbumArtL(const CMobblerBitmap* aCurrentAlb
 
 void CMobblerAlbumArtTransition::DoDrawAlbumArtL(const CMobblerBitmap* aLeft, const CMobblerBitmap* aRight, TRect aAlbumArtRect, TInt aPosition)
 	{
+    TRACER_AUTO;
 	// Draw the first bitmap by the slide amount
 	if (CMobblerBitmap::LongSidesEqual(aLeft->Bitmap()->SizeInPixels(), aAlbumArtRect.Size()))
 		{
@@ -262,6 +274,7 @@ void CMobblerAlbumArtTransition::DoDrawAlbumArtL(const CMobblerBitmap* aLeft, co
 
 void CMobblerAlbumArtTransition::FingerUpL(TInt aPosition, TSlide aSlide)
 	{
+    TRACER_AUTO;
 	iFingerUpOffset = aPosition;
 	iSlide = aSlide;
 	
@@ -277,6 +290,7 @@ void CMobblerAlbumArtTransition::FingerUpL(TInt aPosition, TSlide aSlide)
 
 TInt CMobblerAlbumArtTransition::CallBack(TAny* /*aRef*/)
 	{
+    TRACER_AUTO;
 	static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->StatusDrawNow();
 	return KErrNone;
 	}

@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <sendomfragment.h>
 
 #include "mobblerlogging.h"
+#include "mobblertracer.h"
 #include "mobblerutility.h"
 
 _LIT8(KChineseLangCode, "cn");
@@ -65,6 +66,7 @@ const TInt KNokiaE72MachineUid(0x20014DD0);
 
 TBool MobblerUtility::EqualizerSupported()
 	{
+    TRACER_AUTO;
 	TInt machineUid(0);
 	TInt error(HAL::Get(HALData::EMachineUid, machineUid));
 	return (error == KErrNone) && !(machineUid == KNokiaE52MachineUid || 
@@ -74,6 +76,7 @@ TBool MobblerUtility::EqualizerSupported()
 
 HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
 	{
+    TRACER_AUTO;
 	CMD5* md5(CMD5::NewL());
 	CleanupStack::PushL(md5);
 	
@@ -93,6 +96,7 @@ HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
 
 HBufC8* MobblerUtility::URLEncodeLC(const TDesC8& aString)
 	{
+    TRACER_AUTO;
 	HBufC8* urlEncoded(HBufC8::NewLC(aString.Length() * 3));
 	// sanitise the input string
 	const TInt KCharCount(aString.Length());
@@ -106,6 +110,7 @@ HBufC8* MobblerUtility::URLEncodeLC(const TDesC8& aString)
 
 TBuf8<2> MobblerUtility::LanguageL()
 	{
+    TRACER_AUTO;
 	TBuf8<2> language;
 	language.Copy(KEnglishLangCode); // default to English
 	
@@ -172,6 +177,7 @@ TBuf8<2> MobblerUtility::LanguageL()
 
 TBuf<30> MobblerUtility::LocalLastFmDomainL()
 	{
+    TRACER_AUTO;
 	TBuf<30> url;
 	url.Copy(KEnglishUrl); // default to English
 	
@@ -238,6 +244,7 @@ TBuf<30> MobblerUtility::LocalLastFmDomainL()
 
 void MobblerUtility::FixLyricsSpecialCharacters(TDes8& aText)
 	{
+    TRACER_AUTO;
 	// Lyricsfly: "Because our database varies with many html format encodings 
 	// including international characters, we recommend that you replace all 
 	// quotes, ampersands and all other special and international characters 
@@ -301,6 +308,7 @@ void MobblerUtility::FixLyricsSpecialCharacters(TDes8& aText)
 
 void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 	{
+    TRACER_AUTO;
 	// First, remove all Windows newlines
 	_LIT8(KCRLF,"\x0D\x0A");
 
@@ -333,6 +341,7 @@ void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 
 void MobblerUtility::StripUnwantedTagsFromHtmlL(HBufC8*& aHtml)
 	{
+    TRACER_AUTO;
 	_LIT8(KAnchorStart, "<a");
 
 	TPtr8 htmlPtr(aHtml->Des());
@@ -404,6 +413,7 @@ void MobblerUtility::StripUnwantedTagsFromHtmlL(HBufC8*& aHtml)
 
 CSenDomFragment* MobblerUtility::PrepareDomFragmentLC(CSenXmlReader& aXmlReader, const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	// Create the DOM fragment and associate with the XML reader
 	CSenDomFragment* domFragment(CSenDomFragment::NewL());
 	CleanupStack::PushL(domFragment);

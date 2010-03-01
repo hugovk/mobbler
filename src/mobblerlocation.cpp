@@ -26,10 +26,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblerlocation.h"
 #include "mobblerlogging.h"
+#include "mobblertracer.h"
 #include "mobblerutility.h"
 
 CMobblerLocation* CMobblerLocation::NewL(MMobblerLocationObserver& aObserver)
 	{
+    TRACER_AUTO;
 	CMobblerLocation* self(new(ELeave) CMobblerLocation(aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -40,28 +42,33 @@ CMobblerLocation* CMobblerLocation::NewL(MMobblerLocationObserver& aObserver)
 CMobblerLocation::CMobblerLocation(MMobblerLocationObserver& aObserver)
 	:CActive(CActive::EPriorityStandard), iNetworkInfoPckg(iNetworkInfo), iObserver(aObserver)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerLocation::ConstructL()
 	{
+    TRACER_AUTO;
 	iTelephony = CTelephony::NewL();
 	}
 
 CMobblerLocation::~CMobblerLocation()
 	{
+    TRACER_AUTO;
 	Cancel();
 	delete iTelephony;
 	}
 
 void CMobblerLocation::GetLocationL()
 	{
+    TRACER_AUTO;
 	iTelephony->GetCurrentNetworkInfo(iStatus, iNetworkInfoPckg);
 	SetActive();
 	}
 
 void CMobblerLocation::RunL()
 	{
+    TRACER_AUTO;
 	if (iStatus.Int() == KErrNone)
 		{
 		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().GetLocationL(iNetworkInfoPckg(), *this);
@@ -70,11 +77,13 @@ void CMobblerLocation::RunL()
 
 void CMobblerLocation::DoCancel()
 	{
+    TRACER_AUTO;
 	iTelephony->CancelAsync(CTelephony::EGetCurrentNetworkInfoCancel);
 	}
 
 void CMobblerLocation::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
+    TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		// Parse the XML

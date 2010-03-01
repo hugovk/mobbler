@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblershoutbox.h"
 #include "mobblerstring.h"
 #include "mobblertaglist.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblertracklist.h"
 #include "mobblerutility.h"
@@ -133,6 +134,7 @@ All other responses should be treated as a hard failure.
 */
 CMobblerLastFmError* CMobblerParser::ParseHandshakeL(const TDesC8& aHandshakeResponse, HBufC8*& aSessionId, HBufC8*& aNowPlayingUrl, HBufC8*& aSubmitUrl)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aHandshakeResponse, _L("scrobblehandshake.txt"));
 
 	CMobblerLastFmError* error(NULL);
@@ -195,6 +197,7 @@ fingerprint_upload_url=http://ws.audioscrobbler.com/fingerprint/upload.php
 */
 CMobblerLastFmError* CMobblerParser::ParseOldRadioHandshakeL(const TDesC8& aRadioHandshakeResponse, HBufC8*& aRadioSessionID, HBufC8*& aRadioBaseUrl, HBufC8*& aRadioBasePath)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aRadioHandshakeResponse, _L("radiohandshakeresponse.txt"));
 
 	CMobblerLastFmError* error(NULL);
@@ -264,6 +267,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioHandshakeL(const TDesC8& aRadi
 
 CMobblerLastFmError* CMobblerParser::ParseScrobbleResponseL(const TDesC8& aScrobbleResponse)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aScrobbleResponse, _L("scrobbleresponse.txt"));
 
 	CMobblerLastFmError* error(NULL);
@@ -290,6 +294,7 @@ CMobblerLastFmError* CMobblerParser::ParseScrobbleResponseL(const TDesC8& aScrob
 
 /*HBufC8* CMobblerParser::DecodeURIStringLC(const TDesC8& aString)
 	{
+    TRACER_AUTO;
 	HBufC8* result(aString.AllocLC());
 
 	_LIT8(KPlus, "+");
@@ -340,6 +345,7 @@ CMobblerLastFmError* CMobblerParser::ParseScrobbleResponseL(const TDesC8& aScrob
 
 CMobblerLastFmError* CMobblerParser::ParseOldRadioTuneL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("oldradioselectresponse.xml"));
 
 	CMobblerLastFmError* error(NULL);
@@ -354,6 +360,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioTuneL(const TDesC8& aXml)
 
 CMobblerLastFmError* CMobblerParser::ParseOldRadioPlaylistL(const TDesC8& aXml, CMobblerRadioPlaylist& aPlaylist)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("playlist.xml"));
 
 	// Parse the XML
@@ -401,6 +408,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioPlaylistL(const TDesC8& aXml, 
 
 CMobblerLastFmError* CMobblerParser::ParseRadioTuneL(const TDesC8& aXml, CMobblerString*& aStationName)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("RadioSelectResponse.xml"));
 
 	// Parse the XML
@@ -436,6 +444,7 @@ CMobblerLastFmError* CMobblerParser::ParseRadioTuneL(const TDesC8& aXml, CMobble
 
 CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMobblerRadioPlaylist& aPlaylist)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("playlist.xml"));
 
 	CMobblerLastFmError* error(NULL);
@@ -523,6 +532,7 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 
 CMobblerLastFmError* CMobblerParser::ParseWebServicesHandshakeL(const TDesC8& aWebServicesHandshakeResponse, HBufC8*& aWebServicesSessionKey, CMobblerLastFmConnection::TLastFmMemberType& aMemberType)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aWebServicesHandshakeResponse, _L("webserviceshandshakeresponse.xml"));
 
 	CMobblerLastFmError* error(NULL);
@@ -565,6 +575,7 @@ CMobblerLastFmError* CMobblerParser::ParseWebServicesHandshakeL(const TDesC8& aW
 #ifdef BETA_BUILD
 CMobblerLastFmError* CMobblerParser::ParseBetaTestersHandshakeL(const TDesC8& aHandshakeResponse, const TDesC8& aUsername, TBool& aIsBetaTester)
 	{
+    TRACER_AUTO;
 	CMobblerLastFmError* error(NULL);
 
 	// Parse the XML
@@ -599,6 +610,7 @@ CMobblerLastFmError* CMobblerParser::ParseBetaTestersHandshakeL(const TDesC8& aH
 
 void CMobblerParser::ParseSearchTrackL(const TDesC8& aXml, CMobblerTrackList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("searchtrack.xml"));
 
 	// Parse the XML
@@ -631,6 +643,7 @@ void CMobblerParser::ParseSearchTrackL(const TDesC8& aXml, CMobblerTrackList& aO
 
 void CMobblerParser::ParseSearchAlbumL(const TDesC8& aXml, CMobblerAlbumList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("searchalbum.xml"));
 
 	// Parse the XML
@@ -666,6 +679,7 @@ void CMobblerParser::ParseSearchAlbumL(const TDesC8& aXml, CMobblerAlbumList& aO
 
 void CMobblerParser::ParseSearchArtistL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("searchartist.xml"));
 
 	// Parse the XML
@@ -700,6 +714,7 @@ void CMobblerParser::ParseSearchArtistL(const TDesC8& aXml, CMobblerArtistList& 
 
 void CMobblerParser::ParseSearchTagL(const TDesC8& aXml, CMobblerTagList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("searchtag.xml"));
 
 	// Parse the XML
@@ -732,11 +747,13 @@ void CMobblerParser::ParseSearchTagL(const TDesC8& aXml, CMobblerTagList& aObser
 
 TInt CMobblerParser::FriendOrder(const CMobblerListItem& aLeft, const CMobblerListItem& aRight)
 	{
+    TRACER_AUTO;
 	return aLeft.Title()->String().CompareF(aRight.Title()->String());
 	}
 
 void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("usergetfriends.xml"));
 
 	// Parse the XML
@@ -796,6 +813,7 @@ void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aO
 
 void CMobblerParser::ParseTopArtistsL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("usergettopartists.xml"));
 
 	// Parse the XML
@@ -828,6 +846,7 @@ void CMobblerParser::ParseTopArtistsL(const TDesC8& aXml, CMobblerArtistList& aO
 
 void CMobblerParser::ParseRecommendedArtistsL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("recommendedartists.xml"));
 
 	// Parse the XML
@@ -859,6 +878,7 @@ void CMobblerParser::ParseRecommendedArtistsL(const TDesC8& aXml, CMobblerArtist
 
 void CMobblerParser::ParseSimilarArtistsL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("similarartists.xml"));
 
 	// Parse the XML
@@ -890,6 +910,7 @@ void CMobblerParser::ParseSimilarArtistsL(const TDesC8& aXml, CMobblerArtistList
 
 void CMobblerParser::ParseEventsL(const TDesC8& aXml, CMobblerEventList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("usergetevents.xml"));
 
 	// Parse the XML
@@ -953,6 +974,7 @@ void CMobblerParser::ParseEventsL(const TDesC8& aXml, CMobblerEventList& aObserv
 
 void CMobblerParser::ParseTopAlbumsL(const TDesC8& aXml, CMobblerAlbumList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("usergettopalbums.xml"));
 
 	// Parse the XML
@@ -987,6 +1009,7 @@ void CMobblerParser::ParseTopAlbumsL(const TDesC8& aXml, CMobblerAlbumList& aObs
 
 void CMobblerParser::ParseArtistTopTracksL(const TDesC8& aXml, CMobblerTrackList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("artisttoptracks.xml"));
 
 	// Parse the XML
@@ -1022,6 +1045,7 @@ void CMobblerParser::ParseArtistTopTracksL(const TDesC8& aXml, CMobblerTrackList
 
 void CMobblerParser::ParseUserTopTracksL(const TDesC8& aXml, CMobblerTrackList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("usertoptracks.xml"));
 
 	// Parse the XML
@@ -1053,6 +1077,7 @@ void CMobblerParser::ParseUserTopTracksL(const TDesC8& aXml, CMobblerTrackList& 
 
 void CMobblerParser::ParsePlaylistL(const TDesC8& aXml, CMobblerTrackList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("fetchplaylist.xml"));
 
 	// Parse the XML
@@ -1085,6 +1110,7 @@ void CMobblerParser::ParsePlaylistL(const TDesC8& aXml, CMobblerTrackList& aObse
 
 void CMobblerParser::ParseSimilarTracksL(const TDesC8& aXml, CMobblerTrackList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("similartracks.xml"));
 
 	// Parse the XML
@@ -1120,6 +1146,7 @@ void CMobblerParser::ParseSimilarTracksL(const TDesC8& aXml, CMobblerTrackList& 
 
 void CMobblerParser::ParseRecentTracksL(const TDesC8& aXml, CMobblerTrackList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("recenttracks.xml"));
 
 	// Parse the XML
@@ -1163,6 +1190,7 @@ void CMobblerParser::ParseRecentTracksL(const TDesC8& aXml, CMobblerTrackList& a
 
 void CMobblerParser::ParsePlaylistsL(const TDesC8& aXml, CMobblerPlaylistList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("userplaylists.xml"));
 
 	// Parse the XML
@@ -1196,6 +1224,7 @@ void CMobblerParser::ParsePlaylistsL(const TDesC8& aXml, CMobblerPlaylistList& a
 
 void CMobblerParser::ParseShoutboxL(const TDesC8& aXml, CMobblerShoutbox& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("shoutbox.xml"));
 
 	// Parse the XML
@@ -1223,6 +1252,7 @@ void CMobblerParser::ParseShoutboxL(const TDesC8& aXml, CMobblerShoutbox& aObser
 
 void CMobblerParser::ParseTopTagsL(const TDesC8& aXml, CMobblerTagList& aObserver, RPointerArray<CMobblerListItem>& aList)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("toptags.xml"));
 
 	// Parse the XML
@@ -1250,6 +1280,7 @@ void CMobblerParser::ParseTopTagsL(const TDesC8& aXml, CMobblerTagList& aObserve
 
 TInt CMobblerParser::ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion, TDes8& location)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("update.xml"));
 
 	TInt error(KErrNone);
@@ -1277,6 +1308,7 @@ TInt CMobblerParser::ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion
  */
 void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, HBufC8*& aImageUrl, HBufC8*& aTagsText, HBufC8*& aSimilarArtistsText)
 	{
+    TRACER_AUTO;
 	DUMPDATA(aXml, _L("artistgetinfo.xml"));
 	_LIT8(KSimilar, "similar");
 	_LIT8(KCommaSpace, ", ");

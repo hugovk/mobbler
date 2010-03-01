@@ -38,15 +38,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerresourcereader.h"
 #include "mobblershoutbox.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 
 CMobblerFriendList::CMobblerFriendList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)
 	:CMobblerListControl(aAppUi, aWebServicesControl)
 	{
+    TRACER_AUTO;
 	}
 
 void CMobblerFriendList::ConstructL()
 	{
+    TRACER_AUTO;
 	iDefaultImage = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapDefaultUserImage);
 	
 	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, iText1->String8(), *this);
@@ -54,11 +57,13 @@ void CMobblerFriendList::ConstructL()
 
 CMobblerFriendList::~CMobblerFriendList()
 	{
+    TRACER_AUTO;
 	delete iShareObserver;
 	}
 
 CMobblerListControl* CMobblerFriendList::HandleListCommandL(TInt aCommand)
 	{
+    TRACER_AUTO;
 	CMobblerListControl* list(NULL);
 	
 	switch (aCommand)
@@ -138,6 +143,7 @@ CMobblerListControl* CMobblerFriendList::HandleListCommandL(TInt aCommand)
 
 void CMobblerFriendList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
+    TRACER_AUTO;
 	aCommands.AppendL(EMobblerCommandView);
 	aCommands.AppendL(EMobblerCommandFriends);
 	aCommands.AppendL(EMobblerCommandUserEvents);
@@ -160,11 +166,13 @@ void CMobblerFriendList::SupportedCommandsL(RArray<TInt>& aCommands)
 
 void CMobblerFriendList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError /*aError*/)
 	{
+    TRACER_AUTO;
 	
 	}
 
 void CMobblerFriendList::ParseL(const TDesC8& aXml)
 	{
+    TRACER_AUTO;
 	CMobblerParser::ParseFriendListL(aXml, *this, iList);
 	}
 

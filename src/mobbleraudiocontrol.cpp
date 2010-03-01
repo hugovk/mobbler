@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbleraudiocontrol.h"
 #include "mobbleraudiothread.h"
 #include "mobblerstring.h"
+#include "mobblertracer.h"
 #include "mobblertrack.h"
 
 const TInt KTimerDuration(250000); // 1/4 second
@@ -41,6 +42,7 @@ CMobblerAudioControl* CMobblerAudioControl::NewL(MMobblerAudioControlObserver& a
 												 TInt aVolume, TInt aEqualizerIndex, 
 												 TInt aBitRate)
 	{
+    TRACER_AUTO;
 	CMobblerAudioControl* self(new(ELeave) CMobblerAudioControl(aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL(aTrack, aPreBufferSize, aVolume, aEqualizerIndex, aBitRate);
@@ -51,11 +53,13 @@ CMobblerAudioControl* CMobblerAudioControl::NewL(MMobblerAudioControlObserver& a
 CMobblerAudioControl::CMobblerAudioControl(MMobblerAudioControlObserver& aObserver)
 	:CActive(CActive::EPriorityStandard), iObserver(aObserver)
 	{
+    TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerAudioControl::ConstructL(CMobblerTrack& aTrack, TTimeIntervalSeconds aPreBufferSize, TInt aVolume, TInt aEqualizerIndex, TInt aBitRate)
 	{
+    TRACER_AUTO;
 	// Set up the shared memory
 	iShared.iDownloadComplete = EFalse;
 	iShared.iPlaying = EFalse;
@@ -101,6 +105,7 @@ void CMobblerAudioControl::ConstructL(CMobblerTrack& aTrack, TTimeIntervalSecond
 
 CMobblerAudioControl::~CMobblerAudioControl()
 	{
+    TRACER_AUTO;
 	Cancel();
 	
 	delete iTimer;
@@ -122,23 +127,27 @@ CMobblerAudioControl::~CMobblerAudioControl()
 
 void CMobblerAudioControl::RunL()
 	{
+    TRACER_AUTO;
 	iDestroyCmdSent = ETrue;
 	iObserver.HandleAudioFinishedL(this);
 	}
 
 void CMobblerAudioControl::DoCancel()
 	{
+    TRACER_AUTO;
 	iAudioThread.LogonCancel(iStatus);
 	}
 
 TInt CMobblerAudioControl::HandleAudioPositionChangeL(TAny* aSelf)
 	{
+    TRACER_AUTO;
 	static_cast<CMobblerAudioControl*>(aSelf)->iObserver.HandleAudioPositionChangeL();
 	return KErrNone;
 	}
 
 void CMobblerAudioControl::DataPart(const TDesC8& aData, TInt aTotalDataSize)
 	{
+    TRACER_AUTO;
 	iShared.iTotalDataSize = aTotalDataSize;
 	iShared.iAudioData.Set(aData);
 	SendCmd(ECmdWriteData);
@@ -148,6 +157,7 @@ void CMobblerAudioControl::DataPart(const TDesC8& aData, TInt aTotalDataSize)
 
 void CMobblerAudioControl::DataCompleteL(CMobblerLastFmConnection::TTransactionError aTransactionError, TInt aHTTPStatusCode, const TDesC8& aStatusText)
 	{
+    TRACER_AUTO;
 	iShared.iDownloadComplete = ETrue;
 	
 	switch (aTransactionError)
@@ -189,29 +199,34 @@ void CMobblerAudioControl::DataCompleteL(CMobblerLastFmConnection::TTransactionE
 
 void CMobblerAudioControl::SetVolume(TInt aVolume)
 	{
+    TRACER_AUTO;
 	iShared.iAudioDataSettings.iVolume = aVolume;
 	SendCmd(ECmdSetVolume);
 	}
 
 void CMobblerAudioControl::SetEqualizerIndex(TInt aIndex)
 	{
+    TRACER_AUTO;
 	iShared.iEqualizerIndex = aIndex;
 	SendCmd(ECmdSetEqualizer);
 	}
 
 void CMobblerAudioControl::SetPreBufferSize(TTimeIntervalSeconds aPreBufferSize)
 	{
+    TRACER_AUTO;
 	iShared.iPreBufferSize = aPreBufferSize;
 	}
 
 void CMobblerAudioControl::SetCurrent()
 	{
+    TRACER_AUTO;
 	iShared.iCurrent = ETrue;
 	SendCmd(ECmdSetCurrent);
 	}
 
 void CMobblerAudioControl::SendCmd(TMobblerAudioCmd aCmd)
 	{
+    TRACER_AUTO;
 	// send the command and wait for the audio thread to respond to it
 	
 	if (!iDestroyCmdSent)
@@ -230,26 +245,31 @@ void CMobblerAudioControl::SendCmd(TMobblerAudioCmd aCmd)
 
 TTimeIntervalSeconds CMobblerAudioControl::PreBufferSize() const
 	{
+    TRACER_AUTO;
 	return iShared.iPreBufferSize;
 	}
 
 TInt CMobblerAudioControl::Volume() const
 	{
+    TRACER_AUTO;
 	return iShared.iAudioDataSettings.iVolume;
 	}
 
 TInt CMobblerAudioControl::MaxVolume() const
 	{
+    TRACER_AUTO;
 	return iShared.iMaxVolume;
 	}
 
 TBool CMobblerAudioControl::Playing() const
 	{
+    TRACER_AUTO;
 	return iShared.iPlaying;
 	}
 
 TBool CMobblerAudioControl::DownloadComplete() const
 	{
+    TRACER_AUTO;
 	return iShared.iDownloadComplete;
 	}
 
