@@ -109,7 +109,7 @@ CMobblerAlbumArtTransition::~CMobblerAlbumArtTransition()
 
 TBool CMobblerAlbumArtTransition::IsActive() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return (iTimer != NULL);
 	}
 

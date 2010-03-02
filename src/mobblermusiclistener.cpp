@@ -2,16 +2,17 @@
 mobblermusiclistener.cpp
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -145,7 +146,7 @@ void CMobblerMusicAppListener::NotifyChangeL()
 
 CMobblerTrack* CMobblerMusicAppListener::CurrentTrack()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iCurrentTrack;
 	}
 
@@ -196,7 +197,7 @@ void CMobblerMusicAppListener::ScheduleNowPlayingL()
 	else
 		{
 		delete iNowPlayingCallback;
-		iNowPlayingCallback = CMobblerNowPlayingCallback::NewL(*this);	
+		iNowPlayingCallback = CMobblerNowPlayingCallback::NewL(*this);
 		}
 	}
 
@@ -227,13 +228,6 @@ HBufC* CMobblerMusicAppListener::MusicAppNameL() const
 void CMobblerMusicAppListener::NowPlayingL()
 	{
     TRACER_AUTO;
-	if (static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->
-												RadioPlayer().CurrentTrack())
-		{
-		static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->
-												RadioPlayer().StopL();
-		}
-
 	if (iCurrentTrack)
 		{
 		// We are currently listening to a track so just send the old one again
@@ -319,6 +313,14 @@ void CMobblerMusicAppListener::PlayerStateChangedL(TMobblerMusicAppObserverState
 	if ((oldState != EPlayerPlaying) && 
 		(newState == EPlayerPlaying))
 		{
+		if (static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->
+												RadioPlayer().CurrentTrack())
+			{
+			static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->
+												RadioPlayer().StopL();
+			}
+
+
 		// Set start time = now
 		if (iCurrentTrack)
 			{
@@ -360,10 +362,6 @@ void CMobblerMusicAppListener::PlayerStateChangedL(TMobblerMusicAppObserverState
 			iCurrentTrack->Release();
 			iCurrentTrack = NULL;
 			}
-		else
-			{
-			iLastFmConnection.TrackStoppedL(iCurrentTrack);
-			}
 		}
 	
 	NotifyChangeL();
@@ -372,10 +370,10 @@ void CMobblerMusicAppListener::PlayerStateChangedL(TMobblerMusicAppObserverState
 void CMobblerMusicAppListener::TrackInfoChangedL(const TDesC& /*aTitle*/, const TDesC& /*aArtist*/)
 	{
     TRACER_AUTO;
-	iLastFmConnection.TrackStoppedL(iCurrentTrack);
-	
 	if (iCurrentTrack)
 		{
+		iLastFmConnection.TrackStoppedL(iCurrentTrack);
+		
 		iCurrentTrack->Release();
 		iCurrentTrack = NULL;
 		}

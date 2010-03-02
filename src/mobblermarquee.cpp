@@ -24,14 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblermarquee.h"
 #include "mobblerstatuscontrol.h"
-#include "mobblertracer.h"
+//#include "mobblertracer.h"
 
 const TTimeIntervalMicroSeconds32 KDelay(2000000);
 const TTimeIntervalMicroSeconds32 KInterval(100000);
 
 CMobblerMarquee* CMobblerMarquee::NewL(CMobblerStatusControl& aStatusControl)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CMobblerMarquee* self(new(ELeave) CMobblerMarquee(aStatusControl));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -42,25 +42,25 @@ CMobblerMarquee* CMobblerMarquee::NewL(CMobblerStatusControl& aStatusControl)
 CMobblerMarquee::CMobblerMarquee(CMobblerStatusControl& aStatusControl)
 	:iStatusControl(aStatusControl)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	}
 
 void CMobblerMarquee::ConstructL()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iTimer = CPeriodic::NewL(CActive::EPriorityLow);
 	}
 
 CMobblerMarquee::~CMobblerMarquee()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	delete iTimer;
 	delete iText;
 	}
 
 void CMobblerMarquee::Start(const TDesC& aText, TInt aInitialOffset, TInt aTextWidth, TInt aDisplayWidth)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (!iText || iText && iText->Compare(aText) != 0)
 		{
 		delete iText;
@@ -84,7 +84,7 @@ void CMobblerMarquee::Start(const TDesC& aText, TInt aInitialOffset, TInt aTextW
 
 TInt CMobblerMarquee::GetPosition1() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TInt offset(iInitialOffset);
 	TInt calcOffset(0);
 	TInt maxOffset(0);
@@ -106,7 +106,7 @@ TInt CMobblerMarquee::GetPosition1() const
 
 TInt CMobblerMarquee::GetPosition2() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TInt offset(KMaxTInt);
 	
 	if (iTextWidth + iInitialOffset > iDisplayWidth)
@@ -119,21 +119,21 @@ TInt CMobblerMarquee::GetPosition2() const
 
 void CMobblerMarquee::Reset()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	delete iText;
 	iText = NULL;
 	}
 
 TInt CMobblerMarquee::CallBack(TAny* aRef)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	static_cast<CMobblerMarquee*>(aRef)->Update();
 	return KErrNone;
 	}
 
 void CMobblerMarquee::Update()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (!static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->Foreground())
 		{
 		iTimer->Cancel();

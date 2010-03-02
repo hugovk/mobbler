@@ -179,13 +179,13 @@ void CMobblerLastFmConnection::SetIapIdL(TUint32 aIapId)
 
 void CMobblerLastFmConnection::SetBitRate(TInt aBitRate)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iBitRate = aBitRate;
 	}
 
 TUint32 CMobblerLastFmConnection::IapId() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iIapId;
 	}
 
@@ -261,13 +261,13 @@ void CMobblerLastFmConnection::SetModeL(TMode aMode)
 
 CMobblerLastFmConnection::TMode CMobblerLastFmConnection::Mode() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iMode;
 	}
 
 CMobblerLastFmConnection::TState CMobblerLastFmConnection::State() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iState;
 	}
 
@@ -405,7 +405,7 @@ void CMobblerLastFmConnection::RunL()
 
 CMobblerLastFmConnection::TLastFmMemberType CMobblerLastFmConnection::MemberType() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iMemberType;
 	}
 
@@ -417,7 +417,7 @@ void CMobblerLastFmConnection::DoCancel()
 
 TBool CMobblerLastFmConnection::Connected()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBool connected(EFalse);
 	
 	if (iConnection.SubSessionHandle() != 0)
@@ -2337,13 +2337,13 @@ void CMobblerLastFmConnection::ScrobbleHandshakeL()
 
 TInt CMobblerLastFmConnection::ScrobbleLogCount() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iTrackQueue.Count();
 	}
 
 const CMobblerTrackBase& CMobblerLastFmConnection::ScrobbleLogItem(TInt aIndex) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iTrackQueue[aIndex];
 	}
 

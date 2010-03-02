@@ -172,7 +172,7 @@ void CMobblerTrack::FindLocalTrackL()
 
 void CMobblerTrack::SetDataSize(TInt aDataSize)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iDataSize = aDataSize;
 	}
 

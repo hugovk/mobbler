@@ -78,7 +78,7 @@ void CMobblerRadioPlaylist::Reset()
 
 TInt CMobblerRadioPlaylist::Count() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iPlaylist.Count();
 	}
 

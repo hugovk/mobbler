@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "mobblerlogging.h"
 #include "mobblerstring.h"
-#include "mobblertracer.h"
+//#include "mobblertracer.h"
 
 _LIT(KLogPath, "C:\\Mobbler\\");
 _LIT(KLogFilename, "mobbler.log");
@@ -38,7 +38,7 @@ const TInt KMaxLoggingTextSize(255);
 
 void CMobblerLogging::DumpDataL(const TDesC8& aData, const TDesC& aLogFile)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TFileName logFile(KLogPath);
 	logFile.Append(aLogFile);
 
@@ -52,7 +52,7 @@ void CMobblerLogging::DumpDataL(const TDesC8& aData, const TDesC& aLogFile)
 
 void CMobblerLogging::LogL(const TInt aNumber)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf8<KMaxLoggingTextSize> text8;
 	text8.AppendNum(aNumber);
 	LogL(text8);
@@ -60,7 +60,7 @@ void CMobblerLogging::LogL(const TInt aNumber)
 
 void CMobblerLogging::LogL(const TInt aFirstNumber, const TInt aSecondNumber)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf8<KMaxLoggingTextSize> text8;
 	text8.AppendNum(aFirstNumber);
 	text8.Append(_L8(", "));
@@ -70,7 +70,7 @@ void CMobblerLogging::LogL(const TInt aFirstNumber, const TInt aSecondNumber)
 
 void CMobblerLogging::LogL(const TDesC& aText)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	HBufC8* text8(HBufC8::NewLC(aText.Length()));
 	text8->Des().Copy(aText);
 	LogL(*text8);
@@ -79,7 +79,7 @@ void CMobblerLogging::LogL(const TDesC& aText)
 
 void CMobblerLogging::LogL(const TDesC8& aText, const TInt aNumber)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf8<KMaxLoggingTextSize> text8;
 	text8.Append(aText);
 	text8.Append(_L8(", "));
@@ -89,7 +89,7 @@ void CMobblerLogging::LogL(const TDesC8& aText, const TInt aNumber)
 
 void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC8& aSecondText)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf8<KMaxLoggingTextSize> text8;
 	text8.Append(aFirstText);
 	text8.Append(_L8(", "));
@@ -99,7 +99,7 @@ void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC8& aSecondText)
 
 void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC& aSecondText)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf8<KMaxLoggingTextSize> text8;
 	text8.Append(aFirstText);
 	text8.Append(_L8(", "));
@@ -109,7 +109,7 @@ void CMobblerLogging::LogL(const TDesC8& aFirstText, const TDesC& aSecondText)
 
 void CMobblerLogging::LogL(const CMobblerString* aMobblerString)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf8<KMaxLoggingTextSize> text8;
 	if (aMobblerString)
 		{
@@ -124,7 +124,7 @@ void CMobblerLogging::LogL(const CMobblerString* aMobblerString)
 
 void CMobblerLogging::LogL(const TDesC8& aText)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	HBufC* text(HBufC::NewLC(aText.Length()));
 	text->Des().Copy(aText);
 	CEikonEnv::Static()->InfoMsg(*text);

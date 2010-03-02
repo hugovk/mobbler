@@ -110,7 +110,7 @@ CMobblerAudioThread::~CMobblerAudioThread()
 
 void CMobblerAudioThread::Request()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iShared.iCmdStatus = &iStatus;
 	iStatus = KRequestPending;
 	SetActive();
@@ -267,7 +267,7 @@ TBool CMobblerAudioThread::PreBufferFilled() const
 
 void CMobblerAudioThread::FillBufferL(TBool aDataAdded)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iShared.iPlaying)
 		{
 		if (aDataAdded)
@@ -324,7 +324,7 @@ void CMobblerAudioThread::MaoscBufferCopied(TInt /*aError*/, const TDesC8& /*aBu
 
 void CMobblerAudioThread::MaoscOpenComplete(TInt /*aError*/)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TRAP_IGNORE(iStream->SetDataTypeL(KMMFFourCCCodeMP3));
 	iStream->SetAudioPropertiesL(iShared.iAudioDataSettings.iSampleRate, iShared.iAudioDataSettings.iChannels);
 	iStream->SetVolume(iShared.iAudioDataSettings.iVolume);

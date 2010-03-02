@@ -9,12 +9,12 @@ http://wiki.forum.nokia.com/index.php/Trace_Function_Enter,_Exit_and_Leave
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -52,15 +52,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     #define TRACER(func) TTracer function_tracer( _S(func), _S("") );
 
     // Macro to print function return value in addition to entry, exit
-    // and leave conditions Second parameter is a formatting string used
-    // to print the return value Example to print an integer return value:
+    // and leave conditions. Second parameter is a formatting string used
+    // to print the return value. Example to print an integer return value:
     // TRACER_RET("CMyclass::MyFunction", "%d");
     #define TRACER_RET(func,format) TTracer func_tracer( _S(func), _S(format) );
 
     // Macro to print function entry, exit and leave.
-    // Gets the function name automatically
+    // Gets the function name automatically.
     // Example: TRACER_AUTO;
-    // Substract 1 from MaxLength() because PtrZ() adds the zero terminator
+    // Substract 1 from MaxLength() because PtrZ() adds the zero terminator.
     #define TRACER_AUTO \
         TPtrC8 __ptr8((const TUint8*)__PRETTY_FUNCTION__); \
         TBuf<150> __buf; \
@@ -68,9 +68,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
         TTracer function_tracer( __buf.PtrZ(), _S("") )
 
     // Macro to print function entry, exit and leave.
-    // Gets the function name automatically
+    // Gets the function name automatically.
     // Example: TRACER_AUTO_RET("%d");
-    // Substract 1 from MaxLength() because PtrZ() adds the zero terminator
+    // Substract 1 from MaxLength() because PtrZ() adds the zero terminator.
     #define TRACER_AUTO_RET(format) \
         TPtrC8 __ptr8((const TUint8*)__PRETTY_FUNCTION__); \
         TBuf<150> __buf; \
@@ -139,7 +139,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
                     {
                     // Log the return value
                     #ifdef __WINS__
-                        TInt32 retVal = 0;
+                        TInt32 retVal( 0 );
 
                         // The assembly bit. This needs to be reimplemented
                         // for every target.

@@ -45,7 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerstatuscontrol.h"
 #include "mobblerstring.h"
 #include "mobblertimeout.h"
-#include "mobblertracer.h"
+//#include "mobblertracer.h"
 #include "mobblertrack.h"
 
 _LIT(KMusicAppNameAndConnectionSeperator, " - ");
@@ -69,7 +69,7 @@ const TTimeIntervalMicroSeconds32 KTimeout(2000000);
 
 CMobblerStatusControl* CMobblerStatusControl::NewL(const TRect& aRect, const CMobblerAppUi& aAppUi)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CMobblerStatusControl* self(new(ELeave) CMobblerStatusControl(aAppUi));
 	CleanupStack::PushL(self);
 	self->ConstructL(aRect);
@@ -81,12 +81,12 @@ CMobblerStatusControl::CMobblerStatusControl(const CMobblerAppUi& aAppUi)
 	:iAppUi(aAppUi),
 	iShowAlbumArtFullscreen(EFalse)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	}
 
 void CMobblerStatusControl::ConstructL(const TRect& aRect)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 #ifdef  __S60_50__
 	TRAP_IGNORE(iMobblerFeedback = static_cast<CMobblerTouchFeedbackInterface*>(REComSession::CreateImplementationL(KTouchFeedbackImplUID, iDtorIdKey)));
 #endif
@@ -127,32 +127,32 @@ void CMobblerStatusControl::ConstructL(const TRect& aRect)
 
 void CMobblerStatusControl::HandleConnectionStateChangedL()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	DoChangePaneTextL();
 	}
 
 void CMobblerStatusControl::HandleRadioStateChangedL()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	DoChangePaneTextL();
 	}
 
 void CMobblerStatusControl::HandleMusicAppChangeL()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	DoChangePaneTextL();
 	}
 
 void CMobblerStatusControl::VolumeChanged()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iMobblerVolumeTimeout->Reset();
 	//DrawDeferred();
 	}
 
 void CMobblerStatusControl::DoChangePaneTextL()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf<KMaxMobblerTextSize> stateText;
 	
 	if (iAppUi.CurrentTrack())
@@ -252,7 +252,7 @@ void CMobblerStatusControl::DoChangePaneTextL()
 
 void CMobblerStatusControl::LoadGraphicsL()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iMobblerBitmapLastFm = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapLastFm);
 	iMobblerBitmapScrobble = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapScrobble);
 	iMobblerBitmapTrackIcon = iAppUi.BitmapCollection().BitmapL(*this, CMobblerBitmapCollection::EBitmapTrackIcon);
@@ -279,7 +279,7 @@ void CMobblerStatusControl::LoadGraphicsL()
 
 void CMobblerStatusControl::SetPositions()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	// The height of the text bars
 	const TInt KTextRectHeight(iMobblerFont->HeightInPixels() + iMobblerFont->DescentInPixels() + 2);
 	
@@ -447,7 +447,7 @@ void CMobblerStatusControl::SetPositions()
 
 void CMobblerStatusControl::HandleResourceChange(TInt aType)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TRect rect;
 	if (aType == KEikDynamicLayoutVariantSwitch)
 		{
@@ -460,7 +460,7 @@ void CMobblerStatusControl::HandleResourceChange(TInt aType)
 
 TTypeUid::Ptr CMobblerStatusControl::MopSupplyObject(TTypeUid aId)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iBgContext)
 		{
 		return MAknsControlContext::SupplyMopObject(aId, iBgContext);
@@ -471,7 +471,7 @@ TTypeUid::Ptr CMobblerStatusControl::MopSupplyObject(TTypeUid aId)
 
 void CMobblerStatusControl::SizeChanged()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iTitleMarquee)
 		{
 		iTitleMarquee->Reset();
@@ -504,7 +504,7 @@ void CMobblerStatusControl::SizeChanged()
 
 void CMobblerStatusControl::CreateBackBufferL()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	// Create back buffer bitmap
 	iBackBuffer = new(ELeave) CFbsBitmap;
 	
@@ -534,7 +534,7 @@ void CMobblerStatusControl::CreateBackBufferL()
  
 void CMobblerStatusControl::ReleaseBackBuffer()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iMobblerFont)
 		{
 		iBackBufferContext->DiscardFont();
@@ -557,20 +557,20 @@ void CMobblerStatusControl::ReleaseBackBuffer()
 
 void CMobblerStatusControl::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	SetPositions();
 	DrawDeferred();
 	}
 
 void CMobblerStatusControl::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	DrawDeferred();
 	}
 
 CMobblerStatusControl::~CMobblerStatusControl()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iAppUi.RadioPlayer().RemoveObserver(this);
 	iAppUi.LastFmConnection().RemoveStateChangeObserver(this);
 	iAppUi.MusicListener().RemoveObserver(this);
@@ -617,7 +617,7 @@ CMobblerStatusControl::~CMobblerStatusControl()
 
 void CMobblerStatusControl::FormatTime(TDes& aString, TTimeIntervalSeconds aSeconds, TTimeIntervalSeconds aTotalSeconds)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TInt minutes(aSeconds.Int() / 60);
 	TInt seconds(aSeconds.Int() - (minutes * 60));
 	aString.Zero();
@@ -636,7 +636,7 @@ void CMobblerStatusControl::FormatTime(TDes& aString, TTimeIntervalSeconds aSeco
 
 void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iAppUi.Foreground() && iAppUi.Backlight())
 		{
 		User::ResetInactivityTime();
@@ -964,7 +964,7 @@ void CMobblerStatusControl::Draw(const TRect& /*aRect*/) const
 
 void CMobblerStatusControl::DrawMobblerBitmapL(const CMobblerBitmap* aMobblerBitmap, const TRect& aDestRect, const TRect& aSourceRect, TBool aGray) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (aMobblerBitmap)
 		{
 		if (aMobblerBitmap->Bitmap())
@@ -998,7 +998,7 @@ void CMobblerStatusControl::DrawMobblerBitmapL(const CMobblerBitmap* aMobblerBit
 
 void CMobblerStatusControl::BitBltMobblerBitmapL(const CMobblerBitmap* aMobblerBitmap, const TPoint& aPoint, const TRect& aSourceRect, TBool aGray) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (aMobblerBitmap)
 		{
 		if (aMobblerBitmap->Bitmap())
@@ -1022,7 +1022,7 @@ void CMobblerStatusControl::DrawText(const TDesC& aText, const TRect& aRect,
 									 CGraphicsContext::TTextAlign aTextAlign, 
 									 TInt aOffset) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iBackBufferContext->SetDrawMode(CGraphicsContext::EDrawModePEN);
 	iBackBufferContext->SetPenColor(aPenColor);
 	iBackBufferContext->SetBrushColor(TRgb(255, 255, 255, 0));
@@ -1032,7 +1032,7 @@ void CMobblerStatusControl::DrawText(const TDesC& aText, const TRect& aRect,
 
 void CMobblerStatusControl::DrawRect(const TRect& aRect, const TRgb& aPenColor, const TRgb& aBrushColor) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iBackBufferContext->SetDrawMode(CGraphicsContext::EDrawModePEN);
 	iBackBufferContext->SetPenColor(aPenColor);
 	iBackBufferContext->SetBrushColor(aBrushColor);
@@ -1042,7 +1042,7 @@ void CMobblerStatusControl::DrawRect(const TRect& aRect, const TRgb& aPenColor, 
 
 TKeyResponse CMobblerStatusControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode /*aType*/)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TKeyResponse response(EKeyWasNotConsumed);
 	
 	switch (aKeyEvent.iCode)
@@ -1186,7 +1186,7 @@ TKeyResponse CMobblerStatusControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, T
 
 void CMobblerStatusControl::HandlePointerEventL(const TPointerEvent& aPointerEvent)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	// Check if they have touched any of the buttons
 	// if so, issue a command
 	

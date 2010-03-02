@@ -147,7 +147,7 @@ TInt CMobblerAudioControl::HandleAudioPositionChangeL(TAny* aSelf)
 
 void CMobblerAudioControl::DataPart(const TDesC8& aData, TInt aTotalDataSize)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iShared.iTotalDataSize = aTotalDataSize;
 	iShared.iAudioData.Set(aData);
 	SendCmd(ECmdWriteData);
@@ -213,7 +213,7 @@ void CMobblerAudioControl::SetEqualizerIndex(TInt aIndex)
 
 void CMobblerAudioControl::SetPreBufferSize(TTimeIntervalSeconds aPreBufferSize)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iShared.iPreBufferSize = aPreBufferSize;
 	}
 
@@ -245,31 +245,31 @@ void CMobblerAudioControl::SendCmd(TMobblerAudioCmd aCmd)
 
 TTimeIntervalSeconds CMobblerAudioControl::PreBufferSize() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iShared.iPreBufferSize;
 	}
 
 TInt CMobblerAudioControl::Volume() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iShared.iAudioDataSettings.iVolume;
 	}
 
 TInt CMobblerAudioControl::MaxVolume() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iShared.iMaxVolume;
 	}
 
 TBool CMobblerAudioControl::Playing() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iShared.iPlaying;
 	}
 
 TBool CMobblerAudioControl::DownloadComplete() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iShared.iDownloadComplete;
 	}
 

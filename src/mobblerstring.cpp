@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <utf.h> 
 
 #include "mobblerstring.h"
-#include "mobblertracer.h"
+//#include "mobblertracer.h"
 
 const TChar KForbiddenCharacterArray[] =
 	{
@@ -41,7 +41,7 @@ const TChar KForbiddenCharacterArray[] =
 
 CMobblerString* CMobblerString::NewL(const TDesC& aString)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CMobblerString* self(NewLC(aString));
 	CleanupStack::Pop(self);
 	return self;
@@ -49,7 +49,7 @@ CMobblerString* CMobblerString::NewL(const TDesC& aString)
 
 CMobblerString* CMobblerString::NewL(const TDesC8& aString)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CMobblerString* self(NewLC(aString));
 	CleanupStack::Pop(self);
 	return self;
@@ -57,7 +57,7 @@ CMobblerString* CMobblerString::NewL(const TDesC8& aString)
 
 CMobblerString* CMobblerString::NewLC(const TDesC& aString)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CMobblerString* self(new(ELeave) CMobblerString);
 	CleanupStack::PushL(self);
 	self->ConstructL(aString);
@@ -66,7 +66,7 @@ CMobblerString* CMobblerString::NewLC(const TDesC& aString)
 
 CMobblerString* CMobblerString::NewLC(const TDesC8& aString)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CMobblerString* self(new(ELeave) CMobblerString);
 	CleanupStack::PushL(self);
 	self->ConstructL(aString);
@@ -75,12 +75,12 @@ CMobblerString* CMobblerString::NewLC(const TDesC8& aString)
 
 CMobblerString::CMobblerString()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	}
 
 void CMobblerString::ConstructL(const TDesC& aString)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iString = aString.AllocL();
 	iString8 = CnvUtfConverter::ConvertFromUnicodeToUtf8L(aString);
 	
@@ -90,7 +90,7 @@ void CMobblerString::ConstructL(const TDesC& aString)
 
 void CMobblerString::ConstructL(const TDesC8& aString)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iString8 = aString.AllocL();
 	iString = CnvUtfConverter::ConvertToUnicodeFromUtf8L(aString);
 	
@@ -100,26 +100,26 @@ void CMobblerString::ConstructL(const TDesC8& aString)
 
 CMobblerString::~CMobblerString()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	delete iString;
 	delete iString8;
 	}
 
 const TPtrC& CMobblerString::String() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iStringPtr;
 	}
 
 const TPtrC8& CMobblerString::String8() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iString8Ptr;
 	}
 
 const TPtrC CMobblerString::SafeFsString(const TInt aKnownPathLength) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TFileName stripped;
 	stripped.Copy(SafeFsString8(aKnownPathLength));
 	return stripped;
@@ -127,7 +127,7 @@ const TPtrC CMobblerString::SafeFsString(const TInt aKnownPathLength) const
 
 const TPtrC8 CMobblerString::SafeFsString8(const TInt aKnownPathLength) const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TBuf8<KMaxFileName> stripped8(iString8Ptr);
 
 	const TInt arraySize(sizeof(KForbiddenCharacterArray) / sizeof(TChar));

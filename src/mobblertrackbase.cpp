@@ -48,7 +48,7 @@ CMobblerTrackBase* CMobblerTrackBase::NewL(RReadStream& aReadStream)
 
 CMobblerTrackBase::CMobblerTrackBase()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	}
 
 CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength, TBool aLoved)
@@ -150,51 +150,51 @@ void CMobblerTrackBase::ExternalizeL(RWriteStream& aWriteStream) const
 
 void CMobblerTrackBase::SetAlbumL(const TDesC& aAlbum)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	delete iAlbum;
 	iAlbum = CMobblerString::NewL(aAlbum);
 	}
 
 void CMobblerTrackBase::SetStartTimeUTC(const TTime& aStartTimeUTC)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iStartTimeUTC = aStartTimeUTC;
 	iTrackPlaying = ETrue;
 	}
 
 const TTime& CMobblerTrackBase::StartTimeUTC() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iStartTimeUTC;
 	}
 
 const CMobblerString& CMobblerTrackBase::Artist() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iArtist;
 	}
 
 const CMobblerString& CMobblerTrackBase::Title() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iTitle;
 	}
 
 const CMobblerString& CMobblerTrackBase::Album() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iAlbum;
 	}
 
 TInt CMobblerTrackBase::TrackNumber() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iTrackNumber;
 	}
 
 void CMobblerTrackBase::SetTrackNumber(TInt aTrackNumber)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iTrackNumber = aTrackNumber;
 	}
 
@@ -229,25 +229,25 @@ void CMobblerTrackBase::LoveTrackL()
 
 CMobblerTrackBase::TMobblerLove CMobblerTrackBase::Love() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iLove;
 	}
 
 void CMobblerTrackBase::SetTrackLength(TTimeIntervalSeconds aTrackLength)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iTrackLength = aTrackLength;
 	}
 
 TTimeIntervalSeconds CMobblerTrackBase::TrackLength() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iTrackLength.Int() == 0 ? 1 : iTrackLength;
 	}
 	
 TBool CMobblerTrackBase::IsMusicPlayerTrack() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return (iRadioAuth->Compare(KNullDesC8) == 0);
 	}
 
@@ -273,7 +273,7 @@ TTimeIntervalSeconds CMobblerTrackBase::InitialPlaybackPosition() const
 
 TTimeIntervalSeconds CMobblerTrackBase::PlaybackPosition() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iPlaybackPosition;
 	}
 
@@ -304,38 +304,38 @@ void CMobblerTrackBase::SetPlaybackPosition(TTimeIntervalSeconds aPlaybackPositi
 
 void CMobblerTrackBase::SetTotalPlayed(TTimeIntervalSeconds aTotalPlayed)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iTotalPlayed = aTotalPlayed;
 	iTrackPlaying = EFalse;
 	}
 
 TTimeIntervalSeconds CMobblerTrackBase::TotalPlayed() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iTotalPlayed;
 	}
 
 void CMobblerTrackBase::SetScrobbled()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iScrobbled = ETrue;
 	}
 
 TBool CMobblerTrackBase::Scrobbled() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iScrobbled;
 	}
 
 void CMobblerTrackBase::SetTrackPlaying(TBool aTrackPlaying)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	iTrackPlaying = aTrackPlaying;
 	}
 
 TBool CMobblerTrackBase::TrackPlaying() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iTrackPlaying;
 	}
 	

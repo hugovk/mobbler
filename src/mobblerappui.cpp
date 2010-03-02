@@ -499,43 +499,43 @@ CMobblerTrack* CMobblerAppUi::CurrentTrack()
 
 CMobblerLastFmConnection& CMobblerAppUi::LastFmConnection() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iLastFmConnection;
 	}
 
 CMobblerRadioPlayer& CMobblerAppUi::RadioPlayer() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iRadioPlayer;
 	}
 
 CMobblerMusicAppListener& CMobblerAppUi::MusicListener() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iMusicListener;
 	}
 
 CMobblerSettingItemListView& CMobblerAppUi::SettingView() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iSettingView;
 	}
 
 CMobblerDestinationsInterface* CMobblerAppUi::Destinations() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iDestinations;
 	}
 
 CMobblerContentListingInterface* CMobblerAppUi::ContentListing() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iContentListing;
 	}
 
 HBufC* CMobblerAppUi::MusicAppNameL() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iMusicListener->MusicAppNameL();
 	}
 
@@ -1285,25 +1285,25 @@ TBool CMobblerAppUi::RadioResumable() const
 
 CMobblerLastFmConnection::TMode CMobblerAppUi::Mode() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iLastFmConnection->Mode();
 	}
 
 CMobblerLastFmConnection::TState CMobblerAppUi::State() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iLastFmConnection->State();
 	}
 
 TBool CMobblerAppUi::ScrobblingOn() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iLastFmConnection->ScrobblingOn();
 	}
 
 void CMobblerAppUi::HandleStatusPaneSizeChange()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	}
 
 void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
@@ -1582,7 +1582,7 @@ TBool CMobblerAppUi::GoOnlineL()
 
 void CMobblerAppUi::StatusDrawDeferred()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iStatusView)
 		{
 		iStatusView->DrawDeferred();
@@ -1591,7 +1591,7 @@ void CMobblerAppUi::StatusDrawDeferred()
 
 void CMobblerAppUi::StatusDrawNow()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iStatusView)
 		{
 		iStatusView->DrawNow();
@@ -1600,32 +1600,32 @@ void CMobblerAppUi::StatusDrawNow()
 
 void CMobblerAppUi::HandleForegroundEventL(TBool aForeground)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CAknAppUi::HandleForegroundEventL(aForeground);
 	iForeground = aForeground;
 	}
 
 TBool CMobblerAppUi::Foreground() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iForeground;
 	}
 
 TBool CMobblerAppUi::Backlight() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iSettingView->Backlight();
 	}
 
 TInt CMobblerAppUi::ScrobblePercent() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iSettingView->ScrobblePercent();
 	}
 
 TInt CMobblerAppUi::DownloadAlbumArt() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return iSettingView->DownloadAlbumArt();
 	}
 
@@ -1866,13 +1866,13 @@ void CMobblerAppUi::SaveSearchTermsL()
 
 CMobblerResourceReader& CMobblerAppUi::ResourceReader() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iResourceReader;
 	}
 
 CMobblerBitmapCollection& CMobblerAppUi::BitmapCollection() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	return *iBitmapCollection;
 	}
 

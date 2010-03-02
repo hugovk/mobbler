@@ -132,7 +132,7 @@ CFbsBitmap* CMobblerBitmap::Bitmap(TBool aOriginalPlease) const
 CFbsBitmap* CMobblerBitmap::Bitmap() const
 #endif
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CFbsBitmap* bitmap(NULL);
 	
 	if (iBitmapLoaded)
@@ -151,7 +151,7 @@ CFbsBitmap* CMobblerBitmap::Bitmap() const
 
 CFbsBitmap* CMobblerBitmap::BitmapGrayL() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CFbsBitmap* bitmap(NULL);
 	
 	if (iBitmapLoaded)
@@ -179,7 +179,7 @@ CFbsBitmap* CMobblerBitmap::BitmapGrayL() const
 
 CFbsBitmap* CMobblerBitmap::Mask() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	CFbsBitmap* mask(NULL);
 	
 	if (iBitmapLoaded)
@@ -203,7 +203,7 @@ void CMobblerBitmap::SetSize(TSize aSize)
 
 TSize CMobblerBitmap::SizeInPixels() const
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TSize returnSize(0, 0);
 	
 	if (this && iBitmap)

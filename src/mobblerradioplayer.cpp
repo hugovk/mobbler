@@ -760,7 +760,7 @@ void CMobblerRadioPlayer::DoStopL(TBool aFullStop)
 
 CMobblerTrack* CMobblerRadioPlayer::CurrentTrack()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iCurrentAudioControl && 
 		(!iCurrentAudioControl->DownloadComplete() || iCurrentAudioControl->Playing()) && 
 		iPlaylist->Count() > 0)
@@ -773,7 +773,7 @@ CMobblerTrack* CMobblerRadioPlayer::CurrentTrack()
 
 CMobblerTrack* CMobblerRadioPlayer::NextTrack()
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	if (iPlaylist->Count() > 1)
 		{
 		return (*iPlaylist)[1];
