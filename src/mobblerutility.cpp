@@ -2,7 +2,9 @@
 mobblerutility.cpp
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2009, 2010  Hugo van Kemenade
+Copyright (C) 2010  gw11zz
 
 http://code.google.com/p/mobbler
 
@@ -60,6 +62,7 @@ _LIT(KTurkishUrl,		"http://m.lastfm.com.tr/");
 _LIT8(KFormat1, "%02x");
 _LIT8(KFormat2, "%%%2x");
 
+const TInt KNokia6710NavigatorMachineUid(0x20014DD1);
 const TInt KNokiaE52MachineUid(0x20014DCC);
 const TInt KNokiaE55MachineUid(0x20014DCF);
 const TInt KNokiaE72MachineUid(0x20014DD0);
@@ -69,7 +72,8 @@ TBool MobblerUtility::EqualizerSupported()
     TRACER_AUTO;
 	TInt machineUid(0);
 	TInt error(HAL::Get(HALData::EMachineUid, machineUid));
-	return (error == KErrNone) && !(machineUid == KNokiaE52MachineUid || 
+	return (error == KErrNone) && !(machineUid == KNokia6710NavigatorMachineUid ||
+									machineUid == KNokiaE52MachineUid || 
 									machineUid == KNokiaE55MachineUid || 
 									machineUid == KNokiaE72MachineUid);
 	}
