@@ -206,6 +206,7 @@ LIBRARY		hal.lib
 LIBRARY		hash.lib
 LIBRARY		http.lib
 LIBRARY		imageconversion.lib
+LIBRARY		imut.lib
 LIBRARY		inetprotutil.lib
 LIBRARY		mediaclientaudiostream.lib
 LIBRARY		mediaclientaudio.lib

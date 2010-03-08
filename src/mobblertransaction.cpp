@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <chttpformencoder.h> 
 #include <http/rhttpheaders.h>
 #include <httpstringconstants.h>
+#include <IMCVCODC.H> 
 
 #include "mobblertransaction.h"
 #include "mobblerwebservicesquery.h"
@@ -100,12 +101,48 @@ RHTTPTransaction& CMobblerTransaction::Transaction()
 	return iTransaction;
 	}
 
+void CMobblerTransaction::SetTwitterDetailsL(const TDesC8& aUsername, const TDesC8& aPassword)
+	{
+	// open the transaction
+	RStringF string;
+	RStringPool stringPool(iConnection.iHTTPSession.StringPool());
+	string = stringPool.StringF(HTTP::EPOST, RHTTPSession::GetTable());
+	
+	iTransaction = iConnection.iHTTPSession.OpenTransactionL(iURI->Uri(), *this, string);
+	
+	iForm = CHTTPFormEncoder::NewL();
+	
+	iTransaction.Request().SetBody(*iForm);
+	
+	HBufC8* plainDetails(HBufC8::NewLC(aUsername.Length() + aPassword.Length() + 1));
+	plainDetails->Des().Append(aUsername);
+	plainDetails->Des().Append(_L8(":"));
+	plainDetails->Des().Append(aPassword);
+	
+	delete iTwitterDetails;
+	iTwitterDetails = HBufC8::NewL(plainDetails->Length() * 3);
+	
+	TImCodecB64 b64enc;
+	b64enc.Initialise();
+	TPtr8 results(iTwitterDetails->Des());
+	b64enc.Encode(*plainDetails, results);
+	
+	RStringF detailsF(iConnection.iHTTPSession.StringPool().OpenFStringL(*iTwitterDetails));
+
+	iTransaction.Request().GetHeaderCollection().SetFieldL(iConnection.iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()),
+			iConnection.iHTTPSession.StringPool().StringF(HTTP::EBasic, RHTTPSession::GetTable()));
+	iTransaction.Request().GetHeaderCollection().SetFieldL(iConnection.iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()),
+			detailsF);
+	
+	CleanupStack::PopAndDestroy(plainDetails);
+	}
+
 void CMobblerTransaction::SubmitL()
 	{
 	delete iBuffer;
 	iBuffer = CBufFlat::NewL(KBufferGranularity);
 	
-	if (iURI)
+	if (iURI && !iTwitterDetails)
 		{
 		if (iQuery)
 			{
@@ -150,6 +187,7 @@ CMobblerTransaction::~CMobblerTransaction()
 	delete iForm;
 	delete iURI;
 	delete iQuery;
+	delete iTwitterDetails;
 	}
 
 void CMobblerTransaction::Cancel()

@@ -52,6 +52,10 @@ public:
 	const CMobblerString& Album() const;
 	const TDesC8& RadioAuth() const;
 	
+	HBufC8* ArtistUrlLC();
+	HBufC8* TrackUrlLC();
+	HBufC8* AlbumUrlLC();
+	
 	void SetAlbumL(const TDesC& aAlbum);
 	
 	TBool IsMusicPlayerTrack() const;

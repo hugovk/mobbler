@@ -301,6 +301,9 @@ TInt CMobblerAppUi::VolumeDownCallBack(TAny *aSelf)
 
 void CMobblerAppUi::MrccatoCommand(TRemConCoreApiOperationId aOperationId, TRemConCoreApiButtonAction aButtonAct)
 	{
+	LOG2(_L8("Operation id"), aOperationId);
+	LOG2(_L8("Button action"), aButtonAct);
+	
 	// don't bother if there's a current music player track
 	if ((CurrentTrack() && 
 		(CurrentTrack()->RadioAuth().Compare(KNullDesC8) == 0)))

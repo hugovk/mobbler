@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <commdbconnpref.h> 
 #include <httperr.h>
 #include <httpstringconstants.h>
+#include <IMCVCODC.H>  
 #include <ProfileEngineSDKCRKeys.h>
 #include <s32file.h>
 
@@ -1437,6 +1438,7 @@ void CMobblerLastFmConnection::RequestImageL(MMobblerFlatDataObserver* aObserver
 		AppendAndSubmitTransactionL(transaction);
 		}
 	}
+
 void CMobblerLastFmConnection::GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver)
 	{
 	LOG2(_L8("Cell ID"), aNetworkInfo.iCellId);
@@ -1460,6 +1462,61 @@ void CMobblerLastFmConnection::GetLocationL(const CTelephony::TNetworkInfoV1& aN
 	
 	transaction->SetFlatDataObserver(&aObserver);
 	AppendAndSubmitTransactionL(transaction);
+	}
+
+void CMobblerLastFmConnection::ShortenL(const TDesC8& aURL, MMobblerFlatDataObserver& aObserver)
+	{
+	_LIT8(KShortenUrlFormat, "http://api.bit.ly/shorten?version=2.0.1&format=xml&longUrl=%S&login=mobbler&apiKey=R_2a7f2548867a7aa2d7c2990248646e7c");
+	
+	HBufC8* url(HBufC8::NewLC(KShortenUrlFormat().Length() + aURL.Length()));
+	url->Des().Format(KShortenUrlFormat, &aURL);
+	
+	TUriParser8 bitlyUrl;
+	bitlyUrl.Parse(*url);
+	CUri8* uri(CUri8::NewLC(bitlyUrl));
+	
+	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
+	
+	CleanupStack::Pop(uri);
+	CleanupStack::PopAndDestroy(url);
+	
+	transaction->SetFlatDataObserver(&aObserver);
+	AppendAndSubmitTransactionL(transaction);
+	}
+
+void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObserver& aObserver)
+	{
+	// Query username and password
+	TBuf<KMobblerMaxUsernameLength> username;
+	TBuf<KMobblerMaxPasswordLength> password;
+	CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
+	dlg->SetPromptL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
+					static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
+	
+	if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
+		{
+		_LIT8(KTwitterUrlFormat, "http://api.twitter.com/1/statuses/update.xml?status=%S");
+		
+		HBufC8* url(HBufC8::NewLC(KTwitterUrlFormat().Length() + aTweet.Length()));
+		url->Des().Format(KTwitterUrlFormat, &aTweet);
+		
+		TUriParser8 twitterUrl;
+		twitterUrl.Parse(*url);
+		CUri8* uri(CUri8::NewLC(twitterUrl));
+			
+		CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
+
+		CMobblerString* usernameS(CMobblerString::NewLC(username));
+		CMobblerString* passwordS(CMobblerString::NewLC(password));
+		transaction->SetTwitterDetailsL(usernameS->String8(), passwordS->String8());
+		CleanupStack::PopAndDestroy(2, usernameS);
+		
+		CleanupStack::Pop(uri);
+		CleanupStack::PopAndDestroy(url);
+		
+		transaction->SetFlatDataObserver(&aObserver);
+		AppendAndSubmitTransactionL(transaction);
+		}
 	}
 
 void CMobblerLastFmConnection::GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver)
