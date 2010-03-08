@@ -57,7 +57,7 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandEqualizerDefault,
 	EMobblerCommandEqualizerMaximum = 0x7FFF,
 	
-	EMobblerCommandOnline = 0x8000,
+	EMobblerCommandOnline = 0x8F38, // 0x9000 - 200
 	
 	EMobblerCommandRadio,
 	EMobblerCommandOpen,
@@ -177,7 +177,7 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandRadioNeighbourhood,
 	EMobblerCommandRadioPlaylist,
 	EMobblerCommandRadioListTracks,
-	EMobblerCommandRadioEnumLast = 0xA000,
+	EMobblerCommandRadioEnumLast,
 	
 	EMobblerCommandCheckForUpdates,
 	EMobblerCommandVisitWebPage,
