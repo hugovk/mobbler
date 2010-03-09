@@ -35,11 +35,12 @@ class CMobblerTrack;
 class CMobblerWebServicesHelper : public CBase,	public MMobblerFlatDataObserverHelper, public MMobblerBitmapObserver
 	{
 private:
-	enum TShareSource
+	enum TShareWith
 		{
 		EShareCancelled,
-		EShareFromContacts,
-		EShareFromFriends
+		EShareWithContacts,
+		EShareWithFriends,
+		EShareWithTwitter
 		};
 	
 public:
@@ -69,7 +70,7 @@ private:
 	HBufC* DisplayContactListL();
 	HBufC* DisplayEmailListL(const CDesCArray& aEmails);
 	
-	TShareSource ShareSourceL();
+	TShareWith ShareSourceL();
 	
 	void DoShareL(TInt aCommand, const TDesC8& aRecipient);
 
@@ -82,12 +83,19 @@ private:
 	CMobblerTrack* iTrack;
 	HBufC8* iEventId;
 	
+	HBufC8* iShareMessage;
+	
 	CMobblerFlatDataObserverHelper* iTagAddHelper;
 	CMobblerFlatDataObserverHelper* iTagRemoveHelper;
 	
 	CMobblerFlatDataObserverHelper* iTrackTagRemoveTagsHelper;
 	CMobblerFlatDataObserverHelper* iAlbumTagRemoveTagsHelper;
 	CMobblerFlatDataObserverHelper* iArtistTagRemoveTagsHelper;
+	
+	CMobblerFlatDataObserverHelper* iShortenObserverHelperTrack;
+	CMobblerFlatDataObserverHelper* iShortenObserverHelperAlbum;
+	CMobblerFlatDataObserverHelper* iShortenObserverHelperArtist;
+	CMobblerFlatDataObserverHelper* iTweetObserverHelper;
 	
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperTrackShare;
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperArtistShare;
