@@ -379,5 +379,6 @@ RESOURCE STRING r_mobbler_scrobble_track_option	{ text = STR_mobbler_scrobble_tr
 RESOURCE STRING r_mobbler_scrobble_album_option	{ text = STR_mobbler_scrobble_album_option; }
 RESOURCE STRING r_mobbler_local_events			{ text = STR_mobbler_local_events; }
 RESOURCE STRING r_mobbler_old_scrobbles_warning	{ text = STR_mobbler_old_scrobbles_warning; }
+RESOURCE STRING r_mobbler_lastfm_account		{ text = STR_mobbler_lastfm_account; }
 
 // End of file

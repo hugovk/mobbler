@@ -462,15 +462,23 @@ void CMobblerStatusView::SettingsWizardL()
 		note->ExecuteLD(static_cast<CMobblerAppUi*>(AppUi())->
 			ResourceReader().ResourceL(R_MOBBLER_NOTE_NO_DETAILS));
 		
-		// Query username and password
-		TBuf<KMobblerMaxUsernameLength> username;
-		TBuf<KMobblerMaxPasswordLength> password;
-		CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
-		dlg->SetPromptL(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
-						static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
-		if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
+		// ask if they are a Last.fm user
+		if (EFalse)
 			{
-			static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(username, password, ETrue);
+		
+			}
+		else
+			{
+			// Query username and password
+			TBuf<KMobblerMaxUsernameLength> username;
+			TBuf<KMobblerMaxPasswordLength> password;
+			CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
+			dlg->SetPromptL(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
+							static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
+			if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
+				{
+				static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(username, password, ETrue);
+				}
 			}
 		}
 	}
