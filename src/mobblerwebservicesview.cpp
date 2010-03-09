@@ -1,24 +1,25 @@
 /*
-mobblerwebservicesview.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2009, 2010  Michael Coffey
+Copyright (C) 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  gw11zz
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "mobbler.hrh"
@@ -34,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 CMobblerWebServicesView* CMobblerWebServicesView::NewL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	CMobblerWebServicesView* self(new(ELeave) CMobblerWebServicesView);
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -44,24 +45,24 @@ CMobblerWebServicesView* CMobblerWebServicesView::NewL()
 
 CMobblerWebServicesView::CMobblerWebServicesView()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	}
 
 CMobblerWebServicesView::~CMobblerWebServicesView()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	delete iWebServicesControl;
 	}
 
 void CMobblerWebServicesView::ConstructL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	BaseConstructL(R_MOBBLER_WEBSERVICES_VIEW);
 	}
 
 void CMobblerWebServicesView::SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aResourceId, TInt aCommandId)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	HBufC* menuText(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(aResourceId).AllocLC());
 
 	const TInt KTextLimit(CEikMenuPaneItem::SData::ENominalTextLength);
@@ -78,7 +79,7 @@ void CMobblerWebServicesView::SetMenuItemTextL(CEikMenuPane* aMenuPane, TInt aRe
 
 void CMobblerWebServicesView::FilterMenuItemL(CEikMenuPane* aMenuPane, TInt aIndex, const RArray<TInt>& aSupportedCommands)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	TInt position(0);
 	if (aMenuPane->MenuItemExists(aIndex, position))
 		{
@@ -97,7 +98,7 @@ void CMobblerWebServicesView::FilterMenuItemL(CEikMenuPane* aMenuPane, TInt aInd
 
 void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	// First load the menu text so as not to confuse any dimming logic
 	if (aResourceId == R_MOBBLER_WEBSERVICES_MENU_PANE)
 		{
@@ -251,13 +252,13 @@ void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* a
 
 TUid CMobblerWebServicesView::Id() const
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	return TUid::Uid(KMobblerWebServicesViewUid);
 	}
 
 void CMobblerWebServicesView::HandleCommandL(TInt aCommand)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	iWebServicesControl->HandleListCommandL(aCommand);
 	
 	// let the app ui handle the event
@@ -284,7 +285,7 @@ void CMobblerWebServicesView::HandleCommandL(TInt aCommand)
 
 void CMobblerWebServicesView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid aCustomMessageId, const TDesC8& aCustomMessage)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (!iWebServicesControl)
 		{
 		// create the first view
@@ -299,7 +300,7 @@ void CMobblerWebServicesView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUi
 
 void CMobblerWebServicesView::DoDeactivate()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (iWebServicesControl)
 		{
 		// deactivate the top control
@@ -311,7 +312,7 @@ void CMobblerWebServicesView::DoDeactivate()
 
 void CMobblerWebServicesView::HandleStatusPaneSizeChange()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	CAknView::HandleStatusPaneSizeChange();
 	}
 
