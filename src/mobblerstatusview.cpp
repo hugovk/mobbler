@@ -488,6 +488,7 @@ void CMobblerStatusView::SettingsWizardL()
 		CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
 		dlg->SetPromptL(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
 						static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
+		dlg->SetPredictiveTextInputPermitted(ETrue);
 		if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
 			{
 			static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(username, password, ETrue);

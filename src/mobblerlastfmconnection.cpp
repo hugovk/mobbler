@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <commdbconnpref.h> 
 #include <httperr.h>
 #include <httpstringconstants.h>
-#include <IMCVCODC.H>  
+#include <imcvcodc.h>  
 #include <ProfileEngineSDKCRKeys.h>
 #include <s32file.h>
 
@@ -1517,12 +1517,12 @@ void CMobblerLastFmConnection::GetLocationL(const CTelephony::TNetworkInfoV1& aN
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::ShortenL(const TDesC8& aURL, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver)
 	{
 	_LIT8(KShortenUrlFormat, "http://api.bit.ly/shorten?version=2.0.1&format=xml&longUrl=%S&login=mobbler&apiKey=R_2a7f2548867a7aa2d7c2990248646e7c");
 	
-	HBufC8* url(HBufC8::NewLC(KShortenUrlFormat().Length() + aURL.Length()));
-	url->Des().Format(KShortenUrlFormat, &aURL);
+	HBufC8* url(HBufC8::NewLC(KShortenUrlFormat().Length() + aUrl.Length()));
+	url->Des().Format(KShortenUrlFormat, &aUrl);
 	
 	TUriParser8 bitlyUrl;
 	bitlyUrl.Parse(*url);
@@ -1545,6 +1545,7 @@ void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObse
 	CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
 	dlg->SetPromptL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
 					static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
+	dlg->SetPredictiveTextInputPermitted(ETrue);
 	
 	if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
 		{
@@ -1556,9 +1557,9 @@ void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObse
 		TUriParser8 twitterUrl;
 		twitterUrl.Parse(*url);
 		CUri8* uri(CUri8::NewLC(twitterUrl));
-			
+		
 		CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
-
+		
 		CMobblerString* usernameS(CMobblerString::NewLC(username));
 		CMobblerString* passwordS(CMobblerString::NewLC(password));
 		transaction->SetTwitterDetailsL(usernameS->String8(), passwordS->String8());
@@ -1580,11 +1581,13 @@ void CMobblerLastFmConnection::GeoGetEventsL(const TDesC8& aLatitude, const TDes
 	_LIT8(KQueryGeoGetEvents, "geo.getevents");
 	_LIT8(KLong, "long");
 	_LIT8(KLat, "lat");
+	_LIT8(KDistance, "distance");
+	_LIT8(K10, "10");
 	
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryGeoGetEvents));
 	query->AddFieldL(KLong, aLongitude);
 	query->AddFieldL(KLat, aLatitude);
-	query->AddFieldL(_L8("distance"), _L8("10")); // TODO
+	query->AddFieldL(KDistance, K10);
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, EFalse, uri, query));
 	

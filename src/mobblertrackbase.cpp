@@ -60,7 +60,7 @@ CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength, TBool aL
 	iTotalPlayed(0), 
 	iInitialPlaybackPosition(KErrUnknown)
 	{
-    TRACER_AUTO;
+//	TRACER_AUTO;
 	}
 
 void CMobblerTrackBase::BaseConstructL(const TDesC8& aTitle,
@@ -153,8 +153,8 @@ HBufC8* CMobblerTrackBase::ArtistUrlLC()
 	{
 	_LIT8(KArtistUrlFormat, "http://www.last.fm/music/%S");
 	
-	HBufC8* artist = MobblerUtility::URLEncodeLC(iArtist->String8());
-	HBufC8* artistUrl = HBufC8::NewL(KArtistUrlFormat().Length() + artist->Length());
+	HBufC8* artist(MobblerUtility::URLEncodeLC(iArtist->String8()));
+	HBufC8* artistUrl(HBufC8::NewL(KArtistUrlFormat().Length() + artist->Length()));
 	artistUrl->Des().Format(KArtistUrlFormat, &artist->Des());
 	CleanupStack::Pop(artist);
 	CleanupStack::PushL(artistUrl);
@@ -165,9 +165,9 @@ HBufC8* CMobblerTrackBase::TrackUrlLC()
 	{
 	_LIT8(KTrackUrlFormat, "http://www.last.fm/music/%S/_/%S");
 	
-	HBufC8* artist = MobblerUtility::URLEncodeLC(iArtist->String8());
-	HBufC8* title = MobblerUtility::URLEncodeLC(iTitle->String8());
-	HBufC8* trackUrl = HBufC8::NewL(KTrackUrlFormat().Length() + artist->Length() + title->Length());
+	HBufC8* artist(MobblerUtility::URLEncodeLC(iArtist->String8()));
+	HBufC8* title(MobblerUtility::URLEncodeLC(iTitle->String8()));
+	HBufC8* trackUrl(HBufC8::NewL(KTrackUrlFormat().Length() + artist->Length() + title->Length()));
 	trackUrl->Des().Format(KTrackUrlFormat, &artist->Des(), &title->Des());
 	CleanupStack::Pop(title);
 	CleanupStack::Pop(artist);
@@ -179,9 +179,9 @@ HBufC8* CMobblerTrackBase::AlbumUrlLC()
 	{
 	_LIT8(KAlbumUrlFormat, "http://www.last.fm/music/%S/%S");
 	
-	HBufC8* artist = MobblerUtility::URLEncodeLC(iArtist->String8());
-	HBufC8* album = MobblerUtility::URLEncodeLC(iAlbum->String8());
-	HBufC8* albumUrl = HBufC8::NewL(KAlbumUrlFormat().Length() + artist->Length() + album->Length());
+	HBufC8* artist(MobblerUtility::URLEncodeLC(iArtist->String8()));
+	HBufC8* album(MobblerUtility::URLEncodeLC(iAlbum->String8()));
+	HBufC8* albumUrl(HBufC8::NewL(KAlbumUrlFormat().Length() + artist->Length() + album->Length()));
 	albumUrl->Des().Format(KAlbumUrlFormat, &artist->Des(), &album->Des());
 	CleanupStack::Pop(album);
 	CleanupStack::Pop(artist);

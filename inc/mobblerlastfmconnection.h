@@ -214,7 +214,7 @@ public:
 	void GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver);
 	void GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver);
 	
-	void ShortenL(const TDesC8& aURL, MMobblerFlatDataObserver& aObserver);
+	void ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver);
 	void TweetL(const TDesC8& aTweet, MMobblerFlatDataObserver& aObserver);
 	
 private:

@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <chttpformencoder.h> 
 #include <http/rhttpheaders.h>
 #include <httpstringconstants.h>
-#include <IMCVCODC.H> 
+#include <imcvcodc.h> 
 
 #include "mobblertracer.h"
 #include "mobblertransaction.h"
@@ -126,7 +126,8 @@ void CMobblerTransaction::SetTwitterDetailsL(const TDesC8& aUsername, const TDes
 	
 	HBufC8* plainDetails(HBufC8::NewLC(aUsername.Length() + aPassword.Length() + 1));
 	plainDetails->Des().Append(aUsername);
-	plainDetails->Des().Append(_L8(":"));
+	_LIT8(KColon, ":");
+	plainDetails->Des().Append(KColon);
 	plainDetails->Des().Append(aPassword);
 	
 	delete iTwitterDetails;
@@ -220,16 +221,15 @@ void CMobblerTransaction::MHFRunL(RHTTPTransaction aTransaction, const THTTPEven
 			{
 			RHTTPHeaders headers(aTransaction.Response().GetHeaderCollection());
 			 
-			THTTPHdrVal locationValue;			
+			THTTPHdrVal locationValue;
 			if( headers.GetField(iConnection.iHTTPSession.StringPool().StringF(HTTP::ELocation, RHTTPSession::GetTable()), 0, locationValue) == KErrNone )
 				{
-    TRACER_AUTO;
 				// This is a redirect so ask for the new location
 				
 				const TDesC8& urides(locationValue.StrF().DesC());
 				TUriParser8 uri;
 				uri.Parse(urides);
-				aTransaction.Cancel();						
+				aTransaction.Cancel();
 				iTransaction.Request().SetURIL(uri);
 				iTransaction.SubmitL();
 				}

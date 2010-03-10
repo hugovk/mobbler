@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <sendomfragment.h>
 
 #include "mobblerappui.h"
+#include "mobblerliterals.h"
 #include "mobblerlocation.h"
 #include "mobblerlogging.h"
 #include "mobblertracer.h"
@@ -31,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 CMobblerLocation* CMobblerLocation::NewL(MMobblerLocationObserver& aObserver)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	CMobblerLocation* self(new(ELeave) CMobblerLocation(aObserver));
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -42,33 +43,33 @@ CMobblerLocation* CMobblerLocation::NewL(MMobblerLocationObserver& aObserver)
 CMobblerLocation::CMobblerLocation(MMobblerLocationObserver& aObserver)
 	:CActive(CActive::EPriorityStandard), iNetworkInfoPckg(iNetworkInfo), iObserver(aObserver)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	CActiveScheduler::Add(this);
 	}
 
 void CMobblerLocation::ConstructL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	iTelephony = CTelephony::NewL();
 	}
 
 CMobblerLocation::~CMobblerLocation()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	Cancel();
 	delete iTelephony;
 	}
 
 void CMobblerLocation::GetLocationL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	iTelephony->GetCurrentNetworkInfo(iStatus, iNetworkInfoPckg);
 	SetActive();
 	}
 
 void CMobblerLocation::RunL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (iStatus.Int() == KErrNone)
 		{
 		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().GetLocationL(iNetworkInfoPckg(), *this);
@@ -77,23 +78,27 @@ void CMobblerLocation::RunL()
 
 void CMobblerLocation::DoCancel()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	iTelephony->CancelAsync(CTelephony::EGetCurrentNetworkInfoCancel);
 	}
 
 void CMobblerLocation::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 		{
 		// Parse the XML
 		CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
 		CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 
-		iObserver.HandleLocationCompleteL(domFragment->AsElement().Element(_L8("accuracy"))->Content(), // TODO literals
-											domFragment->AsElement().Element(_L8("latitude"))->Content(),
-											domFragment->AsElement().Element(_L8("longitude"))->Content(),
-											domFragment->AsElement().Element(_L8("name"))->Content());
+		_LIT8(KAccuracy, "accuracy");
+		_LIT8(KLatitude, "latitude");
+		_LIT8(KLongitude, "longitude");
+		
+		iObserver.HandleLocationCompleteL(domFragment->AsElement().Element(KAccuracy)->Content(),
+											domFragment->AsElement().Element(KLatitude)->Content(),
+											domFragment->AsElement().Element(KLongitude)->Content(),
+											domFragment->AsElement().Element(KName)->Content());
 		
 		CleanupStack::PopAndDestroy(2);
 		}
