@@ -44,7 +44,7 @@ public:
 	HBufC* ShoutAtTextUserLC();
 	
 private: // from MMobblerFlatDataObserverHelper
-	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
 
 private:
 	HBufC* ShoutAtTextLC(const TDesC8& aName);

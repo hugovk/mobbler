@@ -36,7 +36,7 @@ public:
 	static TBool EqualizerSupported();
 	
 	static HBufC8* MD5LC(const TDesC8& aSource);
-	static HBufC8* URLEncodeLC(const TDesC8& aString);
+	static HBufC8* URLEncodeLC(const TDesC8& aString, TBool aEncodeAll = ETrue);
 	
 	static TBuf8<2> LanguageL();
 	static TBuf<30> LocalLastFmDomainL(const TInt aMobile = ETrue);

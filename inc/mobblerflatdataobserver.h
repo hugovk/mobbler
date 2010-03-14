@@ -1,5 +1,5 @@
 /*
-mobblerfriendlist.h
+mobblerflatdataobserver.h
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2009  Michael Coffey
@@ -21,32 +21,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MOBBLERFRIENDLIST_H__
-#define __MOBBLERFRIENDLIST_H__
+#ifndef __MOBBLERFLATDATAOBSERVER_H__
+#define __MOBBLERFLATDATAOBSERVER_H__
 
-#include "mobblerlistcontrol.h"
+#include "mobblerlastfmconnection.h"
 
-class CMobblerAppUi;
-
-class CMobblerFriendList : public CMobblerListControl, public MMobblerFlatDataObserverHelper
+class MMobblerFlatDataObserver
 	{
 public:
-	CMobblerFriendList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl);
-	~CMobblerFriendList();
-	
-	void ConstructL();
-	
-	CMobblerListControl* HandleListCommandL(TInt aCommand);
-	void SupportedCommandsL(RArray<TInt>& aCommands);
-	void ParseL(const TDesC8& aXml);
-	
-private:
-	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
-	
-private:
-	CMobblerFlatDataObserverHelper* iShareObserver;
+	virtual void DataL(const TDesC8& aData, TInt aTransactionError) = 0;
 	};
-
-#endif // __MOBBLERFRIENDLIST_H__
-
-// End of file
+	
+#endif // __MOBBLERFLATDATAOBSERVER_H__
+	
+// End of file	

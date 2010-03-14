@@ -98,7 +98,7 @@ void CMobblerFlatDataObserverHelper::DialogDismissedL(TInt aButtonId)
 		}
 	}
 
-void CMobblerFlatDataObserverHelper::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerFlatDataObserverHelper::DataL(const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	iFinished = ETrue;

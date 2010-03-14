@@ -45,7 +45,7 @@ private: // from CActive
 	void DoCancel();
 	
 private: // from MMobblerFlatDataObserver
-	void DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+	void DataL(const TDesC8& aData, TInt aTransactionError);
 
 private:
 	CTelephony* iTelephony;

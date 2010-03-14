@@ -88,7 +88,7 @@ HBufC* CMobblerShoutbox::ShoutAtTextOwnerLC()
 
 	if (iText1->String().Length() == 0)
 		{
-		CMobblerString* name(CMobblerString::NewLC(iAppUi.SettingView().Username()));
+		CMobblerString* name(CMobblerString::NewLC(iAppUi.SettingView().Settings().Username()));
 		shoutAtText = ShoutAtTextLC(name->String8());
 		CleanupStack::Pop(shoutAtText);
 		CleanupStack::PopAndDestroy(name);
@@ -172,7 +172,7 @@ CMobblerListControl* CMobblerShoutbox::HandleListCommandL(TInt aCommand)
 							}
 						else if (iText1->String().Length() == 0)
 							{
-							CMobblerString* name(CMobblerString::NewL(iAppUi.SettingView().Username()));
+							CMobblerString* name(CMobblerString::NewL(iAppUi.SettingView().Settings().Username()));
 							iAppUi.LastFmConnection().ShoutL(KUser, name->String8(), shout->String8());
 							}
 						else
@@ -231,7 +231,7 @@ void CMobblerShoutbox::RequestImageL(TInt aIndex) const
 	iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetInfo, iList[aIndex]->Title()->String8(), *helper);
 	}
 
-void CMobblerShoutbox::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerShoutbox::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)

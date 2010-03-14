@@ -45,6 +45,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
 
+const TInt KMaxTweetLength(140);
+const TInt KBitlyUrlLength(23);
+
 CMobblerWebServicesHelper* CMobblerWebServicesHelper::NewL(CMobblerAppUi& aAppUi)
 	{
     TRACER_AUTO;
@@ -154,7 +157,7 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 	
 	if (shareSource == EShareWithFriends)
 		{
-		CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
+		CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Settings().Username()));
 		
 		delete iFriendFetchObserverHelperTrackShare;
 		iFriendFetchObserverHelperTrackShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -176,23 +179,28 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 		}
 	else if (shareSource == EShareWithTwitter)
 		{
-		if (ETrue) // not a token
-			{
-			// get an xAuth token from twitter
-			}
-		
 		// Ask for custom message
-		_LIT8(KDefaultShareMessage, "Sharing");
+		_LIT(KShareMessageFormat, "Sharing: %S by %S");
 		
 		delete iShareMessage;
-		iShareMessage = HBufC8::NewL(KDefaultShareMessage().Length());
-		iShareMessage->Des().Append(KDefaultShareMessage);
+		iShareMessage = HBufC::NewL(Max(140, KShareMessageFormat().Length() + iTrack->Title().String().Length() + iTrack->Artist().String().Length() + KBitlyUrlLength) );
+		TPtr shareMessage = iShareMessage->Des();
+		shareMessage.Format(KShareMessageFormat, &iTrack->Title().String(), &iTrack->Artist().String());
 		
-		// create and get the URL shortened
-		delete iShortenObserverHelperTrack;
-		iShortenObserverHelperTrack = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-		iAppUi.LastFmConnection().ShortenL(iTrack->TrackUrlLC()->Des(), *iShortenObserverHelperTrack);
-		CleanupStack::PopAndDestroy(); // iTrack->TrackUrlLC()
+		CAknTextQueryDialog* shareDialog(new(ELeave) CAknTextQueryDialog(shareMessage));
+		shareDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
+		shareDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_MESSAGE_PROMPT));
+		shareDialog->SetPredictiveTextInputPermitted(ETrue);
+		shareDialog->SetMaxLength(KMaxTweetLength - KBitlyUrlLength);
+		
+		if (shareDialog->RunLD())
+			{
+			// create and get the URL shortened
+			delete iShortenObserverHelperTrack;
+			iShortenObserverHelperTrack = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+			iAppUi.LastFmConnection().ShortenL(iTrack->TrackUrlLC()->Des(), *iShortenObserverHelperTrack);
+			CleanupStack::PopAndDestroy(); // iTrack->TrackUrlLC()
+			}
 		}
 	}
 
@@ -202,7 +210,7 @@ void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 	iTrack = &aTrack;
 	iTrack->Open();
 	
-	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
+	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Settings().Username()));
 	
 	delete iFriendFetchObserverHelperArtistShare;
 	iFriendFetchObserverHelperArtistShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -217,7 +225,7 @@ void CMobblerWebServicesHelper::PlaylistAddL(CMobblerTrack& aTrack)
 	iTrack = &aTrack;
 	iTrack->Open();
 	
-	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
+	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Settings().Username()));
 	
 	delete iPlaylistFetchObserverHelper;
 	iPlaylistFetchObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -231,7 +239,7 @@ void CMobblerWebServicesHelper::EventShareL(const TDesC8& aEventId)
     TRACER_AUTO;
 	iEventId = aEventId.AllocL();
 	
-	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Username()));
+	CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Settings().Username()));
 	
 	delete iFriendFetchObserverHelperEventShare;
 	iFriendFetchObserverHelperEventShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -528,7 +536,7 @@ void CMobblerWebServicesHelper::DoShareL(TInt aCommand, const TDesC8& aRecipient
 		}
 	}
 
-void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
@@ -732,18 +740,20 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 						
 				if (errorCode.Compare(_L8("0")) == 0)
 					{
-					TPtrC8 shortUrl = domFragment->AsElement().Element(_L8("results"))->Element(_L8("nodeKeyVal"))->Element(_L8("shortUrl"))->Content();
-				
-					_LIT8(KShareMessageFormat, "%S: %S by %S: %S");
-				
-					HBufC8* shareMessage(HBufC8::NewLC(KShareMessageFormat().Length() + shortUrl.Length() + iTrack->Title().String8().Length() + iTrack->Artist().String8().Length() + iShareMessage->Length() ));
-					shareMessage->Des().Format(KShareMessageFormat, &iShareMessage->Des(), &iTrack->Title().String8(), &iTrack->Artist().String8(), &shortUrl);
+					TBuf8<KMaxTweetLength> tweet;
 					
+					CMobblerString* shareMessage(CMobblerString::NewLC(*iShareMessage));
+					tweet.Append(shareMessage->String8());
+					
+					TPtrC8 shortUrl = domFragment->AsElement().Element(_L8("results"))->Element(_L8("nodeKeyVal"))->Element(_L8("shortUrl"))->Content();
+					tweet.Append(_L8(": "));
+					tweet.Append(shortUrl);
+
 					delete iTweetObserverHelper;
 					iTweetObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-					iAppUi.LastFmConnection().TweetL(*MobblerUtility::URLEncodeLC(*shareMessage), *iTweetObserverHelper);
+					iAppUi.LastFmConnection().TweetL(tweet, *iTweetObserverHelper);
 					
-					CleanupStack::PopAndDestroy(2, shareMessage);
+					CleanupStack::PopAndDestroy(shareMessage);
 					}
 				else
 					{

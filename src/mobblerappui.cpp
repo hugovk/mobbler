@@ -172,12 +172,12 @@ void CMobblerAppUi::ConstructL()
 	iSettingView = CMobblerSettingItemListView::NewL();
 	iStatusView = CMobblerStatusView::NewL();
 	
-	iLastFmConnection = CMobblerLastFmConnection::NewL(*this, iSettingView->Username(), iSettingView->Password(), iSettingView->IapId(), iSettingView->BitRate());
+	iLastFmConnection = CMobblerLastFmConnection::NewL(*this, iSettingView->Settings().Username(), iSettingView->Settings().Password(), iSettingView->Settings().IapId(), iSettingView->Settings().BitRate());
 	iRadioPlayer = CMobblerRadioPlayer::NewL(*iLastFmConnection, 
-											 iSettingView->BufferSize(), 
-											 iSettingView->EqualizerIndex(), 
-											 iSettingView->Volume(), 
-											 iSettingView->BitRate());
+											 iSettingView->Settings().BufferSize(), 
+											 iSettingView->Settings().EqualizerIndex(), 
+											 iSettingView->Settings().Volume(), 
+											 iSettingView->Settings().BitRate());
 	iMusicListener = CMobblerMusicAppListener::NewL(*iLastFmConnection);
 	
 	TRAP_IGNORE(iContentListing = static_cast<CMobblerContentListingInterface*>(REComSession::CreateImplementationL(KContentListingImplUid, iContentListingDtorUid)));
@@ -189,10 +189,10 @@ void CMobblerAppUi::ConstructL()
 	iWebServicesView = CMobblerWebServicesView::NewL();
 	iBrowserView = CMobblerBrowserView::NewL();
 
-	iLastFmConnection->SetModeL(iSettingView->Mode());
+	iLastFmConnection->SetModeL(iSettingView->Settings().Mode());
 	iLastFmConnection->LoadCurrentTrackL();
 	
-	if (iSettingView->AlarmOn())
+	if (iSettingView->Settings().AlarmOn())
 		{
 		// If the time has already passed, no problem, the timer will 
 		// simply expire immediately with KErrUnderflow.
@@ -200,7 +200,7 @@ void CMobblerAppUi::ConstructL()
 			{
 			iAlarmTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
 			}
-		iAlarmTimer->At(iSettingView->AlarmTime());
+		iAlarmTimer->At(iSettingView->Settings().AlarmTime());
 		}
 	
 	// Attempt to load gesture plug-in
@@ -432,7 +432,8 @@ void CMobblerAppUi::SetDetailsL(const TDesC& aUsername, const TDesC& aPassword, 
 	iLastFmConnection->SetDetailsL(aUsername, aPassword);
 	if (aAndSaveToSettings)
 		{
-		iSettingView->SetDetailsL(aUsername, aPassword);
+		iSettingView->Settings().SetUsername(aUsername);
+		iSettingView->Settings().SetPassword(aPassword);
 		}
 	}
 
@@ -461,7 +462,7 @@ void CMobblerAppUi::UpdateAccelerometerGesturesL()
 	// If the radio is playing and the setting is on
 	if (iGesturePlugin && 
 		iRadioPlayer->CurrentTrack() && 
-		iSettingView->AccelerometerGestures())
+		iSettingView->Settings().AccelerometerGestures())
 		{
 		iGesturePlugin->ObserveGesturesL(*this);
 		}
@@ -583,11 +584,11 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandOnline:
 			iLastFmConnection->SetModeL(CMobblerLastFmConnection::EOnline);
-			iSettingView->SetModeL(CMobblerLastFmConnection::EOnline);
+			iSettingView->Settings().SetMode(CMobblerLastFmConnection::EOnline);
 			break;
 		case EMobblerCommandOffline:
 			iLastFmConnection->SetModeL(CMobblerLastFmConnection::EOffline);
-			iSettingView->SetModeL(CMobblerLastFmConnection::EOffline);
+			iSettingView->Settings().SetMode(CMobblerLastFmConnection::EOffline);
 			break;
 		case EMobblerCommandFriends:			// intentional fall-through
 		case EMobblerCommandUserTopArtists:		// intentional fall-through
@@ -608,7 +609,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				
 			if (iLastFmConnection->Mode() == CMobblerLastFmConnection::EOnline)
 				{
-				CMobblerString* username(CMobblerString::NewLC(iSettingView->Username()));
+				CMobblerString* username(CMobblerString::NewLC(iSettingView->Settings().Username()));
 				ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(aCommand), username->String8());
 				CleanupStack::PopAndDestroy(username);
 				}
@@ -1163,7 +1164,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				{
 				TInt index(aCommand - EMobblerCommandEqualizerDefault - 1);
 				RadioPlayer().SetEqualizer(index);
-				iSettingView->SetEqualizerIndexL(index);
+				iSettingView->Settings().SetEqualizerIndex(index);
 				return;
 				}
 			break;
@@ -1306,7 +1307,7 @@ void CMobblerAppUi::HandleStatusPaneSizeChange()
 //	TRACER_AUTO;
 	}
 
-void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
@@ -1319,7 +1320,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			TTime now;
 			now.UniversalTime();
 			now += TTimeIntervalHours(KUpdateIntervalHours);
-			iSettingView->SetNextUpdateCheckL(now);
+			iSettingView->Settings().SetNextUpdateCheck(now);
 			
 			TVersion version;
 			TBuf8<KMaxMobblerTextSize> location;
@@ -1461,12 +1462,12 @@ void CMobblerAppUi::HandleConnectCompleteL(TInt aError)
 	else
 		{
 		// check for updates?
-		if (iSettingView->CheckForUpdates())
+		if (iSettingView->Settings().CheckForUpdates())
 			{
 			TTime now;
 			now.UniversalTime();
 			
-			if (now > iSettingView->NextUpdateCheck())
+			if (now > iSettingView->Settings().NextUpdateCheck())
 				{
 				// do an update check
 				delete iAutoCheckForUpdatesObserver;
@@ -1574,7 +1575,7 @@ TBool CMobblerAppUi::GoOnlineL()
 	
 	if (goOnline)
 		{
-		iSettingView->SetModeL(CMobblerLastFmConnection::EOnline);
+		iSettingView->Settings().SetMode(CMobblerLastFmConnection::EOnline);
 		}
 	
 	return goOnline;
@@ -1614,25 +1615,25 @@ TBool CMobblerAppUi::Foreground() const
 TBool CMobblerAppUi::Backlight() const
 	{
 //	TRACER_AUTO;
-	return iSettingView->Backlight();
+	return iSettingView->Settings().Backlight();
 	}
 
 TInt CMobblerAppUi::ScrobblePercent() const
 	{
 //	TRACER_AUTO;
-	return iSettingView->ScrobblePercent();
+	return iSettingView->Settings().ScrobblePercent();
 	}
 
 TInt CMobblerAppUi::DownloadAlbumArt() const
 	{
 //	TRACER_AUTO;
-	return iSettingView->DownloadAlbumArt();
+	return iSettingView->Settings().DownloadAlbumArt();
 	}
 
 void CMobblerAppUi::TrackStoppedL()
 	{
     TRACER_AUTO;
-	iSettingView->SetVolumeL(RadioPlayer().Volume());
+	iSettingView->Settings().SetVolume(RadioPlayer().Volume());
 	
 	if (iSleepAfterTrackStopped)
 		{
@@ -1901,7 +1902,7 @@ void CMobblerAppUi::SetSleepTimerL(const TInt aMinutes)
 		sleepMinutes = minutes.Int();
 		}
 
-	iSettingView->SetSleepTimerMinutesL(sleepMinutes);
+	iSettingView->Settings().SetSleepTimerMinutes(sleepMinutes);
 #ifdef __WINS__
 	TTimeIntervalSeconds delay(sleepMinutes);
 #else
@@ -1945,7 +1946,7 @@ void CMobblerAppUi::SetAlarmTimerL(const TTime aTime)
 		alarmTime += (TTimeIntervalDays)1;
 		}
 	
-	iSettingView->SetAlarmL(alarmTime);
+	iSettingView->Settings().SetAlarmTime(alarmTime);
 	if (!iAlarmTimer)
 		{
 		iAlarmTimer = CMobblerSleepTimer::NewL(EPriorityLow, *this);
@@ -1988,10 +1989,10 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 #endif
 	if (aTimer == iSleepTimer && aError == KErrNone)
 		{
-		LOG(iSettingView->SleepTimerImmediacy());
+		LOG(iSettingView->Settings().SleepTimerImmediacy());
 		
 		if (CurrentTrack() && 
-			iSettingView->SleepTimerImmediacy() == CMobblerSettingItemListSettings::EEndOfTrack)
+			iSettingView->Settings().SleepTimerImmediacy() == CMobblerSettingItemListSettings::EEndOfTrack)
 			{
 			iSleepAfterTrackStopped = ETrue;
 			}
@@ -2011,13 +2012,13 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 		}
 	else if (aTimer == iAlarmTimer && aError == KErrNone)
 		{
-		iSettingView->SetAlarmL(EFalse);
+		iSettingView->Settings().SetAlarmOn(EFalse);
 		User::ResetInactivityTime();
 
-		if (iLastFmConnection->IapId() != iSettingView->AlarmIapId())
+		if (iLastFmConnection->IapId() != iSettingView->Settings().AlarmIapId())
 			{
 			HandleCommandL(EMobblerCommandOffline);
-			SetIapIDL(iSettingView->AlarmIapId());
+			SetIapIDL(iSettingView->Settings().AlarmIapId());
 			}
 		
 		HandleCommandL(EMobblerCommandOnline);
@@ -2029,16 +2030,16 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 		CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
 		note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_ALARM_EXPIRED));
 		
-		iRadioPlayer->SetVolume(iSettingView->AlarmVolume());
+		iRadioPlayer->SetVolume(iSettingView->Settings().AlarmVolume());
 
-		TInt station(iSettingView->AlarmStation() + EMobblerCommandRadioArtist);
+		TInt station(iSettingView->Settings().AlarmStation() + EMobblerCommandRadioArtist);
 
 		switch (station)
 			{
 			case EMobblerCommandRadioArtist:			// intentional fall-through
 			case EMobblerCommandRadioTag:				// intentional fall-through
 			case EMobblerCommandRadioUser:				// intentional fall-through
-				CMobblerString* option(CMobblerString::NewLC(iSettingView->AlarmOption()));
+				CMobblerString* option(CMobblerString::NewLC(iSettingView->Settings().AlarmOption()));
 				RadioStartL(station, option);
 				CleanupStack::PopAndDestroy(option);
 				break;
@@ -2053,11 +2054,11 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 		}
 	else if (aTimer == iAlarmTimer && aError == KErrAbort)
 		{
-		iAlarmTimer->At(iSettingView->AlarmTime());
+		iAlarmTimer->At(iSettingView->Settings().AlarmTime());
 		}
 	else if (aTimer == iAlarmTimer && aError == KErrUnderflow)
 		{
-		iSettingView->SetAlarmL(EFalse);
+		iSettingView->Settings().SetAlarmOn(EFalse);
 		}
 	}
 
@@ -2076,7 +2077,7 @@ void CMobblerAppUi::SleepL()
 	CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
 	note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_SLEEP_TIMER_EXPIRED));
 	
-	switch (iSettingView->SleepTimerAction())
+	switch (iSettingView->Settings().SleepTimerAction())
 		{
 		case CMobblerSettingItemListSettings::EStopPlaying:
 			break;
@@ -2108,7 +2109,7 @@ void CMobblerAppUi::RemoveAlarmL()
 	if (iAlarmTimer && iAlarmTimer->IsActive())
 		{
 		iAlarmTimer->Cancel();
-		iSettingView->SetAlarmL(EFalse);
+		iSettingView->Settings().SetAlarmOn(EFalse);
 		CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
 		note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_ALARM_REMOVED));
 		}
@@ -2426,7 +2427,7 @@ TInt CMobblerAppUi::SetAlbumArtAsWallpaper(TBool aAutomatically)
 	TInt error(KErrUnknown);
 	_LIT(KWallpaperFile, "C:\\System\\Data\\Mobbler\\wallpaperimage.mbm");
 	
-	if (!aAutomatically || iSettingView->AutomaticWallpaper())
+	if (!aAutomatically || iSettingView->Settings().AutomaticWallpaper())
 		{
 		LOG(_L8("Set as wallpaper"));
 		if (!iWallpaperSet &&
@@ -2455,8 +2456,8 @@ TInt CMobblerAppUi::SetAlbumArtAsWallpaper(TBool aAutomatically)
 TBool CMobblerAppUi::DetailsNeeded()
 	{
     TRACER_AUTO;
-	if ((iSettingView->Username().Compare(iResourceReader->ResourceL(R_MOBBLER_USERNAME)) == 0) &&
-		(iSettingView->Password().Compare(_L("password")) == 0))
+	if ((iSettingView->Settings().Username().Compare(iResourceReader->ResourceL(R_MOBBLER_USERNAME)) == 0) &&
+		(iSettingView->Settings().Password().Compare(_L("password")) == 0))
 		{
 		return ETrue;
 		}

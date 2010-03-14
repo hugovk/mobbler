@@ -134,7 +134,7 @@ CMobblerListControl* CMobblerPlaylistList::HandleListCommandL(TInt aCommand)
 	return list;
 	}
 
-void CMobblerPlaylistList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError /*aError*/)
+void CMobblerPlaylistList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt /*aError*/)
 	{
     TRACER_AUTO;
 	if (aObserver == iPlaylistCreateObserver)
