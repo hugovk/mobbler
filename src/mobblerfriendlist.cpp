@@ -164,7 +164,7 @@ void CMobblerFriendList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandRadioLoved);
 	}
 
-void CMobblerFriendList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError /*aError*/)
+void CMobblerFriendList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, TInt /*aError*/)
 	{
     TRACER_AUTO;
 	

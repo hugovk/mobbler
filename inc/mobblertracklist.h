@@ -43,7 +43,7 @@ public:
 	void ParseL(const TDesC8& aXml);
 	
 private:
-	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
 	
 	static TInt ViewScrobbleLogCallBackL(TAny* aPtr);
 	

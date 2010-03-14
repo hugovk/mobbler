@@ -169,7 +169,7 @@ void CMobblerEventList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandAttendanceNo);
 	}
 
-void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
@@ -181,7 +181,7 @@ void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 			// If the person is the user, remove it from the list.
 			// Don't remove it from friends' lists.
 			
-			if (iText1->String().CompareF(iAppUi.SettingView().Username()) == 0)
+			if (iText1->String().CompareF(iAppUi.SettingView().Settings().Username()) == 0)
 				{
 				// Parse the XML
 				CSenXmlReader* xmlReader(CSenXmlReader::NewLC());

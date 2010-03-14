@@ -245,7 +245,7 @@ const TDesC8& CMobblerTrackBase::RadioAuth() const
 	return *iRadioAuth;
 	}
 
-void CMobblerTrackBase::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerTrackBase::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& /*aData*/, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aObserver == iLoveObserverHelper && aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)

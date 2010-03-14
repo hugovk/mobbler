@@ -100,7 +100,7 @@ private:
 	void BaseConstructL(const CMobblerTrackBase& aTrack);
 	
 protected: // from MMobblerFlatDataObserverHelper
-	virtual void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+	virtual void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
 	
 protected:
 	TMobblerLove iLove;

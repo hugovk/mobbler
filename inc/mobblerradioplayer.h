@@ -124,7 +124,7 @@ private:
 	void UpdateVolume();
 
 private:
-	void DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+	void DataL(const TDesC8& aData, TInt aTransactionError);
 	
 private:
 	void HandleIncomingCallL(TPSTelephonyCallState aPSTelephonyCallState);

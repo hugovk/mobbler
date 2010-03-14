@@ -155,7 +155,7 @@ void CMobblerAudioControl::DataPart(const TDesC8& aData, TInt aTotalDataSize)
 	static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->StatusDrawDeferred();
 	}
 
-void CMobblerAudioControl::DataCompleteL(CMobblerLastFmConnection::TTransactionError aTransactionError, TInt aHTTPStatusCode, const TDesC8& aStatusText)
+void CMobblerAudioControl::DataCompleteL(TInt aTransactionError, TInt aHTTPStatusCode, const TDesC8& aStatusText)
 	{
     TRACER_AUTO;
 	iShared.iDownloadComplete = ETrue;

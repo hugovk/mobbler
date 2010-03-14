@@ -316,7 +316,7 @@ void CMobblerListControl::UpdateIconArrayL()
 		}
 	}
 
-void CMobblerListControl::DataL(const TDesC8& aXml, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerListControl::DataL(const TDesC8& aXml, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)

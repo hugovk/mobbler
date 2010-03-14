@@ -111,7 +111,7 @@ RHTTPTransaction& CMobblerTransaction::Transaction()
 	return iTransaction;
 	}
 
-void CMobblerTransaction::SetTwitterDetailsL(const TDesC8& aUsername, const TDesC8& aPassword)
+void CMobblerTransaction::ForcePostL()
 	{
 	// open the transaction
 	RStringF string;
@@ -124,27 +124,7 @@ void CMobblerTransaction::SetTwitterDetailsL(const TDesC8& aUsername, const TDes
 	
 	iTransaction.Request().SetBody(*iForm);
 	
-	HBufC8* plainDetails(HBufC8::NewLC(aUsername.Length() + aPassword.Length() + 1));
-	plainDetails->Des().Append(aUsername);
-	plainDetails->Des().Append(_L8(":"));
-	plainDetails->Des().Append(aPassword);
-	
-	delete iTwitterDetails;
-	iTwitterDetails = HBufC8::NewL(plainDetails->Length() * 3);
-	
-	TImCodecB64 b64enc;
-	b64enc.Initialise();
-	TPtr8 results(iTwitterDetails->Des());
-	b64enc.Encode(*plainDetails, results);
-	
-	RStringF detailsF(iConnection.iHTTPSession.StringPool().OpenFStringL(*iTwitterDetails));
-
-	iTransaction.Request().GetHeaderCollection().SetFieldL(iConnection.iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()),
-			iConnection.iHTTPSession.StringPool().StringF(HTTP::EBasic, RHTTPSession::GetTable()));
-	iTransaction.Request().GetHeaderCollection().SetFieldL(iConnection.iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()),
-			detailsF);
-	
-	CleanupStack::PopAndDestroy(plainDetails);
+	iForcePost = ETrue;
 	}
 
 void CMobblerTransaction::SubmitL()
@@ -153,7 +133,7 @@ void CMobblerTransaction::SubmitL()
 	delete iBuffer;
 	iBuffer = CBufFlat::NewL(KBufferGranularity);
 	
-	if (iURI && !iTwitterDetails)
+	if (iURI && !iForcePost)
 		{
 		if (iQuery)
 			{
@@ -199,7 +179,6 @@ CMobblerTransaction::~CMobblerTransaction()
 	delete iForm;
 	delete iURI;
 	delete iQuery;
-	delete iTwitterDetails;
 	}
 
 void CMobblerTransaction::Cancel()

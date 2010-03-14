@@ -170,49 +170,57 @@ void CMobblerSettingItemListSettings::LoadSettingValuesL()
 		TRAP_IGNORE(alarmStation = readStream.ReadInt32L());
 		TRAP_IGNORE(readStream >> alarmOption);
 		TRAP_IGNORE(automaticWallpaper = readStream.ReadInt8L());
+		TBuf8<KMaxMobblerTextSize> twitterAuthToken;
+		TRAP_IGNORE(readStream >> twitterAuthToken);
+		TBuf8<KMaxMobblerTextSize> twitterAuthTokenSecret;
+		TRAP_IGNORE(readStream >> twitterAuthTokenSecret);
 		
-		SetAlarmOption(alarmOption);
+		iAlarmOption.Copy(alarmOption);
 		
-		SetUsername(username);
-		SetPassword(password);
+		iUsername.Copy(username);
+		iPassword.Copy(password);
+		
+		iTwitterAuthToken.Copy(twitterAuthToken);
+		iTwitterAuthTokenSecret.Copy(twitterAuthTokenSecret);
 		
 		CleanupStack::PopAndDestroy(&readStream);
 		}
 	else
 		{
 		// there was no file there so read from the resource file
-		SetUsername(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME));
-		SetPassword(_L("password"));
+		iUsername.Copy(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME));
+		iPassword.Copy(_L("password"));
 		}
 
-	SetBacklight(backlight);
-	SetCheckForUpdates(autoUpdatesOn);
+	iBacklight = backlight;
+	iCheckForUpdates = autoUpdatesOn;
 	if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->Destinations())
 		{
-		SetIapId(destinationId);
+		iIapId = destinationId;
 		}
 	else
 		{
-		SetIapId(iapId);
+		iIapId = iapId;
 		}
-	SetBufferSize(bufferSize);
-	SetEqualizerIndex(equalizerIndex);
-	SetScrobblePercent(scrobblePercent);
-	SetVolume(volume);
-	SetSleepTimerMinutes(sleepTimerMinutes);
-	SetNextUpdateCheck(nextUpdateCheck);
-	SetMode(mode);
-	SetDownloadAlbumArt(downloadAlbumArt);
-	SetAccelerometerGestures(accelerometerGestures);
-	SetSleepTimerAction(sleepTimerAction);
-	SetSleepTimerImmediacy(sleepTimerImmediacy);
-	SetAlarmOn(alarmOn);
-	SetAlarmTime(alarmTime);
-	SetAlarmIapId(alarmIapId);
-	SetBitRate(bitRate);
-	SetAlarmVolume(alarmVolume);
-	SetAlarmStation(alarmStation);
-	SetAutomaticWallpaper(automaticWallpaper);
+	
+	iBufferSize = bufferSize;
+	iEqualizerIndex = equalizerIndex;
+	iScrobblePercent = scrobblePercent;
+	iVolume = volume;
+	iSleepTimerMinutes = sleepTimerMinutes;
+	iNextUpdateCheck = nextUpdateCheck;
+	iMode = mode;
+	iDownloadAlbumArt = downloadAlbumArt;
+	iAccelerometerGestures = accelerometerGestures;
+	iSleepTimerAction = sleepTimerAction;
+	iSleepTimerImmediacy = sleepTimerImmediacy;
+	iAlarmOn = alarmOn;
+	iAlarmTime = alarmTime;
+	iAlarmIapId = alarmIapId;
+	iBitRate = bitRate;
+	iAlarmVolume = alarmVolume;
+	iAlarmStation = alarmStation;
+	iAutomaticWallpaper = automaticWallpaper;
 	
 	CleanupStack::PopAndDestroy(&file);
 	}
@@ -257,6 +265,8 @@ void CMobblerSettingItemListSettings::SaveSettingValuesL()
 		writeStream.WriteInt32L(AlarmStation());
 		writeStream << AlarmOption();
 		writeStream.WriteInt8L(AutomaticWallpaper());
+		writeStream << TwitterAuthToken();
+		writeStream << TwitterAuthTokenSecret();
 		
 		CleanupStack::PopAndDestroy(&writeStream);
 		}

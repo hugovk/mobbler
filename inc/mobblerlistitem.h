@@ -61,7 +61,7 @@ public:
 	const TDesC8& Longitude() const;
 	
 private:
-	void DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+	void DataL(const TDesC8& aData, TInt aTransactionError);
 	
 private:
 	void BitmapLoadedL(const CMobblerBitmap* aMobblerBitmap);

@@ -1,5 +1,5 @@
 /*
-mobblerutility.h
+mobblertwitter.h
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
@@ -21,33 +21,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __MOBBLERUTILITY_H__
-#define __MOBBLERUTILITY_H__
-
-#include <e32base.h>
-
-class CSenDomFragment;
-class CSenXmlReader;
-
-class MobblerUtility
-	{
-public:
-	static TBool EqualizerSupported();
-	
-	static HBufC8* MD5LC(const TDesC8& aSource);
-	static HBufC8* URLEncodeLC(const TDesC8& aString, TBool aEncodeAll = ETrue);
-	
-	static TBuf8<2> LanguageL();
-	static TBuf<30> LocalLastFmDomainL();
-
-	static void FixLyricsSpecialCharacters(TDes8& aText);
-	static void FixLyricsLineBreaks(TDes8& aText);
-	
-	static void StripUnwantedTagsFromHtmlL(HBufC8*& aHtml);
-
-	static CSenDomFragment* PrepareDomFragmentLC(CSenXmlReader& aXmlReader, const TDesC8& aXml);
-	};
-
-#endif // __MOBBLERUTILITY_H__
-
-// End of file
+// Please replace these with your own twitter oAuth credentials
+// You can get these from here http://twitter.com/oauth_clients
+// You will also need to get permission to use XAuth by emailing api@twitter.com
+// Please see here for more detials http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-oauth-access_token-for-xAuth
+_LIT8(KMobblerTwitterConsumerKey, "");
+_LIT8(KMobblerTwitterConsumerSecret, "");
