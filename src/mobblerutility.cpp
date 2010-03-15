@@ -145,25 +145,25 @@ HBufC8* MobblerUtility::URLEncodeLC(const TDesC8& aString, TBool aEncodeAll)
     _LIT8(KDontEncode, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~");
 
     // Alloc to the maximum size of URL if every char are encoded
-    HBufC8* encoded = HBufC8::NewLC(aString.Length() * 3);
+	HBufC8* encoded(HBufC8::NewLC(aString.Length() * 3));
 
-    // Parse a the chars in the url
-    for (TInt i(0) ; i < aString.Length() ; ++i)
-    	{
+	// Parse the chars in the URL
+	for (TInt i(0); i < aString.Length(); ++i)
+		{
 		const TUint8& cToFind(aString[i]);
-		if ( aEncodeAll || (KErrNotFound == KDontEncode().Locate(cToFind)) )
+		if (aEncodeAll || (KErrNotFound == KDontEncode().Locate(cToFind)))
 			{
-			// Char not found encode it.
+			// Char not found, encode it
 			encoded->Des().AppendFormat(KFormatCode, cToFind);
 			}
 		else
 			{
-			// char found just copy it
+			// Char found, just copy it
 			encoded->Des().Append(cToFind);
 			}
-    	}
+		}
 
-    return encoded;
+	return encoded;
 	}
 
 TBuf8<2> MobblerUtility::LanguageL()

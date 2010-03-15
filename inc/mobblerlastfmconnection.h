@@ -40,8 +40,8 @@ class CMobblerString;
 class CMobblerTrack;
 class CMobblerTrackBase;
 class CMobblerTransaction;
-class MMobblerLastFmConnectionObserver;
 class MMobblerFlatDataObserver;
+class MMobblerLastFmConnectionObserver;
 class MMobblerSegDataObserver;
 
 class MMobblerConnectionStateObserver

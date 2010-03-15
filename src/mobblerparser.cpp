@@ -535,33 +535,34 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 
 HBufC8* CMobblerParser::ParseTwitterAuthL(const TDesC8& aData)
 	{
+	TRACER_AUTO;
 	// Get the token and token secret out of the response
 	// example:
 	// oauth_token=XXX&oauth_token_secret=XXX&user_id=12345678&screen_name=<username>&x_auth_expires=0
 
 	TPtrC8 data(aData);
 	
-	while ( data.Length() != 0 ) 
+	while (data.Length() != 0)
 		{
-		TInt ampPos(data.Find(_L8("&")));
+		TInt ampPos(data.Find(KAmpersand));
 		if (ampPos == KErrNotFound)
 			{
 			ampPos = data.Length();
 			}
 			
 		TPtrC8 pair(data.Left(ampPos));
-		TInt eqlPos(pair.Find(_L8("=")));
+		TInt eqlPos(pair.Find(KEquals));
 		
 		if (eqlPos != KErrNotFound)
 			{
 			TPtrC8 key(pair.Left(eqlPos));
 			TPtrC8 value(pair.Right(pair.Length() - (eqlPos + 1)));
 			
-			if (key.Compare(_L8("oauth_token")) == 0)
+			if (key.Compare(_L8("oauth_token")) == 0) // TODO etc
 				{
 				static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->SettingView().Settings().SetTwitterAuthToken(value);
 				}
-			else if (key.Compare(_L8("oauth_token_secret")) == 0)
+			else if (key.Compare(_L8("oauth_token_secret")) == 0) // TODO etc
 				{
 				static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->SettingView().Settings().SetTwitterAuthTokenSecret(value);
 				}

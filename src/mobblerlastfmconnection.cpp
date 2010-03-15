@@ -47,8 +47,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerradioplayer.h"
 #include "mobblerradioplaylist.h"
 #include "mobblerresourcereader.h"
-#include "mobblersegdataobserver.h"
-#include "mobblersettingitemlistsettings.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
 #include "mobblertracer.h"
@@ -1569,9 +1567,9 @@ void CMobblerLastFmConnection::TwitterAccessTokenL(MMobblerFlatDataObserver& aOb
 	
 	if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
 		{
-		// create the base string
+		// Create the base string
 		HBufC8* url(HBufC8::NewLC(1024));
-		url->Des().Append(_L8("POST&"));
+		url->Des().Append(_L8("POST&")); // TODO etc
 		url->Des().Append(_L8("https%3A%2F%2Fapi.twitter.com%2Foauth%2Faccess_token&"));
 		
 		TTime now;
@@ -1584,7 +1582,7 @@ void CMobblerLastFmConnection::TwitterAccessTokenL(MMobblerFlatDataObserver& aOb
 		time.Num(secs.Int());
 		
 		TBuf8<16> nonce;
-		for (TInt i = 0; i < nonce.MaxLength() / 4; i++)
+		for (TInt i(0); i < nonce.MaxLength() / 4; ++i)
 			{
 			nonce.AppendFormat(_L8("%04x"), Math::Rand(iNonceSeed) & 0xFFFF);
 			}
@@ -1606,8 +1604,8 @@ void CMobblerLastFmConnection::TwitterAccessTokenL(MMobblerFlatDataObserver& aOb
 		// Generate the signature from the base string
 		TBuf8<1024> key;
 		key.Append(KMobblerTwitterConsumerSecret);
-		key.Append(_L8("&"));
-		CHMAC* hmac = CHMAC::NewL(key, CSHA1::NewL());
+		key.Append(KAmpersand);
+		CHMAC* hmac(CHMAC::NewL(key, CSHA1::NewL()));
 		TPtrC8 hashedSig(hmac->Hash(*url));
 		TImCodecB64 b64enc;
 		b64enc.Initialise();
@@ -1615,7 +1613,7 @@ void CMobblerLastFmConnection::TwitterAccessTokenL(MMobblerFlatDataObserver& aOb
 		b64enc.Encode(hashedSig, signature);
 		delete hmac;
 		
-		// now we create the actual url for the query
+		// Now we create the actual URL for the query
 		url->Des().Copy(_L8("https://api.twitter.com/oauth/access_token?oauth_consumer_key="));
 		url->Des().Append(KMobblerTwitterConsumerKey);
 		url->Des().Append(_L8("&oauth_nonce="));
@@ -1654,7 +1652,7 @@ void CMobblerLastFmConnection::DataL(CMobblerFlatDataObserverHelper* aObserver, 
 		{
 		if (aTransactionError == ETransactionErrorNone)
 			{
-			HBufC8* error = CMobblerParser::ParseTwitterAuthL(aData);
+			HBufC8* error(CMobblerParser::ParseTwitterAuthL(aData));
 			
 			if (!error)
 				{
@@ -1684,7 +1682,7 @@ void CMobblerLastFmConnection::DataL(CMobblerFlatDataObserverHelper* aObserver, 
 	}
 
 void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObserver& aObserver)
-	{	
+	{
 	CMobblerAppUi* appUi(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi()));
 	
 	TBuf8<420> tweet;
@@ -1693,7 +1691,7 @@ void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObse
 
 	// We have the access token so we can just do we tweet
 	HBufC8* url(HBufC8::NewLC(1024));
-	url->Des().Append(_L8("POST&"));
+	url->Des().Append(_L8("POST&")); // TODO etc
 	url->Des().Append(_L8("http%3A%2F%2Fapi.twitter.com%2F1%2Fstatuses%2Fupdate.xml&"));
 	
 	TTime now;
@@ -1706,7 +1704,7 @@ void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObse
 	time.Num(secs.Int());
 	
 	TBuf8<16> nonce;
-	for (TInt i = 0; i < nonce.MaxLength() / 4; i++)
+	for (TInt i(0); i < nonce.MaxLength() / 4; ++i)
 		{
 		nonce.AppendFormat(_L8("%04x"), Math::Rand(iNonceSeed) & 0xFFFF);
 		}
@@ -1723,14 +1721,14 @@ void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObse
 	url->Des().Append(*MobblerUtility::URLEncodeLC(tweet, EFalse));
 	CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTweet, EFalse)
 	
-	// key is "consumer-secret&token-secret", for access-token you obviously have to leave token-secret empty
+	// Key is "consumer-secret&token-secret", for access-token you obviously have to leave token-secret empty
 	// for further calls to the API, you need to add the token to the "base" string and as a HTTP GET parameter
 	// and use it in the key as well ...
 	TBuf8<1024> key;
 	key.Append(KMobblerTwitterConsumerSecret);
-	key.Append(_L8("&"));
+	key.Append(KAmpersand);
 	key.Append(appUi->SettingView().Settings().TwitterAuthTokenSecret());
-	CHMAC* hmac = CHMAC::NewL(key, CSHA1::NewL());
+	CHMAC* hmac(CHMAC::NewL(key, CSHA1::NewL()));
 	
 	TPtrC8 hashedSig(hmac->Hash(*url));
 	
@@ -1790,12 +1788,12 @@ void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObse
 	}
 
 void CMobblerLastFmConnection::TwitterFollowMobblerL(MMobblerFlatDataObserver& aObserver)
-	{	
+	{
 	CMobblerAppUi* appUi(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi()));
 	
 	// We have the access token so we can just do we tweet
 	HBufC8* url(HBufC8::NewLC(1024));
-	url->Des().Append(_L8("POST&"));
+	url->Des().Append(_L8("POST&")); // TODO etc
 	url->Des().Append(_L8("http%3A%2F%2Fapi.twitter.com%2F1%2Ffriendships%2Fcreate%2F26246299.xml&"));
 	
 	TTime now;
@@ -1808,7 +1806,7 @@ void CMobblerLastFmConnection::TwitterFollowMobblerL(MMobblerFlatDataObserver& a
 	time.Num(secs.Int());
 	
 	TBuf8<16> nonce;
-	for (TInt i = 0; i < nonce.MaxLength() / 4; i++)
+	for (TInt i(0); i < nonce.MaxLength() / 4; ++i)
 		{
 		nonce.AppendFormat(_L8("%04x"), Math::Rand(iNonceSeed) & 0xFFFF);
 		}
@@ -1823,14 +1821,14 @@ void CMobblerLastFmConnection::TwitterFollowMobblerL(MMobblerFlatDataObserver& a
 	url->Des().Append(appUi->SettingView().Settings().TwitterAuthToken());
 	url->Des().Append(_L8("%26oauth_version%3D1.0"));
 	
-	// key is "consumer-secret&token-secret", for access-token you obviously have to leave token-secret empty
+	// Key is "consumer-secret&token-secret", for access-token you obviously have to leave token-secret empty
 	// for further calls to the API, you need to add the token to the "base" string and as a HTTP GET parameter
 	// and use it in the key as well ...
 	TBuf8<1024> key;
 	key.Append(KMobblerTwitterConsumerSecret);
-	key.Append(_L8("&"));
+	key.Append(KAmpersand);
 	key.Append(appUi->SettingView().Settings().TwitterAuthTokenSecret());
-	CHMAC* hmac = CHMAC::NewL(key, CSHA1::NewL());
+	CHMAC* hmac(CHMAC::NewL(key, CSHA1::NewL()));
 	
 	TPtrC8 hashedSig(hmac->Hash(*url));
 	

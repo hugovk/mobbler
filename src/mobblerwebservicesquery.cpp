@@ -35,8 +35,6 @@ _LIT8(KMobblerParameterApiKey, "api_key");
 _LIT8(KMobblerParameterApiSig, "api_sig");
 _LIT8(KMobblerParameterMethod, "method");
 
-_LIT8(KAmpersand, "&");
-
 CMobblerWebServicesQuery* CMobblerWebServicesQuery::NewLC(const TDesC8& aMethod)
 	{
     TRACER_AUTO;

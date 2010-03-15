@@ -70,8 +70,7 @@ private:
 	HBufC* DisplayContactListL();
 	HBufC* DisplayEmailListL(const CDesCArray& aEmails);
 	
-	void DoShareTrackTwitterL();
-	void DoShareArtistTwitterL();
+	void DoShareTwitterL(const TInt aCommand);
 	
 	TShareWith ShareSourceL();
 	
@@ -101,8 +100,7 @@ private:
 	CMobblerFlatDataObserverHelper* iTwitterFollowObserverTrack;
 	CMobblerFlatDataObserverHelper* iTwitterFollowObserverArtist;
 	
-	CMobblerFlatDataObserverHelper* iShortenObserverHelperTrack;
-	CMobblerFlatDataObserverHelper* iShortenObserverHelperArtist;
+	CMobblerFlatDataObserverHelper* iShortenObserverHelper;
 	CMobblerFlatDataObserverHelper* iTweetObserverHelper;
 	
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperTrackShare;

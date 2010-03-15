@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblerradioplayer.h"
 #include "mobblerresourcereader.h"
-#include "mobblersettingitemlistsettings.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstatuscontrol.h"
 #include "mobblerstatusview.h"
@@ -380,13 +379,13 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		if (static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthToken().Length() == 0
 				|| static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
 			{
-			// The user hasn't authenticated with twitter so hide the switch and remove options 
+			// The user hasn't authenticated with twitter so hide the switch and remove options
 			aMenuPane->SetItemDimmed(EMobblerCommandTwitterSwitch, ETrue);
 			aMenuPane->SetItemDimmed(EMobblerCommandTwitterRemove, ETrue);
 			}
 		else
 			{
-			// the user has authenticated so hide the authenticate options
+			// The user has authenticated so hide the authenticate options
 			aMenuPane->SetItemDimmed(EMobblerCommandTwitterAuth, ETrue);
 			}
 		}
