@@ -54,7 +54,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblertransaction.h"
+#ifdef TWITTER
 #include "mobblertwitter.h"
+#else
+// These are here so that you can build Mobbler, but if you want
+// to tweet you will need to apply for OAuth credentials at
+// http://twitter.com/oauth_clients and ask for permission to use
+// XAuth by emailing api@twitter.com
+_LIT8(KMobblerTwitterConsumerKey, "");
+_LIT8(KMobblerTwitterConsumerSecret, "");
+#endif
 #include "mobblerutility.h"
 #include "mobblerwebservicesquery.h"
 
