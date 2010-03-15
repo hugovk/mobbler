@@ -80,15 +80,35 @@ const TInt KNokiaE52MachineUid(0x20014DCC);
 const TInt KNokiaE55MachineUid(0x20014DCF);
 const TInt KNokiaE72MachineUid(0x20014DD0);
 
+TBool MobblerUtility::iEqualizerSupported = ETrue;
+
 TBool MobblerUtility::EqualizerSupported()
 	{
 	TRACER_AUTO;
+	if (!iEqualizerSupported)
+		{
+		return iEqualizerSupported;
+		}
+
 	TInt machineUid(0);
 	TInt error(HAL::Get(HALData::EMachineUid, machineUid));
-	return (error == KErrNone) && !(machineUid == KNokia6710NavigatorMachineUid ||
-									machineUid == KNokiaE52MachineUid || 
-									machineUid == KNokiaE55MachineUid || 
-									machineUid == KNokiaE72MachineUid);
+	if (error == KErrNone)
+		{
+		iEqualizerSupported = !(machineUid == KNokia6710NavigatorMachineUid ||
+								machineUid == KNokiaE52MachineUid || 
+								machineUid == KNokiaE55MachineUid || 
+								machineUid == KNokiaE72MachineUid);
+		return iEqualizerSupported;
+		}
+	else
+		{
+		return EFalse;
+		}
+	}
+
+void MobblerUtility::SetEqualizerNotSupported()
+	{
+	iEqualizerSupported = EFalse;
 	}
 
 HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
