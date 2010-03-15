@@ -1,13 +1,14 @@
 /*
-mobblertracer.h
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2006  Marko Kivijärvi
+Copyright (C) 2010  Hugo van Kemenade
 
 Originally from:
 http://wiki.forum.nokia.com/index.php/Trace_Function_Enter,_Exit_and_Leave
 
 http://code.google.com/p/mobbler
+
+This file is part of Mobbler.
 
 Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,8 +21,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef __MOBBLERTRACER_H__
