@@ -144,7 +144,7 @@ void CMobblerArtistList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandArtistShare);
 	}
 
-void CMobblerArtistList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, CMobblerLastFmConnection::TTransactionError /*aError*/)
+void CMobblerArtistList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, TInt /*aError*/)
 	{
     TRACER_AUTO;
 	}

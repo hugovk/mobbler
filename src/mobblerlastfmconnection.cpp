@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <chttpformencoder.h>
 #include <coemain.h>
 #include <commdbconnpref.h> 
+#include <e32math.h>
+#include <hash.h>
 #include <httperr.h>
 #include <httpstringconstants.h>
 #include <imcvcodc.h>  
@@ -36,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler_strings.rsg.h"
 #include "mobblerappui.h"
 #include "mobblerdestinationsinterface.h"
+#include "mobblerflatdataobserver.h"
 #include "mobblerlastfmconnection.h"
 #include "mobblerlastfmconnectionobserver.h"
 #include "mobblerliterals.h"
@@ -44,10 +47,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerradioplayer.h"
 #include "mobblerradioplaylist.h"
 #include "mobblerresourcereader.h"
+#include "mobblersegdataobserver.h"
+#include "mobblersettingitemlistsettings.h"
+#include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
 #include "mobblertracer.h"
 #include "mobblertrack.h"
 #include "mobblertransaction.h"
+#ifdef TWITTER
+#include "mobblertwitter.h"
+#else
+// These are here so that you can build Mobbler, but if you want
+// to tweet you will need to apply for OAuth credentials at
+// http://twitter.com/oauth_clients and ask for permission to use
+// XAuth by emailing api@twitter.com
+_LIT8(KMobblerTwitterConsumerKey, "");
+_LIT8(KMobblerTwitterConsumerSecret, "");
+#endif
 #include "mobblerutility.h"
 #include "mobblerwebservicesquery.h"
 
@@ -105,6 +121,10 @@ CMobblerLastFmConnection::CMobblerLastFmConnection(MMobblerLastFmConnectionObser
 	{
     TRACER_AUTO;
 	CActiveScheduler::Add(this);
+	
+	TTime now;
+	now.UniversalTime();
+	iNonceSeed = now.Int64();
 	}
 
 CMobblerLastFmConnection::~CMobblerLastFmConnection()
@@ -1537,22 +1557,232 @@ void CMobblerLastFmConnection::ShortenL(const TDesC8& aUrl, MMobblerFlatDataObse
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::TwitterAccessTokenL(const TDesC& aUsername, const TDesC& aPassword, MMobblerFlatDataObserver& aObserver)
 	{
-	// Query username and password
-	TBuf<KMobblerMaxUsernameLength> username;
-	TBuf<KMobblerMaxPasswordLength> password;
-	CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
-	dlg->SetPromptL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
-					static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
-	dlg->SetPredictiveTextInputPermitted(ETrue);
+	// create the base string
+	HBufC8* url(HBufC8::NewLC(1024));
+	url->Des().Append(_L8("POST&"));
+	url->Des().Append(_L8("https%3A%2F%2Fapi.twitter.com%2Foauth%2Faccess_token&"));
 	
-	if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
+	TTime now;
+	TTime unix;
+	now.UniversalTime();
+	unix.Set(_L("19700000:"));
+	TTimeIntervalSeconds secs;
+	now.SecondsFrom(unix, secs);
+	TBuf8<16> time;
+	time.Num(secs.Int());
+	
+	TBuf8<16> nonce;
+	for (TInt i = 0; i < nonce.MaxLength() / 4; i++)
 		{
-		_LIT8(KTwitterUrlFormat, "http://api.twitter.com/1/statuses/update.xml?status=%S");
+		nonce.AppendFormat(_L8("%04x"), Math::Rand(iNonceSeed) & 0xFFFF);
+		}
+	
+	CMobblerString* username(CMobblerString::NewLC(aUsername));
+	CMobblerString* password(CMobblerString::NewLC(aPassword));
+	
+	url->Des().Append(_L8("oauth_consumer_key%3D"));
+	url->Des().Append(KMobblerTwitterConsumerKey);
+	url->Des().Append(_L8("%26oauth_nonce%3D"));
+	url->Des().Append(nonce);
+	url->Des().Append(_L8("%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D"));
+	url->Des().Append(time);
+	url->Des().Append(_L8("%26oauth_version%3D1.0%26x_auth_mode%3Dclient_auth%26x_auth_password%3D"));
+	url->Des().Append(password->String8());
+	url->Des().Append(_L8("%26x_auth_username%3D"));
+	url->Des().Append(username->String8());
+	
+	// Generate the signature from the base string
+	TBuf8<1024> key;
+	key.Append(KMobblerTwitterConsumerSecret);
+	key.Append(_L8("&"));
+	CHMAC* hmac = CHMAC::NewL(key, CSHA1::NewL());
+	TPtrC8 hashedSig(hmac->Hash(*url));
+	TImCodecB64 b64enc;
+	b64enc.Initialise();
+	TBuf8<512> signature;
+	b64enc.Encode(hashedSig, signature);
+	delete hmac;
+	
+	// now we create the actual url for the query
+	url->Des().Copy(_L8("https://api.twitter.com/oauth/access_token?oauth_consumer_key="));
+	url->Des().Append(KMobblerTwitterConsumerKey);
+	url->Des().Append(_L8("&oauth_nonce="));
+	url->Des().Append(nonce);
+	url->Des().Append(_L8("&oauth_signature_method=HMAC-SHA1&oauth_timestamp="));
+	url->Des().Append(time);
+	url->Des().Append(_L8("&oauth_version=1.0&x_auth_mode=client_auth&x_auth_password="));
+	url->Des().Append(password->String8());
+	url->Des().Append(_L8("&x_auth_username="));
+	url->Des().Append(username->String8());
+	url->Des().Append(_L8("&oauth_signature="));
+	url->Des().Append(*MobblerUtility::URLEncodeLC(signature));
+	CleanupStack::PopAndDestroy(); // MobblerUtility::URLEncodeLC(signature)
+
+	CleanupStack::PopAndDestroy(2, username);
+	
+	TUriParser8 twitterUrl;
+	twitterUrl.Parse(*url);
+	CUri8* uri(CUri8::NewLC(twitterUrl));
 		
-		HBufC8* url(HBufC8::NewLC(KTwitterUrlFormat().Length() + aTweet.Length()));
-		url->Des().Format(KTwitterUrlFormat, &aTweet);
+	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
+	
+	transaction->ForcePostL();
+	
+	CleanupStack::Pop(uri);
+	CleanupStack::PopAndDestroy(url);
+	
+	transaction->SetFlatDataObserver(&aObserver);
+	AppendAndSubmitTransactionL(transaction);
+	}
+
+void CMobblerLastFmConnection::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
+	{
+	if (aObserver == iTwitterTokenHelper)
+		{
+		if (aTransactionError == ETransactionErrorNone)
+			{
+			CMobblerAppUi* appUi(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi()));
+		
+			// get the token out of the response
+			// example:
+			// oauth_token=121168079-ntf35lqSwZnq57xsefFESEodwqj1IDRXVVlA52zB&oauth_token_secret=BDFBfdcmsqInx5HNv4I8lCEesJFsED3uupiFPK59TqI&user_id=121168079&screen_name=mobblertest&x_auth_expires=0
+		
+			TPtrC8 data(aData);
+		
+			while ( data.Length() != 0 ) 
+				{
+				TInt ampPos(data.Find(_L8("&")));
+				if (ampPos == KErrNotFound)
+					{
+					ampPos = data.Length();
+					}
+					
+				TPtrC8 pair(data.Left(ampPos));
+				TInt eqlPos(pair.Find(_L8("=")));
+				
+				TPtrC8 key(pair.Left(eqlPos));
+				TPtrC8 value(pair.Right(pair.Length() - (eqlPos + 1)));
+				
+				if (key.Compare(_L8("oauth_token")) == 0)
+					{
+					appUi->SettingView().Settings().SetTwitterAuthToken(value);
+					}
+				else if (key.Compare(_L8("oauth_token_secret")) == 0)
+					{
+					appUi->SettingView().Settings().SetTwitterAuthTokenSecret(value);
+					}
+				
+				// Move to the rest of the data
+				if (ampPos == data.Length())
+					{
+					data.Set(KNullDesC8);
+					}
+				else
+					{
+					data.Set(data.Right(data.Length() - (ampPos + 1)));
+					}
+				}
+			
+			// We should now actually send the tweet
+			TweetL(*iTweet, *iTweetObserver);
+			}
+		else
+			{
+			// there was an error
+			delete iTweet;
+			iTweet = NULL;
+			iTweetObserver = NULL;
+			}
+		}
+	}
+
+void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObserver& aObserver)
+	{	
+	CMobblerAppUi* appUi(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi()));
+	
+	if (appUi->SettingView().Settings().TwitterAuthToken().Length() == 0
+			|| appUi->SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
+		{
+		// We don't have an auth token so we should go and fetch one
+		// Query username and password
+		TBuf<KMobblerMaxUsernameLength> username;
+		TBuf<KMobblerMaxPasswordLength> password;
+		CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
+		dlg->SetPromptL(appUi->ResourceReader().ResourceL(R_MOBBLER_USERNAME), appUi->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
+	dlg->SetPredictiveTextInputPermitted(ETrue);
+		
+		if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
+			{
+			delete iTweet;
+			iTweet = aTweet.AllocL();
+			iTweetObserver = &aObserver;
+		
+			delete iTwitterTokenHelper;
+			iTwitterTokenHelper = CMobblerFlatDataObserverHelper::NewL(*this, *this, EFalse);
+			TwitterAccessTokenL(username, password, *iTwitterTokenHelper);
+			}
+		}
+	else
+		{
+		TBuf8<420> tweet;
+		tweet.Copy(*MobblerUtility::URLEncodeLC(aTweet, EFalse));
+		CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTweet, EFalse)
+	
+		// We have the access token so we can just do we tweet
+		HBufC8* url(HBufC8::NewLC(1024));
+		url->Des().Append(_L8("POST&"));
+		url->Des().Append(_L8("http%3A%2F%2Fapi.twitter.com%2F1%2Fstatuses%2Fupdate.xml&"));
+		
+		TTime now;
+		TTime unix;
+		now.UniversalTime();
+		unix.Set(_L("19700000:"));
+		TTimeIntervalSeconds secs;
+		now.SecondsFrom(unix, secs);
+		TBuf8<16> time;
+		time.Num(secs.Int());
+		
+		TBuf8<16> nonce;
+		for (TInt i = 0; i < nonce.MaxLength() / 4; i++)
+			{
+			nonce.AppendFormat(_L8("%04x"), Math::Rand(iNonceSeed) & 0xFFFF);
+			}
+		
+		url->Des().Append(_L8("oauth_consumer_key%3D"));
+		url->Des().Append(KMobblerTwitterConsumerKey);
+		url->Des().Append(_L8("%26oauth_nonce%3D"));
+		url->Des().Append(nonce);
+		url->Des().Append(_L8("%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D"));
+		url->Des().Append(time);
+		url->Des().Append(_L8("%26oauth_token%3D"));
+		url->Des().Append(appUi->SettingView().Settings().TwitterAuthToken());
+		url->Des().Append(_L8("%26oauth_version%3D1.0%26status%3D"));
+		url->Des().Append(*MobblerUtility::URLEncodeLC(tweet, EFalse));
+		CleanupStack::PopAndDestroy(); // *MobblerUtility::URLEncodeLC(aTweet, EFalse)
+		
+		// key is "consumer-secret&token-secret", for access-token you obviously have to leave token-secret empty
+		// for further calls to the API, you need to add the token to the "base" string and as a HTTP GET parameter
+		// and use it in the key as well ...
+		TBuf8<1024> key;
+		key.Append(KMobblerTwitterConsumerSecret);
+		key.Append(_L8("&"));
+		key.Append(appUi->SettingView().Settings().TwitterAuthTokenSecret());
+		CHMAC* hmac = CHMAC::NewL(key, CSHA1::NewL());
+		
+		TPtrC8 hashedSig(hmac->Hash(*url));
+		
+		TImCodecB64 b64enc;
+		b64enc.Initialise();
+		
+		TBuf8<512> signature;
+		b64enc.Encode(hashedSig, signature);
+		
+		delete hmac;
+		
+		url->Des().Copy(_L8("http://api.twitter.com/1/statuses/update.xml?status="));
+		url->Des().Append(tweet);
 		
 		TUriParser8 twitterUrl;
 		twitterUrl.Parse(*url);
@@ -1560,11 +1790,37 @@ void CMobblerLastFmConnection::TweetL(const TDesC8& aTweet, MMobblerFlatDataObse
 		
 		CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
 		
-		CMobblerString* usernameS(CMobblerString::NewLC(username));
-		CMobblerString* passwordS(CMobblerString::NewLC(password));
-		transaction->SetTwitterDetailsL(usernameS->String8(), passwordS->String8());
-		CleanupStack::PopAndDestroy(2, usernameS);
+		transaction->ForcePostL();
 		
+		// create the oAuth header
+		HBufC8* oauth(HBufC8::NewLC(1024));
+		oauth->Des().Copy(_L8("OAuth"));
+		
+		RStringF oauthHeader(iHTTPSession.StringPool().OpenFStringL(*oauth));
+		
+		// Add the oauth
+		RHTTPHeaders headers(transaction->Transaction().Request().GetHeaderCollection());
+		headers.SetFieldL(iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()), oauthHeader);
+		
+		oauth->Des().Copy(_L8("realm=\"http://api.twitter.com/1/statuses/update.xml\",oauth_consumer_key=\""));
+		oauth->Des().Append(KMobblerTwitterConsumerKey);
+		oauth->Des().Append(_L8("\",oauth_nonce=\""));
+		oauth->Des().Append(nonce);
+		oauth->Des().Append(_L8("\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\""));
+		oauth->Des().Append(time);
+		oauth->Des().Append(_L8("\",oauth_token=\""));
+		oauth->Des().Append(appUi->SettingView().Settings().TwitterAuthToken());
+		oauth->Des().Append(_L8("\",oauth_version=\"1.0\",oauth_signature=\""));
+		oauth->Des().Append(*MobblerUtility::URLEncodeLC(signature, EFalse));
+		oauth->Des().Append(_L8("\""));
+		CleanupStack::PopAndDestroy(); // MobblerUtility::URLEncodeLC(signature)
+		
+		RStringF oauthHeaderValue(iHTTPSession.StringPool().OpenFStringL(*oauth));
+		
+		// Add the oauth header value
+		headers.SetFieldL(iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()), oauthHeaderValue);
+		
+		CleanupStack::PopAndDestroy(oauth);
 		CleanupStack::Pop(uri);
 		CleanupStack::PopAndDestroy(url);
 		

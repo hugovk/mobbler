@@ -42,7 +42,7 @@ public:
 	void ParseL(const TDesC8& aXML);
 
 private:
-    void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError);
+    void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
 	
 private:
     CMobblerWebServicesHelper* iWebServicesHelper; 

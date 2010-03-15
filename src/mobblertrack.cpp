@@ -458,7 +458,7 @@ const CMobblerString& CMobblerTrack::MbTrackId() const
 	return *iMbTrackId;
 	}
 
-void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aObserver == iTrackInfoHelper)
@@ -564,7 +564,7 @@ void CMobblerTrack::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 		}
 	}
 
-void CMobblerTrack::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerTrack::DataL(const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)

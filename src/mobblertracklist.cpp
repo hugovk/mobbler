@@ -306,7 +306,7 @@ void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandTrackLyrics);
 	}
 
-void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	if (aObserver == iAlbumInfoObserver)

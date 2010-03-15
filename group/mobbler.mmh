@@ -37,4 +37,7 @@ CAPABILITY	NetworkServices ReadUserData
 // uncomment this to use Mobbler's permanent user ID key for Lyricsfly
 //MACRO PERMANENT_LYRICSFLY_ID_KEY
 
+// Use this if you have mobblertwitter.h
+//MACRO TWITTER
+
 // End of file

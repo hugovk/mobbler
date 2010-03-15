@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <mobbler/mobblerdestinationsinterface.h>
 
 #include "mobbler.hrh"
+#include "mobblerflatdataobserverhelper.h"
 #include "mobblerlastfmerror.h"
 
 class CHTTPFormEncoder;
@@ -39,8 +40,8 @@ class CMobblerString;
 class CMobblerTrack;
 class CMobblerTrackBase;
 class CMobblerTransaction;
-class MMobblerFlatDataObserver;
 class MMobblerLastFmConnectionObserver;
+class MMobblerFlatDataObserver;
 class MMobblerSegDataObserver;
 
 class MMobblerConnectionStateObserver
@@ -49,10 +50,14 @@ public:
 	virtual void HandleConnectionStateChangedL() = 0;
 	};
 
-class CMobblerLastFmConnection : public CActive, public MHTTPTransactionCallback, public MMobblerDestinationsInterfaceObserver
+class CMobblerLastFmConnection : public CActive,
+									public MHTTPTransactionCallback,
+									public MMobblerDestinationsInterfaceObserver,
+									public MMobblerFlatDataObserverHelper
 	{
 public:
 	friend class CMobblerTransaction;
+	
 public:
 	enum TLastFmMemberType
 		{
@@ -216,6 +221,7 @@ public:
 	
 	void ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver);
 	void TweetL(const TDesC8& aTweet, MMobblerFlatDataObserver& aObserver);
+	void TwitterAccessTokenL(const TDesC &aUsername, const TDesC &aPassword, MMobblerFlatDataObserver& aObserver);
 	
 private:
 	void RunL();
@@ -276,6 +282,9 @@ private:  // utilities
 	void CloseTransactionsL(TBool aCloseTransactionArray);
 
 	void DeleteCurrentTrackFile();
+	
+private: // from MMobblerFlatDataObserverHelper
+	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
 
 private:
 	RHTTPSession iHTTPSession;
@@ -343,6 +352,11 @@ private:
 
 	TBool i64KbpsWarningShown;
 	TInt iDayNoInYearOfLastAgeCheck;
+	
+	CMobblerFlatDataObserverHelper* iTwitterTokenHelper;
+	HBufC8* iTweet;
+	MMobblerFlatDataObserver* iTweetObserver;
+	TInt64 iNonceSeed;
 	};
 
 #endif // __MOBBLERLASTFMCONNECTION_H__

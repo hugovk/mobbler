@@ -298,7 +298,7 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 	if (!aRadioText)
 		{
 		// use the user's username
-		text.Set(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SettingView().Username());
+		text.Set(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SettingView().Settings().Username());
 		}
 	else
 		{
@@ -357,7 +357,7 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 	DoChangeTransactionStateL(ESelectingStation);
 	}
 
-void CMobblerRadioPlayer::DataL(const TDesC8& aData, CMobblerLastFmConnection::TTransactionError aTransactionError)
+void CMobblerRadioPlayer::DataL(const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
 	switch (iTransactionState)

@@ -49,39 +49,7 @@ public:
 	TUid Id() const;
 	void HandleCommandL(TInt aCommand);
 	
-	const TDesC& Username() const	{ return iSettings->Username(); }
-	const TDesC& Password() const	{ return iSettings->Password(); }
-	TBool Backlight() const			{ return iSettings->Backlight(); }
-	TBool CheckForUpdates() const	{ return iSettings->CheckForUpdates(); }
-	TUint32 IapId() const			{ return iSettings->IapId(); };
-	TUint8 BufferSize() const		{ return iSettings->BufferSize(); }
-	TBool EqualizerIndex() const	{ return iSettings->EqualizerIndex(); }
-	TInt ScrobblePercent() const	{ return iSettings->ScrobblePercent(); }
-	TInt Volume() const				{ return iSettings->Volume(); }
-	TInt SleepTimerMinutes() const 	{ return iSettings->SleepTimerMinutes(); }
-	TTime NextUpdateCheck()			{ return iSettings->NextUpdateCheck(); }
-	CMobblerLastFmConnection::TMode Mode() { return iSettings->Mode(); }
-	TInt DownloadAlbumArt() const	{ return iSettings->DownloadAlbumArt(); }
-	TBool AccelerometerGestures()	{ return iSettings->AccelerometerGestures(); }
-	TInt SleepTimerAction()			{ return iSettings->SleepTimerAction(); }
-	TInt SleepTimerImmediacy()		{ return iSettings->SleepTimerImmediacy(); }
-	TBool AlarmOn()					{ return iSettings->AlarmOn();    }
-	TTime AlarmTime()				{ return iSettings->AlarmTime();  }
-	TUint32 AlarmIapId()			{ return iSettings->AlarmIapId(); }
-	TInt BitRate()					{ return iSettings->BitRate(); }
-	TInt AlarmVolume()				{ return iSettings->AlarmVolume(); }
-	TInt AlarmStation()				{ return iSettings->AlarmStation(); }
-	const TDesC& AlarmOption() const	{ return iSettings->AlarmOption(); }
-	TBool AutomaticWallpaper() const	{ return iSettings->AutomaticWallpaper(); }
-	
-	void SetDetailsL(const TDesC& aUsername, const TDesC& aPassword);
-	void SetEqualizerIndexL(TInt aIndex);
-	void SetVolumeL(TInt aVolume);
-	void SetSleepTimerMinutesL(TInt aSleepTimerMinutes);
-	void SetNextUpdateCheckL(TTime aNextUpdateCheck);
-	void SetModeL(CMobblerLastFmConnection::TMode aMode);
-	void SetAlarmL(TBool aAlarmOn = ETrue);
-	void SetAlarmL(TTime aAlarmTime);
+	CMobblerSettingItemListSettings& Settings() { return *iSettings; }
 	
 private:
 	CMobblerSettingItemListView();        

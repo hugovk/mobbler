@@ -182,64 +182,6 @@ void CMobblerSettingItemListView::DoDeactivate()
 		}
 	}
 
-void CMobblerSettingItemListView::SetDetailsL(const TDesC& aUsername, const TDesC& aPassword)
-	{
-    TRACER_AUTO;
-	iSettings->SetUsername(aUsername);
-	iSettings->SetPassword(aPassword);
-	iSettings->SaveSettingValuesL();
-	}
-
-void CMobblerSettingItemListView::SetEqualizerIndexL(TInt aIndex)
-	{
-    TRACER_AUTO;
-	iSettings->SetEqualizerIndex(aIndex);
-	iSettings->SaveSettingValuesL();
-	}
-
-void CMobblerSettingItemListView::SetVolumeL(TInt aVolume)
-	{
-    TRACER_AUTO;
-	iSettings->SetVolume(aVolume);
-	iSettings->SaveSettingValuesL();
-	}
-
-void CMobblerSettingItemListView::SetSleepTimerMinutesL(TInt aSleepTimerMinutes)
-	{
-    TRACER_AUTO;
-	iSettings->SetSleepTimerMinutes(aSleepTimerMinutes);
-	iSettings->SaveSettingValuesL();
-	}
-
-void CMobblerSettingItemListView::SetNextUpdateCheckL(TTime aNextUpdateCheck)
-	{
-    TRACER_AUTO;
-	iSettings->SetNextUpdateCheck(aNextUpdateCheck);
-	iSettings->SaveSettingValuesL();
-	}
-
-void CMobblerSettingItemListView::SetModeL(CMobblerLastFmConnection::TMode aMode)
-	{
-    TRACER_AUTO;
-	iSettings->SetMode(aMode);
-	iSettings->SaveSettingValuesL();
-	}
-
-void CMobblerSettingItemListView::SetAlarmL(TBool aAlarmOn)
-	{
-    TRACER_AUTO;
-	iSettings->SetAlarmOn(aAlarmOn);
-	iSettings->SaveSettingValuesL();
-	}
-
-void CMobblerSettingItemListView::SetAlarmL(TTime aAlarmTime)
-	{
-    TRACER_AUTO;
-	iSettings->SetAlarmOn(ETrue);
-	iSettings->SetAlarmTime(aAlarmTime);
-	iSettings->SaveSettingValuesL();
-	}
-
 void CMobblerSettingItemListView::HandleStatusPaneSizeChange()
 	{
     TRACER_AUTO;
