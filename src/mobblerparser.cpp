@@ -74,7 +74,6 @@ _LIT8(KNowPlaying, "nowplaying");
 _LIT8(KPlayCount, "playcount");
 _LIT8(KRealName, "realname");
 _LIT8(KRecommendations, "recommendations");
-_LIT8(KResults, "results");
 _LIT8(KSession, "session");
 _LIT8(KShouts, "shouts");
 _LIT8(KSimilarArtists, "similarartists");
@@ -536,11 +535,14 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 HBufC8* CMobblerParser::ParseTwitterAuthL(const TDesC8& aData)
 	{
 	TRACER_AUTO;
-	// Get the token and token secret out of the response
-	// example:
+	// Get the token and token secret out of the response.
+	// Example:
 	// oauth_token=XXX&oauth_token_secret=XXX&user_id=12345678&screen_name=<username>&x_auth_expires=0
 
 	TPtrC8 data(aData);
+	
+	_LIT8(KOauthToken,       "oauth_token");
+	_LIT8(KOauthTokenSecret, "oauth_token_secret");
 	
 	while (data.Length() != 0)
 		{
@@ -558,11 +560,11 @@ HBufC8* CMobblerParser::ParseTwitterAuthL(const TDesC8& aData)
 			TPtrC8 key(pair.Left(eqlPos));
 			TPtrC8 value(pair.Right(pair.Length() - (eqlPos + 1)));
 			
-			if (key.Compare(_L8("oauth_token")) == 0) // TODO etc
+			if (key.Compare(KOauthToken) == 0)
 				{
 				static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->SettingView().Settings().SetTwitterAuthToken(value);
 				}
-			else if (key.Compare(_L8("oauth_token_secret")) == 0) // TODO etc
+			else if (key.Compare(KOauthTokenSecret) == 0)
 				{
 				static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->SettingView().Settings().SetTwitterAuthTokenSecret(value);
 				}
@@ -583,6 +585,7 @@ HBufC8* CMobblerParser::ParseTwitterAuthL(const TDesC8& aData)
 			return aData.AllocL();
 			}
 		}
+	return NULL;
 	}
 
 CMobblerLastFmError* CMobblerParser::ParseWebServicesHandshakeL(const TDesC8& aWebServicesHandshakeResponse, HBufC8*& aWebServicesSessionKey, CMobblerLastFmConnection::TLastFmMemberType& aMemberType)

@@ -347,11 +347,6 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandTwitter;
-			cascade = r_mobbler_twitter_submenu_pane;
-			},
-		MENU_ITEM
-			{
 			command = EMobblerCommandAbout;
 			},
 		// The plus option menu commands
@@ -680,6 +675,11 @@ RESOURCE MENU_PANE r_mobbler_tools_submenu_pane
 		MENU_ITEM
 			{
 			command = EMobblerCommandAlarm;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandTwitter;
+			cascade = r_mobbler_twitter_submenu_pane;
 			},
 		MENU_ITEM
 			{
@@ -1097,8 +1097,8 @@ RESOURCE DIALOG r_mobbler_get_latest_language_dialog
 RESOURCE DIALOG r_mobbler_username_password_query_dialog
 	{
 	flags = EGeneralQueryFlags;
-//	buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
-	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+	buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+//	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
 	items =
 		{
 		DLG_LINE

@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblercontacts.h"
 #include "mobblerliterals.h"
+#include "mobblerlogging.h"
 #include "mobblerparser.h"
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
@@ -191,7 +192,7 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 			{
 			delete iTwitterAuthObserverTrack;
 			iTwitterAuthObserverTrack = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().TwitterAccessTokenL(*iTwitterAuthObserverTrack);
+			iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserverTrack);
 			}
 		else
 			{
@@ -235,7 +236,14 @@ void CMobblerWebServicesHelper::DoShareTwitterL(const TInt aCommand)
 	delete iShareMessage;
 	iShareMessage = HBufC::NewL(Max(140, messageLength));
 	TPtr shareMessage = iShareMessage->Des();
-	shareMessage.Format(shareFormat, &iTrack->Title().String(), &iTrack->Artist().String());
+	if (aCommand == EMobblerCommandTrackShare)
+		{
+		shareMessage.Format(shareFormat, &iTrack->Title().String(), &iTrack->Artist().String());
+		}
+	else
+		{
+		shareMessage.Format(shareFormat, &iTrack->Artist().String());
+		}
 	
 	CAknTextQueryDialog* shareDialog(new(ELeave) CAknTextQueryDialog(shareMessage));
 	shareDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
@@ -297,7 +305,7 @@ void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 			{
 			delete iTwitterAuthObserverArtist;
 			iTwitterAuthObserverArtist = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().TwitterAccessTokenL(*iTwitterAuthObserverArtist);
+			iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserverArtist);
 			}
 		else
 			{
@@ -650,13 +658,13 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 						{
 						delete iTwitterFollowObserverTrack;
 						iTwitterFollowObserverTrack = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().TwitterFollowMobblerL(*iTwitterFollowObserverTrack);
+						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserverTrack);
 						}
 					else
 						{
 						delete iTwitterFollowObserverArtist;
 						iTwitterFollowObserverArtist = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().TwitterFollowMobblerL(*iTwitterFollowObserverArtist);
+						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserverArtist);
 						}
 					
 					releaseTrack = EFalse;
@@ -888,9 +896,11 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				}
 			else if (aObserver == iShortenObserverHelper)
 				{
+				DUMPDATA(aData, _L("shorten.xml"));
 				if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 					{
-					TPtrC8 errorCode(domFragment->AsElement().Element(_L8("errorCode"))->Content());
+					_LIT8(KErrorCode, "errorCode");
+					TPtrC8 errorCode(domFragment->AsElement().Element(KErrorCode)->Content());
 					
 					if (errorCode.Compare(K0) == 0)
 						{
@@ -899,13 +909,16 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 						CMobblerString* shareMessage(CMobblerString::NewLC(*iShareMessage));
 						tweet.Append(shareMessage->String8());
 						
-						TPtrC8 shortUrl = domFragment->AsElement().Element(_L8("results"))->Element(_L8("nodeKeyVal"))->Element(_L8("shortUrl"))->Content();
-						tweet.Append(_L8(": "));
+						_LIT8(KNodeKeyVal, "nodeKeyVal");
+						_LIT8(KShortUrl, "shortUrl");
+						TPtrC8 shortUrl(domFragment->AsElement().Element(KResults)->Element(KNodeKeyVal)->Element(KShortUrl)->Content());
+						_LIT8(KSpace, " ");
+						tweet.Append(KSpace);
 						tweet.Append(shortUrl);
 	
 						delete iTweetObserverHelper;
 						iTweetObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().TweetL(tweet, *iTweetObserverHelper);
+						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::CMobblerLastFmConnection::ETweet, *iTweetObserverHelper, tweet);
 						
 						CleanupStack::PopAndDestroy(shareMessage);
 						}

@@ -46,7 +46,7 @@ _LIT(KShortcut8, " (8)");
 
 CMobblerStatusView* CMobblerStatusView::NewL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	CMobblerStatusView* self(new(ELeave) CMobblerStatusView);
 	CleanupStack::PushL(self);
 	self->ConstructL();
@@ -56,37 +56,37 @@ CMobblerStatusView* CMobblerStatusView::NewL()
 
 CMobblerStatusView::CMobblerStatusView()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	}
 
 CMobblerStatusView::~CMobblerStatusView()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	delete iMobblerStatusControl;
 	iMobblerStatusControl = NULL;
 	}
 
 void CMobblerStatusView::ConstructL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	BaseConstructL(R_MOBBLER_STATUS_VIEW);
 	SetupStatusPaneL();
 	}
 
 void CMobblerStatusView::BitmapLoadedL(const CMobblerBitmap* /*aMobblerBitmap*/) 
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	}
 
 void CMobblerStatusView::BitmapResizedL(const CMobblerBitmap* /*aMobblerBitmap*/)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	}
 
 void CMobblerStatusView::SetMenuItemTextL(CEikMenuPane* aMenuPane,
 										  TInt aResourceId, TInt aCommandId)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	HBufC* menuText(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(aResourceId).AllocLC());
 
 	const TInt KTextLimit(CEikMenuPaneItem::SData::ENominalTextLength);
@@ -125,14 +125,14 @@ void CMobblerStatusView::SetMenuItemTextL(CEikMenuPane* aMenuPane,
 
 void CMobblerStatusView::DisplayPlusMenuL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	iDisplayPlusMenu = ETrue;
 	MenuBar()->TryDisplayMenuBarL();
 	}
 
 void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	// First load the menu text so as not to confuse any dimming logic
 	if (aResourceId == R_MOBBLER_STATUS_MENU_PANE)
 		{
@@ -145,7 +145,6 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EQUALIZER,		EMobblerCommandEqualizer);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TOOLS_SUBMENU,	EMobblerCommandTools);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SETTINGS,			EMobblerCommandEditSettings);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER,			EMobblerCommandTwitter);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_ABOUT,			EMobblerCommandAbout);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EXIT,				EAknSoftkeyExit);
 		
@@ -248,6 +247,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 #endif
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SLEEP_TIMER,				EMobblerCommandSleepTimer);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_ALARM,					EMobblerCommandAlarm);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER,					EMobblerCommandTwitter);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EXPORT_QUEUE_TO_LOG,		EMobblerCommandExportQueueToLogFile);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_LANGUAGE_PATCHES,			EMobblerCommandLanguagePatches);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_QR_CODE,					EMobblerCommandQrCode);
@@ -270,7 +270,6 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 			aMenuPane->SetItemDimmed(EMobblerCommandEqualizer, ETrue);
 			aMenuPane->SetItemDimmed(EMobblerCommandTools, ETrue);
 			aMenuPane->SetItemDimmed(EMobblerCommandEditSettings, ETrue);
-			aMenuPane->SetItemDimmed(EMobblerCommandTwitter, ETrue);
 			aMenuPane->SetItemDimmed(EMobblerCommandAbout, ETrue);
 			aMenuPane->SetItemDimmed(EAknSoftkeyExit, ETrue);
 			}
@@ -379,7 +378,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		if (static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthToken().Length() == 0
 				|| static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
 			{
-			// The user hasn't authenticated with twitter so hide the switch and remove options
+			// The user hasn't authenticated with Twitter so hide the switch and remove options
 			aMenuPane->SetItemDimmed(EMobblerCommandTwitterSwitch, ETrue);
 			aMenuPane->SetItemDimmed(EMobblerCommandTwitterRemove, ETrue);
 			}
@@ -396,20 +395,20 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 
 TUid CMobblerStatusView::Id() const
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	return TUid::Uid(KMobblerStatusViewUid);
 	}
 
 void CMobblerStatusView::HandleCommandL(TInt aCommand)
 	{
     TRACER_AUTO;
-	// let the app ui handle the event
+	// let the app UI handle the event
 	AppUi()->HandleCommandL(aCommand);
 	}
 
 void CMobblerStatusView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid /*aCustomMessageId*/, const TDesC8& /*aCustomMessage*/)
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (!iMobblerStatusControl)
 		{
 		iMobblerStatusControl = CMobblerStatusControl::NewL(ClientRect(), *static_cast<CMobblerAppUi*>(AppUi()));
@@ -430,7 +429,7 @@ void CMobblerStatusView::DoActivateL(const TVwsViewId& /*aPrevViewId*/, TUid /*a
 
 void CMobblerStatusView::DoDeactivate()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (iMobblerStatusControl)
 		{
 		AppUi()->RemoveFromStack(iMobblerStatusControl);
@@ -441,14 +440,14 @@ void CMobblerStatusView::DoDeactivate()
 
 void CMobblerStatusView::HandleStatusPaneSizeChange()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	CAknView::HandleStatusPaneSizeChange();
 	TRAP_IGNORE(SetupStatusPaneL()); 
 	}
 
 void CMobblerStatusView::SetupStatusPaneL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	TUid contextPaneUid(TUid::Uid(EEikStatusPaneUidContext));
 	CEikStatusPaneBase::TPaneCapabilities subPaneContext(StatusPane()->PaneCapabilities(contextPaneUid));
 	
@@ -474,7 +473,7 @@ void CMobblerStatusView::SetupStatusPaneL()
 
 void CMobblerStatusView::DrawDeferred() const
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (iMobblerStatusControl)
 		{
 		iMobblerStatusControl->DrawDeferred();
@@ -483,7 +482,7 @@ void CMobblerStatusView::DrawDeferred() const
 
 void CMobblerStatusView::DrawNow() const
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (iMobblerStatusControl)
 		{
 		iMobblerStatusControl->DrawNow();
@@ -492,13 +491,13 @@ void CMobblerStatusView::DrawNow() const
 
 CMobblerStatusControl* CMobblerStatusView::StatusControl()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	return iMobblerStatusControl;
 	}
 
 void CMobblerStatusView::SettingsWizardL()
 	{
-    TRACER_AUTO;
+	TRACER_AUTO;
 	if (static_cast<CMobblerAppUi*>(AppUi())->DetailsNeeded())
 		{
 		// Display info note
@@ -516,6 +515,11 @@ void CMobblerStatusView::SettingsWizardL()
 		if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
 			{
 			static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(username, password, ETrue);
+			}
+		else
+			{
+			// Exit asynchronously
+			iAvkonAppUi->RunAppShutter();
 			}
 		}
 	}

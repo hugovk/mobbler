@@ -106,6 +106,13 @@ public:
 		ENotAttending
 		};
 
+	enum TTwitterCommand
+		{
+		ETweet,
+		EFollowMobbler,
+		EAccessToken
+		};
+
 public:
 	static CMobblerLastFmConnection* NewL(MMobblerLastFmConnectionObserver& aObserver,
 											const TDesC& aUsername,
@@ -220,15 +227,15 @@ public:
 	void GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver);
 	
 	void ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver);
-	void TweetL(const TDesC8& aTweet, MMobblerFlatDataObserver& aObserver);
-	void TwitterAccessTokenL(MMobblerFlatDataObserver& aObserver);
-	void TwitterFollowMobblerL(MMobblerFlatDataObserver& aObserver);
+	void QueryTwitterL(const TInt aCommand, 
+						MMobblerFlatDataObserver& aObserver, 
+						const TDesC8& aTweet = KNullDesC8);
 	
 private:
 	void RunL();
 	void DoCancel();
 
-private: // fomr MMobblerDestinationsInterfaceObserver
+private: // from MMobblerDestinationsInterfaceObserver
 	void PreferredCarrierAvailable();
 	void NewCarrierActive();
 
