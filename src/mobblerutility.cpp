@@ -46,7 +46,7 @@ _LIT8(KSwedishLangCode, "sv");
 _LIT8(KTurkishLangCode, "tu");
 
 _LIT(KEnglishMobileUrl,		"http://m.last.fm/");
-//_LIT(KChineseMobileUrl,	"http://cn.last.fm/"); // No known Chinese mobile site
+_LIT(KChineseMobileUrl,		"http://m.cn.last.fm/");
 _LIT(KFrenchMobileUrl,		"http://m.lastfm.fr/");
 _LIT(KGermanMobileUrl,		"http://m.lastfm.de/");
 _LIT(KItalianMobileUrl,		"http://m.lastfm.it/");
@@ -297,6 +297,11 @@ TBuf<30> MobblerUtility::LocalLastFmDomainL(const TInt aMobile)
 					url.Copy(KPolishMobileUrl):
 					url.Copy(KPolishUrl);
 				break;
+			case ELangPrcChinese:
+				aMobile?
+					url.Copy(KChineseMobileUrl):
+					url.Copy(KChineseUrl);
+					break;
 			case ELangJapanese: 
 				aMobile?
 					url.Copy(KJapaneseMobileUrl):
@@ -307,13 +312,6 @@ TBuf<30> MobblerUtility::LocalLastFmDomainL(const TInt aMobile)
 					url.Copy(KTurkishMobileUrl):
 					url.Copy(KTurkishUrl);
 				break;
-			case ELangPrcChinese:
-				if (!aMobile)
-					{
-					url.Copy(KChineseUrl);
-					break;
-					}
-				// No known Chinese mobile site, intentional fall-through
 			default:
 				// carry on iterating through the downgrade path
 				languageFound = EFalse;
