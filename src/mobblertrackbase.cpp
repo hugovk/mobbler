@@ -1,24 +1,24 @@
 /*
-mobblertrackbase.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "mobblerappui.h"
@@ -149,44 +149,69 @@ void CMobblerTrackBase::ExternalizeL(RWriteStream& aWriteStream) const
 	aWriteStream << iAlbum->String8();
 	}
 
-HBufC8* CMobblerTrackBase::ArtistUrlLC()
+HBufC8* CMobblerTrackBase::UrlLC(const TInt aCommand)
 	{
-	_LIT8(KArtistUrlFormat, "http://www.last.fm/music/%S");
-	
-	HBufC8* artist(MobblerUtility::URLEncodeLC(iArtist->String8()));
-	HBufC8* artistUrl(HBufC8::NewL(KArtistUrlFormat().Length() + artist->Length()));
-	artistUrl->Des().Format(KArtistUrlFormat, &artist->Des());
-	CleanupStack::Pop(artist);
-	CleanupStack::PushL(artistUrl);
-	return artistUrl;
-	}
+	// Get the local Last.fm domain for this phone's language
+	TBuf8<KMaxMobblerTextSize> base8;
+	base8.Copy(MobblerUtility::LocalLastFmDomainL(EFalse));
+	HBufC8* base(base8.AllocLC());
 
-HBufC8* CMobblerTrackBase::TrackUrlLC()
-	{
-	_LIT8(KTrackUrlFormat, "http://www.last.fm/music/%S/_/%S");
-	
-	HBufC8* artist(MobblerUtility::URLEncodeLC(iArtist->String8()));
-	HBufC8* title(MobblerUtility::URLEncodeLC(iTitle->String8()));
-	HBufC8* trackUrl(HBufC8::NewL(KTrackUrlFormat().Length() + artist->Length() + title->Length()));
-	trackUrl->Des().Format(KTrackUrlFormat, &artist->Des(), &title->Des());
-	CleanupStack::Pop(title);
-	CleanupStack::Pop(artist);
-	CleanupStack::PushL(trackUrl);
-	return trackUrl;
-	}
+	// Format in the names
+	TInt urlLength(base->Length() + iArtist->String8().Length());
+	_LIT8(KArtistUrlFormat, "%Smusic/%S");
+	_LIT8(KTrackUrlFormat,  "%Smusic/%S/_/%S");
+	_LIT8(KAlbumUrlFormat,  "%Smusic/%S/%S");
+	switch (aCommand)
+		{
+		case EMobblerCommandArtistShare:
+			urlLength += KArtistUrlFormat().Length();
+			break;
+		case EMobblerCommandTrackShare:
+			urlLength += KTrackUrlFormat().Length() + 
+						 iTitle->String8().Length();
+			break;
+		case EMobblerCommandAlbumShare:
+			urlLength += KAlbumUrlFormat().Length() + 
+						 iAlbum->String8().Length();
+			break;
+		default:
+			break;
+		}
+	HBufC8* url(HBufC8::NewL(urlLength));
+	TPtr8 basePtr(base->Des());
+	switch (aCommand)
+		{
+		case EMobblerCommandArtistShare:
+			url->Des().Format(KArtistUrlFormat, &basePtr, 
+								&iArtist->String8());
+			break;
+		case EMobblerCommandTrackShare:
+			url->Des().Format(KTrackUrlFormat, &basePtr, 
+								&iArtist->String8(), &iTitle->String8());
+			break;
+		case EMobblerCommandAlbumShare:
+			url->Des().Format(KAlbumUrlFormat, &basePtr, 
+								&iArtist->String8(), &iAlbum->String8());
+			break;
+		default:
+			break;
+		}
+	CleanupStack::Pop(base);
 
-HBufC8* CMobblerTrackBase::AlbumUrlLC()
-	{
-	_LIT8(KAlbumUrlFormat, "http://www.last.fm/music/%S/%S");
-	
-	HBufC8* artist(MobblerUtility::URLEncodeLC(iArtist->String8()));
-	HBufC8* album(MobblerUtility::URLEncodeLC(iAlbum->String8()));
-	HBufC8* albumUrl(HBufC8::NewL(KAlbumUrlFormat().Length() + artist->Length() + album->Length()));
-	albumUrl->Des().Format(KAlbumUrlFormat, &artist->Des(), &album->Des());
-	CleanupStack::Pop(album);
-	CleanupStack::Pop(artist);
-	CleanupStack::PushL(albumUrl);
-	return albumUrl;
+	// Replace space with '+' to make the URL prettier 
+	_LIT8(KSpace, " ");
+	_LIT8(KPlus, "+");
+	TPtr8 urlPtr(url->Des());
+	TInt position(urlPtr.Find(KSpace));
+	while (position != KErrNotFound)
+		{
+		urlPtr.Replace(position, 1, KPlus);
+		position = urlPtr.Find(KSpace);
+		}
+
+	// Encode and return the URL
+	HBufC8* urlEncoded(MobblerUtility::URLEncodeLC(urlPtr));
+	return urlEncoded;
 	}
 
 void CMobblerTrackBase::SetAlbumL(const TDesC& aAlbum)

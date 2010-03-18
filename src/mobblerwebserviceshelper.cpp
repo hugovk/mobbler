@@ -1,24 +1,24 @@
 /*
-mobblerwebserviceshelper.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2009  Michael Coffey
+Copyright (C) 2009, 2010  Michael Coffey
+Copyright (C) 2009, 2010  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <akninfopopupnotecontroller.h>
@@ -256,14 +256,7 @@ void CMobblerWebServicesHelper::DoShareTwitterL(const TInt aCommand)
 		// create and get the URL shortened
 		delete iShortenObserverHelper;
 		iShortenObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-		if (aCommand == EMobblerCommandArtistShare)
-			{
-			iAppUi.LastFmConnection().ShortenL(iTrack->ArtistUrlLC()->Des(), *iShortenObserverHelper);
-			}
-		else
-			{
-			iAppUi.LastFmConnection().ShortenL(iTrack->TrackUrlLC()->Des(), *iShortenObserverHelper);
-			}
+		iAppUi.LastFmConnection().ShortenL(iTrack->UrlLC(aCommand)->Des(), *iShortenObserverHelper);
 		CleanupStack::PopAndDestroy(); // iTrack->TrackUrlLC()
 		}
 	}
