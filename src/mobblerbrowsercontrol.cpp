@@ -53,7 +53,7 @@ _LIT8(KArtistInfoHtmlTemplate, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 			body, html {\
 				margin: 0px 0px 2px 0px;\
 				padding: 0px;\
-				font-family: Arial, Helvetica, sans-serif;\
+				font-family: Series 60 Sans, sans-serif;\
 				font-size: medium;\
 				color: #333333;\
 				background: url(data:image/gif;base64,\
@@ -145,12 +145,14 @@ no-repeat fixed 5%% 20%%; \
 				float:right;\
 				width: auto;\
 				margin: 2px;\
+				padding: 1px;\
 			}\
 \
 			#body_text {\
 				width: 100%%;\
 				float: left;\
 				margin: 2px;\
+				padding: 2px;\
 			}\
 \
 		</style>\
