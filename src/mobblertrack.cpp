@@ -588,8 +588,8 @@ TBool CMobblerTrack::OkToDownloadAlbumArt() const
 	TInt downloadAlbumArt(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->DownloadAlbumArt());
 
 	TBool okToDownloadAlbumArt((downloadAlbumArt == CMobblerAppUi::EOnlyRadio && !IsMusicPlayerTrack())
-								|| ((downloadAlbumArt == CMobblerAppUi::EAlwaysWhenOnlineAndKeep) ||
-									(downloadAlbumArt == CMobblerAppUi::EAlwaysWhenOnlineAndDitch)));
+								|| ((downloadAlbumArt == CMobblerAppUi::EAlwaysAndKeep) ||
+									(downloadAlbumArt == CMobblerAppUi::EAlwaysAndDitch)));
 
 	return (okToDownloadAlbumArt &&
 		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().Mode() == CMobblerLastFmConnection::EOnline);
@@ -707,11 +707,11 @@ void CMobblerTrack::SaveAlbumArtL(const TDesC8& aData)
 	if (((iLocalFile && iLocalFile->Length() > 0) ||
 		(iImageType == EMobblerImageTypeArtistRemote && IsMusicPlayerTrack())) &&
 		(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->DownloadAlbumArt() ==
-				CMobblerAppUi::EAlwaysWhenOnlineAndKeep)
+				CMobblerAppUi::EAlwaysAndKeep)
 		)
 		{
 		// Try to save the album art in the album folder
-		LOG(_L8("SaveAlbumArtL()"));
+		LOG(_L8("SaveAlbumArtL() saving album art"));
 
 		TFileName albumArtFileName;
 		if (iLocalFile && iLocalFile->Length() > 0)

@@ -118,8 +118,8 @@ public:
 		{
 		ENever,
 		EOnlyRadio,
-		EAlwaysWhenOnlineAndKeep,
-		EAlwaysWhenOnlineAndDitch
+		EAlwaysAndKeep,
+		EAlwaysAndDitch
 		};
 
 
