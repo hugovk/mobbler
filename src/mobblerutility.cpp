@@ -399,8 +399,7 @@ void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 	
 	while ((pos = aText.Find(KBrTag1)) != KErrNotFound)
 		{
-		aText.Delete(pos, KBrTag1().Length());
-		aText.Insert(pos, KBrTag2);
+		aText.Replace(pos, KBrTag1().Length(), KBrTag2);
 		}
 	}
 
