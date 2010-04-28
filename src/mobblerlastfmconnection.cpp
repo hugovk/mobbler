@@ -85,11 +85,14 @@ _LIT8(KLogFileFieldSeperator, "\t");
 
 _LIT(KIapId, "IAP\\Id");
 
+_LIT8(KEmail, "email");
 _LIT8(KHttp, "http");
 _LIT8(KLimit, "limit");
 _LIT8(KMessage, "message");
+_LIT8(KPassword, "password");
 _LIT8(KPlaylistUrl, "playlistURL");
 _LIT8(KUsername, "username");
+
 _LIT8(KQueryPlaylistFetch, "playlist.fetch");
 
 // Last.fm can accept up to this many track in one submission
@@ -615,6 +618,27 @@ void CMobblerLastFmConnection::CheckForUpdateL(MMobblerFlatDataObserver& aObserv
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
 	CleanupStack::Pop(uri);
 	transaction->SetFlatDataObserver(&aObserver);
+	AppendAndSubmitTransactionL(transaction);
+	}
+
+void CMobblerLastFmConnection::SignUpL(const TDesC8& aUsername, const TDesC8& aPassword, const TDesC8& aEmail, MMobblerFlatDataObserver& aObserver)
+	{
+	TRACER_AUTO;
+	CUri8* uri(SetUpWebServicesUriLC());
+	
+	_LIT8(KQueryPlaylistCreate, "user.signup");
+	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryPlaylistCreate));
+	
+	query->AddFieldL(KUsername, aUsername);
+	query->AddFieldL(KPassword, aPassword);
+	query->AddFieldL(KEmail, aEmail);
+	
+	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
+	transaction->SetFlatDataObserver(&aObserver);
+	
+	CleanupStack::Pop(query);
+	CleanupStack::Pop(uri);
+	
 	AppendAndSubmitTransactionL(transaction);
 	}
 
