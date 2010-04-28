@@ -141,7 +141,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_GO_ONLINE,		EMobblerCommandOnline);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_GO_OFFLINE,		EMobblerCommandOffline);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_VIEW,				EMobblerCommandView);
-        SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH,           EMobblerCommandSearch);
+        SetMenuItemTextL(aMenuPane, R_MOBBLER_SEARCH,			EMobblerCommandSearch);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EQUALIZER,		EMobblerCommandEqualizer);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TOOLS_SUBMENU,	EMobblerCommandTools);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SETTINGS,			EMobblerCommandEditSettings);
@@ -159,12 +159,6 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_ARTIST_SHOUTBOX,		EMobblerCommandPlusArtistShoutbox);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TAG,					EMobblerCommandPlusTag);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_LYRICS,				EMobblerCommandTrackLyrics);
-		}
-	else if(aResourceId == R_MOBBLER_TWITTER_SUBMENU_PANE)
-		{
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER_AUTH,			EMobblerCommandTwitterAuth);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER_SWITCH,		EMobblerCommandTwitterSwitch);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER_REMOVE,		EMobblerCommandTwitterRemove);
 		}
 	else if(aResourceId == R_MOBBLER_PLUS_SHARE_SUBMENU_PANE)
 		{
@@ -211,7 +205,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TOP_TRACKS,				EMobblerCommandUserTopTracks);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_PLAYLISTS,				EMobblerCommandPlaylists);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EVENTS,					EMobblerCommandUserEvents);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_LOCAL_EVENTS,				EMobblerCommandLocalEvents);	
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_LOCAL_EVENTS,				EMobblerCommandLocalEvents);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EVENTS,					EMobblerCommandArtistEvents);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TOP_TAGS,					EMobblerCommandUserTopTags);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_RECENT_TRACKS,			EMobblerCommandRecentTracks);
@@ -243,14 +237,15 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 			}
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SCROBBLE_LOG,				EMobblerCommandScrobbleLog);
 #ifdef __SYMBIAN_SIGNED__
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_SET_AS_WALLPAPER,			EMobblerCommandSetAsWallpaper); // TODO only if album art available
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_SET_AS_WALLPAPER,			EMobblerCommandSetAsWallpaper);
 #endif
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SLEEP_TIMER,				EMobblerCommandSleepTimer);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_ALARM,					EMobblerCommandAlarm);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER,					EMobblerCommandTwitter);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EXPORT_QUEUE_TO_LOG,		EMobblerCommandExportQueueToLogFile);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_LANGUAGE_PATCHES,			EMobblerCommandLanguagePatches);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_QR_CODE,					EMobblerCommandQrCode);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER_CHANGE,			EMobblerCommandTwitterChange);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER_REMOVE,			EMobblerCommandTwitterRemove);
 		}
 
 	// Now the menu text is set, dimming logic is next
@@ -373,19 +368,13 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		
 		aMenuPane->SetItemDimmed(EMobblerCommandEventWebPage, ETrue);
 		}
-	else if (aResourceId == R_MOBBLER_TWITTER_SUBMENU_PANE)
+	else if (aResourceId == R_MOBBLER_TOOLS_SUBMENU)
 		{
 		if (static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthToken().Length() == 0
 				|| static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
 			{
-			// The user hasn't authenticated with Twitter so hide the switch and remove options
-			aMenuPane->SetItemDimmed(EMobblerCommandTwitterSwitch, ETrue);
+			// The user hasn't authenticated with Twitter so hide the remove options
 			aMenuPane->SetItemDimmed(EMobblerCommandTwitterRemove, ETrue);
-			}
-		else
-			{
-			// The user has authenticated so hide the authenticate options
-			aMenuPane->SetItemDimmed(EMobblerCommandTwitterAuth, ETrue);
 			}
 		}
 	

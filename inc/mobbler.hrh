@@ -165,9 +165,7 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandPlusTopTracks,
 	EMobblerCommandPlusTopTags,
 	
-	EMobblerCommandTwitter,
-	EMobblerCommandTwitterAuth,
-	EMobblerCommandTwitterSwitch,
+	EMobblerCommandTwitterChange,
 	EMobblerCommandTwitterRemove,
 	
 	EMobblerCommandTrackLyrics,

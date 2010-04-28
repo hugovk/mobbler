@@ -2,7 +2,7 @@
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
 Copyright (C) 2009, 2010  Hugo van Kemenade
-Copyright (C) 2009, 2010  gw11zz
+Copyright (C) 2009, 2010  gw111zz
 
 http://code.google.com/p/mobbler
 

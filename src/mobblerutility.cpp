@@ -2,7 +2,7 @@
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
 Copyright (C) 2009, 2010  Hugo van Kemenade
-Copyright (C) 2010  gw11zz
+Copyright (C) 2010  gw111zz
 
 http://code.google.com/p/mobbler
 
@@ -134,17 +134,17 @@ HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
 HBufC8* MobblerUtility::URLEncodeLC(const TDesC8& aString, TBool aEncodeAll)
 	{
 	TRACER_AUTO;
-    
-    _LIT8(KFormatCode, "%%%02X");
-    
-    if (aString.Length() == 0)
-    	{
+	
+	_LIT8(KFormatCode, "%%%02X");
+	
+	if (aString.Length() == 0)
+		{
 		return NULL;
-    	}
+		}
 
-    _LIT8(KDontEncode, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~");
+	_LIT8(KDontEncode, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~");
 
-    // Alloc to the maximum size of URL if every char are encoded
+	// Alloc to the maximum size of URL if every char are encoded
 	HBufC8* encoded(HBufC8::NewLC(aString.Length() * 3));
 
 	// Parse the chars in the URL
@@ -391,33 +391,15 @@ void MobblerUtility::FixLyricsSpecialCharacters(TDes8& aText)
 void MobblerUtility::FixLyricsLineBreaks(TDes8& aText)
 	{
 	TRACER_AUTO;
-	// First, remove all Windows newlines
-	_LIT8(KCRLF,"\x0D\x0A");
 
+	// Replace [br] tags with <br> tags
 	TInt pos(KErrNotFound);
-	while ((pos = aText.Find(KCRLF)) != KErrNotFound)
-		{
-		aText.Delete(pos, KCRLF().Length());
-		}
-	
-	// Next, remove all Linux newlines
-	_LIT8(KLF,"\x0A");
-	
-	pos = KErrNotFound;
-	while ((pos = aText.Find(KLF)) != KErrNotFound)
-		{
-		aText.Delete(pos, KLF().Length());
-		}
-	
-	// Finally, replace [br] tags with newlines
 	_LIT8(KBrTag1, "[br]");
-	_LIT8(KBrTag2, "\r\n");
+	_LIT8(KBrTag2, "<br>");
 	
-	pos = KErrNotFound;
 	while ((pos = aText.Find(KBrTag1)) != KErrNotFound)
 		{
-		aText.Delete(pos, KBrTag1().Length());
-		aText.Insert(pos, KBrTag2);
+		aText.Replace(pos, KBrTag1().Length(), KBrTag2);
 		}
 	}
 

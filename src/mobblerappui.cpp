@@ -1,24 +1,27 @@
 /*
-mobblerappui.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2010  gw111zz
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <aknglobalconfirmationquery.h>
@@ -58,6 +61,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerappui.h"
 #include "mobblerbitmapcollection.h"
 #include "mobblerbrowserview.h"
+#include "mobblerhtmltemplates.h"
 #include "mobblerliterals.h"
 #include "mobblerlocation.h"
 #include "mobblerlogging.h"
@@ -77,6 +81,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 _LIT(KRadioFile, "C:radiostations.dat");
 _LIT(KSearchFile, "C:searchterms.dat");
+_LIT(KSpace, " ");
 
 // Gesture interface
 #ifdef __SYMBIAN_SIGNED__
@@ -90,8 +95,6 @@ const TUid KDestinationImplUid = {0xA000BEB6};
 const TUid KMobblerGesturePlugin5xUid = {0xA000B6C2};
 const TUid KContentListingImplUid = {0xA000BEB3};
 #endif
-
-_LIT(KSpace, " ");
 
 CMobblerGlobalQuery* CMobblerGlobalQuery::NewL(TInt aResourceId)
 	{
@@ -717,8 +720,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 								TUid::Uid(CMobblerSettingItemListView::ENormalSettings), 
 								KNullDesC8);
 			break;
-		case EMobblerCommandTwitterAuth:
-		case EMobblerCommandTwitterSwitch:
+		case EMobblerCommandTwitterChange:
 			delete iTwitterAuthObserver;
 			iTwitterAuthObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);
 			iLastFmConnection->QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserver);
@@ -1374,7 +1376,47 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			} // else if (aObserver == iLyricsObserver)
 		else if (aObserver == iArtistBiographyObserver)
 			{
-			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandPlusArtistBiography), aData);
+			HBufC8* tagsText(NULL);
+			HBufC8* similarArtistsText(NULL);
+			HBufC8* imageUrl(NULL);
+			HBufC8* artistInfo(NULL);
+
+			CMobblerParser::ParseArtistInfoL(aData, artistInfo, imageUrl, tagsText, similarArtistsText);
+
+			CleanupStack::PushL(tagsText);
+			CleanupStack::PushL(imageUrl);
+			CleanupStack::PushL(artistInfo);
+			CleanupStack::PushL(similarArtistsText);
+
+			// Decide how big the artist picture should be taking into account the width
+			// of the application
+			TInt artistImageWidth((TInt)((TReal)ApplicationRect().Width() * 0.40));
+
+			HBufC8* artistInfoHtml(HBufC8::NewLC(
+					KHtmlHeaderTemplate().Length() +
+					KBiographyHtmlTemplate().Length() +
+					CurrentTrack()->Artist().String8().Length() +
+					tagsText->Length() +
+					similarArtistsText->Length() +
+					imageUrl->Length() +
+					3 +
+					artistInfo->Length()));
+
+			TPtr8 artistHtmlPtr(artistInfoHtml->Des());
+			artistHtmlPtr.Append(KHtmlHeaderTemplate);
+			artistHtmlPtr.AppendFormat(
+					KBiographyHtmlTemplate,
+					&(CurrentTrack()->Artist().String8()),
+					imageUrl,
+					artistImageWidth,
+					tagsText,
+					similarArtistsText,
+					artistInfo);
+			DUMPDATA(artistHtmlPtr, _L("artistbio.txt"));
+
+			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandPlusArtistBiography), artistHtmlPtr);
+
+			CleanupStack::PopAndDestroy(5, tagsText);
 			}
 		else if (aObserver == iLocalEventsObserver)
 			{
@@ -2517,16 +2559,12 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	{
 	TRACER_AUTO;
 	DUMPDATA(aData, _L("lyrics.xml"));
-	_LIT(KLyricsFilename, "C:\\System\\Data\\Mobbler\\Lyrics.txt");
 	_LIT8(KSg, "sg"); // song
+	_LIT8(KAr, "ar"); // artist name
+	_LIT8(KTt, "tt"); // title of the song
 	_LIT8(KTx, "tx"); // lyrics text
 	_LIT8(K200, "200");
 	_LIT8(K300, "300");
-	
-	RFileWriteStream file;
-	CleanupClosePushL(file);
-	CCoeEnv::Static()->FsSession().MkDirAll(KLyricsFilename);
-	User::LeaveIfError(file.Replace(CCoeEnv::Static()->FsSession(), KLyricsFilename, EFileWrite));
 	
 	// Parse the XML
 	CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
@@ -2534,27 +2572,30 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	
 	// Get the status error code
 	TPtrC8 statusPtrC(domFragment->AsElement().Element(KStatus)->Content());
-	TBool success(ETrue);
 	
 	if ((statusPtrC.CompareF(K200) == 0) || 
 		(statusPtrC.CompareF(K300) == 0))
 		{
+		TPtrC8 artistPtrC(domFragment->AsElement().Element(KSg)->Element(KAr)->Content());
+		TPtrC8  titlePtrC(domFragment->AsElement().Element(KSg)->Element(KTt)->Content());
 		TPtrC8 lyricsPtrC(domFragment->AsElement().Element(KSg)->Element(KTx)->Content());
 		
+		HBufC8* artistBuf(HBufC8::NewLC(artistPtrC.Length()));
+		HBufC8*  titleBuf(HBufC8::NewLC( titlePtrC.Length()));
 		HBufC8* lyricsBuf(HBufC8::NewLC(lyricsPtrC.Length()));
+		SenXmlUtils::DecodeHttpCharactersL(artistPtrC, artistBuf);
+		SenXmlUtils::DecodeHttpCharactersL( titlePtrC,  titleBuf);
 		SenXmlUtils::DecodeHttpCharactersL(lyricsPtrC, lyricsBuf);
 		
 		TPtr8 lyricsPtr(lyricsBuf->Des());
 		MobblerUtility::FixLyricsLineBreaks(lyricsPtr);
-		file.WriteL(lyricsPtr);
-		CleanupStack::PopAndDestroy(lyricsBuf);
 		
-#ifdef PERMANENT_LYRICSFLY_ID_KEY
+/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
 		// Only link back to corrections with the permanent ID key.
 		// Temporary keys don't return correct checksums to prevent abuse.
 		_LIT8(KCs, "cs"); // checksum (for link back)
 		_LIT8(KId, "id"); // song ID (for link back)
-		_LIT8(KLinkBackFormat, "Make corrections:\r\nhttp://lyricsfly.com/search/correction.php?%S&id=%S\r\n");
+		_LIT8(KLinkBackFormat, "<a href=\"http://lyricsfly.com/search/correction.php?%S&id=%S\">Make corrections</a>\r\n");
 		
 		TPtrC8 checkSumPtrC(domFragment->AsElement().Element(KSg)->Element(KCs)->Content());
 		TPtrC8 idPtrC(domFragment->AsElement().Element(KSg)->Element(KId)->Content());
@@ -2567,14 +2608,47 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 		LOG(*linkBackBuf);
 		
 		file.WriteL(*linkBackBuf);
+#endif*/
+
+		// Show lyrics in the browser view thingy
+		HBufC8* lyricsHtml(HBufC8::NewLC(
+				KHtmlHeaderTemplate().Length() +
+				KLyricsHtmlTemplate().Length() +
+				artistBuf->Length() + 
+				titleBuf->Length() + 
+				lyricsBuf->Length()
+/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
+				+ KLinkBackFormat().Length()
+				+ linkBackBuf->Length()
+#endif*/
+				));
+
+		TPtr8 lyricsHtmlPtr(lyricsHtml->Des());
+		lyricsHtmlPtr.Append(KHtmlHeaderTemplate);
+		lyricsHtmlPtr.AppendFormat(
+				KLyricsHtmlTemplate,
+				artistBuf, 
+				titleBuf,
+				lyricsBuf);
+
+/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
+		lyricsHtmlPtr.Append(*linkBackBuf);
+#endif*/
+
+		DUMPDATA(lyricsHtmlPtr, _L("lyrics.txt"));
+
+		ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandTrackLyrics), lyricsHtmlPtr);
+
+		CleanupStack::PopAndDestroy(lyricsHtml);
+/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
 		CleanupStack::PopAndDestroy(linkBackBuf);
-#endif
+#endif*/
+		CleanupStack::PopAndDestroy(3); // lyricsBuf, titleBuf, artistBuf
 		}
 	else
 		{
 		CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
 		note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_LYRICS_NOT_FOUND));
-		success = EFalse;
 		
 //		TPtrC8 songPtrC(domFragment->AsElement().Element(KSg)->Content());
 //		file.WriteL(songPtrC);
@@ -2624,11 +2698,6 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 #endif // _DEBUG
 
 	CleanupStack::PopAndDestroy(2); // xmlReader & domFragment
-	CleanupStack::PopAndDestroy(&file);
-	if (success)
-		{
-		LaunchFileL(KLyricsFilename);
-		}
 	}
 
 void CMobblerAppUi::WarnOldScrobblesL()

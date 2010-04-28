@@ -626,25 +626,6 @@ RESOURCE MENU_PANE r_mobbler_equalizer_submenu_pane
 			}
 		};
 	}
-	
-RESOURCE MENU_PANE r_mobbler_twitter_submenu_pane
-	{
-	items =
-		{
-		MENU_ITEM
-			{
-			command = EMobblerCommandTwitterAuth;
-			},
-		MENU_ITEM
-			{
-			command = EMobblerCommandTwitterSwitch;
-			},
-		MENU_ITEM
-			{
-			command = EMobblerCommandTwitterRemove;
-			}
-		};
-	}
 
 RESOURCE MENU_PANE r_mobbler_tools_submenu_pane
 	{
@@ -678,11 +659,6 @@ RESOURCE MENU_PANE r_mobbler_tools_submenu_pane
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandTwitter;
-			cascade = r_mobbler_twitter_submenu_pane;
-			},
-		MENU_ITEM
-			{
 			command = EMobblerCommandExportQueueToLogFile;
 			},
 		MENU_ITEM
@@ -692,6 +668,14 @@ RESOURCE MENU_PANE r_mobbler_tools_submenu_pane
 		MENU_ITEM
 			{
 			command = EMobblerCommandQrCode;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandTwitterChange;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandTwitterRemove;
 			}
 		};
 	}

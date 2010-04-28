@@ -381,8 +381,7 @@ RESOURCE STRING r_mobbler_local_events			{ text = STR_mobbler_local_events; }
 RESOURCE STRING r_mobbler_old_scrobbles_warning	{ text = STR_mobbler_old_scrobbles_warning; }
 
 RESOURCE STRING r_mobbler_twitter				{ text = STR_mobbler_twitter; }
-RESOURCE STRING r_mobbler_twitter_auth			{ text = STR_mobbler_twitter_auth; }
-RESOURCE STRING r_mobbler_twitter_switch		{ text = STR_mobbler_twitter_switch; }
+RESOURCE STRING r_mobbler_twitter_change		{ text = STR_mobbler_twitter_change; }
 RESOURCE STRING r_mobbler_twitter_remove		{ text = STR_mobbler_twitter_remove; }
 RESOURCE STRING r_mobbler_twitter_follow		{ text = STR_mobbler_twitter_follow; }
 
