@@ -63,8 +63,8 @@
 "$(EPOCROOT)\epoc32\data\z\resource\plugins\mobblercontentlisting_0xA000BEB1.rsc"-"!:\resource\plugins\mobblercontentlisting_0xA000BEB1.rsc"
 
 ; Gesture plugin (uses sensor framework)
-;"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0xA000B6CE.dll"-"!:\sys\bin\gestureobserver3x_0xA000B6CE.dll"
-;"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"-"!:\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0xA000B6CE.dll"-"!:\sys\bin\gestureobserver3x_0xA000B6CE.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"-"!:\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"
 
 ; Destinations (uses cmmanager.lib (3.2 onwards))
 "$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblerdestinations_0xA000BEB4.dll"-"!:\sys\bin\mobblerdestinations_0xA000BEB4.dll"

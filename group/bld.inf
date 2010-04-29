@@ -35,8 +35,8 @@ mobbler.mmp
 ..\touchfeedback\group\mobblertouchfeedback.mmp
 ..\contentlisting\group\mobblercontentlisting.mmp
 ..\destinations\group\mobblerdestinations.mmp
-//..\gestureobserver\group\gestureobserver3x.mmp
-//..\gestureobserver\group\gestureobserver5x.mmp
+..\gestureobserver\group\gestureobserver3x.mmp
+..\gestureobserver\group\gestureobserver5x.mmp
 
 PRJ_EXPORTS
 // music player ecom plugin interface
