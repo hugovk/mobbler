@@ -153,7 +153,7 @@ rls_string STR_mobbler_note_stop_music_player "Pl332 St0p T3H MUs1c Pl4Y3R 83F0r
 rls_string STR_mobbler_download_album_art "d0wnl04D 4lBum 4r7"
 rls_string STR_mobbler_download_album_art_never "n3v3r"
 rls_string STR_mobbler_download_album_art_radio_only "0NLY r4D10"
-rls_string STR_mobbler_download_album_art_always_and_keep "4LW4y2 wh3n 0nL1N3"
+rls_string STR_mobbler_download_album_art_always_and_keep "4Lw4yZ 4nd k33P"
 rls_string STR_mobbler_view "V13w"
 rls_string STR_mobbler_top_artists "T0p 4RTi5t5"
 rls_string STR_mobbler_top_albums "70p 4L8um5"

@@ -1,24 +1,28 @@
 /*
-mobbler.mmp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
+Copyright (C) 2009  James Clarke
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "mobbler.mmh" 
@@ -96,12 +100,19 @@ SECUREID		0xA0007648
 #ifdef WINS
 LANG 01
 #else
-LANG 01 02 03 04 05 06 07 08 09 10 14 16 17 18 25 26 27 31 32 34 37 40 42 44 54 57 59 67 68 76 78 79 333 337 888
+//LANG 01 02 03 04 05 06 07 08 09 10 14 16 17 18 25 26 27 31 32 34 37 40 42 44 54 57 59 67 68 76 78 79 333 337 888
+LANG 01 06
 #endif
 
 SOURCEPATH	..\src
 USERINCLUDE	..\inc
-SYSTEMINCLUDE	 \epoc32\include
+
+#ifdef SBSV2
+#include <platform_paths.hrh>
+APP_LAYER_SYSTEMINCLUDE
+#else
+SYSTEMINCLUDE /epoc32/include 
+#endif
 
 SOURCE		mobbler.cpp
 SOURCE		mobbleraccesspointsettingitem.cpp

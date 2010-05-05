@@ -1122,6 +1122,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 								KNullDesC8);
 			break;
 		case EMobblerCommandAlarm:
+			{
 			CAknQueryDialog* disclaimerDlg(CAknQueryDialog::NewL());
 			if(disclaimerDlg->ExecuteLD(R_MOBBLER_OK_CANCEL_QUERY_DIALOG, 
 					iResourceReader->ResourceL(R_MOBBLER_ALARM_DISCLAIMER)))
@@ -1130,6 +1131,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 									TUid::Uid(CMobblerSettingItemListView::EAlarm),
 									KNullDesC8);
 				}
+			}
 			break;
 		case EMobblerCommandExportQueueToLogFile:
 			{
