@@ -175,6 +175,7 @@ public:
 	void ShareL(const TInt aCommand, 
 				const TDesC8& aRecipient, 
 				const TDesC8& aArtist, 
+				const TDesC8& aAlbum, 
 				const TDesC8& aTrack, 
 				const TDesC8& aEventId, 
 				const TDesC8& aMessage, 

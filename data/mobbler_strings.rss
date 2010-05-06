@@ -400,4 +400,6 @@ RESOURCE STRING r_mobbler_twitter_share_album_format		{ text = STR_mobbler_twitt
 RESOURCE STRING r_mobbler_twitter_now_playing_artist_format	{ text = STR_mobbler_twitter_now_playing_artist_format; }
 RESOURCE STRING r_mobbler_twitter_share_artist_format		{ text = STR_mobbler_twitter_share_artist_format; }
 
+RESOURCE STRING r_mobbler_share_album						{ text = STR_mobbler_share_album; }
+
 // End of file

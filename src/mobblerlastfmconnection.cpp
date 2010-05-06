@@ -1205,7 +1205,7 @@ void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDes
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::ShareL(const TInt aCommand, const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aTrack, const TDesC8& aEventId, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::ShareL(const TInt aCommand, const TDesC8& aRecipient, const TDesC8& aArtist, const TDesC8& aAlbum, const TDesC8& aTrack, const TDesC8& aEventId, const TDesC8& aMessage, MMobblerFlatDataObserver& aObserver)
 	{
     TRACER_AUTO;
 	CUri8* uri(SetUpWebServicesUriLC());
@@ -1218,6 +1218,12 @@ void CMobblerLastFmConnection::ShareL(const TInt aCommand, const TDesC8& aRecipi
 			query = CMobblerWebServicesQuery::NewLC(KQueryTrackShare);
 			query->AddFieldL(KArtist, aArtist);
 			query->AddFieldL(KTrack, aTrack);
+			break;
+		case EMobblerCommandAlbumShare:
+			_LIT8(KQueryAlbumShare, "album.share");
+			query = CMobblerWebServicesQuery::NewLC(KQueryAlbumShare);
+			query->AddFieldL(KArtist, aArtist);
+			query->AddFieldL(KAlbum, aAlbum);
 			break;
 		case EMobblerCommandArtistShare:
 			_LIT8(KQueryArtistShare, "artist.share");

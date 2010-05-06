@@ -115,13 +115,13 @@ CMobblerTrackList::~CMobblerTrackList()
 	delete iLyricsObserver;
 	}
 
-void CMobblerTrackList::GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle)
+void CMobblerTrackList::GetTrackDetails(TPtrC8& aArtist, TPtrC8& aAlbum, TPtrC8& aTitle)
 	{
     TRACER_AUTO;
-	GetArtistAndTitleName(iListBox->CurrentItemIndex(), aArtist, aTitle);
+    GetTrackDetails(iListBox->CurrentItemIndex(), aArtist, aAlbum, aTitle);
 	}
 
-void CMobblerTrackList::GetArtistAndTitleName(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aTitle)
+void CMobblerTrackList::GetTrackDetails(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aAlbum, TPtrC8& aTitle)
 	{
     TRACER_AUTO;
 	if (iType == EMobblerCommandScrobbleLog)
@@ -130,6 +130,7 @@ void CMobblerTrackList::GetArtistAndTitleName(const TInt aItemIndex, TPtrC8& aAr
 				&& iAppUi.LastFmConnection().ScrobbleLogCount() > 0)
 			{
 			aArtist.Set(iAppUi.LastFmConnection().ScrobbleLogItem(aItemIndex).Artist().String8());
+			aAlbum.Set(iAppUi.LastFmConnection().ScrobbleLogItem(aItemIndex).Album().String8());
 			aTitle.Set(iAppUi.LastFmConnection().ScrobbleLogItem(aItemIndex).Title().String8());
 			}
 		}
@@ -157,9 +158,10 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 	CMobblerListControl* list(NULL);
 	
 	TPtrC8 artist(KNullDesC8);
+	TPtrC8 album(KNullDesC8);
 	TPtrC8 title(KNullDesC8);
 	
-	GetArtistAndTitleName(artist, title);
+	GetTrackDetails(artist, album, title);
 	
 	switch(aCommand)
 		{
@@ -170,7 +172,7 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandTrackScrobble:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
 			TTime now;
 			now.UniversalTime();
 			track->SetStartTimeUTC(now);
@@ -193,16 +195,16 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 			scrobbleTime -= (TTimeIntervalSeconds)(KCount * KAverageTrackLength);
 			
 			// Get the album name
-			TBuf8<KMaxMobblerTextSize> album;
+			TBuf8<KMaxMobblerTextSize> albumName;
 			HBufC* albumBuf(NameL());
-			album.Append(*albumBuf);
+			albumName.Append(*albumBuf);
 			delete albumBuf;
 			
 			// Scrobble each track
 			for (TInt i(0); i < KCount; ++i)
 				{
-				GetArtistAndTitleName(i, artist, title);
-				CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
+				GetTrackDetails(i, artist, album, title);
+				CMobblerTrack* track(CMobblerTrack::NewL(artist, title, albumName, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
 				
 				scrobbleTime += (TTimeIntervalSeconds)KAverageTrackLength;
 				track->SetStartTimeUTC(scrobbleTime);
@@ -236,7 +238,7 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 		case EMobblerCommandArtistShare:
 		case EMobblerCommandPlaylistAddTrack:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
 			
 			switch (aCommand)
 				{
@@ -281,11 +283,23 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
     TRACER_AUTO;
+    
+	TPtrC8 artist(KNullDesC8);
+	TPtrC8 album(KNullDesC8);
+	TPtrC8 title(KNullDesC8);
+	
+	GetTrackDetails(artist, album, title);
+	
 	aCommands.AppendL(EMobblerCommandTrackLove);
 	aCommands.AppendL(EMobblerCommandTrackScrobble);
 	
 	aCommands.AppendL(EMobblerCommandShare);
 	aCommands.AppendL(EMobblerCommandTrackShare);
+	if (album.Length() != 0)
+		{
+		// we know this tracks album so we can share it
+		aCommands.AppendL(EMobblerCommandAlbumShare);
+		}
 	aCommands.AppendL(EMobblerCommandArtistShare);
 	
 	aCommands.AppendL(EMobblerCommandTag);

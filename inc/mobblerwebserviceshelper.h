@@ -48,6 +48,7 @@ public:
 	~CMobblerWebServicesHelper();
 	
 	void TrackShareL(CMobblerTrack& aTrack);
+	void AlbumShareL(CMobblerTrack& aTrack);
 	void ArtistShareL(CMobblerTrack& aTrack);
 	void EventShareL(const TDesC8& aEventId);
 	
@@ -95,15 +96,18 @@ private:
 	CMobblerFlatDataObserverHelper* iArtistTagRemoveTagsHelper;
 	
 	CMobblerFlatDataObserverHelper* iTwitterAuthObserverTrack;
+	CMobblerFlatDataObserverHelper* iTwitterAuthObserverAlbum;
 	CMobblerFlatDataObserverHelper* iTwitterAuthObserverArtist;
 	
 	CMobblerFlatDataObserverHelper* iTwitterFollowObserverTrack;
+	CMobblerFlatDataObserverHelper* iTwitterFollowObserverAlbum;
 	CMobblerFlatDataObserverHelper* iTwitterFollowObserverArtist;
 	
 	CMobblerFlatDataObserverHelper* iShortenObserverHelper;
 	CMobblerFlatDataObserverHelper* iTweetObserverHelper;
 	
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperTrackShare;
+	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperAlbumShare;
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperArtistShare;
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperEventShare;
 	CMobblerFlatDataObserverHelper* iShareObserverHelper;

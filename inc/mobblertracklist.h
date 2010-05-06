@@ -47,8 +47,8 @@ private:
 	
 	static TInt ViewScrobbleLogCallBackL(TAny* aPtr);
 	
-	void GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle);
-	void GetArtistAndTitleName(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aTitle);
+	void GetTrackDetails(TPtrC8& aArtist, TPtrC8& aAlbum, TPtrC8& aTitle);
+	void GetTrackDetails(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aAlbum, TPtrC8& aTitle);
 	
 private:
 	CMobblerWebServicesHelper* iWebServicesHelper;

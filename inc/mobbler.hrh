@@ -154,6 +154,7 @@ enum TMobblerSettingItemListViewCommands
 	
 	EMobblerCommandPlusShare,
 	EMobblerCommandPlusShareTrack,
+	EMobblerCommandPlusShareAlbum,
 	EMobblerCommandPlusShareArtist,
 	
 	EMobblerCommandPlusSimilar,

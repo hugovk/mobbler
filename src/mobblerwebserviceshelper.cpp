@@ -201,63 +201,49 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 		}
 	}
 
-void CMobblerWebServicesHelper::DoShareTwitterL(const TInt aCommand)
+void CMobblerWebServicesHelper::AlbumShareL(CMobblerTrack& aTrack)
 	{
-	TPtrC shareFormat(KNullDesC);
+    TRACER_AUTO;
+	iTrack = &aTrack;
+	iTrack->Open();
 	
-	TInt resourceId(R_MOBBLER_TWITTER_NOW_PLAYING_TRACK_FORMAT);
-	if (iAppUi.CurrentTrack() && (*iAppUi.CurrentTrack() == *iTrack))
+	TShareWith shareSource(ShareSourceL());
+	
+	if (shareSource == EShareWithFriends)
 		{
-		// this is the current track so say that we are playing it now
-		if (aCommand == EMobblerCommandArtistShare)
+		CMobblerString* username(CMobblerString::NewLC(iAppUi.SettingView().Settings().Username()));
+		
+		delete iFriendFetchObserverHelperAlbumShare;
+		iFriendFetchObserverHelperAlbumShare = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+		iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, username->String8(), *iFriendFetchObserverHelperAlbumShare);
+		
+		CleanupStack::PopAndDestroy(username);
+		}
+	else if (shareSource == EShareWithContacts)
+		{
+		HBufC* contact(DisplayContactListL());
+		
+		if (contact)
 			{
-			resourceId = R_MOBBLER_TWITTER_NOW_PLAYING_ARTIST_FORMAT;
+			CleanupStack::PushL(contact);
+			CMobblerString* contactString(CMobblerString::NewLC(*contact));
+			DoShareL(EMobblerCommandAlbumShare, contactString->String8());
+			CleanupStack::PopAndDestroy(2, contact);
 			}
 		}
-	else
+	else if (shareSource == EShareWithTwitter)
 		{
-		if (aCommand == EMobblerCommandArtistShare)
+		if (iAppUi.SettingView().Settings().TwitterAuthToken().Length() == 0
+				|| iAppUi.SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
 			{
-			resourceId = R_MOBBLER_TWITTER_SHARE_ARTIST_FORMAT;
+			delete iTwitterAuthObserverAlbum;
+			iTwitterAuthObserverAlbum = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+			iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserverAlbum);
 			}
 		else
 			{
-			resourceId = R_MOBBLER_TWITTER_SHARE_TRACK_FORMAT;
+			DoShareTwitterL(EMobblerCommandAlbumShare);
 			}
-		}
-	shareFormat.Set(iAppUi.ResourceReader().ResourceL(resourceId));
-	
-	// Ask for custom message
-	TInt messageLength(shareFormat.Length() + iTrack->Artist().String().Length() + KBitlyUrlLength);
-	if (aCommand == EMobblerCommandTrackShare)
-		{
-		messageLength += iTrack->Title().String().Length();
-		}
-	delete iShareMessage;
-	iShareMessage = HBufC::NewL(Max(140, messageLength));
-	TPtr shareMessage = iShareMessage->Des();
-	if (aCommand == EMobblerCommandTrackShare)
-		{
-		shareMessage.Format(shareFormat, &iTrack->Title().String(), &iTrack->Artist().String());
-		}
-	else
-		{
-		shareMessage.Format(shareFormat, &iTrack->Artist().String());
-		}
-	
-	CAknTextQueryDialog* shareDialog(new(ELeave) CAknTextQueryDialog(shareMessage));
-	shareDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
-	shareDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_MESSAGE_PROMPT));
-	shareDialog->SetPredictiveTextInputPermitted(ETrue);
-	shareDialog->SetMaxLength(KMaxTweetLength - KBitlyUrlLength);
-	
-	if (shareDialog->RunLD())
-		{
-		// create and get the URL shortened
-		delete iShortenObserverHelper;
-		iShortenObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-		iAppUi.LastFmConnection().ShortenL(iTrack->UrlLC(aCommand)->Des(), *iShortenObserverHelper);
-		CleanupStack::PopAndDestroy(); // iTrack->TrackUrlLC()
 		}
 	}
 
@@ -304,6 +290,78 @@ void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 			{
 			DoShareTwitterL(EMobblerCommandArtistShare);
 			}
+		}
+	}
+
+void CMobblerWebServicesHelper::DoShareTwitterL(const TInt aCommand)
+	{
+	TPtrC shareFormat(KNullDesC);
+	
+	TInt resourceId(R_MOBBLER_TWITTER_NOW_PLAYING_TRACK_FORMAT);
+	if (iAppUi.CurrentTrack() && (*iAppUi.CurrentTrack() == *iTrack))
+		{
+		// this is the current track so say that we are playing it now
+		if (aCommand == EMobblerCommandArtistShare)
+			{
+			resourceId = R_MOBBLER_TWITTER_NOW_PLAYING_ARTIST_FORMAT;
+			}
+		else if (aCommand == EMobblerCommandAlbumShare)
+			{
+			resourceId = R_MOBBLER_TWITTER_NOW_PLAYING_ALBUM_FORMAT;
+			}
+		}
+	else
+		{
+		if (aCommand == EMobblerCommandArtistShare)
+			{
+			resourceId = R_MOBBLER_TWITTER_SHARE_ARTIST_FORMAT;
+			}
+		else if (aCommand == EMobblerCommandAlbumShare)
+			{
+			resourceId = R_MOBBLER_TWITTER_SHARE_ALBUM_FORMAT;
+			}
+		else
+			{
+			resourceId = R_MOBBLER_TWITTER_SHARE_TRACK_FORMAT;
+			}
+		}
+	shareFormat.Set(iAppUi.ResourceReader().ResourceL(resourceId));
+	
+	// Ask for custom message
+	TInt messageLength(shareFormat.Length() + iTrack->Artist().String().Length() + KBitlyUrlLength);
+	if (aCommand == EMobblerCommandTrackShare)
+		{
+		messageLength += iTrack->Title().String().Length();
+		}
+	delete iShareMessage;
+	iShareMessage = HBufC::NewL(Max(140, messageLength));
+	TPtr shareMessage = iShareMessage->Des();
+	if (aCommand == EMobblerCommandTrackShare)
+		{
+		shareMessage.Format(shareFormat, &iTrack->Title().String(), &iTrack->Artist().String());
+		}
+	else if (aCommand == EMobblerCommandAlbumShare)
+		{
+		shareMessage.Format(shareFormat, &iTrack->Album().String(), &iTrack->Artist().String());
+		}
+	else
+		{
+		shareMessage.Format(shareFormat, &iTrack->Artist().String());
+		}
+	
+	CAknTextQueryDialog* shareDialog(new(ELeave) CAknTextQueryDialog(shareMessage));
+	shareDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
+	shareDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_MESSAGE_PROMPT));
+	shareDialog->SetPredictiveTextInputPermitted(ETrue);
+	shareDialog->SetMaxLength(KMaxTweetLength - KBitlyUrlLength);
+	
+	if (shareDialog->RunLD())
+		{
+		// create and get the URL shortened
+		delete iShortenObserverHelper;
+		iShortenObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+		iAppUi.LastFmConnection().ShortenL(iTrack->UrlLC(aCommand)->Des(), *iShortenObserverHelper);
+		CleanupStack::PopAndDestroy(); // iTrack->TrackUrlLC()
 		}
 	}
 
@@ -604,20 +662,26 @@ void CMobblerWebServicesHelper::DoShareL(TInt aCommand, const TDesC8& aRecipient
 			{
 			delete iShareObserverHelper;
 			iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().ShareL(EMobblerCommandTrackShare, aRecipient, iTrack->Artist().String8(), iTrack->Title().String8(), KNullDesC8, messageString->String8(), *iShareObserverHelper);
+			iAppUi.LastFmConnection().ShareL(EMobblerCommandTrackShare, aRecipient, iTrack->Artist().String8(), iTrack->Album().String8(), iTrack->Title().String8(), KNullDesC8, messageString->String8(), *iShareObserverHelper);
+			}
+		else if (aCommand == EMobblerCommandAlbumShare)
+			{
+			delete iShareObserverHelper;
+			iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+			iAppUi.LastFmConnection().ShareL(EMobblerCommandAlbumShare, aRecipient, iTrack->Artist().String8(), iTrack->Album().String8(), KNullDesC8, KNullDesC8, messageString->String8(), *iShareObserverHelper);
 			}
 		else if (aCommand == EMobblerCommandArtistShare)
 			{
 			delete iShareObserverHelper;
 			iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().ShareL(EMobblerCommandArtistShare, aRecipient, iTrack->Artist().String8(), KNullDesC8, KNullDesC8, messageString->String8(), *iShareObserverHelper);
+			iAppUi.LastFmConnection().ShareL(EMobblerCommandArtistShare, aRecipient, iTrack->Artist().String8(), iTrack->Album().String8(), KNullDesC8, KNullDesC8, messageString->String8(), *iShareObserverHelper);
 			}
 		else
 			{
 			// This must be sharing an event
 			delete iShareObserverHelper;
 			iShareObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().ShareL(EMobblerCommandEventShare, aRecipient, KNullDesC8, KNullDesC8, *iEventId, messageString->String8(), *iShareObserverHelper);
+			iAppUi.LastFmConnection().ShareL(EMobblerCommandEventShare, aRecipient, KNullDesC8, KNullDesC8, KNullDesC8, *iEventId, messageString->String8(), *iShareObserverHelper);
 			}
 		
 		CleanupStack::PopAndDestroy(messageString);
@@ -631,6 +695,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
     TBool releaseTrack(ETrue);
     
     if (aObserver == iTwitterAuthObserverTrack
+    	|| aObserver == iTwitterAuthObserverAlbum
 		|| aObserver == iTwitterAuthObserverArtist)
 		{
 		// We do the twitter auth responses here because it's not xml
@@ -653,6 +718,12 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 						iTwitterFollowObserverTrack = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
 						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserverTrack);
 						}
+					else if (aObserver == iTwitterAuthObserverAlbum)
+						{
+						delete iTwitterFollowObserverAlbum;
+						iTwitterFollowObserverAlbum = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserverAlbum);
+						}
 					else
 						{
 						delete iTwitterFollowObserverArtist;
@@ -665,6 +736,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 				else
 					{
 					if (aObserver == iTwitterAuthObserverTrack) DoShareTwitterL(EMobblerCommandTrackShare);
+					else if (aObserver == iTwitterAuthObserverAlbum) DoShareTwitterL(EMobblerCommandAlbumShare);
 					else if (aObserver == iTwitterAuthObserverArtist) DoShareTwitterL(EMobblerCommandArtistShare);
 					}
 				}
@@ -713,6 +785,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 					}
 				}
 			else if (aObserver == iFriendFetchObserverHelperTrackShare ||
+						aObserver == iFriendFetchObserverHelperAlbumShare ||
 						aObserver == iFriendFetchObserverHelperArtistShare ||
 						aObserver == iFriendFetchObserverHelperEventShare)
 				{
@@ -758,6 +831,10 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 					if (aObserver == iFriendFetchObserverHelperTrackShare)
 						{
 						DoShareL(EMobblerCommandTrackShare, recipient->String8());
+						}
+					else if (aObserver == iFriendFetchObserverHelperAlbumShare)
+						{
+						DoShareL(EMobblerCommandAlbumShare, recipient->String8());
 						}
 					else if (aObserver == iFriendFetchObserverHelperArtistShare)
 						{
@@ -882,6 +959,10 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 			else if (aObserver == iTwitterFollowObserverTrack)
 				{
 				DoShareTwitterL(EMobblerCommandTrackShare);
+				}
+			else if (aObserver == iTwitterFollowObserverAlbum)
+				{
+				DoShareTwitterL(EMobblerCommandAlbumShare);
 				}
 			else if (aObserver == iTwitterFollowObserverArtist)
 				{

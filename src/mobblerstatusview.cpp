@@ -38,6 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerstatuscontrol.h"
 #include "mobblerstatusview.h"
 #include "mobblertracer.h"
+#include "mobblertrack.h"
+#include "mobblerstring.h"
 #include "mobblerutility.h"
 
 _LIT(KShortcut0, " (0)");
@@ -163,7 +165,11 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 	else if(aResourceId == R_MOBBLER_PLUS_SHARE_SUBMENU_PANE)
 		{
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SHARE_TRACK,			EMobblerCommandPlusShareTrack);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_SHARE_ALBUM,			EMobblerCommandPlusShareAlbum);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SHARE_ARTIST,			EMobblerCommandPlusShareArtist);
+		
+		// dim the album share option if we don't know the album
+		aMenuPane->SetItemDimmed(EMobblerCommandPlusShareAlbum, static_cast<CMobblerAppUi*>(AppUi())->CurrentTrack()->Album().String().Length() == 0);
 		}
 	else if(aResourceId == R_MOBBLER_PLUS_SIMILAR_SUBMENU_PANE)
 		{
