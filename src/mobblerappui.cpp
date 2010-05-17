@@ -2108,7 +2108,7 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 		iSettingView->Settings().SetAlarmOn(EFalse);
 		User::ResetInactivityTime();
 
-		if (iLastFmConnection->IapId() != iSettingView->Settings().AlarmIapId())
+		if (iLastFmConnection->IapId() != (TUint)iSettingView->Settings().AlarmIapId())
 			{
 			HandleCommandL(EMobblerCommandOffline);
 			SetIapIDL(iSettingView->Settings().AlarmIapId());

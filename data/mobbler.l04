@@ -152,7 +152,7 @@ rls_string STR_mobbler_note_stop_music_player "Detén el reproductor de música 
 rls_string STR_mobbler_download_album_art "Descargar carátulas"
 rls_string STR_mobbler_download_album_art_never "Nunca"
 rls_string STR_mobbler_download_album_art_radio_only "Sólo para la radio"
-rls_string STR_mobbler_download_album_art_always_and_keep "Siempre (en linea)" // MODIFIED
+rls_string STR_mobbler_download_album_art_always_when_online "Siempre (en linea)" // MODIFIED
 rls_string STR_mobbler_view "Ver"
 rls_string STR_mobbler_top_artists "Artistas más oídos"
 rls_string STR_mobbler_top_albums "Álbumes más oídos"
@@ -287,3 +287,5 @@ rls_string STR_mobbler_similar "Similares"
 rls_string STR_mobbler_top "Top"
 rls_string STR_mobbler_lyrics "Letras"
 rls_string STR_mobbler_lyrics_not_found "Letras no encontradas"
+rls_string STR_mobbler_download_album_art_always_and_keep "Always and keep"
+rls_string STR_mobbler_download_album_art_always_and_ditch "Always and ditch"
