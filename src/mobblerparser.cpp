@@ -114,77 +114,6 @@ _LIT8(KUpdateLocation,			"location");
 
 _LIT8(KNamespace, "http://www.audioscrobbler.net/dtd/xspf-lastfm");
 
-/*
-OK
-    This indicates that the handshake was successful. Three lines will follow the OK response:
-
-       1. Session ID
-       2. Now-Playing URL
-       3. Submission URL
-
-BANNED
-    This indicates that this client version has been banned from the server. This usually happens if the client is violating the protocol in a destructive way. Users should be asked to upgrade their client application.
-BADAUTH
-    This indicates that the authentication details provided were incorrect. The client should not retry the handshake until the user has changed their details.
-BADTIME
-    The timestamp provided was not close enough to the current time. The system clock must be corrected before re-handshaking.
-FAILED <reason>
-    This indicates a temporary server failure. The reason indicates the cause of the failure. The client should proceed as directed in the Hard Failures section.
-All other responses should be treated as a hard failure.
-    An error may be reported to the user, but as with other messages this should be kept to a minimum.
-*/
-CMobblerLastFmError* CMobblerParser::ParseHandshakeL(const TDesC8& aHandshakeResponse, HBufC8*& aSessionId, HBufC8*& aNowPlayingUrl, HBufC8*& aSubmitUrl)
-	{
-    TRACER_AUTO;
-	DUMPDATA(aHandshakeResponse, _L("scrobblehandshake.txt"));
-
-	CMobblerLastFmError* error(NULL);
-
-	if (aHandshakeResponse.MatchF(KMatchOkStar) == 0)
-		{
-		TInt position(aHandshakeResponse.Find(KNewLine));
-
-		// get the session ID
-		TPtrC8 last3Lines(aHandshakeResponse.Mid(position + 1, aHandshakeResponse.Length() - (position + 1)));
-		position = last3Lines.Find(KNewLine);
-		delete aSessionId;
-		aSessionId = last3Lines.Mid(0, position).AllocL();
-
-		// get the now playing URL
-		TPtrC8 last2Lines(last3Lines.Mid(position + 1, last3Lines.Length() - (position + 1)));
-		position = last2Lines.Find(KNewLine);
-		delete aNowPlayingUrl;
-		aNowPlayingUrl = last2Lines.Mid(0, position).AllocL();
-
-		// get the submit URL
-		TPtrC8 last1Lines(last2Lines.Mid(position + 1, last2Lines.Length() - (position + 1)));
-		position = last1Lines.Find(KNewLine);
-		delete aSubmitUrl;
-		aSubmitUrl = last1Lines.Mid(0, position).AllocL();
-		}
-	else if (aHandshakeResponse.MatchF(KMatchBannedStar) == 0)
-		{
-		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BANNED), CMobblerLastFmError::EBanned);
-		}
-	else if (aHandshakeResponse.MatchF(KMatchBadAuthStar) == 0)
-		{
-		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BAD_AUTH), CMobblerLastFmError::EBadAuth);
-		}
-	else if (aHandshakeResponse.MatchF(KMatchBadTimeStar) == 0)
-		{
-		error = CMobblerLastFmError::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NOTE_BAD_TIME), CMobblerLastFmError::EBadTime);
-		}
-	else if (aHandshakeResponse.MatchF(KMatchFailedStar) == 0)
-		{
-		error = CMobblerLastFmError::NewL(aHandshakeResponse.Mid(7), CMobblerLastFmError::EFailed);
-		}
-	else
-		{
-		error = CMobblerLastFmError::NewL(aHandshakeResponse, CMobblerLastFmError::EFailed);
-		}
-
-	return error;
-	}
 
 /*
 session
@@ -393,7 +322,7 @@ CMobblerLastFmError* CMobblerParser::ParseOldRadioPlaylistL(const TDesC8& aXml, 
 		TPtrC8 trackAuth(tracks[i]->Element(KNamespace, KTrackAuth)->Content());
 		TPtrC8 musicBrainzId(tracks[i]->Element(KId)->Content());
 
-		CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, /**albumIDBuf,*/ musicBrainzId, image, location, durationSeconds, trackAuth, EFalse));
+		CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, /**albumIDBuf,*/ musicBrainzId, image, location, durationSeconds, trackAuth, EFalse, ETrue));
 		CleanupStack::PushL(track);
 		track->FindLocalTrackL();
 		aPlaylist.AppendTrackL(track);
@@ -505,7 +434,7 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 
 				TBool loved((*tracks)[i]->Element(KExtension)->Element(KLoved)->Content().Compare(K0) != 0);
 				
-				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, trackauth, loved));
+				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, trackauth, loved, ETrue));
 				CleanupStack::PushL(track);
 				track->FindLocalTrackL();
 				aPlaylist.AppendTrackL(track);
@@ -809,7 +738,7 @@ TInt CMobblerParser::FriendOrder(const CMobblerListItem& aLeft, const CMobblerLi
 	return aLeft.Title()->String().CompareF(aRight.Title()->String());
 	}
 
-void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aObserver, RPointerArray<CMobblerListItem>& aList)
+void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aObserver, RPointerArray<CMobblerListItem>& aList, TInt& aTotal, TInt& aPage, TInt& aPerPage, TInt& aTotalPages)
 	{
     TRACER_AUTO;
 	DUMPDATA(aXml, _L("usergetfriends.xml"));
@@ -818,7 +747,19 @@ void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aO
 	CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
 	CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aXml));
 
-	RPointerArray<CSenElement>& items(domFragment->AsElement().Element(KFriends)->ElementsL());
+	CSenElement* friends = domFragment->AsElement().Element(KFriends);
+	
+	TLex8 lex;
+	lex.Assign(*friends->AttrValue(_L8("total")));
+	lex.Val(aTotal);
+	lex.Assign(*friends->AttrValue(_L8("page")));
+	lex.Val(aPage);
+	lex.Assign(*friends->AttrValue(_L8("perPage")));
+	lex.Val(aPerPage);
+	lex.Assign(*friends->AttrValue(_L8("totalPages")));
+	lex.Val(aTotalPages);
+	
+	RPointerArray<CSenElement>& items(friends->ElementsL());
 
 	const TInt KItemCount(items.Count());
 	for (TInt i(0); i < KItemCount; ++i)

@@ -40,7 +40,6 @@ class CMobblerTrackList;
 class CMobblerParser : public CBase
 	{
 public:
-	static CMobblerLastFmError* ParseHandshakeL(const TDesC8& aHandshakeResponse, HBufC8*& aSessionId, HBufC8*& aNowPlayingUrl, HBufC8*& aSubmitUrl);
 	static CMobblerLastFmError* ParseWebServicesHandshakeL(const TDesC8& aWebServicesHandshakeResponse, HBufC8*& aWebServicesSessionKey, CMobblerLastFmConnection::TLastFmMemberType& aMemberType);
 	static CMobblerLastFmError* ParseOldRadioHandshakeL(const TDesC8& aRadioHandshakeResponse, HBufC8*& aRadioSessionID, HBufC8*& aRadioBaseUrl, HBufC8*& aRadioBasePath);
 
@@ -62,7 +61,7 @@ public:
 	
 	static TInt FriendOrder(const CMobblerListItem& aLeft, const CMobblerListItem& aRight);
 
-	static void ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aObserver, RPointerArray<CMobblerListItem>& aList);
+	static void ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aObserver, RPointerArray<CMobblerListItem>& aList, TInt& aTotal, TInt& aPage, TInt& aPerPage, TInt& aTotalPages);
 	static void ParseTopArtistsL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList);
 	static void ParseRecommendedArtistsL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList);
 	static void ParseSimilarArtistsL(const TDesC8& aXml, CMobblerArtistList& aObserver, RPointerArray<CMobblerListItem>& aList);

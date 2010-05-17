@@ -172,7 +172,7 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandTrackScrobble:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse, EFalse));
 			TTime now;
 			now.UniversalTime();
 			track->SetStartTimeUTC(now);
@@ -204,7 +204,7 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 			for (TInt i(0); i < KCount; ++i)
 				{
 				GetTrackDetails(i, artist, album, title);
-				CMobblerTrack* track(CMobblerTrack::NewL(artist, title, albumName, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse));
+				CMobblerTrack* track(CMobblerTrack::NewL(artist, title, albumName, KNullDesC8, KNullDesC8, KNullDesC8, KAverageTrackLength, KNullDesC8, EFalse, EFalse));
 				
 				scrobbleTime += (TTimeIntervalSeconds)KAverageTrackLength;
 				track->SetStartTimeUTC(scrobbleTime);
@@ -216,14 +216,14 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandTrackAddTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse, EFalse));
 			iWebServicesHelper->AddTagL(*track, aCommand);
 			track->Release();
 			}
 			break;
 		case EMobblerCommandTrackRemoveTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, KNullDesC8, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse, EFalse));
 			iWebServicesHelper->TrackRemoveTagL(*track);
 			track->Release();
 			}
@@ -238,7 +238,7 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 		case EMobblerCommandArtistShare:
 		case EMobblerCommandPlaylistAddTrack:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(artist, title, album, KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse, EFalse));
 			
 			switch (aCommand)
 				{
@@ -363,7 +363,7 @@ TInt CMobblerTrackList::ViewScrobbleLogCallBackL(TAny* aPtr)
 	return KErrNone;
 	}
 
-void CMobblerTrackList::ParseL(const TDesC8& aXml)
+TBool CMobblerTrackList::ParseL(const TDesC8& aXml)
 	{
     TRACER_AUTO;
 	switch (iType)
@@ -407,6 +407,8 @@ void CMobblerTrackList::ParseL(const TDesC8& aXml)
 		default:
 			break;
 		}
+	
+	return ETrue;
 	}
 
 // End of file

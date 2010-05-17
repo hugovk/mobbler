@@ -84,15 +84,22 @@ CMobblerListControl* CMobblerAlbumList::HandleListCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandAlbumAddTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse, EFalse));
 			iWebServicesHelper->AddTagL(*track, aCommand);
 			track->Release();
 			}
 			break;
 		case EMobblerCommandAlbumRemoveTag:
 			{
-			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse));
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse, EFalse));
 			iWebServicesHelper->AlbumRemoveTagL(*track);
+			track->Release();
+			}
+			break;
+		case EMobblerCommandAlbumShare:
+			{
+			CMobblerTrack* track(CMobblerTrack::NewL(iList[iListBox->CurrentItemIndex()]->Description()->String8(), KNullDesC8, iList[iListBox->CurrentItemIndex()]->Title()->String8(), KNullDesC8, KNullDesC8, KNullDesC8, 0, KNullDesC8, EFalse, EFalse));
+			iWebServicesHelper->AlbumShareL(*track);
 			track->Release();
 			}
 			break;
@@ -111,6 +118,9 @@ void CMobblerAlbumList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandTag);
 	aCommands.AppendL(EMobblerCommandAlbumAddTag);
 	aCommands.AppendL(EMobblerCommandAlbumRemoveTag);
+	
+	aCommands.AppendL(EMobblerCommandShare);
+	aCommands.AppendL(EMobblerCommandAlbumShare);
 	}
 
 void CMobblerAlbumList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, const TDesC8& /*aData*/, TInt /*aError*/)
@@ -118,7 +128,7 @@ void CMobblerAlbumList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, con
     TRACER_AUTO;
 	}
 
-void CMobblerAlbumList::ParseL(const TDesC8& aXml)
+TBool CMobblerAlbumList::ParseL(const TDesC8& aXml)
 	{
     TRACER_AUTO;
 	switch (iType)
@@ -133,6 +143,8 @@ void CMobblerAlbumList::ParseL(const TDesC8& aXml)
 		default:
 			break;
 		}
+	
+	return ETrue;
 	}
 
 // End of file

@@ -212,10 +212,11 @@ void CMobblerShoutbox::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandShoutOwner);
 	}
 
-void CMobblerShoutbox::ParseL(const TDesC8& aXml)
+TBool CMobblerShoutbox::ParseL(const TDesC8& aXml)
 	{
     TRACER_AUTO;
 	CMobblerParser::ParseShoutboxL(aXml, *this, iList);
+	return ETrue;
 	}
 
 void CMobblerShoutbox::RequestImageL(TInt aIndex) const

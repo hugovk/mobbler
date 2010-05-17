@@ -148,10 +148,6 @@ CMobblerLastFmConnection::~CMobblerLastFmConnection()
 	delete iUsername;
 	delete iPassword;
 	
-	delete iScrobbleSessionId;
-	delete iNowPlayingUrl;
-	delete iSubmitUrl;
-	
 	delete iWebServicesSessionKey;
 	
 	iHTTPSession.Close();
@@ -513,7 +509,6 @@ void CMobblerLastFmConnection::AuthenticateL()
 	
 	// Handshake with Last.fm
 	ChangeStateL(EHandshaking);
-	ScrobbleHandshakeL();
 	WebServicesHandshakeL();
 #ifdef BETA_BUILD
 	BetaHandshakeL();
@@ -1159,7 +1154,7 @@ void CMobblerLastFmConnection::GetInfoL(const TInt aCommand, const TDesC8& aArti
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver)
+void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver, TInt aPage, TInt aPerPage)
 	{
     TRACER_AUTO;
 	CUri8* uri(SetUpWebServicesUriLC());
@@ -1191,6 +1186,20 @@ void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDes
 		{
 		query->AddFieldL(aClass, *MobblerUtility::URLEncodeLC(aText));
 		CleanupStack::PopAndDestroy(); // URLEncodeLC
+		}
+	
+	if (aPage != KErrNotFound)
+		{
+		TBuf8<3> page;
+		page.AppendNum(aPage);
+		query->AddFieldL(_L8("page"), page);
+		}
+	
+	if (aPerPage != KErrNotFound)
+		{
+		TBuf8<3> perPage;
+		perPage.AppendNum(aPerPage);
+		query->AddFieldL(_L8("limit"), perPage);
 		}
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -1861,14 +1870,6 @@ void CMobblerLastFmConnection::Disconnect()
 	
 	CloseTransactionsL(EFalse);
 	
-	// delete strings for URLs etc
-	delete iScrobbleSessionId;
-	iScrobbleSessionId = NULL;
-	delete iNowPlayingUrl;
-	iNowPlayingUrl = NULL;
-	delete iSubmitUrl;
-	iSubmitUrl = NULL;
-	
 	iAuthenticated = EFalse;
 	
 	iHTTPSession.Close();
@@ -1886,47 +1887,23 @@ void CMobblerLastFmConnection::DoNowPlayingL()
 			{
 			// We must be in online mode and have recieved the now playing URL and session ID from Last.fm
 			// before we try to submit and tracks
+			CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(_L8("user.updateNowPlaying")));
+			query->AddFieldL(KArtist, iCurrentTrack->Artist().String8());
+			query->AddFieldL(KTrack, iCurrentTrack->Title().String8());
+			query->AddFieldL(KAlbum, iCurrentTrack->Album().String8());
 			
-			// create the from that will be sent to Last.fm
-			CHTTPFormEncoder* nowPlayingForm(CHTTPFormEncoder::NewL());
-			CleanupStack::PushL(nowPlayingForm);
-			
-			_LIT8(KLowerA8, "a");
-			_LIT8(KLowerB8, "b");
-			_LIT8(KLowerL8, "l");
-			_LIT8(KLowerM8, "m");
-			_LIT8(KLowerN8, "n");
-			_LIT8(KLowerS8, "s");
-			_LIT8(KLowerT8, "t");
-			
-			nowPlayingForm->AddFieldL(KLowerS8, *iScrobbleSessionId);
-			nowPlayingForm->AddFieldL(KLowerA8, iCurrentTrack->Artist().String8());
-			nowPlayingForm->AddFieldL(KLowerT8, iCurrentTrack->Title().String8());
-			nowPlayingForm->AddFieldL(KLowerB8, iCurrentTrack->Album().String8());
 			TBuf8<10> trackLength;
 			trackLength.AppendNum(iCurrentTrack->TrackLength().Int());
-			nowPlayingForm->AddFieldL(KLowerL8, trackLength);
-			if (iCurrentTrack->TrackNumber() != KErrUnknown)
-				{
-				TBuf8<10> trackNumber;
-				trackNumber.AppendNum(iCurrentTrack->TrackNumber());
-				nowPlayingForm->AddFieldL(KLowerN8, trackNumber);
-				}
-			else
-				{
-				nowPlayingForm->AddFieldL(KLowerN8, KNullDesC8);
-				}
-			nowPlayingForm->AddFieldL(KLowerM8, KNullDesC8);
+			query->AddFieldL(_L8("duration"), trackLength);
 			
-			// get the URI
 			TUriParser8 uriParser;
-			uriParser.Parse(*iNowPlayingUrl);
+			uriParser.Parse(_L8("http://post.audioscrobbler.com/2.0/"));
 			CUri8* uri(CUri8::NewLC(uriParser));
 			
 			delete iNowPlayingTransaction;
-			iNowPlayingTransaction = CMobblerTransaction::NewL(*this, ETrue, uri, nowPlayingForm);
+			iNowPlayingTransaction = CMobblerTransaction::NewL(*this, ETrue, uri, query);
 			iNowPlayingTransaction->SubmitL();
-			CleanupStack::Pop(2, nowPlayingForm);
+			CleanupStack::Pop(2, query);
 			}
 		}
 	}
@@ -2017,18 +1994,15 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 			CHTTPFormEncoder* submitForm(CHTTPFormEncoder::NewL());
 			CleanupStack::PushL(submitForm);
 			
-			_LIT8(KS, "s");
-			submitForm->AddFieldL(KS, *iScrobbleSessionId);
-			
 			for (TInt ii(0); ii < KSubmitTracksCount && ii < KMaxSubmitTracks; ++ii)
 				{
-				_LIT8(KA, "a[%d]");
-				_LIT8(KT, "t[%d]");
-				_LIT8(KI, "i[%d]");
+				_LIT8(KA, "artist[%d]");
+				_LIT8(KT, "track[%d]");
+				_LIT8(KI, "timestamp[%d]");
 				_LIT8(KO, "o[%d]");
 				_LIT8(KR, "r[%d]");
-				_LIT8(KL, "l[%d]");
-				_LIT8(KB, "b[%d]");
+				_LIT8(KL, "duration[%d]");
+				_LIT8(KB, "album[%d]");
 				_LIT8(KN, "n[%d]");
 				_LIT8(KM, "m[%d]");
 				
@@ -2078,18 +2052,11 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 					CleanupStack::PopAndDestroy(sourceValue);
 					}
 				
-				HBufC8* love(HBufC8::NewLC(1));
 				if (iTrackQueue[ii]->Love() != CMobblerTrack::ENoLove)
 					{
-					// The track has been loved so set this in the scrobble submission
-					love->Des().Append(KUpperL8);
-					
 					// Make sure we also tell Last.fm in a web service call
 					iTrackQueue[ii]->LoveTrackL();
 					}
-				
-				submitForm->AddFieldL(r, *love);
-				CleanupStack::PopAndDestroy(love);
 				
 				TBuf8<10> trackLength;
 				trackLength.AppendNum(iTrackQueue[ii]->TrackLength().Int());
@@ -2108,10 +2075,14 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 				submitForm->AddFieldL(m, KNullDesC8);
 				}
 			
-			// get the URI
 			TUriParser8 uriParser;
-			uriParser.Parse(*iSubmitUrl);
+			uriParser.Parse(_L8("http://post.audioscrobbler.com/2.0/"));
 			CUri8* uri(CUri8::NewLC(uriParser));
+			
+			CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(_L8("track.scrobbleBatch")));
+			uri->SetComponentL(*query->GetQueryAuthLC(), EUriQuery);
+			CleanupStack::PopAndDestroy(2, query); // query, query->GetQueryAuthLC()
+			
 			delete iSubmitTransaction;
 			iSubmitTransaction = CMobblerTransaction::NewL(*this, ETrue, uri, submitForm);
 			iSubmitTransaction->SubmitL();
@@ -2131,7 +2102,7 @@ void CMobblerLastFmConnection::HandleHandshakeErrorL(CMobblerLastFmError* aError
 		{
 		// The handshake was ok
 		
-		if (iScrobbleSessionId && iWebServicesSessionKey
+		if (iWebServicesSessionKey
 #ifdef BETA_BUILD
 				&& iIsBetaTester
 #endif
@@ -2175,7 +2146,6 @@ void CMobblerLastFmConnection::HandleHandshakeErrorL(CMobblerLastFmError* aError
 		iObserver.HandleLastFmErrorL(*aError);
 		ChangeStateL(ENone);
 		iWebServicesHandshakeTransaction->Cancel();
-		iHandshakeTransaction->Cancel();
 		
 		// close all transactions that require authentication
 		// but let other ones carry on
@@ -2238,8 +2208,6 @@ void CMobblerLastFmConnection::CloseTransactionsL(TBool aCloseTransactionArray)
 	{
     TRACER_AUTO;
 	// close any ongoing transactions
-	delete iHandshakeTransaction;
-	iHandshakeTransaction = NULL;
 	delete iNowPlayingTransaction;
 	iNowPlayingTransaction = NULL;
 	delete iSubmitTransaction;
@@ -2280,14 +2248,7 @@ void CMobblerLastFmConnection::CloseTransactionsL(TBool aCloseTransactionArray)
 void CMobblerLastFmConnection::TransactionResponseL(CMobblerTransaction* aTransaction, const TDesC8& aResponse)
 	{
     TRACER_AUTO;
-	if (aTransaction == iHandshakeTransaction)
-		{
-		CMobblerLastFmError* error(CMobblerParser::ParseHandshakeL(aResponse, iScrobbleSessionId, iNowPlayingUrl, iSubmitUrl));
-		CleanupStack::PushL(error);
-		HandleHandshakeErrorL(error);
-		CleanupStack::PopAndDestroy(error);
-		}
-	else if (aTransaction == iWebServicesHandshakeTransaction)
+	if (aTransaction == iWebServicesHandshakeTransaction)
 		{
 		CMobblerLastFmError* error(CMobblerParser::ParseWebServicesHandshakeL(aResponse, iWebServicesSessionKey, iMemberType));
 		CleanupStack::PushL(error);
@@ -2448,8 +2409,7 @@ void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransact
 		
 		now.FormatL(logMessage, _L("%F%D/%M/%Y %H:%T:%S\t"));
 		
-		if (aTransaction == iHandshakeTransaction) logMessage.Append(_L("Handshake\t"));
-		else if (aTransaction == iWebServicesHandshakeTransaction) logMessage.Append(_L("WebServicesHandsake\t"));
+		if (aTransaction == iWebServicesHandshakeTransaction) logMessage.Append(_L("WebServicesHandsake\t"));
 		else if (aTransaction == iNowPlayingTransaction) logMessage.Append(_L("NowPlaying\t"));
 		else if (aTransaction == iSubmitTransaction) logMessage.Append(_L("Submit\t"));
 		
@@ -2488,8 +2448,7 @@ void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransact
 		{
 		// If it was one of the handshake transactions then
 		// complain to the app UI so an error is displayed
-		if (aTransaction ==	iHandshakeTransaction
-				|| aTransaction == iWebServicesHandshakeTransaction
+		if (aTransaction == iWebServicesHandshakeTransaction
 				|| aTransaction == iOldRadioHandshakeTransaction
 #ifdef BETA_BUILD
 				|| aTransaction == iBetaTestersTransaction
@@ -2591,48 +2550,6 @@ void CMobblerLastFmConnection::CreateAuthTokenL(TDes8& aHash, TTimeIntervalSecon
 	HBufC8* authToken(MobblerUtility::MD5LC(*passwordHashAndTimeStamp));
 	aHash.Copy(*authToken);
 	CleanupStack::PopAndDestroy(3, passwordHash);
-	}
-
-void CMobblerLastFmConnection::ScrobbleHandshakeL()
-	{
-    TRACER_AUTO;
-	delete iSubmitUrl;
-	iSubmitUrl = NULL;
-	delete iNowPlayingUrl;
-	iNowPlayingUrl = NULL;
-	delete iScrobbleSessionId;
-	iScrobbleSessionId = NULL;
-	
-	iAuthenticated = EFalse;
-	
-	TTime now;
-	now.UniversalTime();
-	TTimeIntervalSeconds unixTimeStamp;
-	TTime epoch(TDateTime(1970, EJanuary, 0, 0, 0, 0, 0));
-	User::LeaveIfError(now.SecondsFrom(epoch, unixTimeStamp));
-	
-	HBufC8* authToken(HBufC8::NewLC(KMaxMobblerTextSize));
-	TPtr8 authTokenPtr(authToken->Des());
-	CreateAuthTokenL(authTokenPtr, unixTimeStamp);
-	
-	HBufC8* path(HBufC8::NewLC(KMaxMobblerTextSize));
-	// The format for the handshake URL:
-	_LIT8(KScrobbleQuery, "hs=true&p=1.2&c=mlr&v=0.1&u=%S&t=%d&a=%S");
-	path->Des().AppendFormat(KScrobbleQuery, &iUsername->String8(), unixTimeStamp.Int(), &authTokenPtr);
-	
-	CUri8* uri(CUri8::NewLC());
-	
-	uri->SetComponentL(KHttp, EUriScheme);
-	// The Last.fm URL to send the handshake to:
-	_LIT8(KScrobbleHost, "post.audioscrobbler.com");
-	uri->SetComponentL(KScrobbleHost, EUriHost);
-	uri->SetComponentL(*path, EUriQuery);
-	
-	delete iHandshakeTransaction;
-	iHandshakeTransaction = CMobblerTransaction::NewL(*this, uri);
-	CleanupStack::Pop(uri);
-	iHandshakeTransaction->SubmitL();
-	CleanupStack::PopAndDestroy(2, authToken);
 	}
 
 TInt CMobblerLastFmConnection::ScrobbleLogCount() const

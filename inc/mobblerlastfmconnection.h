@@ -166,7 +166,7 @@ public:
 	// Web services APIs
 	void SignUpL(const TDesC8& aUsername, const TDesC8& aPassword, const TDesC8& aEmail, MMobblerFlatDataObserver& aObserver);
 	
-	void WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver);
+	void WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver, TInt aPage = KErrNotFound, TInt aPerPage = KErrNotFound);
 
 	void ShoutL(const TDesC8& aClass, const TDesC8& aArgument, const TDesC8& aMessage);
 
@@ -260,8 +260,6 @@ private:
 
 	// handshaking
 	void AuthenticateL();
-
-	void ScrobbleHandshakeL();
 	void WebServicesHandshakeL();
 	void OldRadioHandshakeL();
 #ifdef BETA_BUILD
@@ -306,7 +304,6 @@ private:
 	TUint32 iCurrentIapId;
 
 	// authentication transactions
-	CMobblerTransaction* iHandshakeTransaction;
 	CMobblerTransaction* iWebServicesHandshakeTransaction;
 	CMobblerTransaction* iOldRadioHandshakeTransaction;
 #ifdef BETA_BUILD
@@ -335,12 +332,7 @@ private:
 	CMobblerString* iUsername;
 	CMobblerString* iPassword;
 
-	HBufC8* iScrobbleSessionId;
-
 	HBufC8* iWebServicesSessionKey;
-
-	HBufC8* iNowPlayingUrl;
-	HBufC8* iSubmitUrl;
 
 	MMobblerLastFmConnectionObserver& iObserver;
 

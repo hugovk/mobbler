@@ -157,10 +157,25 @@ void CMobblerFriendList::DataL(CMobblerFlatDataObserverHelper* /*aObserver*/, co
 	
 	}
 
-void CMobblerFriendList::ParseL(const TDesC8& aXml)
+TBool CMobblerFriendList::ParseL(const TDesC8& aXml)
 	{
     TRACER_AUTO;
-	CMobblerParser::ParseFriendListL(aXml, *this, iList);
+    
+    TBool finished(ETrue);
+    
+    TInt total;
+    TInt page;
+    TInt perPage;
+    TInt totalPages;
+	CMobblerParser::ParseFriendListL(aXml, *this, iList, total, page, perPage, totalPages);
+	
+	if (page != totalPages)
+		{
+		iAppUi.LastFmConnection().WebServicesCallL(KUser, KGetFriends, iText1->String8(), *this, page + 1, perPage);
+		finished = EFalse;
+		}
+	
+	return finished;	
 	}
 
 // End of file

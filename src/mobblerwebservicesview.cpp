@@ -135,6 +135,7 @@ void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* a
 	else if (aResourceId == R_MOBBLER_SHARE_SUBMENU_PANE)
 		{
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TRACK,			EMobblerCommandTrackShare);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_ALBUM,			EMobblerCommandAlbumShare);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_ARTIST,			EMobblerCommandArtistShare);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EVENT,			EMobblerCommandEventShare);
 		}

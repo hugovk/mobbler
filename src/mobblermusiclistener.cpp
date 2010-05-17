@@ -281,14 +281,14 @@ void CMobblerMusicAppListener::NowPlayingL()
 				
 				if (trackAlbum.Length() == 0)
 					{
-					iCurrentTrack = CMobblerTrack::NewL(*artist, *title, KNullDesC8, /*KNullDesC8,*/ KNullDesC8, KNullDesC8, KNullDesC8, trackLength, KNullDesC8, EFalse);
+					iCurrentTrack = CMobblerTrack::NewL(*artist, *title, KNullDesC8, /*KNullDesC8,*/ KNullDesC8, KNullDesC8, KNullDesC8, trackLength, KNullDesC8, EFalse, ETrue);
 					iCurrentTrack->FindLocalTrackL();
 					}
 				else
 					{
 					HBufC8* album(CnvUtfConverter::ConvertFromUnicodeToUtf8L(trackAlbum));
 					CleanupStack::PushL(album);
-					iCurrentTrack = CMobblerTrack::NewL(*artist, *title, *album, /*KNullDesC8,*/ KNullDesC8, KNullDesC8, KNullDesC8, trackLength, KNullDesC8, EFalse);
+					iCurrentTrack = CMobblerTrack::NewL(*artist, *title, *album, /*KNullDesC8,*/ KNullDesC8, KNullDesC8, KNullDesC8, trackLength, KNullDesC8, EFalse, ETrue);
 					iCurrentTrack->FindLocalTrackL();
 					CleanupStack::PopAndDestroy(album);
 					}
