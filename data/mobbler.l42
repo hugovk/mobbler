@@ -3,22 +3,25 @@ mobbler.l42 - Bulgarian
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
+Copyright (C) 200?  Юлиян Илев
+Copyright (C) 2010  Andreya Kostov
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 rls_string STR_mobbler_mobbler "Mobbler"
@@ -69,7 +72,7 @@ rls_string STR_mobbler_history "Последно скроблирано"
 rls_string STR_mobbler_status "Статус"
 rls_string STR_mobbler_data "Данни"
 rls_string STR_mobbler_radio_start "Започни нова станиця"
-rls_string STR_mobbler_resume_radio "Възобнови последната станиця" // TOO LONG -- TEXT TRUNCATED
+rls_string STR_mobbler_resume_radio "Възобнови станиця"
 rls_string STR_mobbler_radio_artist "Изпълнител"
 rls_string STR_mobbler_radio_enter_artist "Изпълнител:"
 rls_string STR_mobbler_radio_tag "Таг"
@@ -97,7 +100,7 @@ rls_string STR_mobbler_idle "Бездеен"
 rls_string STR_mobbler_title "Име"
 rls_string STR_mobbler_album "Албум"
 rls_string STR_mobbler_artist "Изпълнител"
-rls_string STR_mobbler_check_for_updates "Проверка за обновления" // TOO LONG -- TEXT TRUNCATED
+rls_string STR_mobbler_check_for_updates "Проверка за обновяване" // TOO LONG -- TEXT TRUNCATED
 rls_string STR_mobbler_update "Налична е нова версия на Mobbler. Сваляне и инсталиране сега?"
 rls_string STR_mobbler_downloading "Сваляне"
 rls_string STR_mobbler_no_update "Имате последната версия на Mobbler"
@@ -111,7 +114,7 @@ rls_string STR_mobbler_state_connecting "Свързване"
 rls_string STR_mobbler_state_handshaking "Ръкостискане"
 rls_string STR_mobbler_state_selecting_station "Избиране на станция"
 rls_string STR_mobbler_state_fetching_playlist "Извличане на плейлист" // TOO LONG -- TEXT TRUNCATED
-rls_string STR_mobbler_state_checking_for_updates "Проверява се за обновления"
+rls_string STR_mobbler_state_checking_for_updates "Проверява се за нова версия на програмата""
 rls_string STR_mobbler_softkey_hide "Скриване"
 rls_string STR_mobbler_backlight "Подсветка"
 rls_string STR_mobbler_backlight_on_when_active "Включена в активен режим"
@@ -127,7 +130,7 @@ rls_string STR_mobbler_seconds "%U секунди"
 rls_string STR_mobbler_equalizer "Еквалайзер"
 rls_string STR_mobbler_equalizer_profile_default "По подразбиране"
 rls_string STR_mobbler_tools_submenu "Инструменти"
-rls_string STR_mobbler_export_queue_to_log "Изнеси записаните песни в списък" // TOO LONG -- TEXT TRUNCATED
+rls_string STR_mobbler_export_queue_to_log "Изнеси записани в списък" // TOO LONG -- TEXT TRUNCATED
 rls_string STR_mobbler_confirm_replace_log ".scrobbler.log вече съществува. Заместване на файла?"
 rls_string STR_mobbler_note_queue_exported "Записаните песни изнесени в C:\Data\Mobbler\.scrobbler.log"
 rls_string STR_mobbler_note_queue_not_exported "Възникна проблем при изнасянето на записаните песни"
@@ -161,7 +164,7 @@ rls_string STR_mobbler_playlists "Плейлисти"
 rls_string STR_mobbler_top_tags "Топ тагове"
 rls_string STR_mobbler_open "Отваряне"
 rls_string STR_mobbler_track "Песен"
-rls_string STR_mobbler_recent_tracks "Последно слушани песни" // TOO LONG -- TEXT TRUNCATED
+rls_string STR_mobbler_recent_tracks "Посл. слушани песни" // TOO LONG -- TEXT TRUNCATED
 rls_string STR_mobbler_shoutbox "Коментари"
 rls_string STR_mobbler_shout "Остави коментар"
 rls_string STR_mobbler_shout_at "На %S"
@@ -172,7 +175,7 @@ rls_string STR_mobbler_loved_tracks_format "%Любими песни на %S"
 rls_string STR_mobbler_playlist_format "%Плейлисти на %S"
 rls_string STR_mobbler_artist_format "Радио %S"
 rls_string STR_mobbler_tag_format "Радио %S"
-rls_string STR_mobbler_recommended_artists "Препоръч. изпълнители" // TOO LONG -- TEXT TRUNCATED
+rls_string STR_mobbler_recommended_artists "Препоръч. изпълнит." // TOO LONG -- TEXT TRUNCATED
 rls_string STR_mobbler_recommended_events "Препоръч. събития"
 rls_string STR_mobbler_similar_artists_format "Подобни на %S изпълнители"
 rls_string STR_mobbler_playlist_add_track "Добавяне в плейлист"
@@ -225,10 +228,10 @@ rls_string STR_mobbler_alarm_prompt "Време на аларма"
 rls_string STR_mobbler_alarm_iap "Точка за достъп"
 rls_string STR_mobbler_alarm_expired "Аларма!"
 rls_string STR_mobbler_alarm_removed "Аларма премахната"
-rls_string STR_mobbler_alarm_hour_minute "Време оставащо до алармата: %U час и %U минута"
-rls_string STR_mobbler_alarm_hour_minutes "Време оставащо до алармата: %U час и %U минути"
-rls_string STR_mobbler_alarm_hours_minute "Време оставащо до алармата: %U часа и %U минута"
-rls_string STR_mobbler_alarm_hours_minutes "Време оставащо до алармата: %U часа и %U минути"
+rls_string STR_mobbler_alarm_hour_minute "Време, оставащо до алармата: %U час и %U минута"
+rls_string STR_mobbler_alarm_hour_minutes "Време, оставащо до алармата: %U час и %U минути"
+rls_string STR_mobbler_alarm_hours_minute "Време, оставащо до алармата: %U часа и %U минута"
+rls_string STR_mobbler_alarm_hours_minutes "Време, оставащо до алармата: %U часа и %U минути"
 rls_string STR_mobbler_alarm_disclaimer "Алармите се задават на собствена отговорност. Създателите на Mobbler не носят отговорност за закъснения."
 rls_string STR_mobbler_search "Търсене"
 rls_string STR_mobbler_search_tracks "Песни"
@@ -287,22 +290,22 @@ rls_string STR_mobbler_similar "Подобни"
 rls_string STR_mobbler_top "Топ"
 rls_string STR_mobbler_lyrics "Текстове"
 rls_string STR_mobbler_lyrics_not_found "Текст не е намерен"
-rls_string STR_mobbler_scrobble_track_option "Scrobble track"
-rls_string STR_mobbler_scrobble_album_option "Scrobble album"
-rls_string STR_mobbler_local_events "Local events"
-rls_string STR_mobbler_old_scrobbles_warning "You have queued scrobbles close to two weeks old which will be ignored by Last.fm after that. Scrobble soon!"
-rls_string STR_mobbler_twitter_change "Change Twitter user"
-rls_string STR_mobbler_twitter_remove "Remove Twitter user"
-rls_string STR_mobbler_twitter_follow "Would you like to follow @Mobbler on Twitter?"
-rls_string STR_mobbler_share_lastfm "Last.fm friends"
+rls_string STR_mobbler_scrobble_track_option "Скроблирай песен"
+rls_string STR_mobbler_scrobble_album_option "Скроблирай албум"
+rls_string STR_mobbler_local_events "Местни събития"
+rls_string STR_mobbler_old_scrobbles_warning "Имате запаметени песни отпреди близо две седмици, които ще бъдат игнорирани от Last.fm след това. Скроблирайте скоро!"
+rls_string STR_mobbler_twitter_change "Смени Twitter потребител"
+rls_string STR_mobbler_twitter_remove "Премахни Twitter потребител"
+rls_string STR_mobbler_twitter_follow "Искате ли да последвате @Mobbler в Twitter?"
+rls_string STR_mobbler_share_lastfm "Last.fm приятели"
 rls_string STR_mobbler_share_twitter "Twitter"
-rls_string STR_mobbler_share_contacts "Contacts"
-rls_string STR_mobbler_twitter_now_playing_track_format "Listening to \"%S\" by %S"
-rls_string STR_mobbler_twitter_share_track_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_love_track_format "Loved \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_album_format "Listening to %S by %S"
-rls_string STR_mobbler_twitter_share_album_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_artist_format "Listening to %S"
-rls_string STR_mobbler_twitter_share_artist_format "Sharing %S"
+rls_string STR_mobbler_share_contacts "Контакти"
+rls_string STR_mobbler_twitter_now_playing_track_format "Слуша \"%S\" от %S"
+rls_string STR_mobbler_twitter_share_track_format "Споделя \"%S\" от %S"
+rls_string STR_mobbler_twitter_love_track_format "Добави в любими \"%S\" от %S"
+rls_string STR_mobbler_twitter_now_playing_album_format "Слуша %S от %S"
+rls_string STR_mobbler_twitter_share_album_format "Споделя \"%S\" от %S"
+rls_string STR_mobbler_twitter_now_playing_artist_format "Слуша %S"
+rls_string STR_mobbler_twitter_share_artist_format "Споделя %S"
 rls_string STR_mobbler_download_album_art_always_and_keep "Винаги и запази"
 rls_string STR_mobbler_download_album_art_always_and_ditch "Винаги и изтрий"
