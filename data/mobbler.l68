@@ -1,24 +1,26 @@
 /*
-mobbler.l68 - Lithuanian
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey
+Copyright (C) 200?, 2010  Dominykas T.
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+mobbler.l68 - Lithuanian
+
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 rls_string STR_mobbler_mobbler "Mobbler"
@@ -287,22 +289,22 @@ rls_string STR_mobbler_similar "Panašūs"
 rls_string STR_mobbler_top "Topas"
 rls_string STR_mobbler_lyrics "Žodžiai"
 rls_string STR_mobbler_lyrics_not_found "Žodžiai nerasti"
-rls_string STR_mobbler_scrobble_track_option "Scrobble track"
-rls_string STR_mobbler_scrobble_album_option "Scrobble album"
-rls_string STR_mobbler_local_events "Local events"
-rls_string STR_mobbler_old_scrobbles_warning "You have queued scrobbles close to two weeks old which will be ignored by Last.fm after that. Scrobble soon!"
-rls_string STR_mobbler_twitter_change "Change Twitter user"
-rls_string STR_mobbler_twitter_remove "Remove Twitter user"
-rls_string STR_mobbler_twitter_follow "Would you like to follow @Mobbler on Twitter?"
-rls_string STR_mobbler_share_lastfm "Last.fm friends"
+rls_string STR_mobbler_scrobble_track_option "Scrobblinti dainą"
+rls_string STR_mobbler_scrobble_album_option "Scrobblinti albumą"
+rls_string STR_mobbler_local_events "Vietiniai įvykiai"
+rls_string STR_mobbler_old_scrobbles_warning "Jūsų klausimosi eilėje yra beveik 2 savaičių senumo dainų, siūlo scrobble'inti dainas nes Last.fm jų greit nebepriims!"
+rls_string STR_mobbler_twitter_change "Pakeisti Twitter vartotoją"
+rls_string STR_mobbler_twitter_remove "Pašalinti Twitter vartotoją"
+rls_string STR_mobbler_twitter_follow "Ar norėtumėgte sekti @Mobbler Twitter'yje?"
+rls_string STR_mobbler_share_lastfm "Last.fm draugai"
 rls_string STR_mobbler_share_twitter "Twitter"
-rls_string STR_mobbler_share_contacts "Contacts"
-rls_string STR_mobbler_twitter_now_playing_track_format "Listening to \"%S\" by %S"
-rls_string STR_mobbler_twitter_share_track_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_love_track_format "Loved \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_album_format "Listening to %S by %S"
-rls_string STR_mobbler_twitter_share_album_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_artist_format "Listening to %S"
-rls_string STR_mobbler_twitter_share_artist_format "Sharing %S"
-rls_string STR_mobbler_download_album_art_always_and_keep "Always and keep"
-rls_string STR_mobbler_download_album_art_always_and_ditch "Always and ditch"
+rls_string STR_mobbler_share_contacts "Kontaktai"
+rls_string STR_mobbler_twitter_now_playing_track_format "Klausosi \"%S\" - %S"
+rls_string STR_mobbler_twitter_share_track_format "Dalinasi \"%S\" by %S"
+rls_string STR_mobbler_twitter_love_track_format "Myli \"%S\" by %S"
+rls_string STR_mobbler_twitter_now_playing_album_format "Klausosi %S - %S"
+rls_string STR_mobbler_twitter_share_album_format "Dalinasi \"%S\" - %S"
+rls_string STR_mobbler_twitter_now_playing_artist_format "Klausosi %S"
+rls_string STR_mobbler_twitter_share_artist_format "Dalinasi %S"
+rls_string STR_mobbler_download_album_art_always_and_keep "Visada ir laikyti"
+rls_string STR_mobbler_download_album_art_always_and_ditch "Visada ir išmesti"

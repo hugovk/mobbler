@@ -75,6 +75,7 @@ _LIT(KTurkishUrl,			"http://www.lastfm.com.tr/");
 _LIT8(KFormat1, "%02x");
 _LIT8(KFormat2, "%%%2x");
 
+const TInt KNokia5630XpressMusicMachineUid(0x2000DA61);
 const TInt KNokia6710NavigatorMachineUid(0x20014DD1);
 const TInt KNokiaE52MachineUid(0x20014DCC);
 const TInt KNokiaE55MachineUid(0x20014DCF);
@@ -94,7 +95,8 @@ TBool MobblerUtility::EqualizerSupported()
 	TInt error(HAL::Get(HALData::EMachineUid, machineUid));
 	if (error == KErrNone)
 		{
-		iEqualizerSupported = !(machineUid == KNokia6710NavigatorMachineUid ||
+		iEqualizerSupported = !(machineUid == KNokia5630XpressMusicMachineUid ||
+								machineUid == KNokia6710NavigatorMachineUid || 
 								machineUid == KNokiaE52MachineUid || 
 								machineUid == KNokiaE55MachineUid || 
 								machineUid == KNokiaE72MachineUid);
