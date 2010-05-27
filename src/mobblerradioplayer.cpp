@@ -23,6 +23,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <aknnotewrappers.h>
+#include <mdaaudiooutputstream.h>
 
 #include "mobbler.rsg.h"
 #include "mobbler_strings.rsg.h"
@@ -41,8 +42,6 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblerutility.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
-
-const TInt KDefaultMaxVolume(10);
 
 // The radio should timeout and delete its playlists after 5 minutes
 // so that we do not get tracks that can't be downloaded when restarting
@@ -71,7 +70,6 @@ CMobblerRadioPlayer::CMobblerRadioPlayer(CMobblerLastFmConnection& aLastFmConnec
 	iLastFmConnection(aLastFmConnection), 
 	iPreBufferSize(aPreBufferSize), 
 	iVolume(aVolume), 
-	iMaxVolume(KDefaultMaxVolume), 
 	iEqualizerIndex(aEqualizerIndex),
 	iBitRate(aBitRate),
 	iAbnormalTerminations(0)
@@ -88,6 +86,11 @@ void CMobblerRadioPlayer::ConstructL()
 	User::LeaveIfError(iTimer.CreateLocal());
 	iPlaylist = CMobblerRadioPlaylist::NewL();
 	iLastFmConnection.AddStateChangeObserverL(this);
+	
+	MMdaAudioOutputStreamCallback* dummyCallback(NULL);
+	CMdaAudioOutputStream* dummyOutputStream(CMdaAudioOutputStream::NewL(*dummyCallback));
+	iMaxVolume = dummyOutputStream->MaxVolume();
+	delete dummyOutputStream;
 	}
 
 CMobblerRadioPlayer::~CMobblerRadioPlayer()
