@@ -1343,9 +1343,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			
 			if (error == KErrNone)
 				{
-				if ((version.iMajor > KVersion.iMajor)
-					|| 
-					(version.iMajor == KVersion.iMajor && 
+				if ((version.iMajor == KVersion.iMajor && 
 					 version.iMinor > KVersion.iMinor)
 					|| 
 					(version.iMajor == KVersion.iMajor && 
