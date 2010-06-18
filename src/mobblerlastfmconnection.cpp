@@ -1,24 +1,24 @@
 /*
-mobblerlastfmconnection.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <aknnotewrappers.h> 
@@ -512,7 +512,7 @@ void CMobblerLastFmConnection::AuthenticateL()
 	ChangeStateL(EHandshaking);
 	ScrobbleHandshakeL();
 	WebServicesHandshakeL();
-#ifdef BETA_BUILD
+#ifdef FULL_BETA_BUILD
 	BetaHandshakeL();
 #endif
 	}
@@ -590,7 +590,7 @@ void CMobblerLastFmConnection::WebServicesHandshakeL()
 	CleanupStack::PopAndDestroy(5, passwordHash);
 	}
 
-#ifdef BETA_BUILD
+#ifdef FULL_BETA_BUILD
 void CMobblerLastFmConnection::BetaHandshakeL()
 	{
     TRACER_AUTO;
@@ -838,7 +838,7 @@ void CMobblerLastFmConnection::FetchLyricsL(const TDesC8& aArtist,
 											MMobblerFlatDataObserver& aObserver)
 	{
     TRACER_AUTO;
-	LOG(_L8("CMobblerLastFmConnection::FetchLyricsL"));
+	LOGTEXT("CMobblerLastFmConnection::FetchLyricsL");
 	LOG2(aArtist, aTitle);
 	
 	// 1. replace special characters with %
@@ -1746,13 +1746,13 @@ void CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 	
 	if (aCommand == ETweet || aCommand == EFollowMobbler)
 		{
-		// create the oAuth header
+		// create the OAuth header
 		HBufC8* oauth(HBufC8::NewLC(1024));
 		oauth->Des().Copy(_L8("OAuth"));
 		
 		RStringF oauthHeader(iHTTPSession.StringPool().OpenFStringL(*oauth));
 		
-		// Add the oauth
+		// Add the OAuth
 		RHTTPHeaders headers(transaction->Transaction().Request().GetHeaderCollection());
 		headers.SetFieldL(iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()), oauthHeader);
 		
@@ -1771,7 +1771,7 @@ void CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 		
 		RStringF oauthHeaderValue(iHTTPSession.StringPool().OpenFStringL(*oauth));
 		
-		// Add the oauth header value
+		// Add the OAuth header value
 		headers.SetFieldL(iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()), oauthHeaderValue);
 		
 		CleanupStack::PopAndDestroy(oauth);
@@ -2102,7 +2102,7 @@ void CMobblerLastFmConnection::HandleHandshakeErrorL(CMobblerLastFmError* aError
 		// The handshake was ok
 		
 		if (iScrobbleSessionId && iWebServicesSessionKey
-#ifdef BETA_BUILD
+#ifdef FULL_BETA_BUILD
 				&& iIsBetaTester
 #endif
 				)
@@ -2216,9 +2216,9 @@ void CMobblerLastFmConnection::CloseTransactionsL(TBool aCloseTransactionArray)
 	iSubmitTransaction = NULL;
 	delete iWebServicesHandshakeTransaction;
 	iWebServicesHandshakeTransaction = NULL;
-#ifdef BETA_BUILD
+#ifdef FULL_BETA_BUILD
 	delete iBetaTestersTransaction;
-	iBetaTestersTransaction = NULL;	
+	iBetaTestersTransaction = NULL;
 #endif
 	
 	iRadioAudioTransaction.Close();
@@ -2271,7 +2271,7 @@ void CMobblerLastFmConnection::TransactionResponseL(CMobblerTransaction* aTransa
 		HandleHandshakeErrorL(error);
 		CleanupStack::PopAndDestroy(error);
 		}
-#ifdef BETA_BUILD
+#ifdef FULL_BETA_BUILD
 	else if (aTransaction == iBetaTestersTransaction)
 		{
 		CMobblerLastFmError* error(CMobblerParser::ParseBetaTestersHandshakeL(aResponse, iUsername->String8(), iIsBetaTester));
@@ -2461,7 +2461,7 @@ void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransact
 		if (aTransaction ==	iHandshakeTransaction
 				|| aTransaction == iWebServicesHandshakeTransaction
 				|| aTransaction == iOldRadioHandshakeTransaction
-#ifdef BETA_BUILD
+#ifdef FULL_BETA_BUILD
 				|| aTransaction == iBetaTestersTransaction
 #endif
 				)
