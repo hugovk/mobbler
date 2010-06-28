@@ -114,7 +114,7 @@ rls_string STR_mobbler_state_connecting "Свързване"
 rls_string STR_mobbler_state_handshaking "Ръкостискане"
 rls_string STR_mobbler_state_selecting_station "Избиране на станция"
 rls_string STR_mobbler_state_fetching_playlist "Извличане на плейлист" // TOO LONG -- TEXT TRUNCATED
-rls_string STR_mobbler_state_checking_for_updates "Проверява се за нова версия на програмата""
+rls_string STR_mobbler_state_checking_for_updates "Проверява се за нова версия на програмата"
 rls_string STR_mobbler_softkey_hide "Скриване"
 rls_string STR_mobbler_backlight "Подсветка"
 rls_string STR_mobbler_backlight_on_when_active "Включена в активен режим"

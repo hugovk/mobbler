@@ -2130,9 +2130,11 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 			case EMobblerCommandRadioArtist:			// intentional fall-through
 			case EMobblerCommandRadioTag:				// intentional fall-through
 			case EMobblerCommandRadioUser:				// intentional fall-through
+				{
 				CMobblerString* option(CMobblerString::NewLC(iSettingView->Settings().AlarmOption()));
 				RadioStartL(station, option);
 				CleanupStack::PopAndDestroy(option);
+				}
 				break;
 			case EMobblerCommandRadioRecommendations:	// intentional fall-through
 			case EMobblerCommandRadioPersonal:			// intentional fall-through

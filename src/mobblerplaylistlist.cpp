@@ -42,7 +42,6 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblertrack.h"
 #include "mobblerutility.h"
 
-_LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_playlist.png");
 _LIT8(KPlaylist, "playlist");
 
 CMobblerPlaylistList::CMobblerPlaylistList(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)

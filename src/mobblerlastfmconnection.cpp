@@ -1596,8 +1596,8 @@ void CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 	{
 	TBuf<KMobblerMaxUsernameLength> usernameInput;
 	TBuf<KMobblerMaxPasswordLength> passwordInput;
-	CMobblerString* username;
-	CMobblerString* password;
+	CMobblerString* username(NULL);
+	CMobblerString* password(NULL);
 	if (aCommand == EAccessToken)
 		{
 		// Query username and password

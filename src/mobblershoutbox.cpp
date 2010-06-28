@@ -45,7 +45,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblertracer.h"
 #include "mobblerutility.h"
 
-_LIT(KDefaultImage, "\\resource\\apps\\mobbler\\default_user.png");
 _LIT8(KGetShouts, "getshouts");
 
 CMobblerShoutbox::CMobblerShoutbox(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl)

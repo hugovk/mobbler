@@ -67,7 +67,6 @@ _LIT8(KDuration, "duration");
 _LIT8(KExtension, "extension");
 _LIT8(KKey, "key");
 _LIT8(KIdentifier, "identifier");
-_LIT8(KLink, "link");
 _LIT8(KLocation, "location");
 _LIT8(KLoved, "loved");
 _LIT8(KMatch, "match");

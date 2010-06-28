@@ -72,8 +72,7 @@ _LIT(KSwedishUrl,			"http://www.lastfm.se/");
 _LIT(KTurkishUrl,			"http://www.lastfm.com.tr/");
 
 
-_LIT8(KFormat1, "%02x");
-_LIT8(KFormat2, "%%%2x");
+_LIT8(KFormat, "%02x");
 
 const TInt KNokia5630XpressMusicMachineUid(0x2000DA61);
 const TInt KNokia6710NavigatorMachineUid(0x20014DD1);
@@ -124,7 +123,7 @@ HBufC8* MobblerUtility::MD5LC(const TDesC8& aSource)
 	
 	for (TInt i(0); i < hash.Length(); ++i)
 		{
-		hashResult->Des().AppendFormat(KFormat1, hash[i]);
+		hashResult->Des().AppendFormat(KFormat, hash[i]);
 		}
 	
 	CleanupStack::Pop(hashResult);
