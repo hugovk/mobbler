@@ -1,47 +1,50 @@
 ;
-; mobbler_MAJORBUILDVERSION_MINORBUILDVERSION_BUILDVERSION_LANGUAGENAME.pkg
-;
 ; Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+; Copyright (C) 2009, 2010  Hugo van Kemenade
 ; Copyright (C) 2009  Michael Coffey
 ; 
 ; http://code.google.com/p/mobbler
 ;
-; This program is free software; you can redistribute it and/or
+; This file is part of Mobbler.
+; 
+; Mobbler is free software; you can redistribute it and/or
 ; modify it under the terms of the GNU General Public License
 ; as published by the Free Software Foundation; either version 2
 ; of the License, or (at your option) any later version.
-;
-; This program is distributed in the hope that it will be useful,
+; 
+; Mobbler is distributed in the hope that it will be useful,
 ; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ; GNU General Public License for more details.
-;
+; 
 ; You should have received a copy of the GNU General Public License
-; along with this program; if not, write to the Free Software
-; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+; along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 ;
 
-;Languages
+; Languages
 &LANGUAGECODE
 
 ; Header
 ;#{"Mobbler LANGUAGENAME"}, (0xA0007648), MAJORBUILDVERSION, MINORBUILDVERSION, BUILDVERSION, TYPE=PARTIALUPGRADE
 #{"Mobbler language"}, (0xA000B6C3), MAJORBUILDVERSION, MINORBUILDVERSION, BUILDVERSION
 
-;Localised vendor names
+; Localised vendor names
 %{"Coffey"}
 
-;Unique vendor name
+; Unique vendor name
 :"Coffey"
 
-;Dependency on specific Mobbler version, MAJORBUILDVERSION.MINORBUILDVERSION.BUILDVERSION or newer must be already installed
+; Dependency on specific Mobbler version, MAJORBUILDVERSION.MINORBUILDVERSION.BUILDVERSION or newer must be already installed
 ;(0xA0007648), MAJORBUILDVERSION, MINORBUILDVERSION, BUILDVERSION, {"Mobbler"}
 
-;Supports Series 60 v3.0
+; Supports Series 60 v3.0
 [0x101F7961], 0, 0, 0, {"Series60ProductID"}
 
-;Supports S60 release v5.0
+; Supports S60 release v5.0
 [0x1028315F], 0, 0, 0, {"Series60ProductID"}
+
+; Supports Symbian^3
+[0x20022E6D], 0, 0, 0, {"Series60ProductID"}
 
 ; Must be on the C: drive
 {
