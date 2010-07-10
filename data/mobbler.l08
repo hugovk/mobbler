@@ -1,24 +1,31 @@
 /*
-mobbler.l08 - Norwegian
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  Ketil Wendelbo Aanensen
+Copyright (C) 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
+Copyright (C) 2010  Aleksander Blø
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+mobbler.l08 - Norwegian
+
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 rls_string STR_mobbler_mobbler "Mobbler"
@@ -258,51 +265,51 @@ rls_string STR_mobbler_attendance "Deltakelse"
 rls_string STR_mobbler_attendance_yes "Deltar"
 rls_string STR_mobbler_attendance_maybe "Deltar kanskje"
 rls_string STR_mobbler_attendance_no "Deltar ikke"
-rls_string STR_mobbler_set_as_wallpaper "Set as wallpaper"
-rls_string STR_mobbler_note_wallpaper_set "Wallpaper set"
-rls_string STR_mobbler_note_wallpaper_not_set "Wallpaper not set"
-rls_string STR_mobbler_automatically_set_wallpaper "Set wallpaper"
-rls_string STR_mobbler_set_wallpaper_automatically "Automatically"
-rls_string STR_mobbler_set_wallpaper_manually "Manually"
-rls_string STR_mobbler_language_patches "Language patches"
-rls_string STR_mobbler_sleep_timer_time_minutes "Sleep after (minutes)"
-rls_string STR_mobbler_close_query "Something is trying to close Mobbler. Are you sure you want to stop scrobbling?"
-rls_string STR_mobbler_qr_code "QR Code"
-rls_string STR_mobbler_map "Maps"
-rls_string STR_mobbler_visit_map "Event location"
+rls_string STR_mobbler_set_as_wallpaper "Sett som bakgrunnsbilde"
+rls_string STR_mobbler_note_wallpaper_set "Bakgrunnsbilde endret"
+rls_string STR_mobbler_note_wallpaper_not_set "Bakgrunnsbilde ikke endret"
+rls_string STR_mobbler_automatically_set_wallpaper "Bruk bakgrunnsbilde automatisk"
+rls_string STR_mobbler_set_wallpaper_automatically "Automatisk"
+rls_string STR_mobbler_set_wallpaper_manually "Manuellt"
+rls_string STR_mobbler_language_patches "Språkoppdateringer"
+rls_string STR_mobbler_sleep_timer_time_minutes "Slå av etter (minutter)"
+rls_string STR_mobbler_close_query "Et annet program prøver å avslutte Mobbler, Er du sikker på at du vil slutte å Scrobble?"
+rls_string STR_mobbler_qr_code "QR kode"
+rls_string STR_mobbler_map "Kart"
+rls_string STR_mobbler_visit_map "Arrangementsted"
 rls_string STR_mobbler_foursquare "Foursquare tips"
-rls_string STR_mobbler_scrobble_log "Scrobble log"
-rls_string STR_mobbler_scrobble_log_remove "Remove from log"
-rls_string STR_mobbler_tag "Tag"
-rls_string STR_mobbler_track_add_tag "Tag track"
-rls_string STR_mobbler_track_add_tag_prompt "Tag track:"
-rls_string STR_mobbler_track_remove_tag "Remove track tag"
-rls_string STR_mobbler_album_add_tag "Tag album"
-rls_string STR_mobbler_album_add_tag_prompt "Tag album:"
-rls_string STR_mobbler_album_remove_tag "Remove album tag"
-rls_string STR_mobbler_artist_add_tag "Tag artist"
-rls_string STR_mobbler_artist_add_tag_prompt "Tag artist:"
-rls_string STR_mobbler_artist_remove_tag "Remove artist tag"
-rls_string STR_mobbler_similar "Similar"
-rls_string STR_mobbler_top "Top"
-rls_string STR_mobbler_lyrics "Lyrics"
-rls_string STR_mobbler_lyrics_not_found "Lyrics not found"
-rls_string STR_mobbler_scrobble_track_option "Scrobble track"
+rls_string STR_mobbler_scrobble_log "Scrobble logg"
+rls_string STR_mobbler_scrobble_log_remove "Fjern fra logg"
+rls_string STR_mobbler_tag "Tagg"
+rls_string STR_mobbler_track_add_tag "Tagg spor"
+rls_string STR_mobbler_track_add_tag_prompt "Tagg spor:"
+rls_string STR_mobbler_track_remove_tag "Fjern sportagg"
+rls_string STR_mobbler_album_add_tag "Tagg album"
+rls_string STR_mobbler_album_add_tag_prompt "Tagg album:"
+rls_string STR_mobbler_album_remove_tag "fjern albumtagg"
+rls_string STR_mobbler_artist_add_tag "Tagg artist"
+rls_string STR_mobbler_artist_add_tag_prompt "Tagg artist:"
+rls_string STR_mobbler_artist_remove_tag "Fjern artisttagg"
+rls_string STR_mobbler_similar "Lignende"
+rls_string STR_mobbler_top "Topp"
+rls_string STR_mobbler_lyrics "Sangtekst"
+rls_string STR_mobbler_lyrics_not_found "Sangtekst ikke funnet"
+rls_string STR_mobbler_scrobble_track_option "Scrobble spor"
 rls_string STR_mobbler_scrobble_album_option "Scrobble album"
-rls_string STR_mobbler_local_events "Local events"
-rls_string STR_mobbler_old_scrobbles_warning "You have queued scrobbles close to two weeks old which will be ignored by Last.fm after that. Scrobble soon!"
-rls_string STR_mobbler_twitter_change "Change Twitter user"
-rls_string STR_mobbler_twitter_remove "Remove Twitter user"
-rls_string STR_mobbler_twitter_follow "Would you like to follow @Mobbler on Twitter?"
-rls_string STR_mobbler_share_lastfm "Last.fm friends"
+rls_string STR_mobbler_local_events "Lokale arrangementer"
+rls_string STR_mobbler_old_scrobbles_warning "Du har gamle scrobbler i kø, scrobbler som er to uker gamle vil bli ignorert av Last.fm, pass på å scrobble snart!"
+rls_string STR_mobbler_twitter_change "Bytt Twitter bruker"
+rls_string STR_mobbler_twitter_remove "Fjern Twitter bruker"
+rls_string STR_mobbler_twitter_follow "Vil du følge @Mobbler på Twitter?"
+rls_string STR_mobbler_share_lastfm "Last.fm venner"
 rls_string STR_mobbler_share_twitter "Twitter"
-rls_string STR_mobbler_share_contacts "Contacts"
-rls_string STR_mobbler_twitter_now_playing_track_format "Listening to \"%S\" by %S"
-rls_string STR_mobbler_twitter_share_track_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_love_track_format "Loved \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_album_format "Listening to %S by %S"
-rls_string STR_mobbler_twitter_share_album_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_artist_format "Listening to %S"
-rls_string STR_mobbler_twitter_share_artist_format "Sharing %S"
-rls_string STR_mobbler_download_album_art_always_and_keep "Always and keep"
-rls_string STR_mobbler_download_album_art_always_and_ditch "Always and ditch"
+rls_string STR_mobbler_share_contacts "Kontakter"
+rls_string STR_mobbler_twitter_now_playing_track_format "Lytter til \"%S\" by %S"
+rls_string STR_mobbler_twitter_share_track_format "Deler \"%S\" av %S"
+rls_string STR_mobbler_twitter_love_track_format "Elsker \"%S\" av %S"
+rls_string STR_mobbler_twitter_now_playing_album_format "Lytter til %S av %S"
+rls_string STR_mobbler_twitter_share_album_format "Deler \"%S\" av %S"
+rls_string STR_mobbler_twitter_now_playing_artist_format "Lytter til %S"
+rls_string STR_mobbler_twitter_share_artist_format "Deler %S"
+rls_string STR_mobbler_download_album_art_always_and_keep "Alltid og behold"
+rls_string STR_mobbler_download_album_art_always_and_ditch "Alltid og forkast"
