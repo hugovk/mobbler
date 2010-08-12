@@ -1,24 +1,31 @@
 /*
-mobbler.l02 - French
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010  Paul Grenet
+Copyright (C) 2009  Steve Punter
+Copyright (C) 2009  Guy Déridet
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+mobbler.l02 - French
+
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 rls_string STR_mobbler_mobbler "Mobbler"
@@ -162,8 +169,8 @@ rls_string STR_mobbler_top_tags "Top tags"
 rls_string STR_mobbler_open "Ouvert"
 rls_string STR_mobbler_track "Morceau"
 rls_string STR_mobbler_recent_tracks "Morceaux récents"
-rls_string STR_mobbler_shoutbox "Gueuloir"
-rls_string STR_mobbler_shout "Gueulez"
+rls_string STR_mobbler_shoutbox "Shoutbox"
+rls_string STR_mobbler_shout "Envoyer"
 rls_string STR_mobbler_shout_at "Gueulez sur %S"
 rls_string STR_mobbler_personal_format "%S's librairie"
 rls_string STR_mobbler_recommendations_format "%S's recommandations"
@@ -174,7 +181,7 @@ rls_string STR_mobbler_artist_format "%S radio"
 rls_string STR_mobbler_tag_format "%S radio"
 rls_string STR_mobbler_recommended_artists "Artistes recommandés"
 rls_string STR_mobbler_recommended_events "Concerts recommandés"
-rls_string STR_mobbler_similar_artists_format "%S's artistes similaires"
+rls_string STR_mobbler_similar_artists_format "Artistes similaires à %S"
 rls_string STR_mobbler_playlist_add_track "Ajouter à la playlist"
 rls_string STR_mobbler_format_play "%S jouer"
 rls_string STR_mobbler_format_plays "%S jouer"
@@ -187,25 +194,25 @@ rls_string STR_mobbler_format_time_ago_hour "Il y a %d heure"
 rls_string STR_mobbler_format_time_ago_hours "Il y a %d heures"
 rls_string STR_mobbler_format_friends "%S's amis"
 rls_string STR_mobbler_format_top_artists "%S's top artists"
-rls_string STR_mobbler_format_recommended_artists "%S's artistes recommandés"
-rls_string STR_mobbler_format_recommended_events "%S's concerts recommandés"
-rls_string STR_mobbler_format_similar_artists "%S's artistes similaires"
-rls_string STR_mobbler_format_top_albums "%S's top albums"
-rls_string STR_mobbler_format_top_tracks "%S's top morceaux"
-rls_string STR_mobbler_format_recent_tracks "%S's morceaux récents"
-rls_string STR_mobbler_format_similar_tracks "%S's morceaux similaires"
-rls_string STR_mobbler_format_playlists "%S's playlists"
-rls_string STR_mobbler_format_events "%S's concerts"
-rls_string STR_mobbler_format_top_tags "%S's top tags"
-rls_string STR_mobbler_format_shoutbox "%S's gueuloir"
+rls_string STR_mobbler_format_recommended_artists "Artistes recommandés de %S"
+rls_string STR_mobbler_format_recommended_events "Concerts recommandés de %S"
+rls_string STR_mobbler_format_similar_artists "Artistes similaires à %S"
+rls_string STR_mobbler_format_top_albums "Top albums de %S"
+rls_string STR_mobbler_format_top_tracks "Top morceaux de %S"
+rls_string STR_mobbler_format_recent_tracks "Morceaux récents de %S"
+rls_string STR_mobbler_format_similar_tracks "Morceaux similaires de %S"
+rls_string STR_mobbler_format_playlists "Playlists de %S"
+rls_string STR_mobbler_format_events "Concerts de %S"
+rls_string STR_mobbler_format_top_tags "Top tags de %S"
+rls_string STR_mobbler_format_shoutbox "Shoutbox de %S"
 rls_string STR_mobbler_loading "Chargement"
 rls_string STR_mobbler_failed "Echec"
-rls_string STR_mobbler_artist_shoutbox "Gueuloir artiste"
+rls_string STR_mobbler_artist_shoutbox "Shoutbox artiste"
 rls_string STR_mobbler_share_track "Partager morceaux"
 rls_string STR_mobbler_share_artist "Partager artiste"
 rls_string STR_mobbler_radio "Lancer radio"
 rls_string STR_mobbler_accelerometer_gestures "Mouvements accéléromètre"
-rls_string STR_mobbler_accelerometer_gestures_on "En marche"
+rls_string STR_mobbler_accelerometer_gestures_on "Activés"
 rls_string STR_mobbler_accelerometer_gestures_off "Arrêt"
 rls_string STR_mobbler_playlist_create "Créer playlist"
 rls_string STR_mobbler_playlist_title "Titre playlist:"
@@ -213,12 +220,12 @@ rls_string STR_mobbler_playlist_description "Description playlist:"
 rls_string STR_mobbler_format_tracks "%S morceaux"
 rls_string STR_mobbler_love_track_option "J'aime ce morceau"
 rls_string STR_mobbler_visit_lastfm "Visitez Last.fm:"
-rls_string STR_mobbler_sleep_timer_time "Mettre ne sommeil après"
+rls_string STR_mobbler_sleep_timer_time "Mettre en sommeil après"
 rls_string STR_mobbler_sleep_timer_minute "%U minute"
 rls_string STR_mobbler_sleep_timer_minutes "%U minutes"
-rls_string STR_mobbler_sleep_timer_setting_action "Puis"
-rls_string STR_mobbler_sleep_timer_immediacy "Et faîtes le"
-rls_string STR_mobbler_sleep_timer_immediate "Immédiatement"
+rls_string STR_mobbler_sleep_timer_setting_action "Action:"
+rls_string STR_mobbler_sleep_timer_immediacy "A partir de"
+rls_string STR_mobbler_sleep_timer_immediate "Maintenant"
 rls_string STR_mobbler_sleep_timer_end_of_track "A la fin du morceau"
 rls_string STR_mobbler_alarm "Alarme"
 rls_string STR_mobbler_alarm_prompt "Heure de l'alarme"
@@ -274,35 +281,35 @@ rls_string STR_mobbler_foursquare "Foursquare tips"
 rls_string STR_mobbler_scrobble_log "Titres en attente"
 rls_string STR_mobbler_scrobble_log_remove "Retirer de la liste"
 rls_string STR_mobbler_tag "Tag"
-rls_string STR_mobbler_track_add_tag "Tag track"
-rls_string STR_mobbler_track_add_tag_prompt "Tag track:"
-rls_string STR_mobbler_track_remove_tag "Remove track tag"
-rls_string STR_mobbler_album_add_tag "Tag album"
-rls_string STR_mobbler_album_add_tag_prompt "Tag album:"
-rls_string STR_mobbler_album_remove_tag "Remove album tag"
-rls_string STR_mobbler_artist_add_tag "Tag artist"
-rls_string STR_mobbler_artist_add_tag_prompt "Tag artist:"
-rls_string STR_mobbler_artist_remove_tag "Remove artist tag"
-rls_string STR_mobbler_similar "Similar"
+rls_string STR_mobbler_track_add_tag "Tagger le morceau"
+rls_string STR_mobbler_track_add_tag_prompt "Tagger le morceau:"
+rls_string STR_mobbler_track_remove_tag "Retirer le tag du morceau"
+rls_string STR_mobbler_album_add_tag "Tagger l'album"
+rls_string STR_mobbler_album_add_tag_prompt "Tager l'album:"
+rls_string STR_mobbler_album_remove_tag "Retirer le tag de l'album"
+rls_string STR_mobbler_artist_add_tag "Tagger l'artiste"
+rls_string STR_mobbler_artist_add_tag_prompt "Tagger l'artiste:"
+rls_string STR_mobbler_artist_remove_tag "Retirer le tag artiste"
+rls_string STR_mobbler_similar "Similaire"
 rls_string STR_mobbler_top "Top"
-rls_string STR_mobbler_lyrics "Lyrics"
-rls_string STR_mobbler_lyrics_not_found "Lyrics not found"
-rls_string STR_mobbler_scrobble_track_option "Scrobble track"
-rls_string STR_mobbler_scrobble_album_option "Scrobble album"
+rls_string STR_mobbler_lyrics "Paroles"
+rls_string STR_mobbler_lyrics_not_found "Paroles non trouvées"
+rls_string STR_mobbler_scrobble_track_option "Scrobbler le morceau"
+rls_string STR_mobbler_scrobble_album_option "Scrobble l'album"
 rls_string STR_mobbler_local_events "Local events"
-rls_string STR_mobbler_old_scrobbles_warning "You have queued scrobbles close to two weeks old which will be ignored by Last.fm after that. Scrobble soon!"
-rls_string STR_mobbler_twitter_change "Change Twitter user"
-rls_string STR_mobbler_twitter_remove "Remove Twitter user"
-rls_string STR_mobbler_twitter_follow "Would you like to follow @Mobbler on Twitter?"
-rls_string STR_mobbler_share_lastfm "Last.fm friends"
+rls_string STR_mobbler_old_scrobbles_warning "Attention, la file d'attente n'a pas été envoyée depuis presque 2 semaines. Passé ce délai, elle ne pourra plus être envoyée à Last.fm"
+rls_string STR_mobbler_twitter_change "Changer le compte Twitter"
+rls_string STR_mobbler_twitter_remove "Supprimer le compte Twitter"
+rls_string STR_mobbler_twitter_follow "Voulez vous suivre @Mobbler sur Twitter?"
+rls_string STR_mobbler_share_lastfm "Amis Last.fm"
 rls_string STR_mobbler_share_twitter "Twitter"
 rls_string STR_mobbler_share_contacts "Contacts"
-rls_string STR_mobbler_twitter_now_playing_track_format "Listening to \"%S\" by %S"
-rls_string STR_mobbler_twitter_share_track_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_love_track_format "Loved \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_album_format "Listening to %S by %S"
-rls_string STR_mobbler_twitter_share_album_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_artist_format "Listening to %S"
-rls_string STR_mobbler_twitter_share_artist_format "Sharing %S"
-rls_string STR_mobbler_download_album_art_always_and_keep "Always and keep"
-rls_string STR_mobbler_download_album_art_always_and_ditch "Always and ditch"
+rls_string STR_mobbler_twitter_now_playing_track_format "J'écoute \"%S\" de %S"
+rls_string STR_mobbler_twitter_share_track_format "\"%S\" de %S"
+rls_string STR_mobbler_twitter_love_track_format "J'aime \"%S\" de %S"
+rls_string STR_mobbler_twitter_now_playing_album_format "J'écoute %S de %S"
+rls_string STR_mobbler_twitter_share_album_format "Sharing \"%S\" de %S"
+rls_string STR_mobbler_twitter_now_playing_artist_format "J'écoute %S"
+rls_string STR_mobbler_twitter_share_artist_format "%S"
+rls_string STR_mobbler_download_album_art_always_and_keep "Toujours et les sauvegarder"
+rls_string STR_mobbler_download_album_art_always_and_ditch "Toujours et les supprimer"

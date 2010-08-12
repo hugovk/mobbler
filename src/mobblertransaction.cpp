@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblertransaction.h"
 #include "mobblerwebservicesquery.h"
 
-// The granurarity of the buffer that responses from last.fm are read into
+// The granularity of the buffer that responses from Last.fm are read into
 const TInt KBufferGranularity(256);
 
 _LIT8(KSk, "sk");
