@@ -343,6 +343,10 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 			break;
 		case CMobblerLastFmConnection::ETag:
 			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_TAG_FORMAT), &text);
+		case CMobblerLastFmConnection::EGroup:
+			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_GROUP_FORMAT), &text);
+		case CMobblerLastFmConnection::ECustom:
+			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_CUSTOM_FORMAT), &text);
 			break;
 		case CMobblerLastFmConnection::EUnknown:
 		default:

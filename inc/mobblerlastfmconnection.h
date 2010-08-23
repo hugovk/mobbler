@@ -84,7 +84,9 @@ public:
 		ELovedTracks,
 		EPlaylist,
 		EArtist,
-		ETag
+		ETag,
+		EGroup,
+		ECustom
 		};
 
 	enum TMode

@@ -611,6 +611,14 @@ RESOURCE MENU_PANE r_radio_submenu_pane
 		MENU_ITEM
 			{
 			command = EMobblerCommandRadioNeighbourhood;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioGroup;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandRadioCustom;
 			}
 		};
 	}

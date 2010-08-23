@@ -347,6 +347,8 @@ void CMobblerSettingItemListView::LoadListL()
 		alarmStationArray.AppendL(R_MOBBLER_RADIO_PERSONAL);
 		alarmStationArray.AppendL(R_MOBBLER_RADIO_LOVED);
 		alarmStationArray.AppendL(R_MOBBLER_RADIO_NEIGHBOURHOOD);
+		alarmStationArray.AppendL(R_MOBBLER_RADIO_GROUP);
+		alarmStationArray.AppendL(R_MOBBLER_RADIO_CUSTOM);
 		CreateEnumItemL(iSettings->AlarmStation(),
 						R_MOBBLER_STATION,
 						R_MOBBLER_SETTING_PAGE_ENUM,

@@ -289,6 +289,8 @@ private:
 	CMobblerString* iPreviousRadioTag;
 	CMobblerString* iPreviousRadioUser;
 	CMobblerString* iPreviousRadioPlaylistId;
+	CMobblerString* iPreviousRadioGroup;
+	CMobblerString* iPreviousRadioCustom;
 	CMobblerString* iPreviousSearchTrack;
 	CMobblerString* iPreviousSearchAlbum;
 	CMobblerString* iPreviousSearchArtist;
