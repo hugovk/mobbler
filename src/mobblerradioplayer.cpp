@@ -343,8 +343,10 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 			break;
 		case CMobblerLastFmConnection::ETag:
 			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_TAG_FORMAT), &text);
+			break;
 		case CMobblerLastFmConnection::EGroup:
 			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_GROUP_FORMAT), &text);
+			break;
 		case CMobblerLastFmConnection::ECustom:
 			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_CUSTOM_FORMAT), &text);
 			break;
@@ -364,9 +366,18 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 	// now ask for the radio to start again
 	if (aRadioText)
 		{
-		HBufC8* urlEncoded(MobblerUtility::URLEncodeLC(aRadioText->String8()));
-		iLastFmConnection.SelectStationL(this, aRadioStation, *urlEncoded);
-		CleanupStack::PopAndDestroy(urlEncoded);
+		if (aRadioStation == CMobblerLastFmConnection::ECustom)
+			{
+			// Don't encode this
+			iLastFmConnection.SelectStationL(this, aRadioStation, 
+												aRadioText->String8());
+			}
+		else
+			{
+			HBufC8* urlEncoded(MobblerUtility::URLEncodeLC(aRadioText->String8()));
+			iLastFmConnection.SelectStationL(this, aRadioStation, *urlEncoded);
+			CleanupStack::PopAndDestroy(urlEncoded);
+			}
 		}
 	else
 		{
