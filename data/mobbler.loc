@@ -162,6 +162,11 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobbler.l59"
 #endif
 
+// Korean
+#ifdef LANGUAGE_65
+#include "mobbler.l65"
+#endif
+
 // Latvian
 #ifdef LANGUAGE_67
 #include "mobbler.l67"
