@@ -323,159 +323,162 @@ void CMobblerListControl::DataL(const TDesC8& aXml, TInt aTransactionError)
 		{
 		iState = ENormal;
 		
-		ParseL(aXml);
+		TBool finished = ParseL(aXml);
 		
-		const TInt KListCount(iList.Count());
-		for (TInt i(0); i < KListCount; ++i)
+		if (finished)
 			{
-			// add the formatted text to the array
-			
-			switch (iType)
+			const TInt KListCount(iList.Count());
+			for (TInt i(0); i < KListCount; ++i)
 				{
-				case EMobblerCommandUserTopTags:
-				case EMobblerCommandArtistTopTags:
-				case EMobblerCommandUserTopArtists:
-				case EMobblerCommandArtistTopTracks:
-					{
-					HBufC* description;
-					if (iList[i]->Description()->String().Length() == 0)
-						{
-						description = KNullDesC().AllocLC();
-						}
-					else
-						{
-						TInt descriptionFormatId(0);
-					
-						switch (iType)
-							{
-							case EMobblerCommandUserTopTags:
-							case EMobblerCommandArtistTopTags:
-								{
-								descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
-														R_MOBBLER_FORMAT_TIME_USED:
-														R_MOBBLER_FORMAT_TIMES_USED;
-								break;
-								}
-							case EMobblerCommandUserTopArtists:
-							case EMobblerCommandArtistTopTracks:
-								{
-								descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
-														R_MOBBLER_FORMAT_PLAY:
-														R_MOBBLER_FORMAT_PLAYS;
-								break;
-								}
-							default:
-								break;
-							}
-
-						const TDesC& descriptionFormat(iAppUi.ResourceReader().ResourceL(descriptionFormatId));						
+				// add the formatted text to the array
 				
-						description = HBufC::NewLC(descriptionFormat.Length() + iList[i]->Description()->String().Length());
-						description->Des().Format(descriptionFormat, &iList[i]->Description()->String());
-						}
-					
-					HBufC* format(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + iList[i]->Title()->String().Length() + description->Length()));
-					format->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), description);
-					iListBoxItems->AppendL(*format);
-					CleanupStack::PopAndDestroy(format);
-					CleanupStack::PopAndDestroy(description);
-					}
-					break;
-
-				case EMobblerCommandRecentTracks:
+				switch (iType)
 					{
-					HBufC* title(HBufC::NewLC(KRecentTracksTitleFormat().Length() +
-												iList[i]->Title()->String().Length() +
-												iList[i]->Description()->String().Length()));
-					
-					title->Des().Format(KRecentTracksTitleFormat, &iList[i]->Title()->String(), &iList[i]->Description()->String());
-
-					HBufC* description(HBufC::NewLC(50));
-					
-					TTime itemTime(iList[i]->TimeLocal());
-					
-					if (itemTime == Time::NullTTime())
+					case EMobblerCommandUserTopTags:
+					case EMobblerCommandArtistTopTags:
+					case EMobblerCommandUserTopArtists:
+					case EMobblerCommandArtistTopTracks:
 						{
-    TRACER_AUTO;
-						// this means that the track is playling now
-						description->Des().Copy(iAppUi.ResourceReader().ResourceL(R_MOBBLER_NOW_LISTENING));
-						}
-					else
-						{
-						TTime now;
-						now.HomeTime();
-						
-						TTimeIntervalMinutes minutesAgo(0);
-						User::LeaveIfError(now.MinutesFrom(itemTime, minutesAgo));
-						
-						TTimeIntervalHours hoursAgo;
-						User::LeaveIfError(now.HoursFrom(itemTime, hoursAgo));
-						
-						if (minutesAgo < KMinutesInAnHour)
+						HBufC* description;
+						if (iList[i]->Description()->String().Length() == 0)
 							{
-							description->Des().Format( (minutesAgo.Int() == 1)?
-															iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_MINUTE):
-															iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_MINUTES),
-															minutesAgo.Int());
-							}
-						else if (hoursAgo < KHoursInOneDay)
-							{
-							description->Des().Format( (hoursAgo.Int() == 1)?
-															iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_HOUR):
-															iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_HOURS),
-															hoursAgo.Int());
+							description = KNullDesC().AllocLC();
 							}
 						else
 							{
-							TPtr yeah(description->Des());
-							iList[i]->TimeLocal().FormatL(yeah, KTimeFormat);
+							TInt descriptionFormatId(0);
+						
+							switch (iType)
+								{
+								case EMobblerCommandUserTopTags:
+								case EMobblerCommandArtistTopTags:
+									{
+									descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
+															R_MOBBLER_FORMAT_TIME_USED:
+															R_MOBBLER_FORMAT_TIMES_USED;
+									break;
+									}
+								case EMobblerCommandUserTopArtists:
+								case EMobblerCommandArtistTopTracks:
+									{
+									descriptionFormatId = (iList[i]->Description()->String().Compare(KOne) == 0)?
+															R_MOBBLER_FORMAT_PLAY:
+															R_MOBBLER_FORMAT_PLAYS;
+									break;
+									}
+								default:
+									break;
+								}
+	
+							const TDesC& descriptionFormat(iAppUi.ResourceReader().ResourceL(descriptionFormatId));						
+					
+							description = HBufC::NewLC(descriptionFormat.Length() + iList[i]->Description()->String().Length());
+							description->Des().Format(descriptionFormat, &iList[i]->Description()->String());
 							}
+						
+						HBufC* format(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + iList[i]->Title()->String().Length() + description->Length()));
+						format->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), description);
+						iListBoxItems->AppendL(*format);
+						CleanupStack::PopAndDestroy(format);
+						CleanupStack::PopAndDestroy(description);
 						}
-					
-					HBufC* itemText(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + title->Length() + description->Length()));
-					itemText->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, title, description);
-					
-					iListBoxItems->AppendL(*itemText);
-					
-					CleanupStack::PopAndDestroy(itemText);
-					CleanupStack::PopAndDestroy(description);
-					CleanupStack::PopAndDestroy(title);
+						break;
+	
+					case EMobblerCommandRecentTracks:
+						{
+						HBufC* title(HBufC::NewLC(KRecentTracksTitleFormat().Length() +
+													iList[i]->Title()->String().Length() +
+													iList[i]->Description()->String().Length()));
+						
+						title->Des().Format(KRecentTracksTitleFormat, &iList[i]->Title()->String(), &iList[i]->Description()->String());
+	
+						HBufC* description(HBufC::NewLC(50));
+						
+						TTime itemTime(iList[i]->TimeLocal());
+						
+						if (itemTime == Time::NullTTime())
+							{
+							TRACER_AUTO;
+							// this means that the track is playling now
+							description->Des().Copy(iAppUi.ResourceReader().ResourceL(R_MOBBLER_NOW_LISTENING));
+							}
+						else
+							{
+							TTime now;
+							now.HomeTime();
+							
+							TTimeIntervalMinutes minutesAgo(0);
+							User::LeaveIfError(now.MinutesFrom(itemTime, minutesAgo));
+							
+							TTimeIntervalHours hoursAgo;
+							User::LeaveIfError(now.HoursFrom(itemTime, hoursAgo));
+							
+							if (minutesAgo < KMinutesInAnHour)
+								{
+								description->Des().Format( (minutesAgo.Int() == 1)?
+																iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_MINUTE):
+																iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_MINUTES),
+																minutesAgo.Int());
+								}
+							else if (hoursAgo < KHoursInOneDay)
+								{
+								description->Des().Format( (hoursAgo.Int() == 1)?
+																iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_HOUR):
+																iAppUi.ResourceReader().ResourceL(R_MOBBLER_FORMAT_TIME_AGO_HOURS),
+																hoursAgo.Int());
+								}
+							else
+								{
+								TPtr yeah(description->Des());
+								iList[i]->TimeLocal().FormatL(yeah, KTimeFormat);
+								}
+							}
+						
+						HBufC* itemText(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + title->Length() + description->Length()));
+						itemText->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, title, description);
+						
+						iListBoxItems->AppendL(*itemText);
+						
+						CleanupStack::PopAndDestroy(itemText);
+						CleanupStack::PopAndDestroy(description);
+						CleanupStack::PopAndDestroy(title);
+						}
+						break;
+	
+					case EMobblerCommandSimilarArtists:
+						{
+						_LIT(KPercent, "%");
+						HBufC* description(HBufC::NewLC(iList[i]->Description()->String().Length() + KPercent().Length()));
+						description->Des() = iList[i]->Description()->String();
+						description->Des().Append(KPercent());
+											
+						HBufC* format(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + iList[i]->Title()->String().Length() + description->Length()));
+						format->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), description);
+						iListBoxItems->AppendL(*format);
+						CleanupStack::PopAndDestroy(format);
+						CleanupStack::PopAndDestroy(description);
+						}
+						break;
+	
+					default:
+						{
+						HBufC* itemText(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length()
+													+ iList[i]->Title()->String().Length()
+													+ iList[i]->Description()->String().Length()));
+						itemText->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), &iList[i]->Description()->String());
+						iListBoxItems->AppendL(*itemText);
+						CleanupStack::PopAndDestroy(itemText);
+						}
+						break;
 					}
-					break;
-
-				case EMobblerCommandSimilarArtists:
-					{
-					_LIT(KPercent, "%");
-					HBufC* description(HBufC::NewLC(iList[i]->Description()->String().Length() + KPercent().Length()));
-					description->Des() = iList[i]->Description()->String();
-					description->Des().Append(KPercent());
-										
-					HBufC* format(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length() + iList[i]->Title()->String().Length() + description->Length()));
-					format->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), description);
-					iListBoxItems->AppendL(*format);
-					CleanupStack::PopAndDestroy(format);
-					CleanupStack::PopAndDestroy(description);
-					}
-					break;
-
-				default:
-					{
-					HBufC* itemText(HBufC::NewLC(KDoubleLargeStyleListBoxTextFormat().Length()
-												+ iList[i]->Title()->String().Length()
-												+ iList[i]->Description()->String().Length()));
-					itemText->Des().Format(KDoubleLargeStyleListBoxTextFormat, i, &iList[i]->Title()->String(), &iList[i]->Description()->String());
-					iListBoxItems->AppendL(*itemText);
-					CleanupStack::PopAndDestroy(itemText);
-					}
-					break;
 				}
+	
+			iListBox->HandleItemAdditionL();
+			
+			UpdateIconArrayL();
+			
+			RequestImagesL();
 			}
-
-		iListBox->HandleItemAdditionL();
-		
-		UpdateIconArrayL();
-		
-		RequestImagesL();
 		}
 	else
 		{

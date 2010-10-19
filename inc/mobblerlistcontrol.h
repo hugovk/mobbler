@@ -66,7 +66,7 @@ public:
 public: // interface for derived lists
 	virtual CMobblerListControl* HandleListCommandL(TInt aCommand) = 0;
 	virtual void SupportedCommandsL(RArray<TInt>& aCommands) = 0;
-	virtual void ParseL(const TDesC8& aData) = 0;
+	virtual TBool ParseL(const TDesC8& aData) = 0;
 	
 protected:
 	CMobblerListControl(CMobblerAppUi& aAppUi, CMobblerWebServicesControl& aWebServicesControl);

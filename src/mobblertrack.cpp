@@ -68,12 +68,13 @@ CMobblerTrack* CMobblerTrack::NewL(const TDesC8& aArtist,
 									const TDesC8& aMp3Location,
 									TTimeIntervalSeconds aTrackLength,
 									const TDesC8& aRadioAuth,
-									TBool aLoved)
+									TBool aLoved,
+									TBool aGetInfo)
 	{
     TRACER_AUTO;
 	CMobblerTrack* self(new(ELeave) CMobblerTrack(aTrackLength, aLoved));
 	CleanupStack::PushL(self);
-	self->ConstructL(aArtist, aTitle, aAlbum, aMbTrackId, aImage, aMp3Location, aRadioAuth);
+	self->ConstructL(aArtist, aTitle, aAlbum, aMbTrackId, aImage, aMp3Location, aRadioAuth, aGetInfo);
 	CleanupStack::Pop(self);
 	return self;
 	}
@@ -92,7 +93,8 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 		const TDesC8& aMbTrackId,
 		const TDesC8& aImage,
 		const TDesC8& aMp3Location,
-		const TDesC8& aRadioAuth)
+		const TDesC8& aRadioAuth,
+		TBool aGetInfo)
 	{
     TRACER_AUTO;
 	BaseConstructL(aTitle, aArtist, aAlbum, aRadioAuth);
@@ -101,25 +103,28 @@ void CMobblerTrack::ConstructL(const TDesC8& aArtist,
 	iMp3Location = aMp3Location.AllocL();
 	iPlaylistImageLocation = aImage.AllocL();
 	
-	if (aRadioAuth.Length() == 0)
+	if (aGetInfo)
 		{
-		// This is a music player track
+		if (aRadioAuth.Length() == 0)
+			{
+			// This is a music player track
+		
+			if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().Mode() == CMobblerLastFmConnection::EOnline)
+				{
+				// when in online mode fetch the track details so we
+				// can see if the track has been loved by this user
+				delete iTrackInfoHelper;
+				iTrackInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
+				static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().GetInfoL(EMobblerCommandTrackGetInfo, Artist().String8(), KNullDesC8, Title().String8(), aMbTrackId, *iTrackInfoHelper);
+				}
+			}
 	
 		if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().Mode() == CMobblerLastFmConnection::EOnline)
 			{
-			// when in online mode fetch the track details so we
-			// can see if the track has been loved by this user
-			delete iTrackInfoHelper;
-			iTrackInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
-			static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().GetInfoL(EMobblerCommandTrackGetInfo, Artist().String8(), KNullDesC8, Title().String8(), aMbTrackId, *iTrackInfoHelper);
+			delete iEventsInfoHelper;
+			iEventsInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
+			static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().QueryLastFmL(EMobblerCommandArtistEventSingle, Artist().String8(), KNullDesC8, KNullDesC8, KNullDesC8, *iEventsInfoHelper);
 			}
-		}
-
-	if (static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().Mode() == CMobblerLastFmConnection::EOnline)
-		{
-		delete iEventsInfoHelper;
-		iEventsInfoHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection(), *this, EFalse);
-		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->LastFmConnection().QueryLastFmL(EMobblerCommandArtistEventSingle, Artist().String8(), KNullDesC8, KNullDesC8, KNullDesC8, *iEventsInfoHelper);
 		}
 	}
 

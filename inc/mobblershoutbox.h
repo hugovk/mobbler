@@ -38,7 +38,7 @@ public:
 	
 	CMobblerListControl* HandleListCommandL(TInt aCommand);
 	void SupportedCommandsL(RArray<TInt>& aCommands);
-	void ParseL(const TDesC8& aXML);
+	TBool ParseL(const TDesC8& aXML);
 	
 	HBufC* ShoutAtTextOwnerLC();
 	HBufC* ShoutAtTextUserLC();

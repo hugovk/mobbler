@@ -276,10 +276,11 @@ void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 		}
 	}
 
-void CMobblerEventList::ParseL(const TDesC8& aXml)
+TBool CMobblerEventList::ParseL(const TDesC8& aXml)
 	{
     TRACER_AUTO;
 	CMobblerParser::ParseEventsL(aXml, *this, iList);
+	return ETrue;
 	}
 
 // End of file
