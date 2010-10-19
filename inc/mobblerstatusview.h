@@ -26,7 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <aknview.h>
 
-class CMobblerStatusView : public CAknView, public MMobblerBitmapObserver
+class CMobblerFlatDataObserverHelper;
+
+class CMobblerStatusView : public CAknView, public MMobblerBitmapObserver, public MMobblerFlatDataObserverHelper
 	{
 public:
 	static CMobblerStatusView* NewL();
@@ -64,7 +66,11 @@ private:
 	void SettingsWizardL();
 	
 private:
+	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
+	
+private:
 	CMobblerStatusControl* iMobblerStatusControl;
+	CMobblerFlatDataObserverHelper* iTermsHelper; 
 	
 	TBool iDisplayPlusMenu;
 	};

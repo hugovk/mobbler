@@ -164,6 +164,7 @@ public:
 	void CancelTransaction(MMobblerFlatDataObserver* aObserver);
 
 	// Web services APIs
+	void TermsL(MMobblerFlatDataObserver& aObserver);
 	void SignUpL(const TDesC8& aUsername, const TDesC8& aPassword, const TDesC8& aEmail, MMobblerFlatDataObserver& aObserver);
 	
 	void WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver, TInt aPage = KErrNotFound, TInt aPerPage = KErrNotFound);
@@ -230,7 +231,7 @@ public:
 	void GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver);
 	
 	void ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver);
-	void QueryTwitterL(const TInt aCommand, 
+	TBool QueryTwitterL(const TInt aCommand, 
 						MMobblerFlatDataObserver& aObserver, 
 						const TDesC8& aTweet = KNullDesC8);
 	
@@ -305,16 +306,10 @@ private:
 
 	// authentication transactions
 	CMobblerTransaction* iWebServicesHandshakeTransaction;
-	CMobblerTransaction* iOldRadioHandshakeTransaction;
 #ifdef BETA_BUILD
 	CMobblerTransaction* iBetaTestersTransaction;
 	TBool iIsBetaTester;
 #endif
-
-	// Old radio things
-	HBufC8* iOldRadioSessionId;
-	HBufC8* iOldRadioBaseUrl;
-	HBufC8* iOldRadioBasePath;
 
 	// scrobble transactions
 	CMobblerTransaction* iNowPlayingTransaction;

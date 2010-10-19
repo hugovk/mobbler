@@ -992,7 +992,12 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 	
 						delete iTweetObserverHelper;
 						iTweetObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::CMobblerLastFmConnection::ETweet, *iTweetObserverHelper, tweet);
+						if (!iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::CMobblerLastFmConnection::ETweet, *iTweetObserverHelper, tweet))
+							{
+							// it was cancelled before the request was made
+							delete iTweetObserverHelper;
+							iTweetObserverHelper = NULL;
+							}
 						
 						CleanupStack::PopAndDestroy(shareMessage);
 						}

@@ -34,17 +34,6 @@ Last.fm error codes can be found in their API documentation here http://www.last
 class CMobblerLastFmError : public CBase
 	{
 public:
-	enum TSubmissionError
-		{
-		EOK,
-		EBanned,
-		EBadAuth,
-		EBadSession,
-		EBadTime,
-		EFailed
-		};
-	
-public:
 	static CMobblerLastFmError* NewL(const TDesC8& aText, TInt aLastFmErrorCode);
 	static CMobblerLastFmError* NewL(const TDesC& aText, TInt aLastFmErrorCode);
 	~CMobblerLastFmError();

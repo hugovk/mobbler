@@ -32,6 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler.rsg.h"
 #include "mobbler_strings.rsg.h"
 #include "mobblerappui.h"
+#include "mobblerbrowserview.h"
+#include "mobblerdataobserver.h"
 #include "mobblerradioplayer.h"
 #include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
@@ -494,19 +496,20 @@ void CMobblerStatusView::SettingsWizardL()
 	{
 	TRACER_AUTO;
 	if (static_cast<CMobblerAppUi*>(AppUi())->DetailsNeeded())
+	//if (ETrue)
 		{
 		// Display info note
 		CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
 		note->ExecuteLD(static_cast<CMobblerAppUi*>(AppUi())->
 			ResourceReader().ResourceL(R_MOBBLER_NOTE_NO_DETAILS));
 		
-		// ask if they are a Last.fm user
-		if (EFalse)
+		CAknQueryDialog* disclaimerDlg(CAknQueryDialog::NewL());
+				
+		if(disclaimerDlg->ExecuteLD(R_MOBBLER_YES_NO_QUERY_DIALOG, 
+				static_cast<CMobblerAppUi*>(AppUi())->
+				ResourceReader().ResourceL(R_MOBBLER_LASTFM_ACCOUNT)))
 			{
-		
-			}
-		else
-			{
+			// They have an account so ask for their details
 			// Query username and password
 			TBuf<KMobblerMaxUsernameLength> username;
 			TBuf<KMobblerMaxPasswordLength> password;
@@ -524,7 +527,25 @@ void CMobblerStatusView::SettingsWizardL()
 				iAvkonAppUi->RunAppShutter();
 				}
 			}
+		else
+			{
+			// They don't have an account for so show them the terms and conditions
+			delete iTermsHelper;
+			iTermsHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(AppUi())->LastFmConnection(), *this, ETrue);
+			static_cast<CMobblerAppUi*>(AppUi())->LastFmConnection().TermsL(*iTermsHelper);
+			}
 		}
 	}
+
+void CMobblerStatusView::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
+	{
+	CMobblerAppUi* appUi(static_cast<CMobblerAppUi*>(AppUi()));
+			
+	if (aObserver == iTermsHelper)
+		{
+		appUi->ActivateLocalViewL(appUi->BrowserView().Id(), TUid::Uid(EMobblerCommandShowTerms), aData);
+		}
+	}
+	
 
 // End of file
