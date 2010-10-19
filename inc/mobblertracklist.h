@@ -40,15 +40,15 @@ public:
 	
 	CMobblerListControl* HandleListCommandL(TInt aCommand);
 	void SupportedCommandsL(RArray<TInt>& aCommands);
-	void ParseL(const TDesC8& aXml);
+	TBool ParseL(const TDesC8& aXml);
 	
 private:
 	void DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError);
 	
 	static TInt ViewScrobbleLogCallBackL(TAny* aPtr);
 	
-	void GetArtistAndTitleName(TPtrC8& aArtist, TPtrC8& aTitle);
-	void GetArtistAndTitleName(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aTitle);
+	void GetTrackDetails(TPtrC8& aArtist, TPtrC8& aAlbum, TPtrC8& aTitle);
+	void GetTrackDetails(const TInt aItemIndex, TPtrC8& aArtist, TPtrC8& aAlbum, TPtrC8& aTitle);
 	
 private:
 	CMobblerWebServicesHelper* iWebServicesHelper;

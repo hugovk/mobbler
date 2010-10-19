@@ -143,6 +143,8 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandAlbumGetTags,
 	EMobblerCommandAlbumGetInfo,
 	
+	EMobblerCommandShowTerms,
+	
 	// plus menu commands
 	EMobblerCommandPlusVisitLastFm,
 	EMobblerCommandPlusArtistBiography,
@@ -154,6 +156,7 @@ enum TMobblerSettingItemListViewCommands
 	
 	EMobblerCommandPlusShare,
 	EMobblerCommandPlusShareTrack,
+	EMobblerCommandPlusShareAlbum,
 	EMobblerCommandPlusShareArtist,
 	
 	EMobblerCommandPlusSimilar,

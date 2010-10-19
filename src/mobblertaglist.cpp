@@ -89,7 +89,7 @@ void CMobblerTagList::SupportedCommandsL(RArray<TInt>& aCommands)
 	aCommands.AppendL(EMobblerCommandRadioStart);
 	}
 
-void CMobblerTagList::ParseL(const TDesC8& aXml)
+TBool CMobblerTagList::ParseL(const TDesC8& aXml)
 	{
     TRACER_AUTO;
 	switch (iType)
@@ -104,6 +104,8 @@ void CMobblerTagList::ParseL(const TDesC8& aXml)
 		default:
 			break;
 		}
+	
+	return ETrue;
 	}
 
 // End of file

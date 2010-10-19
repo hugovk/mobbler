@@ -529,6 +529,12 @@ CMobblerSettingItemListView& CMobblerAppUi::SettingView() const
 	return *iSettingView;
 	}
 
+CMobblerBrowserView& CMobblerAppUi::BrowserView() const
+	{
+//	TRACER_AUTO;
+	return *iBrowserView;
+	}
+
 CMobblerDestinationsInterface* CMobblerAppUi::Destinations() const
 	{
 //	TRACER_AUTO;

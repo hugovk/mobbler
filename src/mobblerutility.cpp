@@ -79,6 +79,7 @@ const TInt KNokia6710NavigatorMachineUid(0x20014DD1);
 const TInt KNokiaE52MachineUid(0x20014DCC);
 const TInt KNokiaE55MachineUid(0x20014DCF);
 const TInt KNokiaE72MachineUid(0x20014DD0);
+const TInt KNokiaN8MachineUid(0x20029A73);
 
 TBool MobblerUtility::iEqualizerSupported = ETrue;
 
@@ -98,7 +99,10 @@ TBool MobblerUtility::EqualizerSupported()
 								machineUid == KNokia6710NavigatorMachineUid || 
 								machineUid == KNokiaE52MachineUid || 
 								machineUid == KNokiaE55MachineUid || 
-								machineUid == KNokiaE72MachineUid);
+								machineUid == KNokiaE72MachineUid ||
+								machineUid >= KNokiaN8MachineUid);
+		// The N8 doesn't like the equlizer and we
+		// don't expect any future device to either
 		return iEqualizerSupported;
 		}
 	else

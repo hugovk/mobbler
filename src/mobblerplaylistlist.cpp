@@ -178,10 +178,11 @@ void CMobblerPlaylistList::SupportedCommandsL(RArray<TInt>& aCommands)
 	}
 
 
-void CMobblerPlaylistList::ParseL(const TDesC8& aXml)
+TBool CMobblerPlaylistList::ParseL(const TDesC8& aXml)
 	{
     TRACER_AUTO;
 	CMobblerParser::ParsePlaylistsL(aXml, *this, iList);
+	return ETrue;
 	}
 
 // End of file

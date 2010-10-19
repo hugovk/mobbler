@@ -140,6 +140,7 @@ public:
 	CMobblerContentListingInterface* ContentListing() const;
 
 	CMobblerSettingItemListView& SettingView() const;
+	CMobblerBrowserView& BrowserView() const;
 	HBufC* MusicAppNameL() const;
 
 	void RadioStartL(TInt aRadioStation,

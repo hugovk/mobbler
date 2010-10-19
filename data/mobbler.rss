@@ -280,6 +280,10 @@ RESOURCE MENU_PANE r_mobbler_share_submenu_pane
 			},
 		MENU_ITEM
 			{
+			command = EMobblerCommandAlbumShare;
+			},
+		MENU_ITEM
+			{
 			command = EMobblerCommandArtistShare;
 			},
 		MENU_ITEM
@@ -409,6 +413,10 @@ RESOURCE MENU_PANE r_mobbler_plus_share_submenu_pane
 		MENU_ITEM
 			{
 			command = EMobblerCommandPlusShareTrack;
+			},
+		MENU_ITEM
+			{
+			command = EMobblerCommandPlusShareAlbum;
 			},
 		MENU_ITEM
 			{
