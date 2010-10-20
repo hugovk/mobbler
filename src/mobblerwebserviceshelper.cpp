@@ -570,6 +570,8 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 	
 	TInt photoNumber(1);
 	
+	_LIT(KEllipsisText, "...");
+	_LIT(KFormat, "%d\t%S\t%S");
 	for (TInt i(0); i < KContactCount; ++i)
 		{
 		HBufC8* photo(contacts->GetPhotoAtL(i));
@@ -583,7 +585,6 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 			}
 		else
 			{
-			_LIT(KEllipsisText, "...");
 			firstEmail.Set(KEllipsisText);
 			}
 		
@@ -599,13 +600,13 @@ HBufC* CMobblerWebServicesHelper::DisplayContactListL()
 			CleanupStack::PopAndDestroy(photo);
 			
 			TBuf<1024> formatted;
-			formatted.Format(_L("%d\t%S\t%S"), photoNumber++, &name, &firstEmail); // TODO
+			formatted.Format(KFormat, photoNumber++, &name, &firstEmail);
 			items->AppendL(formatted);
 			}
 		else
 			{
 			TBuf<1024> formatted;
-			formatted.Format(_L("%d\t%S\t%S"), 0, &name, &firstEmail); // TODO
+			formatted.Format(KFormat, 0, &name, &firstEmail);
 			items->AppendL(formatted);
 			}
 		

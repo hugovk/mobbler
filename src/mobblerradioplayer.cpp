@@ -88,7 +88,7 @@ void CMobblerRadioPlayer::ConstructL()
 	iLastFmConnection.AddStateChangeObserverL(this);
 	
 	MMdaAudioOutputStreamCallback* dummyCallback(NULL);
-	CMdaAudioOutputStream* dummyOutputStream = CMdaAudioOutputStream::NewL(*dummyCallback);
+	CMdaAudioOutputStream* dummyOutputStream(CMdaAudioOutputStream::NewL(*dummyCallback));
 	iMaxVolume = dummyOutputStream->MaxVolume();
 	delete dummyOutputStream;
 	}

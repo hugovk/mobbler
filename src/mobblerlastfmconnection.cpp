@@ -92,7 +92,6 @@ _LIT8(KMessage, "message");
 _LIT8(KPassword, "password");
 _LIT8(KPlaylistUrl, "playlistURL");
 _LIT8(KUsername, "username");
-
 _LIT8(KQueryPlaylistFetch, "playlist.fetch");
 
 // Last.fm can accept up to this many track in one submission
@@ -584,7 +583,8 @@ void CMobblerLastFmConnection::TermsL(MMobblerFlatDataObserver& aObserver)
 	_LIT8(KQueryTerms, "user.terms");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTerms));
 	
-	query->AddFieldL(_L8("lang"), MobblerUtility::LanguageL());
+	_LIT8(KLang, "lang");
+	query->AddFieldL(KLang, MobblerUtility::LanguageL());
 	
 	uri->SetComponentL(*query->GetQueryAuthLC(), EUriQuery);
 	CleanupStack::PopAndDestroy(1); // query->GetQueryLC()
@@ -1174,14 +1174,16 @@ void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDes
 		{
 		TBuf8<3> page;
 		page.AppendNum(aPage);
-		query->AddFieldL(_L8("page"), page);
+		_LIT8(KPage, "page");
+		query->AddFieldL(KPage, page);
 		}
 	
 	if (aPerPage != KErrNotFound)
 		{
 		TBuf8<3> perPage;
 		perPage.AppendNum(aPerPage);
-		query->AddFieldL(_L8("limit"), perPage);
+		_LIT8(KLimit, "limit");
+		query->AddFieldL(KLimit, perPage);
 		}
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
@@ -1588,9 +1590,9 @@ TBool CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 	time.Num(secs.Int());
 	
 	TBuf8<16> nonce;
+	_LIT8(KFormat, "%04x");
 	for (TInt i(0); i < nonce.MaxLength() / 4; ++i)
 		{
-		_LIT8(KFormat, "%04x");
 		nonce.AppendFormat(KFormat, Math::Rand(iNonceSeed) & 0xFFFF);
 		}
 	
@@ -1786,10 +1788,11 @@ void CMobblerLastFmConnection::DoNowPlayingL()
 			{
 			// We must be in online mode and have recieved the now playing URL and session ID from Last.fm
 			// before we try to submit and tracks
-			CMobblerWebServicesQuery* nowPlayingQuery(CMobblerWebServicesQuery::NewLC(_L8("track.updateNowPlaying")));
+			_LIT8(KTrackUpdateNowPlaying, "track.updateNowPlaying");
+			CMobblerWebServicesQuery* nowPlayingQuery(CMobblerWebServicesQuery::NewLC(KTrackUpdateNowPlaying));
 			nowPlayingQuery->AddFieldL(KArtist, iCurrentTrack->Artist().String8());
 			nowPlayingQuery->AddFieldL(KTrack, iCurrentTrack->Title().String8());
-						
+			
 			if (iCurrentTrack->Album().String8().Length() != 0)
 				{
 				nowPlayingQuery->AddFieldL(KAlbum, iCurrentTrack->Album().String8());
@@ -1797,7 +1800,8 @@ void CMobblerLastFmConnection::DoNowPlayingL()
 			
 			TBuf8<10> trackLength;
 			trackLength.AppendNum(iCurrentTrack->TrackLength().Int());
-			nowPlayingQuery->AddFieldL(_L8("duration"), trackLength);
+			_LIT8(KDuration, "duration");
+			nowPlayingQuery->AddFieldL(KDuration, trackLength);
 			
 			CUri8* uri(SetUpWebServicesUriLC());
 			
@@ -1892,7 +1896,8 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 		
 		if (KSubmitTracksCount > 0)
 			{
-			CMobblerWebServicesQuery* submitQuery(CMobblerWebServicesQuery::NewLC(_L8("track.scrobble")));
+			_LIT8(KTrackScrobble, "track.scrobble");
+			CMobblerWebServicesQuery* submitQuery(CMobblerWebServicesQuery::NewLC(KTrackScrobble));
 			
 			for (TInt ii(0); ii < KSubmitTracksCount && ii < KMaxSubmitTracks; ++ii)
 				{

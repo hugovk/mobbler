@@ -558,16 +558,20 @@ void CMobblerParser::ParseFriendListL(const TDesC8& aXml, CMobblerFriendList& aO
 	CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
 	CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aXml));
 
-	CSenElement* friends = domFragment->AsElement().Element(KFriends);
+	CSenElement* friends(domFragment->AsElement().Element(KFriends));
 	
+	_LIT8(KTotal, "total");
+	_LIT8(KPage, "page");
+	_LIT8(KPerPage, "perPage");
+	_LIT8(KTotalPages, "totalPages");
 	TLex8 lex;
-	lex.Assign(*friends->AttrValue(_L8("total")));
+	lex.Assign(*friends->AttrValue(KTotal));
 	lex.Val(aTotal);
-	lex.Assign(*friends->AttrValue(_L8("page")));
+	lex.Assign(*friends->AttrValue(KPage));
 	lex.Val(aPage);
-	lex.Assign(*friends->AttrValue(_L8("perPage")));
+	lex.Assign(*friends->AttrValue(KPerPage));
 	lex.Val(aPerPage);
-	lex.Assign(*friends->AttrValue(_L8("totalPages")));
+	lex.Assign(*friends->AttrValue(KTotalPages));
 	lex.Val(aTotalPages);
 	
 	RPointerArray<CSenElement>& items(friends->ElementsL());

@@ -379,7 +379,6 @@ RESOURCE STRING r_mobbler_scrobble_track_option	{ text = STR_mobbler_scrobble_tr
 RESOURCE STRING r_mobbler_scrobble_album_option	{ text = STR_mobbler_scrobble_album_option; }
 RESOURCE STRING r_mobbler_local_events			{ text = STR_mobbler_local_events; }
 RESOURCE STRING r_mobbler_old_scrobbles_warning	{ text = STR_mobbler_old_scrobbles_warning; }
-RESOURCE STRING r_mobbler_lastfm_account		{ text = STR_mobbler_lastfm_account; }
 
 RESOURCE STRING r_mobbler_twitter				{ text = STR_mobbler_twitter; }
 RESOURCE STRING r_mobbler_twitter_change		{ text = STR_mobbler_twitter_change; }
@@ -408,6 +407,8 @@ RESOURCE STRING r_mobbler_group_format				{ text = STR_mobbler_group_format; }
 RESOURCE STRING r_mobbler_radio_custom				{ text = STR_mobbler_radio_custom; }
 RESOURCE STRING r_mobbler_radio_enter_custom			{ text = STR_mobbler_radio_enter_custom;}
 RESOURCE STRING r_mobbler_custom_format				{ text = STR_mobbler_custom_format; }
-RESOURCE STRING r_mobbler_share_album						{ text = STR_mobbler_share_album; }
+RESOURCE STRING r_mobbler_share_album				{ text = STR_mobbler_share_album; }
+
+RESOURCE STRING r_mobbler_lastfm_account		{ text = STR_mobbler_lastfm_account; }
 
 // End of file

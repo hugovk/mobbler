@@ -46,6 +46,7 @@ const TInt KDefaultSleepTimerAction(CMobblerSettingItemListSettings::EGoOffline)
 const TInt KDefaultSleepTimerImmediacy(CMobblerSettingItemListSettings::EImmediately);
 
 _LIT(KDefaultAlarmTime, "070000."); // "HHMMSS."
+_LIT(KPassword, "password");
 _LIT(KSettingsFile, "c:settings.ini");
 
 CMobblerSettingItemListSettings* CMobblerSettingItemListSettings::NewL()
@@ -189,7 +190,7 @@ void CMobblerSettingItemListSettings::LoadSettingValuesL()
 		{
 		// there was no file there so read from the resource file
 		iUsername.Copy(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME));
-		iPassword.Copy(_L("password"));
+		iPassword.Copy(KPassword);
 		}
 
 	iBacklight = backlight;

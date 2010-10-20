@@ -2617,8 +2617,9 @@ TInt CMobblerAppUi::SetAlbumArtAsWallpaper(TBool aAutomatically)
 TBool CMobblerAppUi::DetailsNeeded()
 	{
 	TRACER_AUTO;
+	_LIT(KPassword, "password");
 	if ((iSettingView->Settings().Username().Compare(iResourceReader->ResourceL(R_MOBBLER_USERNAME)) == 0) &&
-		(iSettingView->Settings().Password().Compare(_L("password")) == 0))
+		(iSettingView->Settings().Password().Compare(KPassword) == 0))
 		{
 		return ETrue;
 		}

@@ -539,7 +539,7 @@ void CMobblerStatusView::SettingsWizardL()
 		}
 	}
 
-void CMobblerStatusView::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
+void CMobblerStatusView::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt /*aTransactionError*/)
 	{
 	CMobblerAppUi* appUi(static_cast<CMobblerAppUi*>(AppUi()));
 			

@@ -1,24 +1,23 @@
 /*
-mobblermusicapp30.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2009, 2010  Michael Coffey
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <ecom/implementationproxy.h>
@@ -40,6 +39,8 @@ const TInt KTrackArtistKey(5);
 const TInt KTrackLengthKey(7);
 //const TInt KPlaylistPositionKey(8);
 //const TInt KCommandKey(12);
+
+_LIT(KMusicPlayer, "Music Player");
 
 const TImplementationProxy ImplementationTable[] =
 	{
@@ -119,7 +120,7 @@ TMobblerMusicAppObserverState CMobblerMusicAppObserver30::PlayerState()
 
 HBufC* CMobblerMusicAppObserver30::NameL()
 	{
-	return _L("Music Player").AllocL();
+	return KMusicPlayer().AllocL();
 	}
 	
 const TDesC& CMobblerMusicAppObserver30::Title()

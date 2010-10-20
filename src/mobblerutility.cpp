@@ -101,7 +101,7 @@ TBool MobblerUtility::EqualizerSupported()
 								machineUid == KNokiaE55MachineUid || 
 								machineUid == KNokiaE72MachineUid ||
 								machineUid >= KNokiaN8MachineUid);
-		// The N8 doesn't like the equlizer and we
+		// The N8 doesn't like the equalizer and we
 		// don't expect any future device to either
 		return iEqualizerSupported;
 		}

@@ -323,7 +323,7 @@ void CMobblerListControl::DataL(const TDesC8& aXml, TInt aTransactionError)
 		{
 		iState = ENormal;
 		
-		TBool finished = ParseL(aXml);
+		TBool finished(ParseL(aXml));
 		
 		if (finished)
 			{
