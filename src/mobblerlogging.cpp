@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerstring.h"
 //#include "mobblertracer.h"
 
-_LIT(KLogPath, "C:\\Mobbler\\");
+_LIT(KLogPath, "C:\\data\\Mobbler\\");
 _LIT(KLogFilename, "mobbler.log");
 _LIT8(KCommaSpace, ", ");
 _LIT8(KNewline, "\n");
