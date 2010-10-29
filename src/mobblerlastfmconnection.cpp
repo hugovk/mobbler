@@ -575,50 +575,6 @@ void CMobblerLastFmConnection::CheckForUpdateL(MMobblerFlatDataObserver& aObserv
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::TermsL(MMobblerFlatDataObserver& aObserver)
-	{
-	TRACER_AUTO;
-	CUri8* uri(SetUpWebServicesUriLC());
-	
-	_LIT8(KQueryTerms, "user.terms");
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryTerms));
-	
-	_LIT8(KLang, "lang");
-	query->AddFieldL(KLang, MobblerUtility::LanguageL());
-	
-	uri->SetComponentL(*query->GetQueryAuthLC(), EUriQuery);
-	CleanupStack::PopAndDestroy(1); // query->GetQueryLC()
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
-void CMobblerLastFmConnection::SignUpL(const TDesC8& aUsername, const TDesC8& aPassword, const TDesC8& aEmail, MMobblerFlatDataObserver& aObserver)
-	{
-	TRACER_AUTO;
-	CUri8* uri(SetUpWebServicesUriLC());
-	
-	_LIT8(KQuerySignup, "user.signup");
-	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQuerySignup));
-	
-	query->AddFieldL(KUsername, aUsername);
-	query->AddFieldL(KPassword, aPassword);
-	query->AddFieldL(KEmail, aEmail);
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, ETrue, uri, query));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(query);
-	CleanupStack::Pop(uri);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-
 void CMobblerLastFmConnection::PlaylistCreateL(const TDesC& aTitle, const TDesC& aDescription, MMobblerFlatDataObserver& aObserver)
 	{
 	TRACER_AUTO;
