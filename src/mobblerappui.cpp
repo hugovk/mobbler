@@ -1566,11 +1566,6 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 				CleanupStack::PopAndDestroy(message);
 				}
 			}
-		else if (aObserver == iTwitterAuthObserver)
-			{
-			CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
-			note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_DONE));
-			}
 		} // 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 	}
 
