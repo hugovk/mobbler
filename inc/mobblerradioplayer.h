@@ -148,6 +148,7 @@ private:
 	TTimeIntervalSeconds iPreBufferSize;
 	TInt iVolume;
 	TInt iMaxVolume;
+	TInt iVolumeSteps;
 	TInt iEqualizerIndex;
 	TInt iBitRate;
 	

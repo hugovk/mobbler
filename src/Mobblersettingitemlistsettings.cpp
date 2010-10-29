@@ -38,7 +38,7 @@ const TInt KDefaultEqualizerIndex(-1);
 #ifdef __WINS__
 const TInt KDefaultVolume(0);
 #else
-const TInt KDefaultVolume(5);
+const TInt KDefaultVolume(KErrUnknown);
 #endif
 const TInt KDefaultSleepTimerMinutes(30);
 const TInt KDefaultDownloadAlbumArt(CMobblerAppUi::EOnlyRadio);

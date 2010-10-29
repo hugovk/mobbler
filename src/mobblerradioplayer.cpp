@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
 Copyright (C) 2008, 2009  Steve Punter
 
 http://code.google.com/p/mobbler
@@ -91,6 +91,24 @@ void CMobblerRadioPlayer::ConstructL()
 	CMdaAudioOutputStream* dummyOutputStream(CMdaAudioOutputStream::NewL(*dummyCallback));
 	iMaxVolume = dummyOutputStream->MaxVolume();
 	delete dummyOutputStream;
+
+	// Depending on the device, max volume could be 10 or 100.
+	// For the first run, set the volume to be half max volume.
+	if (iVolume == KErrUnknown)
+		{
+		iVolume = iMaxVolume / 2;
+		static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->
+							SettingView().Settings().SetVolume(iVolume);
+		}
+	
+	if (iMaxVolume >= 20)
+		{
+		iVolumeSteps = 20;
+		}
+	else
+		{
+		iVolumeSteps = 10;
+		}
 	}
 
 CMobblerRadioPlayer::~CMobblerRadioPlayer()
@@ -206,11 +224,11 @@ void CMobblerRadioPlayer::HandleConnectionStateChangedL()
 			{
 			if (iState == EPlaying)
 				{
-				// if we are in the playing state and we start
-				// connecting then it means we have lost connection
-				// we should stop the radio and wait to be told
+				// If we are in the playing state and we start
+				// connecting then it means we have lost connection.
+				// We should stop the radio and wait to be told
 				// that the connection is back, this will come through
-				// the try again callback from the auido control
+				// the try again callback from the auido control.
 				DoStopL(ETrue);
 				iRestart = ETrue;
 				}
@@ -579,7 +597,7 @@ void CMobblerRadioPlayer::VolumeUp()
 //	TRACER_AUTO;
 	TInt volume(Volume());
 	TInt maxVolume(MaxVolume());
-	iVolume = Min(volume + (maxVolume / 10), maxVolume);
+	iVolume = Min(volume + (maxVolume / iVolumeSteps), maxVolume);
 	
 	UpdateVolume();
 	}
@@ -589,7 +607,7 @@ void CMobblerRadioPlayer::VolumeDown()
 //	TRACER_AUTO;
 	TInt volume(Volume());
 	TInt maxVolume(MaxVolume());
-	iVolume = Max(volume - (maxVolume / 10), 0);
+	iVolume = Max(volume - (maxVolume / iVolumeSteps), 0);
 	
 	UpdateVolume();
 	}
