@@ -1,0 +1,176 @@
+;
+; Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+; Copyright (C) 2008, 2009, 2010  Michael Coffey
+; Copyright (C) 2009  Steve Punter
+; Copyright (C) 2009, 2010  Hugo van Kemenade
+; Copyright (C) 2009  James Aley
+; Copyright (C) 2010  gw111zz
+; 
+; http://code.google.com/p/mobbler
+;
+; This file is part of Mobbler.
+; 
+; Mobbler is free software; you can redistribute it and/or
+; modify it under the terms of the GNU General Public License
+; as published by the Free Software Foundation; either version 2
+; of the License, or (at your option) any later version.
+; 
+; Mobbler is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+; 
+; You should have received a copy of the GNU General Public License
+; along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
+;
+
+; Languages
+&EN, FR, GE, SP, IT, SW, DA, NO, FI, AM, PO, TU, RU, HU, DU, CS, SK, PL, ZH, JA, AF, AR, BE, BG, CA, EL, HE, IN, KO, LV, LT, BP, RO, SR
+
+; Header
+#{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}, (0xA0007648), 0, 10, 312
+
+; Localised vendor names
+%{"Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler", "Mobbler"}
+
+; Unique vendor name
+:"Mobbler"
+
+; Supports Series 60 v 3.0
+[0x101F7961], 0, 0, 0, {"Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID"}
+
+; Supports S60 release 5.0
+[0x1028315F], 0, 0, 0, {"Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID"}
+
+; Supports Symbian^3
+[0x20022E6D], 0, 0, 0, {"Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID", "Series60ProductID"}
+
+; The Mobbler application
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobbler_0xA0007648.exe"-"!:\sys\bin\mobbler_0xA0007648.exe"
+
+; The Mobbler music app observer
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\musicappobserver_0xA0007CAB.dll"-"!:\sys\bin\musicappobserver_0xA0007CAB.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobserver_0xA0007CAB.rsc"-"!:\resource\plugins\musicappobserver_0xA0007CAB.rsc"
+
+; The Mobbler 3.0 music app observer
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblermusicapp30_0xA000D9F7.dll"-"!:\sys\bin\mobblermusicapp30_0xA000D9F7.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblermusicapp30_0xA000D9F7.rsc"-"!:\resource\plugins\mobblermusicapp30_0xA000D9F7.rsc"
+
+; The Mobbler mpx music app observer
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\musicappobservermpx_0xA000D9F4.dll"-"!:\sys\bin\musicappobservermpx_0xA000D9F4.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\musicappobservermpx_0xA000D9F4.rsc"-"!:\resource\plugins\musicappobservermpx_0xA000D9F4.rsc"
+
+; 5th edition touch feedback
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblertouchfeedback_0xA000B6CB.dll"-"!:\sys\bin\mobblertouchfeedback_0xA000B6CB.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblertouchfeedback_0xA000B6CB.rsc"-"!:\resource\plugins\mobblertouchfeedback_0xA000B6CB.rsc"
+
+; Content listing plugin
+"$(EPOCROOT)\epoc32\release\$(PLATFORM)\$(TARGET)\mobblercontentlisting_0xA000BEB1.dll"-"!:\sys\bin\mobblercontentlisting_0xA000BEB1.dll"
+"$(EPOCROOT)\epoc32\data\z\resource\plugins\mobblercontentlisting_0xA000BEB1.rsc"-"!:\resource\plugins\mobblercontentlisting_0xA000BEB1.rsc"
+
+; Gesture plugin (uses sensor framework)
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\gestureobserver3x_0xA000B6CE.dll"-"!:\sys\bin\gestureobserver3x_0xA000B6CE.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"-"!:\resource\plugins\gestureobserver3x_0xA000B6CE.rsc"
+
+; Destinations (uses cmmanager.lib (3.2 onwards))
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\mobblerdestinations_0xA000BEB4.dll"-"!:\sys\bin\mobblerdestinations_0xA000BEB4.dll"
+"$(EPOCROOT)epoc32\data\z\resource\plugins\mobblerdestinations_0xA000BEB4.rsc"-"!:\resource\plugins\mobblerdestinations_0xA000BEB4.rsc"
+
+; Graphics
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\scrobble.png"-		"!:\resource\apps\mobbler\scrobble.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\icon_alarm.png"-		"!:\resource\apps\mobbler\icon_alarm.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\icon_track.png"-		"!:\resource\apps\mobbler\icon_track.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\lastfm.png"-		"!:\resource\apps\mobbler\lastfm.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_album.gif"-		"!:\resource\apps\mobbler\default_album.gif"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_artist.png"-				"!:\resource\apps\mobbler\default_artist.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_event.png"-		"!:\resource\apps\mobbler\default_event.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_playlist.png"-	"!:\resource\apps\mobbler\default_playlist.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_tag.png"-		"!:\resource\apps\mobbler\default_tag.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_track.png"-		"!:\resource\apps\mobbler\default_track.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\default_user.png"-		"!:\resource\apps\mobbler\default_user.png"
+"$(EPOCROOT)epoc32\data\z\resource\apps\ssmobbler.mif"-					"!:\resource\apps\mobbler_0xA0007648.mif"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\Mobbler.png"-				"C:\private\A0007648\Mobbler.png"
+
+; Resource file
+{
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r01"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r02"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r03"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r04"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r05"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r06"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r07"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r08"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r09"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r10"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r13"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r14"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r16"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r17"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r18"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r25"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r26"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r27"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r31"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r32"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r34"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r37"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r40"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r42"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r44"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r54"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r57"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r59"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r65"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r67"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r68"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r76"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r78"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0xA0007648.r79"
+}-"!:\resource\apps\mobbler_0xA0007648.rsc"
+
+; The language localisation file
+{
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r01"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r02"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r03"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r04"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r05"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r06"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r07"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r08"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r09"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r10"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r13"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r14"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r16"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r17"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r18"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r25"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r26"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r27"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r31"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r32"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r34"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r37"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r40"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r42"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r44"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r54"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r57"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r59"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r65"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r67"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r68"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r76"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r78"
+"$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_strings_0xA0007648.r79"
+}-"!:\resource\apps\mobbler_strings_0xA0007648.rsc"
+
+; The application registration file
+"$(EPOCROOT)epoc32\data\z\private\10003a3f\apps\mobbler_reg_0xA0007648.r01"-"!:\private\10003a3f\import\apps\mobbler_reg_0xA0007648.rsc"
+
+; Backup and restore
+".\backup_registration.xml"-"!:\private\A0007648\backup_registration.xml"
+
+; End of file
