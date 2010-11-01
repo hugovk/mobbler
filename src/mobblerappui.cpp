@@ -792,7 +792,6 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 						break;
 					case EMobblerCommandRadioRecommendations:	// intentional fall-through
 					case EMobblerCommandRadioPersonal:			// intentional fall-through
-					case EMobblerCommandRadioLoved:				// intentional fall-through
 					case EMobblerCommandRadioMix:				// intentional fall-through
 					case EMobblerCommandRadioNeighbourhood:		// intentional fall-through
 					default:
@@ -886,7 +885,6 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandRadioRecommendations:	// intentional fall-through
 		case EMobblerCommandRadioPersonal:			// intentional fall-through
 		case EMobblerCommandRadioMix:				// intentional fall-through
-		case EMobblerCommandRadioLoved:				// intentional fall-through
 		case EMobblerCommandRadioNeighbourhood:		// intentional fall-through
 			RadioStartL(aCommand, NULL);
 			break;
@@ -1266,9 +1264,6 @@ void CMobblerAppUi::RadioStartL(TInt aRadioStation,
 			break;
 		case EMobblerCommandRadioPersonal:
 			station = CMobblerLastFmConnection::EPersonal;
-			break;
-		case EMobblerCommandRadioLoved:
-			station = CMobblerLastFmConnection::ELovedTracks;
 			break;
 		case EMobblerCommandRadioNeighbourhood:
 			station = CMobblerLastFmConnection::ENeighbourhood;
@@ -1766,7 +1761,9 @@ void CMobblerAppUi::LoadRadioStationsL()
 		
 		iPreviousRadioStation = readStream.ReadInt32L();
 		if (iPreviousRadioStation <= EMobblerCommandRadioEnumFirst ||
-			iPreviousRadioStation >= EMobblerCommandRadioEnumLast)
+			iPreviousRadioStation >= EMobblerCommandRadioEnumLast ||
+			iPreviousRadioStation == EMobblerCommandRadioLoved ||  // discontinued station
+			iPreviousRadioStation == EMobblerCommandRadioPlaylist) // discontinued station
 			{
 			iPreviousRadioStation = EMobblerCommandRadioPersonal;
 			}
@@ -2191,7 +2188,6 @@ void CMobblerAppUi::TimerExpiredL(TAny* aTimer, TInt aError)
 			case EMobblerCommandRadioRecommendations:	// intentional fall-through
 			case EMobblerCommandRadioPersonal:			// intentional fall-through
 			case EMobblerCommandRadioMix:				// intentional fall-through
-			case EMobblerCommandRadioLoved:				// intentional fall-through
 			case EMobblerCommandRadioNeighbourhood:		// intentional fall-through
 			default:
 				RadioStartL(station, NULL);

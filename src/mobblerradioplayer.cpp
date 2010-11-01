@@ -350,12 +350,6 @@ void CMobblerRadioPlayer::StartL(CMobblerLastFmConnection::TRadioStation aRadioS
 		case CMobblerLastFmConnection::ENeighbourhood:
 			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_NEIGHBOURHOOD_FORMAT), &text);
 			break;
-		case CMobblerLastFmConnection::ELovedTracks:
-			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_LOVED_TRACKS_FORMAT), &text);
-			break;
-		case CMobblerLastFmConnection::EPlaylist:
-			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_PLAYLIST_FORMAT), &text);
-			break;
 		case CMobblerLastFmConnection::EArtist:
 			station.Format(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_ARTIST_FORMAT), &text);
 			break;

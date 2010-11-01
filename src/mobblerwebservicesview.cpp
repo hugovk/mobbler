@@ -262,7 +262,6 @@ void CMobblerWebServicesView::HandleCommandL(TInt aCommand)
 		case EMobblerCommandRadioStart:
 		case EMobblerCommandRadioPersonal:
 		case EMobblerCommandRadioNeighbourhood:
-		case EMobblerCommandRadioLoved:
 			// we have started a radio station so switch back to the status view
 			AppUi()->ActivateLocalViewL(TUid::Uid(KMobblerStatusViewUid)); 
 			break;

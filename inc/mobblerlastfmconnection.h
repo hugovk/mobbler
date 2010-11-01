@@ -81,8 +81,6 @@ public:
 		EPersonal,
 		ERecommendations,
 		ENeighbourhood,
-		ELovedTracks,
-		EPlaylist,
 		EArtist,
 		ETag,
 		EGroup,

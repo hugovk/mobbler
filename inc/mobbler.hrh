@@ -181,8 +181,9 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandRadioUser,
 	EMobblerCommandRadioRecommendations,
 	EMobblerCommandRadioPersonal,
-	EMobblerCommandRadioLoved,
+	EMobblerCommandRadioLoved,    // placeholder to ensure save file format compatibilty
 	EMobblerCommandRadioNeighbourhood,
+	EMobblerCommandRadioPlaylist, // placeholder to ensure save file format compatibilty
 	EMobblerCommandRadioListTracks,
 	EMobblerCommandRadioGroup,
 	EMobblerCommandRadioCustom,
