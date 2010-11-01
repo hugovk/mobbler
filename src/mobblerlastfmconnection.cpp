@@ -1885,17 +1885,20 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 				_LIT8(KTrackFormat, "track[%d]");
 				_LIT8(KTimestampFormat, "timestamp[%d]");
 				_LIT8(KDurationFormat, "duration[%d]");
+				_LIT8(KTrackNumberFormat, "trackNumber[%d]");
 			
 				TBuf8<16> artist;
 				TBuf8<16> album;
 				TBuf8<16> track;
 				TBuf8<16> timestamp;
 				TBuf8<16> duration;
+				TBuf8<16> trackNumber;
 				artist.AppendFormat(KArtistFormat, ii);
 				album.AppendFormat(KAlbumFormat, ii);
 				track.AppendFormat(KTrackFormat, ii);
 				timestamp.AppendFormat(KTimestampFormat, ii);
 				duration.AppendFormat(KDurationFormat, ii);
+				trackNumber.AppendFormat(KTrackNumberFormat, ii);
 				
 				submitQuery->AddFieldL(artist, iTrackQueue[ii]->Artist().String8());
 				submitQuery->AddFieldL(track, iTrackQueue[ii]->Title().String8());
@@ -1920,6 +1923,13 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 				TBuf8<10> trackLength;
 				trackLength.AppendNum(iTrackQueue[ii]->TrackLength().Int());
 				submitQuery->AddFieldL(duration, trackLength);
+				
+				if (iTrackQueue[ii]->TrackNumber() != KErrUnknown)
+					{
+					TBuf8<10> number;
+					number.AppendNum(iTrackQueue[ii]->TrackNumber());
+					submitQuery->AddFieldL(trackNumber, number);
+					}
 				}
 			
 			CUri8* uri(SetUpWebServicesUriLC());
