@@ -36,7 +36,9 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblerdownload.h"
 #include "mobblergesturesinterface.h"
 #include "mobblerlastfmconnectionobserver.h"
+#ifdef __SYMBIAN_SIGNED__
 #include "mobblerlocationobserver.h"
+#endif
 #include "mobblersleeptimer.h"
 
 #ifdef BETA_BUILD
@@ -74,7 +76,9 @@ class CMobblerBitmapCollection;
 class CMobblerBrowserView;
 class CMobblerDestinationsInterface;
 class CMobblerDownload;
+#ifdef __SYMBIAN_SIGNED__
 class CMobblerLocation;
+#endif
 class CMobblerMusicAppListener;
 class CMobblerRadioPlayer;
 class CMobblerResourceReader;
@@ -111,8 +115,10 @@ class CMobblerAppUi : public CAknViewAppUi,
 						public MMobblerSleepTimerNotify,
 						public MRemConCoreApiTargetObserver,
 						public MMobblerFlatDataObserverHelper,
-						public MMobblerGestures,
-						public MMobblerLocationObserver
+						public MMobblerGestures
+#ifdef __SYMBIAN_SIGNED__
+						, public MMobblerLocationObserver
+#endif
 	{
 public:
 	enum TDownloadAlbumArt
@@ -243,8 +249,10 @@ private: // from MAknWsEventObserver
 	void HandleWsEventL(const TWsEvent &aEvent, CCoeControl *aDestination);
 	void HandleSystemEventL(const TWsEvent& aEvent);
 
-private: // from MMobllerLocationObserver
+#ifdef __SYMBIAN_SIGNED__
+private: // from MMobblerLocationObserver
 	void HandleLocationCompleteL(const TDesC8& aAccuracy, const TDesC8& aLatitude, const TDesC8& aLongitude, const TDesC8& aName);
+#endif
 	
 private:
 	// the view classes
@@ -263,8 +271,10 @@ private:
 	TUid iGesturePluginDtorUid;
 	CMobblerGesturesInterface* iGesturePlugin;
 	
+#ifdef __SYMBIAN_SIGNED__
 	// Location
 	CMobblerLocation* iLocation;
+#endif
 
 	// The current track submit and queue count
 	TInt iTracksSubmitted;
@@ -318,7 +328,9 @@ private:
 	CMobblerFlatDataObserverHelper* iAutoCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iManualCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iLyricsObserver;
+#ifdef __SYMBIAN_SIGNED__
 	CMobblerFlatDataObserverHelper* iLocalEventsObserver;
+#endif
 	CMobblerFlatDataObserverHelper* iTwitterAuthObserver;
 	CMobblerFlatDataObserverHelper* iTwitterFollowObserver;
 

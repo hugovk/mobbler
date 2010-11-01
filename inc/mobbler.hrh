@@ -80,7 +80,9 @@ enum TMobblerSettingItemListViewCommands
 	
 	EMobblerCommandPlaylists,
 	EMobblerCommandUserEvents,
+#ifdef __SYMBIAN_SIGNED__
 	EMobblerCommandLocalEvents,
+#endif
 	EMobblerCommandArtistEvents,
 	EMobblerCommandArtistEventSingle,
 	

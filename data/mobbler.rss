@@ -500,10 +500,12 @@ RESOURCE MENU_PANE r_mobbler_view_submenu_pane
 			{
 			command = EMobblerCommandUserEvents;
 			},
+#ifdef __SYMBIAN_SIGNED__
 		MENU_ITEM
 			{
 			command = EMobblerCommandLocalEvents;
 			},
+#endif
 		MENU_ITEM
 			{
 			command = EMobblerCommandArtistEvents;

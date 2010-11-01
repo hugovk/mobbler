@@ -27,7 +27,9 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <e32base.h>
 #include <es_sock.h>
+#ifdef __SYMBIAN_SIGNED__
 #include <Etel3rdParty.h>
+#endif
 #include <http/mhttptransactioncallback.h>
 #include <http/rhttpsession.h>
 #include <mobbler/mobblerdestinationsinterface.h>
@@ -227,9 +229,11 @@ public:
 	void SaveCurrentTrackL();
 	void CheckQueueAgeL();
 	
+#ifdef __SYMBIAN_SIGNED__
 	// Ericsson API
 	void GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver);
 	void GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver);
+#endif
 	
 	void ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver);
 	TBool QueryTwitterL(const TInt aCommand, 

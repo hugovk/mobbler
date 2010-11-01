@@ -21,6 +21,8 @@ You should have received a copy of the GNU General Public License
 along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifdef __SYMBIAN_SIGNED__
+
 #include <sendomfragment.h>
 
 #include "mobblerappui.h"
@@ -110,5 +112,7 @@ void CMobblerLocation::DataL(const TDesC8& aData, TInt aTransactionError)
 		LOG2(_L8("Transaction error"), aTransactionError);
 		}
 	}
+
+#endif // __SYMBIAN_SIGNED__
 
 // End of file

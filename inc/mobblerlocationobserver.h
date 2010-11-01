@@ -21,6 +21,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#ifdef __SYMBIAN_SIGNED__
+
 #ifndef __MOBBLERLOCATIONOBSERVER_H__
 #define __MOBBLERLOCATIONOBSERVER_H__
 
@@ -36,5 +38,7 @@ public:
 	};
 
 #endif // __MOBBLERLOCATIONOBSERVER_H__
+
+#endif // __SYMBIAN_SIGNED__
 
 // End of file

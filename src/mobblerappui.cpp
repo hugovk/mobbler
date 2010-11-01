@@ -63,7 +63,9 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblerbrowserview.h"
 #include "mobblerhtmltemplates.h"
 #include "mobblerliterals.h"
+#ifdef __SYMBIAN_SIGNED__
 #include "mobblerlocation.h"
+#endif
 #include "mobblerlogging.h"
 #include "mobblermusiclistener.h"
 #include "mobblerparser.h"
@@ -270,8 +272,10 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iVolumeDownTimer;
 	delete iVolumeUpTimer;
 	delete iWebServicesHelper;
+#ifdef __SYMBIAN_SIGNED__
 	delete iLocation;
 	delete iLocalEventsObserver;
+#endif
 	delete iTwitterAuthObserver;
 	delete iTwitterFollowObserver;
 	
@@ -623,6 +627,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				}
 			
 			break;
+#ifdef __SYMBIAN_SIGNED__
 		case EMobblerCommandLocalEvents:
 			if (!iLocation)
 				{
@@ -630,6 +635,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				}
 			iLocation->GetLocationL();
 			break;
+#endif
 		case EMobblerCommandSearchTrack:
 		case EMobblerCommandSearchAlbum:
 		case EMobblerCommandSearchArtist:
@@ -1437,6 +1443,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 
 			CleanupStack::PopAndDestroy(5, tagsText);
 			}
+#ifdef __SYMBIAN_SIGNED__
 		else if (aObserver == iLocalEventsObserver)
 			{
 			// create a map and open it
@@ -1517,6 +1524,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			
 			LaunchFileL(KMapKmlFilename);
 			}
+#endif // __SYMBIAN_SIGNED__
 		else if (aObserver == iTwitterAuthObserver)
 			{
 			HBufC8* error(CMobblerParser::ParseTwitterAuthL(aData));
@@ -2455,6 +2463,7 @@ void CMobblerAppUi::GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const
 		}
 	}
 
+#ifdef __SYMBIAN_SIGNED__
 void CMobblerAppUi::HandleLocationCompleteL(const TDesC8& /*aAccuracy*/, const TDesC8& aLatitude, const TDesC8& aLongitude, const TDesC8& /*aName*/)
 	{
 	TRACER_AUTO;
@@ -2462,6 +2471,7 @@ void CMobblerAppUi::HandleLocationCompleteL(const TDesC8& /*aAccuracy*/, const T
 	iLocalEventsObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);
 	iLastFmConnection->GeoGetEventsL(aLatitude, aLongitude, *iLocalEventsObserver);
 	}
+#endif
 
 void CMobblerAppUi::OpenWebBrowserL(const TDesC& aUrl)
 	{

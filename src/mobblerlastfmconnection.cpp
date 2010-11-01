@@ -1422,6 +1422,7 @@ void CMobblerLastFmConnection::RequestImageL(MMobblerFlatDataObserver* aObserver
 		}
 	}
 
+#ifdef __SYMBIAN_SIGNED__
 void CMobblerLastFmConnection::GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver)
 	{
 	TRACER_AUTO;
@@ -1447,6 +1448,7 @@ void CMobblerLastFmConnection::GetLocationL(const CTelephony::TNetworkInfoV1& aN
 	transaction->SetFlatDataObserver(&aObserver);
 	AppendAndSubmitTransactionL(transaction);
 	}
+#endif // __SYMBIAN_SIGNED__
 
 void CMobblerLastFmConnection::ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver)
 	{
@@ -1698,6 +1700,7 @@ TBool CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 	return ETrue;
 	}
 
+#ifdef __SYMBIAN_SIGNED__
 void CMobblerLastFmConnection::GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver)
 	{
 	TRACER_AUTO;
@@ -1722,6 +1725,7 @@ void CMobblerLastFmConnection::GeoGetEventsL(const TDesC8& aLatitude, const TDes
 	transaction->SetFlatDataObserver(&aObserver);
 	AppendAndSubmitTransactionL(transaction);
 	}
+#endif // __SYMBIAN_SIGNED__
 
 void CMobblerLastFmConnection::CancelTransaction(MMobblerFlatDataObserver* aObserver)
 	{
@@ -2184,7 +2188,7 @@ void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransact
 	TRACER_AUTO;
 #ifdef _DEBUG
 	// Transaction log file 
-	_LIT(KTransactionLogFile, "C:\\Mobbler\\transaction.log");
+	_LIT(KTransactionLogFile, "C:\\Data\\Mobbler\\transaction.log");
 	
 	RFile file;
 	CleanupClosePushL(file);
