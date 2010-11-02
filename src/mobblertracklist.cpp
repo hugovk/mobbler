@@ -1,27 +1,28 @@
 /*
-mobblertracklist.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2009  Michael Coffey
+Copyright (C) 2009, 2010  Michael Coffey
+Copyright (C) 2009, 2010  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <aknquerydialog.h>
+#include <aknmessagequerydialog.h>
 #include <sendomfragment.h>
 #include <senxmlutils.h> 
 
@@ -165,6 +166,40 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 	
 	switch(aCommand)
 		{
+		case EMobblerCommandOpen:
+			{
+			// Show the track details in a dialog box
+			_LIT(KNewLine, "\n");
+			TInt length(title.Length() +
+						KNewLine().Length() +
+						artist.Length());
+			if (album.Length() > 0)
+				{
+				length += KNewLine().Length() +
+						  album.Length();
+				}
+			HBufC8* message8(HBufC8::NewLC(length));
+
+			message8->Des().Copy(title);
+			message8->Des().Append(KNewLine);
+			message8->Des().Append(artist);
+			if (album.Length() > 0)
+				{
+				message8->Des().Append(KNewLine);
+				message8->Des().Append(album);
+				}
+
+			CMobblerString* message(CMobblerString::NewLC(*message8));
+			CAknMessageQueryDialog* dlg(new(ELeave) CAknMessageQueryDialog());
+			dlg->PrepareLC(R_MOBBLER_ABOUT_BOX);
+			dlg->QueryHeading()->SetTextL(
+				iAppUi.ResourceReader().ResourceL(R_MOBBLER_TRACK));
+			dlg->SetMessageTextL(message->String());
+			dlg->RunLD();
+			CleanupStack::PopAndDestroy(message);
+			CleanupStack::PopAndDestroy(message8);
+			}
+			break;
 		case EMobblerCommandTrackLove:
 			delete iLoveObserver;
 			iLoveObserver = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
@@ -290,6 +325,7 @@ void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 	
 	GetTrackDetails(artist, album, title);
 	
+	aCommands.AppendL(EMobblerCommandOpen);
 	aCommands.AppendL(EMobblerCommandTrackLove);
 	aCommands.AppendL(EMobblerCommandTrackScrobble);
 	

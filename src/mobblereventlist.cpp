@@ -22,10 +22,13 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <apgcli.h>
+#include <aknmessagequerydialog.h>
 #include <documenthandler.h>
 #include <s32file.h>
 #include <sendomfragment.h>
 
+#include "mobbler.rsg.h"
+#include "mobbler_strings.rsg.h"
 #include "mobblerappui.h"
 #include "mobblerbitmapcollection.h"
 #include "mobblereventlist.h"
@@ -34,6 +37,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblerliterals.h"
 #include "mobblerlogging.h"
 #include "mobblerparser.h"
+#include "mobblerresourcereader.h"
 #include "mobblersettingitemlistview.h"
 #include "mobblerstring.h"
 #include "mobblertracer.h"
@@ -88,6 +92,28 @@ CMobblerListControl* CMobblerEventList::HandleListCommandL(TInt aCommand)
 	
 	switch (aCommand)
 		{
+		case EMobblerCommandOpen:
+			{
+			// Show the event details in a dialog box
+			_LIT(KNewLine, "\n");
+			HBufC* message(HBufC::NewLC(
+				iList[iListBox->CurrentItemIndex()]->Title()->String().Length() +
+				KNewLine().Length() +
+				iList[iListBox->CurrentItemIndex()]->Description()->String().Length()));
+
+			message->Des().Copy(iList[iListBox->CurrentItemIndex()]->Title()->String());
+			message->Des().Append(KNewLine);
+			message->Des().Append(iList[iListBox->CurrentItemIndex()]->Description()->String());
+
+			CAknMessageQueryDialog* dlg(new(ELeave) CAknMessageQueryDialog());
+			dlg->PrepareLC(R_MOBBLER_ABOUT_BOX);
+			dlg->QueryHeading()->SetTextL(
+				iAppUi.ResourceReader().ResourceL(R_MOBBLER_EVENT));
+			dlg->SetMessageTextL(*message);
+			dlg->RunLD();
+			CleanupStack::PopAndDestroy(message);
+			}
+			break;
 		case EMobblerCommandEventShoutbox:
 			list = CMobblerListControl::CreateListL(iAppUi, iWebServicesControl, 
 					EMobblerCommandEventShoutbox, 
@@ -118,7 +144,8 @@ CMobblerListControl* CMobblerEventList::HandleListCommandL(TInt aCommand)
 			iAppUi.GoToLastFmL(aCommand, iList[iListBox->CurrentItemIndex()]->Id());
 			break;
 		case EMobblerCommandVisitMap:
-			iAppUi.GoToMapL(iList[iListBox->CurrentItemIndex()]->Title()->String8(),
+			iAppUi.GoToMapL(	iList[iListBox->CurrentItemIndex()]->Title()->String8(),
+								iList[iListBox->CurrentItemIndex()]->Description()->String8(),
 								iList[iListBox->CurrentItemIndex()]->Latitude(),
 								iList[iListBox->CurrentItemIndex()]->Longitude());
 			break;
@@ -132,6 +159,7 @@ CMobblerListControl* CMobblerEventList::HandleListCommandL(TInt aCommand)
 void CMobblerEventList::SupportedCommandsL(RArray<TInt>& aCommands)
 	{
     TRACER_AUTO;
+	aCommands.AppendL(EMobblerCommandOpen);
 	aCommands.AppendL(EMobblerCommandView);
 	aCommands.AppendL(EMobblerCommandEventShoutbox);
 	aCommands.AppendL(EMobblerCommandVisitWebPage);
