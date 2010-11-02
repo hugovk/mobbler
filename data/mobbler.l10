@@ -1,24 +1,29 @@
 /*
-mobbler.l10 - US English
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+mobbler.l10 - US English
+
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 rls_string STR_mobbler_mobbler "Mobbler"
@@ -53,10 +58,10 @@ rls_string STR_mobbler_status_bad_auth "Incorrect password"
 rls_string STR_mobbler_status_bad_time "Incorrect time"
 rls_string STR_mobbler_status_bad_session "Logged in elsewhere"
 rls_string STR_mobbler_status_lastfm_error "Last.fm error"
-rls_string STR_mobbler_status_comms_error "comms error"
+rls_string STR_mobbler_status_comms_error "Comms error"
 rls_string STR_mobbler_details "Enter details"
 rls_string STR_mobbler_settings "Settings"
-rls_string STR_mobbler_current_track "Current track"
+rls_string STR_mobbler_current_track "Current track:"
 rls_string STR_mobbler_love_track "Love this track?"
 rls_string STR_mobbler_ban_track "Ban this track?"
 rls_string STR_mobbler_similar_tracks "Similar tracks"
@@ -68,7 +73,7 @@ rls_string STR_mobbler_user_events "Your events"
 rls_string STR_mobbler_history "History"
 rls_string STR_mobbler_status "Status"
 rls_string STR_mobbler_data "Data"
-rls_string STR_mobbler_radio_start "Start a new station"
+rls_string STR_mobbler_radio_start "Start a station"
 rls_string STR_mobbler_resume_radio "Resume last station"
 rls_string STR_mobbler_radio_artist "Artist"
 rls_string STR_mobbler_radio_enter_artist "Artist:"
@@ -76,10 +81,10 @@ rls_string STR_mobbler_radio_tag "Tag"
 rls_string STR_mobbler_radio_enter_tag "Tag:"
 rls_string STR_mobbler_radio_user "User"
 rls_string STR_mobbler_radio_enter_user "User:"
-rls_string STR_mobbler_radio_recommendations "Recommended"
-rls_string STR_mobbler_radio_personal "Personal"
-rls_string STR_mobbler_radio_loved "Loved tracks"
-rls_string STR_mobbler_radio_neighbourhood "Neighbourhood"
+rls_string STR_mobbler_radio_recommendations "My recommendations"
+rls_string STR_mobbler_radio_personal "My radio station"
+rls_string STR_mobbler_radio_loved "My loved tracks"
+rls_string STR_mobbler_radio_neighbourhood "My neighborhood"
 rls_string STR_mobbler_radio_playlist "My playlist"
 rls_string STR_mobbler_radio_buffering "Buffering"
 rls_string STR_mobbler_note_bad_station "You are not allowed to listen to this radio station"
@@ -87,7 +92,7 @@ rls_string STR_mobbler_note_no_tracks "There are no more tracks to play on this 
 rls_string STR_mobbler_buy "Buy"
 rls_string STR_mobbler_buy_amazon "Search for the current track on the Mobbler Amazon aStore?"
 rls_string STR_mobbler_share "Share"
-rls_string STR_mobbler_biography "Bio"
+rls_string STR_mobbler_biography "Biography"
 rls_string STR_mobbler_events "Events"
 rls_string STR_mobbler_ban "Ban"
 rls_string STR_mobbler_tags "Tags"
@@ -167,7 +172,7 @@ rls_string STR_mobbler_shout "Shout"
 rls_string STR_mobbler_shout_at "Shout at %S"
 rls_string STR_mobbler_personal_format "%S's library"
 rls_string STR_mobbler_recommendations_format "%S's recommendations"
-rls_string STR_mobbler_neighbourhood_format "%S's neighbourhood"
+rls_string STR_mobbler_neighbourhood_format "%S's neighborhood"
 rls_string STR_mobbler_loved_tracks_format "%S's loved tracks"
 rls_string STR_mobbler_playlist_format "%S's playlist"
 rls_string STR_mobbler_artist_format "%S radio"
@@ -240,7 +245,7 @@ rls_string STR_mobbler_search_album_prompt "Album:"
 rls_string STR_mobbler_event "Event"
 rls_string STR_mobbler_to_prompt "To:"
 rls_string STR_mobbler_message_prompt "Message:"
-rls_string STR_mobbler_share_tagline "\n\nShared from [url=http://code.google.com/p/mobbler]Mobbler[/url]: the Last.fm radio player and scrobbler for S60 smartphones."
+rls_string STR_mobbler_share_tagline "\n\nShared from [url=http://code.google.com/p/mobbler]Mobbler[/url]: the Last.fm radio player and scrobbler for Symbian smartphones."
 rls_string STR_mobbler_please_wait "Please wait"
 rls_string STR_mobbler_done "Done"
 rls_string STR_mobbler_error "Error!"
@@ -301,7 +306,7 @@ rls_string STR_mobbler_twitter_now_playing_track_format "Listening to \"%S\" by 
 rls_string STR_mobbler_twitter_share_track_format "Sharing \"%S\" by %S"
 rls_string STR_mobbler_twitter_love_track_format "Loved \"%S\" by %S"
 rls_string STR_mobbler_twitter_now_playing_album_format "Listening to %S by %S"
-rls_string STR_mobbler_twitter_share_album_format "Sharing \"%S\" by %S"
+rls_string STR_mobbler_twitter_share_album_format "Sharing %S by %S"
 rls_string STR_mobbler_twitter_now_playing_artist_format "Listening to %S"
 rls_string STR_mobbler_twitter_share_artist_format "Sharing %S"
 rls_string STR_mobbler_download_album_art_always_and_keep "Always and keep"
@@ -312,3 +317,6 @@ rls_string STR_mobbler_group_format "%S radio"
 rls_string STR_mobbler_radio_custom "Custom"
 rls_string STR_mobbler_radio_enter_custom "Custom:"
 rls_string STR_mobbler_custom_format "%S radio"
+rls_string STR_mobbler_share_album "Share album"
+rls_string STR_mobbler_lastfm_account "Do you have a Last.fm account?"
+rls_string STR_mobbler_radio_mix "My mix radio"
