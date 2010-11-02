@@ -168,9 +168,6 @@ public:
 	void CancelTransaction(MMobblerFlatDataObserver* aObserver);
 
 	// Web services APIs
-	void TermsL(MMobblerFlatDataObserver& aObserver);
-	void SignUpL(const TDesC8& aUsername, const TDesC8& aPassword, const TDesC8& aEmail, MMobblerFlatDataObserver& aObserver);
-	
 	void WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver, TInt aPage = KErrNotFound, TInt aPerPage = KErrNotFound);
 
 	void ShoutL(const TDesC8& aClass, const TDesC8& aArgument, const TDesC8& aMessage);

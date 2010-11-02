@@ -502,7 +502,6 @@ void CMobblerStatusView::SettingsWizardL()
 	{
 	TRACER_AUTO;
 	if (static_cast<CMobblerAppUi*>(AppUi())->DetailsNeeded())
-	//if (ETrue)
 		{
 		// Display info note
 		CAknInformationNote* note(new (ELeave) CAknInformationNote(ETrue));
@@ -511,34 +510,35 @@ void CMobblerStatusView::SettingsWizardL()
 		
 		CAknQueryDialog* disclaimerDlg(CAknQueryDialog::NewL());
 				
-		if(disclaimerDlg->ExecuteLD(R_MOBBLER_YES_NO_QUERY_DIALOG, 
+		if(!disclaimerDlg->ExecuteLD(R_MOBBLER_YES_NO_QUERY_DIALOG, 
 				static_cast<CMobblerAppUi*>(AppUi())->
 				ResourceReader().ResourceL(R_MOBBLER_LASTFM_ACCOUNT)))
 			{
-			// They have an account so ask for their details
-			// Query username and password
-			TBuf<KMobblerMaxUsernameLength> username;
-			TBuf<KMobblerMaxPasswordLength> password;
-			CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
-			dlg->SetPromptL(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
-							static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
-			dlg->SetPredictiveTextInputPermitted(ETrue);
-			if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
-				{
-				static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(username, password, ETrue);
-				}
-			else
-				{
-				// Exit asynchronously
-				iAvkonAppUi->RunAppShutter();
-				}
+			// Open the mobile site to sign up to Last.fm
+			_LIT(KJoin, "join");
+			HBufC* joinUrl = HBufC::NewLC(MobblerUtility::LocalLastFmDomainL(ETrue).Length() + KJoin().Length());
+			joinUrl->Des().Append(MobblerUtility::LocalLastFmDomainL(ETrue));
+			joinUrl->Des().Append(KJoin);
+			static_cast<CMobblerAppUi*>(AppUi())->OpenWebBrowserL(*joinUrl);
+			CleanupStack::PopAndDestroy(joinUrl);
+			}
+		
+		// They have an account so ask for their details
+		// Query username and password
+		TBuf<KMobblerMaxUsernameLength> username;
+		TBuf<KMobblerMaxPasswordLength> password;
+		CAknMultiLineDataQueryDialog* dlg(CAknMultiLineDataQueryDialog::NewL(username, password));
+		dlg->SetPromptL(static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_USERNAME),
+						static_cast<CMobblerAppUi*>(AppUi())->ResourceReader().ResourceL(R_MOBBLER_PASSWORD));
+		dlg->SetPredictiveTextInputPermitted(ETrue);
+		if (dlg->ExecuteLD(R_MOBBLER_USERNAME_PASSWORD_QUERY_DIALOG))
+			{
+			static_cast<CMobblerAppUi*>(AppUi())->SetDetailsL(username, password, ETrue);
 			}
 		else
 			{
-			// They don't have an account so show them the terms and conditions
-			delete iTermsHelper;
-			iTermsHelper = CMobblerFlatDataObserverHelper::NewL(static_cast<CMobblerAppUi*>(AppUi())->LastFmConnection(), *this, ETrue);
-			static_cast<CMobblerAppUi*>(AppUi())->LastFmConnection().TermsL(*iTermsHelper);
+			// Exit asynchronously
+			iAvkonAppUi->RunAppShutter();
 			}
 		}
 	}
