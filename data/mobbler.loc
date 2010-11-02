@@ -192,6 +192,11 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobbler.l79"
 #endif
 
+// Ukrainian
+#ifdef LANGUAGE_93
+#include "mobbler.l93"
+#endif
+
 // Klingon
 #ifdef LANGUAGE_333
 #include "mobbler.l333"
