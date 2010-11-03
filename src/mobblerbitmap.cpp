@@ -69,7 +69,7 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TD
 	}
 
 CMobblerBitmap::CMobblerBitmap(MMobblerBitmapObserver* aObserver)
-	:CActive(CActive::EPriorityStandard), iObserver(aObserver), iRefCount(1)
+	:CActive(CActive::EPriorityStandard), iRefCount(1)
 	{
     TRACER_AUTO;
 	CActiveScheduler::Add(this);
@@ -79,6 +79,8 @@ CMobblerBitmap::~CMobblerBitmap()
 	{
     TRACER_AUTO;
 	Cancel();
+	
+	iObservers.Reset();
 	
 	if (iScaledBitmap)
 		{
@@ -111,19 +113,25 @@ void CMobblerBitmap::Close() const
 		}
 	}
 
-void CMobblerBitmap::SetCallbackCancelled(TBool aCallbackCancelled)
+void CMobblerBitmap::RemoveObserver(MMobblerBitmapObserver* aObserver)
 	{
     TRACER_AUTO;
-	if (aCallbackCancelled)
+	TInt pos = iObservers.FindInAddressOrder(aObserver);
+	if (pos != KErrNotFound)
 		{
-		iObserver = NULL;
+		iObservers.Remove(pos);
 		}
 	}
 
-void CMobblerBitmap::SetObserver(MMobblerBitmapObserver& aObserver)
+void CMobblerBitmap::RemoveAllObservers()
+	{
+	iObservers.Reset();
+	}
+
+void CMobblerBitmap::AddObserver(MMobblerBitmapObserver* aObserver)
 	{
     TRACER_AUTO;
-	iObserver = &aObserver;
+	iObservers.InsertInAddressOrder(aObserver);
 	}
 
 #ifdef __SYMBIAN_SIGNED__
@@ -328,9 +336,9 @@ void CMobblerBitmap::RunL()
 				}
 		
 			iBitmapLoaded = ETrue;
-			if (iObserver)
+			for ( int i(0) ; i < iObservers.Count() ; ++i )
 				{
-				iObserver->BitmapLoadedL(this);
+				iObservers[i]->BitmapLoadedL(this);
 				}
 			}
 		}
@@ -351,9 +359,9 @@ void CMobblerBitmap::RunL()
 			iScaledBitmap = NULL;
 			iScaleStatus = EMobblerScaleNone;
 
-			if (iObserver)
+			for ( int i(0) ; i < iObservers.Count() ; ++i )
 				{
-				iObserver->BitmapResizedL(this);
+				iObservers[i]->BitmapResizedL(this);
 				}
 			}
 		}

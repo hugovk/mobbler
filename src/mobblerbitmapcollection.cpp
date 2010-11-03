@@ -288,8 +288,7 @@ CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObser
 		{
 		// it has already been created so just return it
 		bitmap = iBitmaps[position]->Bitmap();
-		bitmap->SetCallbackCancelled(EFalse);
-		bitmap->SetObserver(aObserver);
+		bitmap->AddObserver(&aObserver);
 		}
 	
 	return bitmap;
@@ -304,7 +303,7 @@ void CMobblerBitmapCollection::Cancel(CMobblerBitmap* aBitmap) const
 		{
 		if (iBitmaps[i]->Bitmap() == aBitmap)
 			{
-			iBitmaps[i]->Bitmap()->SetCallbackCancelled(ETrue);
+			iBitmaps[i]->Bitmap()->RemoveAllObservers();
 			break;
 			}
 		}
