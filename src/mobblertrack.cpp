@@ -146,7 +146,10 @@ CMobblerTrack::~CMobblerTrack()
 	
 	delete iMbTrackId;
 	delete iMp3Location;
-	iImage->RemoveObserver(this);
+	if (iImage)
+		{
+		iImage->RemoveObserver(this);
+		}
 	iImage->Close();
 	delete iLocalFile;
 	delete iPlaylistImageLocation;
