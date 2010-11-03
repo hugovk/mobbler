@@ -71,8 +71,9 @@ public:
 	TMobblerScaleStatus ScaleStatus() const;
 	static TBool LongSidesEqual(TSize aLeftSize, TSize aRightSize);
 	
-	void SetCallbackCancelled(TBool aCallbackCancelled);
-	void SetObserver(MMobblerBitmapObserver& aObserver);
+	void RemoveObserver(MMobblerBitmapObserver* aObserver);
+	void RemoveAllObservers();
+	void AddObserver(MMobblerBitmapObserver* aObserver);
 	
 private:
 	void ConstructL(const TDesC& aFileName, const TUid aFileUid);
@@ -88,7 +89,7 @@ private:
 	void DoCancel();
 	
 private:
-	MMobblerBitmapObserver* iObserver;
+	RPointerArray<MMobblerBitmapObserver> iObservers;
 	TBool iCallbackCancelled;
 	
 	TBool iBitmapLoaded;
