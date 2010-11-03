@@ -252,7 +252,7 @@ private: // from MHTTPTransactionCallback
 private: // from MMobblerTransactionObserver
 	void TransactionResponseL(CMobblerTransaction* aTransaction, const TDesC8& aResponse);
 	void TransactionCompleteL(CMobblerTransaction* aTransaction);
-	void TransactionFailedL(CMobblerTransaction* aTransaction, const TDesC8& aStatus, TInt aStatusCode);
+	void TransactionFailedL(CMobblerTransaction* aTransaction, const TDesC8& aResponse, const TDesC8& aStatus, TInt aStatusCode);
 
 private:
 	void DoNowPlayingL();

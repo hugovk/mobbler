@@ -232,7 +232,11 @@ void CMobblerTransaction::MHFRunL(RHTTPTransaction aTransaction, const THTTPEven
 			iConnection.TransactionCompleteL(this);
 			break;
 		case THTTPEvent::EFailed:
-			iConnection.TransactionFailedL(this, iTransaction.Response().StatusText().DesC(), iTransaction.Response().StatusCode());
+			{
+			HBufC8* response(iBuffer->Ptr(0).AllocLC());
+			iConnection.TransactionFailedL(this, *response, iTransaction.Response().StatusText().DesC(), iTransaction.Response().StatusCode());
+			CleanupStack::PopAndDestroy(response);
+			}
 			break;
 		default:
 			break;
@@ -243,7 +247,7 @@ TInt CMobblerTransaction::MHFRunError(TInt aError, RHTTPTransaction /*aTransacti
 	{
     TRACER_AUTO;
 	_LIT8(KMHFRunError, "MHFRunError");
-	iConnection.TransactionFailedL(this, KMHFRunError, aError);
+	iConnection.TransactionFailedL(this, KNullDesC8, KMHFRunError, aError);
 	return KErrNone;
 	}
 

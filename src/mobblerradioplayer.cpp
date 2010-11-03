@@ -407,7 +407,9 @@ void CMobblerRadioPlayer::DataL(const TDesC8& aData, TInt aTransactionError)
 		{
 		case ESelectingStation:
 			{
-			if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+			if ( (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone
+					|| aTransactionError == CMobblerLastFmConnection::ETransactionErrorFailed)
+					&& aData.Length() != 0 )
 				{
 				delete iStation;
 				CMobblerLastFmError* radioError(CMobblerParser::ParseRadioTuneL(aData, iStation));
@@ -439,7 +441,9 @@ void CMobblerRadioPlayer::DataL(const TDesC8& aData, TInt aTransactionError)
 			break;
 		case EFetchingPlaylist:
 			{
-			if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+			if ( (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone
+					|| aTransactionError == CMobblerLastFmConnection::ETransactionErrorFailed)
+					&& aData.Length() != 0 )
 				{
 				DoChangeTransactionStateL(ENone);
 		

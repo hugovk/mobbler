@@ -2149,7 +2149,7 @@ void CMobblerLastFmConnection::TransactionCompleteL(CMobblerTransaction* aTransa
 		}
 	}
 
-void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransaction, const TDesC8& aStatus, TInt aStatusCode)
+void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransaction, const TDesC8& aResponse, const TDesC8& aStatus, TInt aStatusCode)
 	{
 	TRACER_AUTO;
 #ifdef _DEBUG
@@ -2243,7 +2243,7 @@ void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransact
 					{
 					if (aTransaction->FlatDataObserver())
 						{
-						aTransaction->FlatDataObserver()->DataL(KNullDesC8, ETransactionErrorFailed);
+						aTransaction->FlatDataObserver()->DataL(aResponse, ETransactionErrorFailed);
 						}
 					
 					delete aTransaction;
