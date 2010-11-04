@@ -31,9 +31,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TDesC& aMifFileName, TInt aBitmapIndex, TInt iMaskIndex)
 	{
     TRACER_AUTO;
-	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
+	CMobblerBitmap* self(new(ELeave) CMobblerBitmap());
 	CleanupStack::PushL(self);
-	self->ConstructL(aMifFileName, aBitmapIndex, iMaskIndex);
+	self->ConstructL(aObserver, aMifFileName, aBitmapIndex, iMaskIndex);
 	CleanupStack::Pop(self);
 	return self;
 	}
@@ -41,9 +41,9 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TD
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, TUid aAppUid)
 	{
     TRACER_AUTO;
-	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
+	CMobblerBitmap* self(new(ELeave) CMobblerBitmap());
 	CleanupStack::PushL(self);
-	self->ConstructL(aAppUid);
+	self->ConstructL(aObserver, aAppUid);
 	CleanupStack::Pop(self);
 	return self;
 	}
@@ -51,9 +51,9 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, TUid aAp
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TDesC& aFileName, const TUid aFileUid)
 	{
     TRACER_AUTO;
-	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
+	CMobblerBitmap* self(new(ELeave) CMobblerBitmap());
 	CleanupStack::PushL(self);
-	self->ConstructL(aFileName, aFileUid);
+	self->ConstructL(aObserver, aFileName, aFileUid);
 	CleanupStack::Pop(self);
 	return self;
 	}
@@ -61,9 +61,9 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TD
 CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TDesC8& aData, const TUid aFileUid)
 	{
     TRACER_AUTO;
-	CMobblerBitmap* self(new(ELeave) CMobblerBitmap(&aObserver));
+	CMobblerBitmap* self(new(ELeave) CMobblerBitmap());
 	CleanupStack::PushL(self);
-	self->ConstructL(aData, aFileUid);
+	self->ConstructL(aObserver, aData, aFileUid);
 	CleanupStack::Pop(self);
 	return self;
 	}
