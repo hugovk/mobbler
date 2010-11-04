@@ -56,7 +56,11 @@ CMobblerListItem::~CMobblerListItem()
 	delete iDescription;
 	delete iTitle;
 	delete iImageLocation;
-	iImage->Close();
+	if (iImage)
+		{
+		iImage->RemoveObserver(this);
+		iImage->Close();
+		}
 	delete iId;
 	delete iLatitude;
 	delete iLongitude;
