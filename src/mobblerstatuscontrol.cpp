@@ -163,7 +163,7 @@ void CMobblerStatusControl::DoChangePaneTextL()
 			{
 			stateText.Copy(iAppUi.CurrentTrack()->Title().String());
 			}
-		else if (iAppUi.CurrentTrack()->RadioAuth().Compare(KNullDesC8) != 0)
+		else if (iAppUi.CurrentTrack()->StreamId().Compare(KNullDesC8) != 0)
 			{
 			// This is a radio song so display the name of the current radio station
 			stateText.Copy(iAppUi.RadioPlayer().Station().String());

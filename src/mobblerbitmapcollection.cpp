@@ -148,6 +148,12 @@ void CMobblerBitmapCollection::ConstructL()
 CMobblerBitmapCollection::~CMobblerBitmapCollection()
 	{
     TRACER_AUTO;
+    
+    for ( TInt i(0) ; i < iBitmaps.Count() ; ++i)
+    	{
+		iBitmaps[i]->Bitmap()->RemoveObserver(this);
+    	}
+    
 	iBitmaps.ResetAndDestroy();
 	}
 	

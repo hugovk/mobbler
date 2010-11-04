@@ -327,7 +327,7 @@ void CMobblerAppUi::MrccatoCommand(TRemConCoreApiOperationId aOperationId, TRemC
 	TRACER_AUTO;
 	// don't bother if there's a current music player track
 	if ((CurrentTrack() && 
-		(CurrentTrack()->RadioAuth().Compare(KNullDesC8) == 0)))
+		(CurrentTrack()->StreamId().Compare(KNullDesC8) == 0)))
 		{
 		return;
 		}

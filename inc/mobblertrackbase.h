@@ -50,7 +50,7 @@ public:
 	const CMobblerString& Artist() const;
 	const CMobblerString& Title() const;
 	const CMobblerString& Album() const;
-	const TDesC8& RadioAuth() const;
+	const TDesC8& StreamId() const;
 	
 	HBufC8* UrlLC(const TInt aCommand);
 	
@@ -91,7 +91,7 @@ public:
 	
 protected:
 	CMobblerTrackBase(TTimeIntervalSeconds iTrackLength, TBool aLoved);
-	void BaseConstructL(const TDesC8& aTitle, const TDesC8& aArtist, const TDesC8& aAlbum, const TDesC8& aRadioAuth);
+	void BaseConstructL(const TDesC8& aTitle, const TDesC8& aArtist, const TDesC8& aAlbum, const TDesC8& aStreamId);
 	
 private:
 	CMobblerTrackBase();
@@ -115,7 +115,7 @@ private:
 	
 	TTimeIntervalSeconds iTrackLength;
 	
-	HBufC8* iRadioAuth;
+	HBufC8* iStreamId;
 	
 	CMobblerFlatDataObserverHelper* iLoveObserverHelper;
 

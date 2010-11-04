@@ -57,7 +57,7 @@ public:
 								const TDesC8& aImage,
 								const TDesC8& aMp3Location,
 								TTimeIntervalSeconds aTrackLength,
-								const TDesC8& aRadioAuth,
+								const TDesC8& aStreamId,
 								TBool aLoved,
 								TBool aGetInfo);
 	
@@ -93,7 +93,7 @@ private:
 						const TDesC8& aMbTrackId,
 						const TDesC8& aImage,
 						const TDesC8& aMp3Location,
-						const TDesC8& aRadioAuth,
+						const TDesC8& aStreamId,
 						TBool aGetInfo);
 	
 	void FetchAlbumInfoL();

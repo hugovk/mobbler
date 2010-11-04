@@ -85,7 +85,7 @@ _LIT8(KTopArtists, "topartists");
 _LIT8(KTopAlbums, "topalbums");
 _LIT8(KTopTags, "toptags");
 _LIT8(KTopTracks, "toptracks");
-_LIT8(KTrackAuth, "trackauth");
+_LIT8(KStreamId, "streamid");
 _LIT8(KTrackList, "trackList");
 _LIT8(KTrackMatches, "trackmatches");
 _LIT8(KTrue, "true");
@@ -241,11 +241,11 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 				TPtrC8 image((*tracks)[i]->Element(KImage)->Content());
 				TPtrC8 location((*tracks)[i]->Element(KLocation)->Content());
 				TPtrC8 identifier((*tracks)[i]->Element(KIdentifier)->Content());
-				TPtrC8 trackauth((*tracks)[i]->Element(KExtension)->Element(KTrackAuth)->Content());
+				TPtrC8 streamId((*tracks)[i]->Element(KExtension)->Element(KStreamId)->Content());
 
 				TBool loved((*tracks)[i]->Element(KExtension)->Element(KLoved)->Content().Compare(K0) != 0);
 				
-				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, trackauth, loved, ETrue));
+				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, streamId, loved, ETrue));
 				CleanupStack::PushL(track);
 				track->FindLocalTrackL();
 				aPlaylist.AppendTrackL(track);

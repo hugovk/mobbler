@@ -1842,6 +1842,7 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 				_LIT8(KTimestampFormat, "timestamp[%d]");
 				_LIT8(KDurationFormat, "duration[%d]");
 				_LIT8(KTrackNumberFormat, "trackNumber[%d]");
+				_LIT8(KStreamIdFormat, "streamId[%d]");
 			
 				TBuf8<16> artist;
 				TBuf8<16> album;
@@ -1849,12 +1850,14 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 				TBuf8<16> timestamp;
 				TBuf8<16> duration;
 				TBuf8<16> trackNumber;
+				TBuf8<16> streamId;
 				artist.AppendFormat(KArtistFormat, ii);
 				album.AppendFormat(KAlbumFormat, ii);
 				track.AppendFormat(KTrackFormat, ii);
 				timestamp.AppendFormat(KTimestampFormat, ii);
 				duration.AppendFormat(KDurationFormat, ii);
 				trackNumber.AppendFormat(KTrackNumberFormat, ii);
+				streamId.AppendFormat(KStreamIdFormat, ii);
 				
 				submitQuery->AddFieldL(artist, iTrackQueue[ii]->Artist().String8());
 				submitQuery->AddFieldL(track, iTrackQueue[ii]->Title().String8());
@@ -1871,11 +1874,18 @@ TBool CMobblerLastFmConnection::DoSubmitL()
 				startTimeBuf.AppendNum(unixTimeStamp.Int());
 				submitQuery->AddFieldL(timestamp, startTimeBuf);
 				
+				if (iTrackQueue[ii]->StreamId().Length() != 0)
+					{
+					// This is a  radio track so submit the stream id
+					submitQuery->AddFieldL(streamId, iTrackQueue[ii]->StreamId());
+					}
+				
 				if (iTrackQueue[ii]->Love() != CMobblerTrack::ENoLove)
 					{
 					// Make sure we also tell Last.fm in a web service call
 					iTrackQueue[ii]->LoveTrackL();
 					}
+				
 				TBuf8<10> trackLength;
 				trackLength.AppendNum(iTrackQueue[ii]->TrackLength().Int());
 				submitQuery->AddFieldL(duration, trackLength);
