@@ -44,12 +44,27 @@ CMobblerRadioPlaylist::CMobblerRadioPlaylist()
 void CMobblerRadioPlaylist::ConstructL()
 	{
     TRACER_AUTO;
+    iTitle = CMobblerString::NewL(KNullDesC);
 	}
 
 CMobblerRadioPlaylist::~CMobblerRadioPlaylist()
 	{
     TRACER_AUTO;
+    delete iTitle;
 	Reset();
+	}
+
+void CMobblerRadioPlaylist::SetTitleL(const TDesC8& aTitle)
+	{
+	TRACER_AUTO;
+	delete iTitle;
+	iTitle = CMobblerString::NewL(aTitle);
+	}
+
+CMobblerString& CMobblerRadioPlaylist::Title() const
+	{
+    TRACER_AUTO;
+	return *iTitle;
 	}
 
 void CMobblerRadioPlaylist::AppendTrackL(CMobblerTrack* aTrack)

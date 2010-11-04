@@ -35,6 +35,9 @@ public:
 	static CMobblerRadioPlaylist* NewL();
 	~CMobblerRadioPlaylist();
 	
+	void SetTitleL(const TDesC8& aTitle);
+	CMobblerString& Title() const;
+	
 	void AppendTrackL(CMobblerTrack* aTrack);
 	void RemoveAndReleaseTrack(TInt aTrackIndex);
 	void Reset();
@@ -49,6 +52,7 @@ private:
 
 private:
 	RPointerArray<CMobblerTrack> iPlaylist;
+	CMobblerString* iTitle;
 	};
 
 #endif // __MOBBLERRADIOPLAYLIST_H__

@@ -458,6 +458,11 @@ void CMobblerRadioPlayer::DataL(const TDesC8& aData, TInt aTransactionError)
 						// being fetched in the background so we do nothing
 						SkipTrackL();
 						}
+					
+					
+					// Pretend to change state so that the status control
+					// updates the navi pane to the new station name
+					DoChangeStateL(iState);
 					}
 				else
 					{
@@ -661,6 +666,11 @@ TInt CMobblerRadioPlayer::EqualizerIndex() const
 const CMobblerString& CMobblerRadioPlayer::Station() const
 	{
 //	TRACER_AUTO;
+	if (iPlaylist && iPlaylist->Title().String().Length() != 0)
+		{
+		return iPlaylist->Title();
+		}
+	
 	return *iStation;
 	}
 

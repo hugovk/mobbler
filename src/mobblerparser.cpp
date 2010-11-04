@@ -209,6 +209,12 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 
 		if (playlistElement)
 			{
+			CSenElement* titleElement(playlistElement->Element(KTitle));
+			if (titleElement)
+				{
+				aPlaylist.SetTitleL(titleElement->Content());
+				}
+		
 			CSenElement* trackListElement(playlistElement->Element(KTrackList));
 
 			if (trackListElement)
