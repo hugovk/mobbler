@@ -76,12 +76,12 @@ public:
 	void AddObserver(MMobblerBitmapObserver* aObserver);
 	
 private:
-	void ConstructL(const TDesC& aFileName, const TUid aFileUid);
-	void ConstructL(const TDesC8& aData, const TUid aFileUid);
-	void ConstructL(TUid aAppUid);
-	void ConstructL(const TDesC& aMifFileName, TInt aBitmapIndex, TInt iMaskIndex);
+	void ConstructL(MMobblerBitmapObserver& aObserver, const TDesC& aFileName, const TUid aFileUid);
+	void ConstructL(MMobblerBitmapObserver& aObserver, const TDesC8& aData, const TUid aFileUid);
+	void ConstructL(MMobblerBitmapObserver& aObserver, TUid aAppUid);
+	void ConstructL(MMobblerBitmapObserver& aObserver, const TDesC& aMifFileName, TInt aBitmapIndex, TInt iMaskIndex);
 	
-	CMobblerBitmap(MMobblerBitmapObserver* aObserver);
+	CMobblerBitmap();
 	~CMobblerBitmap();
 	
 private:

@@ -68,7 +68,7 @@ CMobblerBitmap* CMobblerBitmap::NewL(MMobblerBitmapObserver& aObserver, const TD
 	return self;
 	}
 
-CMobblerBitmap::CMobblerBitmap(MMobblerBitmapObserver* aObserver)
+CMobblerBitmap::CMobblerBitmap()
 	:CActive(CActive::EPriorityStandard), iRefCount(1)
 	{
     TRACER_AUTO;
@@ -222,9 +222,11 @@ TSize CMobblerBitmap::SizeInPixels() const
 	return returnSize;
 	}
 	
-void CMobblerBitmap::ConstructL(const TDesC& aFileName, const TUid aFileUid)
+void CMobblerBitmap::ConstructL(MMobblerBitmapObserver& aObserver, const TDesC& aFileName, const TUid aFileUid)
 	{
     TRACER_AUTO;
+	AddObserver(&aObserver);
+
 	TFileName fileName;
 	if (aFileName[0] == '\\')
 		{
@@ -261,9 +263,11 @@ void CMobblerBitmap::ConstructL(const TDesC& aFileName, const TUid aFileUid)
 	SetActive();
 	}
 
-void CMobblerBitmap::ConstructL(const TDesC8& aData, const TUid aFileUid)
+void CMobblerBitmap::ConstructL(MMobblerBitmapObserver& aObserver, const TDesC8& aData, const TUid aFileUid)
 	{
     TRACER_AUTO;
+	AddObserver(&aObserver);
+
 	iData = aData.AllocL();
 	
 	iImageDecoder = CImageDecoder::DataNewL(CCoeEnv::Static()->FsSession(), *iData, CImageDecoder::EOptionAlwaysThread, aFileUid, TUid::Null(), TUid::Null());
@@ -286,9 +290,11 @@ void CMobblerBitmap::ConstructL(const TDesC8& aData, const TUid aFileUid)
 	SetActive();
 	}
 
-void CMobblerBitmap::ConstructL(TUid aAppUid)
+void CMobblerBitmap::ConstructL(MMobblerBitmapObserver& aObserver, TUid aAppUid)
 	{
     TRACER_AUTO;
+	AddObserver(&aObserver);
+
 	CFbsBitmap* bitmap(NULL);
 	CFbsBitmap* mask(NULL);
 	AknsUtils::CreateAppIconLC(AknsUtils::SkinInstance(), aAppUid,  EAknsAppIconTypeContext, bitmap, mask);
@@ -298,9 +304,11 @@ void CMobblerBitmap::ConstructL(TUid aAppUid)
 	iBitmapLoaded = ETrue;
 	}
 	
-void CMobblerBitmap::ConstructL(const TDesC& aMifFileName, TInt aBitmapIndex, TInt aMaskIndex)
+void CMobblerBitmap::ConstructL(MMobblerBitmapObserver& aObserver, const TDesC& aMifFileName, TInt aBitmapIndex, TInt aMaskIndex)
 	{
     TRACER_AUTO;
+	AddObserver(&aObserver);
+
 	// Find which drive the mif file is on
 	iMifFileName = HBufC::NewL(aMifFileName.Length() + 2);
 	TParse parse;
