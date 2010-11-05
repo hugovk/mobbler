@@ -1028,7 +1028,12 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 					}
 				}
 			
-			CleanupStack::PopAndDestroy(2, xmlReader);
+			if (!(aObserver == iTwitterFollowObserverTrack
+				    || aObserver == iTwitterFollowObserverAlbum
+					|| aObserver == iTwitterFollowObserverArtist))
+				{
+				CleanupStack::PopAndDestroy(2, xmlReader);
+				}
 			}
 		else
 			{
