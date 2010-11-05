@@ -344,7 +344,7 @@ void CMobblerBitmap::RunL()
 				}
 		
 			iBitmapLoaded = ETrue;
-			for ( int i(0) ; i < iObservers.Count() ; ++i )
+			for ( TInt i(0) ; i < iObservers.Count() ; ++i )
 				{
 				iObservers[i]->BitmapLoadedL(this);
 				}
@@ -367,7 +367,7 @@ void CMobblerBitmap::RunL()
 			iScaledBitmap = NULL;
 			iScaleStatus = EMobblerScaleNone;
 
-			for ( int i(0) ; i < iObservers.Count() ; ++i )
+			for ( TInt i(0) ; i < iObservers.Count() ; ++i )
 				{
 				iObservers[i]->BitmapResizedL(this);
 				}
