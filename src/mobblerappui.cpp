@@ -736,7 +736,11 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandTwitterChange:
 			delete iTwitterAuthObserver;
 			iTwitterAuthObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);
-			iLastFmConnection->QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserver);
+			if (!iLastFmConnection->QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserver))
+				{
+				delete iTwitterAuthObserver;
+				iTwitterAuthObserver = NULL;
+				}
 			break;
 		case EMobblerCommandTwitterRemove:
 			SettingView().Settings().SetTwitterAuthToken(KNullDesC8);
