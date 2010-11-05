@@ -1613,7 +1613,7 @@ TBool CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 	
 	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
 	
-	transaction->ForcePostL();
+	transaction->SetTwitter();
 	
 	if (aCommand == ETweet || aCommand == EFollowMobbler)
 		{
@@ -1621,11 +1621,7 @@ TBool CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 		HBufC8* oauth(HBufC8::NewLC(1024));
 		oauth->Des().Copy(_L8("OAuth"));
 		
-		RStringF oauthHeader(iHTTPSession.StringPool().OpenFStringL(*oauth));
-		
-		// Add the OAuth
-		RHTTPHeaders headers(transaction->Transaction().Request().GetHeaderCollection());
-		headers.SetFieldL(iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()), oauthHeader);
+		transaction->AddTwitterOAuthStringL(*oauth);
 		
 		oauth->Des().Copy(_L8("realm=\"http://api.twitter.com/1/statuses/update.xml\",oauth_consumer_key=\""));
 		oauth->Des().Append(KMobblerTwitterConsumerKey);
@@ -1640,10 +1636,7 @@ TBool CMobblerLastFmConnection::QueryTwitterL(const TInt aCommand,
 		oauth->Des().Append(_L8("\""));
 		CleanupStack::PopAndDestroy(); // MobblerUtility::URLEncodeLC(signature)
 		
-		RStringF oauthHeaderValue(iHTTPSession.StringPool().OpenFStringL(*oauth));
-		
-		// Add the OAuth header value
-		headers.SetFieldL(iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()), oauthHeaderValue);
+		transaction->AddTwitterOAuthStringL(*oauth);
 		
 		CleanupStack::PopAndDestroy(oauth);
 		}
