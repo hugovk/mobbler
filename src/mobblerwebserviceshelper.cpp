@@ -761,11 +761,26 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 		}
     else
 		{
-		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone
+				// We don't care if there was an error following @Mobbler
+				// it was probably just that they are already following us
+			    || aObserver == iTwitterFollowObserverTrack
+			    || aObserver == iTwitterFollowObserverAlbum
+				|| aObserver == iTwitterFollowObserverArtist)
 			{
 			// Parse the XML
-			CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
-			CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
+			CSenXmlReader* xmlReader(NULL);
+			CSenDomFragment* domFragment(NULL);
+			
+			if (!(aObserver == iTwitterFollowObserverTrack
+				    || aObserver == iTwitterFollowObserverAlbum
+					|| aObserver == iTwitterFollowObserverArtist))
+				{
+				// Don't parse the response for the following calls as we don't need to and
+				// it could be a blank document if they were already following @Mobbler
+				xmlReader = CSenXmlReader::NewLC();
+				domFragment = MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData);
+				}
 			
 			if (aObserver == iShareObserverHelper ||
 					aObserver == iPlaylistAddObserverHelper)

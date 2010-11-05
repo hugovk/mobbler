@@ -111,9 +111,19 @@ RHTTPTransaction& CMobblerTransaction::Transaction()
 	return iTransaction;
 	}
 
-void CMobblerTransaction::ForcePostL()
+void CMobblerTransaction::SetTwitter()
 	{
-	iForcePost = ETrue;
+	iTwitter = ETrue;
+	}
+
+void CMobblerTransaction::AddTwitterOAuthStringL(const TDesC8& aString)
+	{
+	if (!iTwitterOAuthStrings)
+		{
+		iTwitterOAuthStrings = new CDesC8ArrayFlat(4);
+		}
+	
+	iTwitterOAuthStrings->AppendL(aString);
 	}
 
 void CMobblerTransaction::SubmitL()
@@ -122,7 +132,7 @@ void CMobblerTransaction::SubmitL()
 	delete iBuffer;
 	iBuffer = CBufFlat::NewL(KBufferGranularity);
 	
-	if (iURI && !iForcePost)
+	if (iURI && !iTwitter)
 		{
 		if (iQuery)
 			{
@@ -157,7 +167,7 @@ void CMobblerTransaction::SubmitL()
 			}
 		}
 	
-	if (iForcePost)
+	if (iTwitter)
 		{
 		// open the transaction
 		RStringF string;
@@ -169,6 +179,19 @@ void CMobblerTransaction::SubmitL()
 		iForm = CHTTPFormEncoder::NewL();
 		
 		iTransaction.Request().SetBody(*iForm);
+		
+		if (iTwitterOAuthStrings)
+			{
+			for (TInt i(0) ; i < iTwitterOAuthStrings->Count() ; ++i) 
+				{
+				// create the OAuth header
+				RStringF oauthHeader(iConnection.iHTTPSession.StringPool().OpenFStringL((*iTwitterOAuthStrings)[i]));
+				
+				// Add the OAuth
+				RHTTPHeaders headers(iTransaction.Request().GetHeaderCollection());
+				headers.SetFieldL(iConnection.iHTTPSession.StringPool().StringF(HTTP::EAuthorization, RHTTPSession::GetTable()), oauthHeader);
+				}
+			}
 		}
 	
 	iTransaction.SubmitL();
@@ -182,6 +205,7 @@ CMobblerTransaction::~CMobblerTransaction()
 	delete iForm;
 	delete iURI;
 	delete iQuery;
+	delete iTwitterOAuthStrings;
 	}
 
 void CMobblerTransaction::Cancel()
