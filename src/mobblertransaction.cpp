@@ -182,7 +182,7 @@ void CMobblerTransaction::SubmitL()
 		
 		if (iTwitterOAuthStrings)
 			{
-			for (TInt i(0) ; i < iTwitterOAuthStrings->Count() ; ++i) 
+			for (TInt i(0); i < iTwitterOAuthStrings->Count(); ++i) 
 				{
 				// create the OAuth header
 				RStringF oauthHeader(iConnection.iHTTPSession.StringPool().OpenFStringL((*iTwitterOAuthStrings)[i]));

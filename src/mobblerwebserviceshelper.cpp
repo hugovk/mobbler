@@ -1024,7 +1024,7 @@ void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver,
 					}
 				else
 					{
-					// ther was a transaction error with shortening
+					// there was a transaction error with shortening
 					}
 				}
 			

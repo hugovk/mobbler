@@ -1531,6 +1531,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 #endif // __SYMBIAN_SIGNED__
 		else if (aObserver == iTwitterAuthObserver)
 			{
+			DUMPDATA(aData, _L("twitterauth.xml"));
 			HBufC8* error(CMobblerParser::ParseTwitterAuthL(aData));
 			
 			if (!error)

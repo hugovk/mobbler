@@ -190,50 +190,48 @@ void CMobblerEventList::SupportedCommandsL(RArray<TInt>& aCommands)
 void CMobblerEventList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
-	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+	DUMPDATA(aData, _L("attendance.xml"));
+	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone &&
+		aObserver == iAttendanceHelperNo &&
+		iType == EMobblerCommandUserEvents)
 		{
-		if (aObserver == iAttendanceHelperNo &&
-				iType == EMobblerCommandUserEvents)
+		// We have removed an event from the person's Last.fm events. 
+		// If the person is the user, remove it from the list.
+		// Don't remove it from friends' lists.
+		
+		if (iText1->String().CompareF(iAppUi.SettingView().Settings().Username()) == 0)
 			{
-			DUMPDATA(aData, _L("attendance.xml"));
-			// We have removed an event from the person's Last.fm events. 
-			// If the person is the user, remove it from the list.
-			// Don't remove it from friends' lists.
+			// Parse the XML
+			CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
+			CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
 			
-			if (iText1->String().CompareF(iAppUi.SettingView().Settings().Username()) == 0)
+			const TDesC8* statusText(domFragment->AsElement().AttrValue(KStatus));
+			
+			if (iListBox && statusText && (statusText->CompareF(KOk) == 0))
 				{
-				// Parse the XML
-				CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
-				CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
+				// Get the list box items model
+				MDesCArray* listArray(iListBox->Model()->ItemTextArray());
+				CDesCArray* itemArray(static_cast<CDesCArray*>(listArray));
 				
-				const TDesC8* statusText(domFragment->AsElement().AttrValue(KStatus));
+				 // Number of items in the list
+				const TInt KCount(itemArray->Count());
 				
-				if (iListBox && statusText && (statusText->CompareF(KOk) == 0))
+				// Validate index then delete
+				const TInt KIndex(iListBox->CurrentItemIndex());
+				if (KIndex >= 0 && KIndex < KCount)
 					{
-					// Get the list box items model
-					MDesCArray* listArray(iListBox->Model()->ItemTextArray());
-					CDesCArray* itemArray(static_cast<CDesCArray*>(listArray));
-					
-					 // Number of items in the list
-					const TInt KCount(itemArray->Count());
-					
-					// Validate index then delete
-					const TInt KIndex(iListBox->CurrentItemIndex());
-					if (KIndex >= 0 && KIndex < KCount)
-						{
-						itemArray->Delete(KIndex, 1);
-						AknListBoxUtils::HandleItemRemovalAndPositionHighlightL(
-							iListBox, KIndex, ETrue);
-						iListBox->DrawNow();
-						}
+					itemArray->Delete(KIndex, 1);
+					AknListBoxUtils::HandleItemRemovalAndPositionHighlightL(
+						iListBox, KIndex, ETrue);
+					iListBox->DrawNow();
 					}
-				else
-					{
-					// There was an error!
-					}
-				
-				CleanupStack::PopAndDestroy(2);
 				}
+			else
+				{
+				// There was an error!
+				}
+			
+			CleanupStack::PopAndDestroy(2);
 			}
 		}
 	}
