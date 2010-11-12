@@ -831,6 +831,11 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 						{
 						station = iPreviousRadioArtist->String();
 						}
+					else
+						{
+						_LIT(KDefault, "Emmy the Great");
+						station = KDefault();
+						}
 					}
 					break;
 				case EMobblerCommandRadioTag:
@@ -839,6 +844,11 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 					if (iPreviousRadioTag)
 						{
 						station = iPreviousRadioTag->String();
+						}
+					else
+						{
+						_LIT(KDefault, "ukulele");
+						station = KDefault();
 						}
 					}
 					break;
@@ -849,6 +859,11 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 						{
 						station = iPreviousRadioUser->String();
 						}
+					else
+						{
+						_LIT(KDefault, "eartle");
+						station = KDefault();
+						}
 					}
 					break;
 				case EMobblerCommandRadioGroup:
@@ -857,6 +872,11 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 					if (iPreviousRadioGroup)
 						{
 						station = iPreviousRadioGroup->String();
+						}
+					else
+						{
+						_LIT(KDefault, "Mobbler Users");
+						station = KDefault();
 						}
 					}
 					break;
@@ -869,8 +889,8 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 						}
 					else
 						{
-						_LIT(KCustomPrefix, "lastfm://");
-						station = KCustomPrefix();
+						_LIT(KDefault, "lastfm://group/Mobbler+Users");
+						station = KDefault();
 						}
 					}
 					break;
