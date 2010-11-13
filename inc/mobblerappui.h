@@ -197,6 +197,7 @@ public:
 	TInt LaunchFileL(const TDesC& aFilename);
 	TBool DetailsNeeded();
 	void ShowLyricsL(const TDesC8& aData);
+	void ShowBiographyL(const TDesC8& aData);
 	void WarnOldScrobblesL();
 
 public: // CEikAppUi

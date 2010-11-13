@@ -140,6 +140,10 @@ RESOURCE MENU_PANE r_mobbler_webservices_menu_pane
 			},
 		MENU_ITEM
 			{
+			command = EMobblerCommandBiography;
+			},
+		MENU_ITEM
+			{
 			command = EMobblerCommandTrackLyrics;
 			},
 		MENU_ITEM
@@ -338,7 +342,7 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			},
 		MENU_ITEM
 			{
-			command = EMobblerCommandPlusArtistBiography;
+			command = EMobblerCommandBiography;
 			},
 		MENU_ITEM
 			{

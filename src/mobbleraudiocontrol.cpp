@@ -27,7 +27,6 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblerappui.h"
 #include "mobbleraudiocontrol.h"
 #include "mobbleraudiothread.h"
-#include "mobblerlogging.h"
 #include "mobblerstring.h"
 #include "mobblertracer.h"
 #include "mobblertrack.h"

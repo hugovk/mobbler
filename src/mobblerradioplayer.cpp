@@ -32,7 +32,6 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobbleraudiothread.h"
 #include "mobblerincomingcallmonitor.h"
 #include "mobblerlastfmconnection.h"
-#include "mobblerlogging.h"
 #include "mobblerparser.h"
 #include "mobblerradioplayer.h"
 #include "mobblerradioplaylist.h"

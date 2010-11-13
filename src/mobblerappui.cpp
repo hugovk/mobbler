@@ -965,7 +965,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandPlusVisitLastFm:
 			HandleCommandL(EMobblerCommandVisitWebPage);
 			break;
-		case EMobblerCommandPlusArtistBiography:
+		case EMobblerCommandBiography:
 			if (currentTrack)
 				{
 				delete iArtistBiographyObserver;
@@ -1422,50 +1422,10 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 		else if (aObserver == iLyricsObserver)
 			{
 			ShowLyricsL(aData);
-			} // else if (aObserver == iLyricsObserver)
+			}
 		else if (aObserver == iArtistBiographyObserver)
 			{
-			HBufC8* tagsText(NULL);
-			HBufC8* similarArtistsText(NULL);
-			HBufC8* imageUrl(NULL);
-			HBufC8* artistInfo(NULL);
-
-			CMobblerParser::ParseArtistInfoL(aData, artistInfo, imageUrl, tagsText, similarArtistsText);
-
-			CleanupStack::PushL(tagsText);
-			CleanupStack::PushL(imageUrl);
-			CleanupStack::PushL(artistInfo);
-			CleanupStack::PushL(similarArtistsText);
-
-			// Decide how big the artist picture should be taking into account the width
-			// of the application
-			TInt artistImageWidth((TInt)((TReal)ApplicationRect().Width() * 0.40));
-
-			HBufC8* artistInfoHtml(HBufC8::NewLC(
-					KHtmlHeaderTemplate().Length() +
-					KBiographyHtmlTemplate().Length() +
-					CurrentTrack()->Artist().String8().Length() +
-					tagsText->Length() +
-					similarArtistsText->Length() +
-					imageUrl->Length() +
-					3 +
-					artistInfo->Length()));
-
-			TPtr8 artistHtmlPtr(artistInfoHtml->Des());
-			artistHtmlPtr.Append(KHtmlHeaderTemplate);
-			artistHtmlPtr.AppendFormat(
-					KBiographyHtmlTemplate,
-					&(CurrentTrack()->Artist().String8()),
-					imageUrl,
-					artistImageWidth,
-					tagsText,
-					similarArtistsText,
-					artistInfo);
-			DUMPDATA(artistHtmlPtr, _L("artistbio.txt"));
-
-			ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandPlusArtistBiography), artistHtmlPtr);
-
-			CleanupStack::PopAndDestroy(5, tagsText);
+			ShowBiographyL(aData);
 			}
 #ifdef __SYMBIAN_SIGNED__
 		else if (aObserver == iLocalEventsObserver)
@@ -2785,6 +2745,55 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 #endif // _DEBUG
 
 	CleanupStack::PopAndDestroy(2); // xmlReader & domFragment
+	}
+
+void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
+	{
+	TRACER_AUTO;
+	DUMPDATA(aData, _L("bio.xml"));
+	HBufC8* artist(NULL);
+	HBufC8* artistInfo(NULL);
+	HBufC8* imageUrl(NULL);
+	HBufC8* tagsText(NULL);
+	HBufC8* similarArtistsText(NULL);
+
+	CMobblerParser::ParseArtistInfoL(aData, artist, artistInfo, imageUrl, tagsText, similarArtistsText);
+
+	CleanupStack::PushL(artist);
+	CleanupStack::PushL(artistInfo);
+	CleanupStack::PushL(imageUrl);
+	CleanupStack::PushL(tagsText);
+	CleanupStack::PushL(similarArtistsText);
+
+	// Decide how big the artist picture should be taking into account the width
+	// of the application
+	TInt artistImageWidth((TInt)((TReal)ApplicationRect().Width() * 0.40));
+
+	HBufC8* artistInfoHtml(HBufC8::NewLC(
+			KHtmlHeaderTemplate().Length() +
+			KBiographyHtmlTemplate().Length() +
+			artist->Length() +
+			tagsText->Length() +
+			similarArtistsText->Length() +
+			imageUrl->Length() +
+			3 +
+			artistInfo->Length()));
+
+	TPtr8 artistHtmlPtr(artistInfoHtml->Des());
+	artistHtmlPtr.Append(KHtmlHeaderTemplate);
+	artistHtmlPtr.AppendFormat(
+			KBiographyHtmlTemplate,
+			artist,
+			imageUrl,
+			artistImageWidth,
+			tagsText,
+			similarArtistsText,
+			artistInfo);
+	DUMPDATA(artistHtmlPtr, _L("artistbio.txt"));
+
+	ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandBiography), artistHtmlPtr);
+
+	CleanupStack::PopAndDestroy(6, artist);
 	}
 
 void CMobblerAppUi::WarnOldScrobblesL()

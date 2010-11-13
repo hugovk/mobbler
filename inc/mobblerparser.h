@@ -53,7 +53,7 @@ public:
 	
 	static HBufC8* CMobblerParser::ParseTwitterAuthL(const TDesC8& aData);
 
-	static TInt ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion, TDes8& location);
+	static TInt ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion, TDes8& aLocation);
 	
 	static TInt FriendOrder(const CMobblerListItem& aLeft, const CMobblerListItem& aRight);
 
@@ -79,7 +79,7 @@ public:
 	static void ParsePlaylistsL(const TDesC8& aXml, CMobblerPlaylistList& aObserver, RPointerArray<CMobblerListItem>& aList);
 	static void ParseShoutboxL(const TDesC8& aXml, CMobblerShoutbox& aObserver, RPointerArray<CMobblerListItem>& aList);
 
-	static void ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, HBufC8*& aImageUrl, HBufC8*& aTagsText, HBufC8*& aSimilarArtistsText);
+	static void ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtist, HBufC8*& aArtistBio, HBufC8*& aImageUrl, HBufC8*& aTagsText, HBufC8*& aSimilarArtistsText);
 
 //private:
 //	static HBufC8* DecodeURIStringLC(const TDesC8& aString);

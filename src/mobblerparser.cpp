@@ -1098,7 +1098,7 @@ void CMobblerParser::ParseTopTagsL(const TDesC8& aXml, CMobblerTagList& aObserve
 	CleanupStack::PopAndDestroy(2, xmlReader);
 	}
 
-TInt CMobblerParser::ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion, TDes8& location)
+TInt CMobblerParser::ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion, TDes8& aLocation)
 	{
     TRACER_AUTO;
 	DUMPDATA(aXml, _L("update.xml"));
@@ -1116,7 +1116,7 @@ TInt CMobblerParser::ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion
 	error |= lex8.Val(aVersion.iMinor);
 	lex8.Assign(domFragment->AsElement().Element(KUpdateVersionBuild)->Content());
 	error |= lex8.Val(aVersion.iBuild);
-	location.Copy(domFragment->AsElement().Element(KUpdateLocation)->Content());
+	aLocation.Copy(domFragment->AsElement().Element(KUpdateLocation)->Content());
 
 	CleanupStack::PopAndDestroy(2, xmlReader);
 
@@ -1126,7 +1126,7 @@ TInt CMobblerParser::ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion
 /**
  * Ownership of aArtistBio, aImageUrl, aTagsText remain with the calling function.
  */
-void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, HBufC8*& aImageUrl, HBufC8*& aTagsText, HBufC8*& aSimilarArtistsText)
+void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtist, HBufC8*& aArtistBio, HBufC8*& aImageUrl, HBufC8*& aTagsText, HBufC8*& aSimilarArtistsText)
 	{
     TRACER_AUTO;
 	DUMPDATA(aXml, _L("artistgetinfo.xml"));
@@ -1145,23 +1145,29 @@ void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, H
 	CSenElement* artistElement(domFragment->AsElement().Element(KArtist));
 	User::LeaveIfNull(artistElement); // No point continuing if there is no data at all
 
+	// Get the artist name
+	TPtrC8 artistPtr(artistElement->Content());
+
+	aArtist = HBufC8::NewLC(artistPtr.Length());
+	SenXmlUtils::DecodeHttpCharactersL(artistPtr, aArtist);
+
 	// Get the actual artist's biography
 	// Display summary if there is no extended content
-	TPtrC8 contentPtr(artistElement->Element(KBio)->Element(KContent)->Content());
-	if (contentPtr.Length() == 0)
+	TPtrC8 bioPtr(artistElement->Element(KBio)->Element(KContent)->Content());
+	if (bioPtr.Length() == 0)
 		{
-		contentPtr.Set(artistElement->Element(KBio)->Element(KSummary)->Content());
+		bioPtr.Set(artistElement->Element(KBio)->Element(KSummary)->Content());
 		}
 
-	aArtistBio = HBufC8::NewLC(contentPtr.Length());
-	SenXmlUtils::DecodeHttpCharactersL(contentPtr, aArtistBio);
+	aArtistBio = HBufC8::NewLC(bioPtr.Length());
+	SenXmlUtils::DecodeHttpCharactersL(bioPtr, aArtistBio);
 
 	MobblerUtility::StripUnwantedTagsFromHtmlL(aArtistBio);
 	CleanupStack::Pop(); 	// StripUnwantedTagsFromHtmlL may reallocate the buffer
 							// hence the pointer may change
 	CleanupStack::PushL(aArtistBio);
 
-	// Get the image url
+	// Get the image URL
 	RPointerArray<CSenElement> imageArray;
 	CleanupClosePushL(imageArray);
 	TInt err(artistElement->ElementsL(imageArray, KImage));
@@ -1272,6 +1278,7 @@ void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtistBio, H
 	CleanupStack::Pop(aImageUrl);
 	CleanupStack::PopAndDestroy(&imageArray);
 	CleanupStack::Pop(aArtistBio);
+	CleanupStack::Pop(aArtist);
 	CleanupStack::PopAndDestroy(2, xmlReader);
 	}
 
