@@ -2791,9 +2791,9 @@ void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
 			artistInfo);
 	DUMPDATA(artistHtmlPtr, _L("artistbio.txt"));
 
-	ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandBiography), artistHtmlPtr);
-
 	CleanupStack::PopAndDestroy(6, artist);
+
+	ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandBiography), artistHtmlPtr);
 	}
 
 void CMobblerAppUi::WarnOldScrobblesL()
