@@ -1,7 +1,12 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
-Copyright (C) 200?, 2010  Dominykas T.
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
+Copyright (C) 2009, 2010  Dominykas T.
+Copyright (C) 2009  Petras Jonaitis
 
 http://code.google.com/p/mobbler
 
@@ -32,7 +37,7 @@ rls_string STR_mobbler_username "Vartotojo vardas"
 rls_string STR_mobbler_password "Slaptažodis"
 rls_string STR_mobbler_connecting "Jungiamasi prie Last.fm"
 rls_string STR_mobbler_about_text1 "Mobbler "
-rls_string STR_mobbler_about_text2 "\ncode.google.com/p/mobbler\n\nby Michael Coffey\nHugo van Kemenade\nSteve Punter\nJames Aley\ngw111zz\nJames Clarke\n\nIšvertė\nDominykas T. (TrueSkillZ)\ndjtrue1@gmail.com"
+rls_string STR_mobbler_about_text2 "\ncode.google.com/p/mobbler\n\nby Michael Coffey\nHugo van Kemenade\nSteve Punter\nJames Aley\ngw111zz\nJames Clarke\n\nIšvertė\nDominykas T. (TrueSkillZ)\ndjtrue1@gmail.com\nPetras Jonaitis"
 rls_string STR_mobbler_note_connected "Prisijungta Last.fm!"
 rls_string STR_mobbler_note_banned "Mobbler uždraustas! Rašykite apie problemą į code.google.com/p/mobbler."
 rls_string STR_mobbler_note_bad_auth "Slaptažodis neteisingas"
@@ -308,12 +313,12 @@ rls_string STR_mobbler_twitter_now_playing_artist_format "Klausosi %S"
 rls_string STR_mobbler_twitter_share_artist_format "Dalinasi %S"
 rls_string STR_mobbler_download_album_art_always_and_keep "Visada ir laikyti"
 rls_string STR_mobbler_download_album_art_always_and_ditch "Visada ir išmesti"
-rls_string STR_mobbler_radio_group "Group"
-rls_string STR_mobbler_radio_enter_group "Group:"
-rls_string STR_mobbler_group_format "%S radio"
-rls_string STR_mobbler_radio_custom "Custom"
-rls_string STR_mobbler_radio_enter_custom "Custom:"
-rls_string STR_mobbler_custom_format "%S radio"
-rls_string STR_mobbler_share_album "Share album"
-rls_string STR_mobbler_lastfm_account "Do you have a Last.fm account?"
-rls_string STR_mobbler_radio_mix "My mix radio"
+rls_string STR_mobbler_radio_group "Grupė"
+rls_string STR_mobbler_radio_enter_group "Grupė:"
+rls_string STR_mobbler_group_format "%S radija"
+rls_string STR_mobbler_radio_custom "Nustatyta"
+rls_string STR_mobbler_radio_enter_custom "Nustatyta:"
+rls_string STR_mobbler_custom_format "%S radija"
+rls_string STR_mobbler_share_album "Dalintis albumu"
+rls_string STR_mobbler_lastfm_account "Ar turite Last.fm vartotoją?"
+rls_string STR_mobbler_radio_mix "Mano mix radija"

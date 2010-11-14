@@ -2769,7 +2769,7 @@ void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
 	// of the application
 	TInt artistImageWidth((TInt)((TReal)ApplicationRect().Width() * 0.40));
 
-	HBufC8* artistInfoHtml(HBufC8::NewLC(
+	HBufC8* artistInfoHtml(HBufC8::NewL(
 			KHtmlHeaderTemplate().Length() +
 			KBiographyHtmlTemplate().Length() +
 			artist->Length() +
@@ -2791,9 +2791,10 @@ void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
 			artistInfo);
 	DUMPDATA(artistHtmlPtr, _L("artistbio.txt"));
 
-	CleanupStack::PopAndDestroy(6, artist);
-
+	CleanupStack::PopAndDestroy(5, artist);
+	CleanupStack::PushL(artistInfoHtml);
 	ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandBiography), artistHtmlPtr);
+	CleanupStack::PopAndDestroy(artistInfoHtml);
 	}
 
 void CMobblerAppUi::WarnOldScrobblesL()
