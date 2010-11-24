@@ -976,6 +976,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			break;
 		case EMobblerCommandPlusShareTrack:
 		case EMobblerCommandPlusShareArtist:
+		case EMobblerCommandPlusShareAlbum:
 		case EMobblerCommandPlusPlaylistAddTrack:
 			{
 			if (CurrentTrack())
@@ -984,6 +985,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 					{
 					case EMobblerCommandPlusShareTrack: iWebServicesHelper->TrackShareL(*CurrentTrack()); break;
 					case EMobblerCommandPlusShareArtist: iWebServicesHelper->ArtistShareL(*CurrentTrack()); break;
+					case EMobblerCommandPlusShareAlbum: iWebServicesHelper->AlbumShareL(*CurrentTrack()); break;
 					case EMobblerCommandPlusPlaylistAddTrack: iWebServicesHelper->PlaylistAddL(*CurrentTrack()); break;
 					}
 				}
