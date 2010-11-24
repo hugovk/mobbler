@@ -194,6 +194,8 @@ CHTTPFormEncoder* CMobblerWebServicesQuery::GetFormLC() const
 		apiSigLength += iFields[i].iValue->Length();
 		}
 	
+	apiSigLength += KMobblerSecretKey().Length();
+	
 	HBufC8* apiSig(HBufC8::NewLC(apiSigLength));
 	
 	// add all the fields
