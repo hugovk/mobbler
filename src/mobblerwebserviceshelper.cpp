@@ -334,8 +334,8 @@ void CMobblerWebServicesHelper::DoShareTwitterL(const TInt aCommand)
 		messageLength += iTrack->Title().String().Length();
 		}
 	delete iShareMessage;
-	iShareMessage = HBufC::NewL(Max(140, messageLength));
-	TPtr shareMessage = iShareMessage->Des();
+	iShareMessage = HBufC::NewL(Max(KMaxTweetLength, messageLength));
+	TPtr shareMessage(iShareMessage->Des());
 	if (aCommand == EMobblerCommandTrackShare)
 		{
 		shareMessage.Format(shareFormat, &iTrack->Title().String(), &iTrack->Artist().String());

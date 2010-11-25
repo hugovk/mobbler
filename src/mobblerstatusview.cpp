@@ -516,7 +516,7 @@ void CMobblerStatusView::SettingsWizardL()
 			{
 			// Open the mobile site to sign up to Last.fm
 			_LIT(KJoin, "join");
-			HBufC* joinUrl = HBufC::NewLC(MobblerUtility::LocalLastFmDomainL(ETrue).Length() + KJoin().Length());
+			HBufC* joinUrl(HBufC::NewLC(MobblerUtility::LocalLastFmDomainL(ETrue).Length() + KJoin().Length()));
 			joinUrl->Des().Append(MobblerUtility::LocalLastFmDomainL(ETrue));
 			joinUrl->Des().Append(KJoin);
 			static_cast<CMobblerAppUi*>(AppUi())->OpenWebBrowserL(*joinUrl);

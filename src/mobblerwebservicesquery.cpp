@@ -88,7 +88,7 @@ HBufC8* CMobblerWebServicesQuery::GetQueryAuthLC() const
     
 	// add all the fields
 	const TInt KFieldCount(iFields.Count());
-	for (TInt i(0) ; i < KFieldCount ; ++i)
+	for (TInt i(0); i < KFieldCount; ++i)
 		{
 		// add the fields for the normal query
 		if (i > 0)
@@ -117,7 +117,7 @@ HBufC8* CMobblerWebServicesQuery::GetQueryAuthLC() const
 	HBufC8* apiSig(HBufC8::NewLC(apiSigLength));
 	
 	// add all the fields
-	for (TInt i(0) ; i < KFieldCount ; ++i)
+	for (TInt i(0); i < KFieldCount; ++i)
 		{
 		// add the fields for the normal query
 		if (i > 0)
@@ -184,7 +184,7 @@ CHTTPFormEncoder* CMobblerWebServicesQuery::GetFormLC() const
 	CHTTPFormEncoder* form(CHTTPFormEncoder::NewL());
 	CleanupStack::PushL(form);
 	
-	TInt apiSigLength(0);
+	TInt apiSigLength(KMobblerSecretKey().Length());
 	
 	// add all the fields
 	const TInt KFieldCount(iFields.Count());
@@ -193,8 +193,6 @@ CHTTPFormEncoder* CMobblerWebServicesQuery::GetFormLC() const
 		apiSigLength += iFields[i].iParameter->Length();
 		apiSigLength += iFields[i].iValue->Length();
 		}
-	
-	apiSigLength += KMobblerSecretKey().Length();
 	
 	HBufC8* apiSig(HBufC8::NewLC(apiSigLength));
 	

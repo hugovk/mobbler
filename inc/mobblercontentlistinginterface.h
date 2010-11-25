@@ -39,6 +39,6 @@ public:
 	virtual void CancelFindLocalTrack(MMobblerContentListingObserver* aObserver) = 0;
 	};
 
-#endif // __MOBBLERTOUCHFEEDBACKINTERFACE_H__
+#endif // __MOBBLERCONTENTLISTINGINTERFACE_H__
 
 // End of file

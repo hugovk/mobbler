@@ -28,7 +28,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include <aknutils.h>
 #include <gulicon.h>
 
-#ifdef  __S60_50__
+#ifdef __S60_50__
 #include <mobbler/mobblertouchfeedbackinterface.h>
 #include <touchfeedback.h>
 #endif
@@ -63,9 +63,9 @@ const TRgb KRgbTransparent(0x00, 0x00, 0x00, 0x00);
 #endif
 
 #ifdef __SYMBIAN_SIGNED__
-const TUid KTouchFeedbackImplUID = {0x20026565};
+const TUid KTouchFeedbackImplUid = {0x20026565};
 #else
-const TUid KTouchFeedbackImplUID = {0xA000B6CD};
+const TUid KTouchFeedbackImplUid = {0xA000B6CD};
 #endif 
 const TTimeIntervalMicroSeconds32 KTimeout(2000000);
 
@@ -89,8 +89,8 @@ CMobblerStatusControl::CMobblerStatusControl(const CMobblerAppUi& aAppUi)
 void CMobblerStatusControl::ConstructL(const TRect& aRect)
 	{
 //	TRACER_AUTO;
-#ifdef  __S60_50__
-	TRAP_IGNORE(iMobblerFeedback = static_cast<CMobblerTouchFeedbackInterface*>(REComSession::CreateImplementationL(KTouchFeedbackImplUID, iDtorIdKey)));
+#ifdef __S60_50__
+	TRAP_IGNORE(iMobblerFeedback = static_cast<CMobblerTouchFeedbackInterface*>(REComSession::CreateImplementationL(KTouchFeedbackImplUid, iDtorIdKey)));
 #endif
 	
 	// No parent owner, so create an own window
@@ -614,7 +614,7 @@ CMobblerStatusControl::~CMobblerStatusControl()
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapMusicAppIcon);
 	iAppUi.BitmapCollection().Cancel(iMobblerBitmapAppIcon);
 	
-#ifdef  __S60_50__
+#ifdef __S60_50__
 	if (iMobblerFeedback)
 		{
 		delete iMobblerFeedback;
@@ -1246,7 +1246,7 @@ void CMobblerStatusControl::HandlePointerEventL(const TPointerEvent& aPointerEve
 				{
 				if (iMobblerFeedback)
 					{
-#ifdef  __S60_50__
+#ifdef __S60_50__
 					iMobblerFeedback->InstantFeedback(ETouchFeedbackBasic);
 #endif
 					}

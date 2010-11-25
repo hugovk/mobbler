@@ -26,7 +26,6 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __MOBBLERAPPUI_H__
 #define __MOBBLERAPPUI_H__
 
-#include <aknserverapp.h>	// MAknServerAppExitObserver
 #include <aknviewappui.h>
 #include <remconcoreapitargetobserver.h>    // link against RemConCoreApi.lib
 #include <remconcoreapitarget.h>            // and
@@ -49,7 +48,7 @@ const TInt KUpdateIntervalHours(24);
 const TInt KMaxMobblerTextSize(255);
 
 const TInt KMobblerMinorVersion(10);
-const TInt KMobblerBuildNumber(311);
+const TInt KMobblerBuildNumber(80);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
