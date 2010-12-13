@@ -1,24 +1,30 @@
 /*
-mobbler.l27 - Polish
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
+Copyright (C) 2008, 2009, 2010  Piotr Worotnicki
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+mobbler.l27 - Polish
+
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 rls_string STR_mobbler_mobbler "Mobbler"
@@ -173,7 +179,7 @@ rls_string STR_mobbler_playlist_format "Playlista %S"
 rls_string STR_mobbler_artist_format "Radio %S"
 rls_string STR_mobbler_tag_format "Radio %S"
 rls_string STR_mobbler_recommended_artists "Polecani artyści"
-rls_string STR_mobbler_recommended_events "polecane wydarzenia"
+rls_string STR_mobbler_recommended_events "Polecane wydarzenia"
 rls_string STR_mobbler_similar_artists_format "Artyści podobni do %S"
 rls_string STR_mobbler_playlist_add_track "Dodaj do playlisty"
 rls_string STR_mobbler_format_play "%S odtworzenie"
@@ -287,31 +293,31 @@ rls_string STR_mobbler_similar "Podobne"
 rls_string STR_mobbler_top "Najlepsze"
 rls_string STR_mobbler_lyrics "Tekst"
 rls_string STR_mobbler_lyrics_not_found "Nie znaleziono tekstu"
-rls_string STR_mobbler_scrobble_track_option "Scrobble track"
-rls_string STR_mobbler_scrobble_album_option "Scrobble album"
-rls_string STR_mobbler_local_events "Local events"
-rls_string STR_mobbler_old_scrobbles_warning "You have queued scrobbles close to two weeks old which will be ignored by Last.fm after that. Scrobble soon!"
-rls_string STR_mobbler_twitter_change "Change Twitter user"
-rls_string STR_mobbler_twitter_remove "Remove Twitter user"
-rls_string STR_mobbler_twitter_follow "Would you like to follow @Mobbler on Twitter?"
-rls_string STR_mobbler_share_lastfm "Last.fm friends"
+rls_string STR_mobbler_scrobble_track_option "Scrobbluj utwór"
+rls_string STR_mobbler_scrobble_album_option "Scrobbluj album"
+rls_string STR_mobbler_local_events "Wydarzenia"
+rls_string STR_mobbler_old_scrobbles_warning "Masz w kolejce utwory, które niedługo będą miały dwa tygodnie i zostaną zignorowane przez Last.fm!"
+rls_string STR_mobbler_twitter_change Zmień użytkownika Twittera"
+rls_string STR_mobbler_twitter_remove "Usuń użytkownika Twittera"
+rls_string STR_mobbler_twitter_follow "Czy chcesz śledzić @Mobbler na Twitterze?"
+rls_string STR_mobbler_share_lastfm "Znajomi z Last.fm"
 rls_string STR_mobbler_share_twitter "Twitter"
-rls_string STR_mobbler_share_contacts "Contacts"
-rls_string STR_mobbler_twitter_now_playing_track_format "Listening to \"%S\" by %S"
-rls_string STR_mobbler_twitter_share_track_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_love_track_format "Loved \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_album_format "Listening to %S by %S"
-rls_string STR_mobbler_twitter_share_album_format "Sharing %S by %S"
-rls_string STR_mobbler_twitter_now_playing_artist_format "Listening to %S"
-rls_string STR_mobbler_twitter_share_artist_format "Sharing %S"
-rls_string STR_mobbler_download_album_art_always_and_keep "Always and keep"
-rls_string STR_mobbler_download_album_art_always_and_ditch "Always and ditch"
-rls_string STR_mobbler_radio_group "Group"
-rls_string STR_mobbler_radio_enter_group "Group:"
-rls_string STR_mobbler_group_format "%S radio"
-rls_string STR_mobbler_radio_custom "Custom"
-rls_string STR_mobbler_radio_enter_custom "Custom:"
-rls_string STR_mobbler_custom_format "%S radio"
-rls_string STR_mobbler_share_album "Share album"
-rls_string STR_mobbler_lastfm_account "Do you have a Last.fm account?"
-rls_string STR_mobbler_radio_mix "My mix radio"
+rls_string STR_mobbler_share_contacts "Kontakty"
+rls_string STR_mobbler_twitter_now_playing_track_format "Słucha \"%S\" w wykonaniu %S"
+rls_string STR_mobbler_twitter_share_track_format "Dzieli się \"%S\" w wykonaniu %S"
+rls_string STR_mobbler_twitter_love_track_format "Lubi \"%S\" w wykonaniu %S"
+rls_string STR_mobbler_twitter_now_playing_album_format "Słucha %S w wykonaniu %S"
+rls_string STR_mobbler_twitter_share_album_format "Dzieli się %S w wykonaniu %S"
+rls_string STR_mobbler_twitter_now_playing_artist_format "Słucha %S"
+rls_string STR_mobbler_twitter_share_artist_format "Dzieli się %S"
+rls_string STR_mobbler_download_album_art_always_and_keep "Zawsze, potem zachowaj"
+rls_string STR_mobbler_download_album_art_always_and_ditch "Zawsze, potem usuwaj"
+rls_string STR_mobbler_radio_group "Grupa"
+rls_string STR_mobbler_radio_enter_group "Grupa:"
+rls_string STR_mobbler_group_format "Radio %S"
+rls_string STR_mobbler_radio_custom "Niestandardowe"
+rls_string STR_mobbler_radio_enter_custom "Niestandardowe:"
+rls_string STR_mobbler_custom_format "Radio %S"
+rls_string STR_mobbler_share_album "Podziel się albumem"
+rls_string STR_mobbler_lastfm_account "Czy masz konto Last.fm?"
+rls_string STR_mobbler_radio_mix "Twoje radio mix"
