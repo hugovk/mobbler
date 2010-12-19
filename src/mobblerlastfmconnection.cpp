@@ -1069,7 +1069,7 @@ void CMobblerLastFmConnection::GetInfoL(const TInt aCommand, const TDesC8& aArti
 	AppendAndSubmitTransactionL(transaction);
 	}
 
-void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver, TInt aPage, TInt aPerPage)
+void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDesC8& aMethod, const TDesC8& aText, MMobblerFlatDataObserver& aObserver, TInt aPage, TInt aPerPage, TBool aLang)
 	{
 	TRACER_AUTO;
 	CUri8* uri(SetUpWebServicesUriLC());
@@ -1118,6 +1118,11 @@ void CMobblerLastFmConnection::WebServicesCallL(const TDesC8& aClass, const TDes
 		_LIT8(KLimit, "limit");
 		query->AddFieldL(KLimit, perPage);
 		}
+	
+	if (aLang)
+	    {
+	    query->AddFieldL(KLang, MobblerUtility::LanguageL());
+	    }
 	
 	uri->SetComponentL(*query->GetQueryLC(), EUriQuery);
 	CleanupStack::PopAndDestroy(); // GetQueryLC
@@ -1275,7 +1280,6 @@ void CMobblerLastFmConnection::SelectStationL(MMobblerFlatDataObserver* aObserve
 	
 	_LIT8(KQueryRadioTune, "radio.tune");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryRadioTune));
-	_LIT8(KLang, "lang");
 	query->AddFieldL(KLang, MobblerUtility::LanguageL());
 	query->AddFieldL(KStation, *radioUrl);
 	

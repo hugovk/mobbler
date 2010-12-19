@@ -101,7 +101,7 @@ WIZNMnwfsXhquINsyB4wVxTnVoIGAodz+IV1KDQ6FXVDuIfch4AiVRBUKIVPI4htaBHMZxpWnpMw\
 boODh8iGJtGIH3cQCYVQymUAeDiH6sIgBxBzvaeIfGgSPWUgbLRYFnUbk0iKWDJyrmg3hmGJsYgm\
 W1aLc8ImtIiLZHWLvEgnd7KLv2hPRzaMyrcnwmiM8wE4NqiMg/gnzeiMr7g40fiLmFONpAhX2HiF\
 d7WNWuVaTxhaQehTVyeOWNc15WiOJOFW25Jd2KaO8BiP8jiP9FiPBREQADs=)\
-no-repeat fixed 5%% 20%%; \
+no-repeat fixed 5%% 30%%; \
 				\
 			}\
 \

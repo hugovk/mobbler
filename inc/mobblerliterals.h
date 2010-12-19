@@ -38,6 +38,7 @@ GLREF_D const TPtrC8 KGetInfo;
 GLREF_D const TPtrC8 KGetPlaylists;
 GLREF_D const TPtrC8 KId;
 GLREF_D const TPtrC8 KImage;
+GLREF_D const TPtrC8 KLang;
 GLREF_D const TPtrC8 KLarge;
 GLREF_D const TPtrC8 KMbid;
 GLREF_D const TPtrC8 KName;

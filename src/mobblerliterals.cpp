@@ -38,6 +38,7 @@ GLDEF_D const TPtrC8 KGetInfo(_S8("getinfo"));
 GLDEF_D const TPtrC8 KGetPlaylists(_S8("getplaylists"));
 GLDEF_D const TPtrC8 KId(_S8("id"));
 GLDEF_D const TPtrC8 KImage(_S8("image"));
+GLDEF_D const TPtrC8 KLang(_S8("lang"));
 GLDEF_D const TPtrC8 KLarge(_S8("large"));
 GLDEF_D const TPtrC8 KMbid(_S8("mbid"));
 GLDEF_D const TPtrC8 KName(_S8("name"));

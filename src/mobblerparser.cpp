@@ -1146,7 +1146,7 @@ void CMobblerParser::ParseArtistInfoL(const TDesC8& aXml, HBufC8*& aArtist, HBuf
 	User::LeaveIfNull(artistElement); // No point continuing if there is no data at all
 
 	// Get the artist name
-	TPtrC8 artistPtr(artistElement->Content());
+	TPtrC8 artistPtr(artistElement->Element(KName)->Content());
 
 	aArtist = HBufC8::NewLC(artistPtr.Length());
 	SenXmlUtils::DecodeHttpCharactersL(artistPtr, aArtist);
