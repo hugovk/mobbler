@@ -971,7 +971,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				delete iArtistBiographyObserver;
 				iArtistBiographyObserver = CMobblerFlatDataObserverHelper::NewL(
 											*iLastFmConnection, *this, ETrue);
-				iLastFmConnection->WebServicesCallL(KArtist, KGetInfo, CurrentTrack()->Artist().String8(), *iArtistBiographyObserver);
+				iLastFmConnection->WebServicesCallL(KArtist, KGetInfo, CurrentTrack()->Artist().String8(), *iArtistBiographyObserver, KErrNotFound, KErrNotFound, ETrue);
 				}
 			break;
 		case EMobblerCommandPlusShareTrack:
