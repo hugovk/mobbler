@@ -225,6 +225,7 @@ private:
 	void SaveSearchTermsL();
 	void SleepL();
 	TBool RadioStartableL() const;
+	void GetBiographyL(TBool aLocalised);
 
 private: // from MMobblerSleepTimerNotify
 	void TimerExpiredL(TAny* aTimer, TInt aError);
@@ -313,6 +314,7 @@ private:
 #endif
 
 	TBool iForeground;
+	TBool iGettingLocalisedBiography;
 
 	CMobblerDownload* iMobblerDownload;
 

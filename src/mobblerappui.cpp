@@ -8,7 +8,7 @@ Copyright (C) 2010  gw111zz
 
 http://code.google.com/p/mobbler
 
-This file is part of Mobbler.
+This file is part of Mobbler.f
 
 Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -969,9 +969,8 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			if (currentTrack)
 				{
 				delete iArtistBiographyObserver;
-				iArtistBiographyObserver = CMobblerFlatDataObserverHelper::NewL(
-											*iLastFmConnection, *this, ETrue);
-				iLastFmConnection->WebServicesCallL(KArtist, KGetInfo, CurrentTrack()->Artist().String8(), *iArtistBiographyObserver, KErrNotFound, KErrNotFound, ETrue);
+				iArtistBiographyObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);
+				GetBiographyL(ETrue);
 				}
 			break;
 		case EMobblerCommandPlusShareTrack:
@@ -2750,7 +2749,7 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	}
 
 void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
-	{
+    {
 	TRACER_AUTO;
 	DUMPDATA(aData, _L("bio.xml"));
 	HBufC8* artist(NULL);
@@ -2758,9 +2757,20 @@ void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
 	HBufC8* imageUrl(NULL);
 	HBufC8* tagsText(NULL);
 	HBufC8* similarArtistsText(NULL);
-
 	CMobblerParser::ParseArtistInfoL(aData, artist, artistInfo, imageUrl, tagsText, similarArtistsText);
-
+	if (iGettingLocalisedBiography && artistInfo->Length() == 0)
+	    {
+	    // No artist biography in the phone's current language so make the request again
+	    // in non-localised form
+	    delete artist;
+	    delete artistInfo;
+	    delete imageUrl;
+	    delete tagsText;
+	    delete similarArtistsText;
+	    GetBiographyL(EFalse);
+	    return;
+	    }
+	
 	CleanupStack::PushL(artist);
 	CleanupStack::PushL(artistInfo);
 	CleanupStack::PushL(imageUrl);
@@ -2811,5 +2821,13 @@ void CMobblerAppUi::WarnOldScrobblesL()
 		iOldScrobbleGlobalQuery = NULL;
 		}
 	}
+
+void CMobblerAppUi::GetBiographyL(TBool aLocalised)
+    {
+    TRACER_AUTO;
+    iGettingLocalisedBiography = aLocalised;
+    iLastFmConnection->WebServicesCallL(KArtist, KGetInfo, CurrentTrack()->Artist().String8(), 
+            *iArtistBiographyObserver, KErrNotFound, KErrNotFound, aLocalised);
+    }
 
 // End of file
