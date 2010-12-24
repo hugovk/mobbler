@@ -8,7 +8,7 @@ Copyright (C) 2010  gw111zz
 
 http://code.google.com/p/mobbler
 
-This file is part of Mobbler.f
+This file is part of Mobbler.
 
 Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
