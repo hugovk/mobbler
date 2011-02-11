@@ -51,7 +51,7 @@ const TInt KMobblerMinorVersion(10);
 const TInt KMobblerBuildNumber(314);
 
 #ifdef __SYMBIAN_SIGNED__
-const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
+const TVersion KVersion(2, KMobblerMinorVersion, KMobblerBuildNumber);
 const TInt KMobblerAppUid = 0x20038513;
 const TInt KMobblerSettingsViewUid = 0x20038515;
 const TInt KMobblerStatusViewUid = 0x20038514;
