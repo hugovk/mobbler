@@ -24,9 +24,9 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobbler.mmh"
 
 #ifdef SYMBIAN_SIGNED
-TARGET		mobblertouchfeedback_0x20026563.dll
+TARGET		mobblertouchfeedback_0x20039AF9.dll
 TARGETTYPE	PLUGIN
-UID		0x10009D8D 0x20026563
+UID		0x10009D8D 0x20039AF9
 #else
 TARGET		mobblertouchfeedback_0xA000B6CB.dll
 TARGETTYPE	PLUGIN
@@ -41,7 +41,7 @@ SOURCE		mobblertouchfeedback.cpp
 
 START RESOURCE	..\data\mobblertouchfeedback.rss
 #ifdef SYMBIAN_SIGNED
-TARGET mobblertouchfeedback_0x20026563
+TARGET mobblertouchfeedback_0x20039AF9
 #else
 TARGET mobblertouchfeedback_0xA000B6CB
 #endif

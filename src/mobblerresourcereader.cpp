@@ -32,10 +32,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef __SYMBIAN_SIGNED__
 
 #ifdef __WINS__
-_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings_0x2002655A.r01");
+_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings_0x20038513.r01");
 _LIT(KLanguageRscFile2,"Z:\\Resource\\apps\\mobbler_strings2.r01");
 #else
-_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings_0x2002655A.rsc");
+_LIT(KLanguageRscFile, "\\Resource\\apps\\mobbler_strings_0x20038513.rsc");
 _LIT(KLanguageRscFile2,"C:\\Resource\\apps\\mobbler_strings2.rsc");
 #endif
 

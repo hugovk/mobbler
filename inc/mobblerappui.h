@@ -48,15 +48,15 @@ const TInt KUpdateIntervalHours(24);
 const TInt KMaxMobblerTextSize(255);
 
 const TInt KMobblerMinorVersion(10);
-const TInt KMobblerBuildNumber(80);
+const TInt KMobblerBuildNumber(314);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(1, KMobblerMinorVersion, KMobblerBuildNumber);
-const TInt KMobblerAppUid = 0x2002655A;
-const TInt KMobblerSettingsViewUid = 0x2002655C;
-const TInt KMobblerStatusViewUid = 0x2002655B;
-const TInt KMobblerWebServicesViewUid = 0x2002656B;
-const TInt KMobblerBrowserViewUid = 0x2002656C;
+const TInt KMobblerAppUid = 0x20038513;
+const TInt KMobblerSettingsViewUid = 0x20038515;
+const TInt KMobblerStatusViewUid = 0x20038514;
+const TInt KMobblerWebServicesViewUid = 0x20039B01;
+const TInt KMobblerBrowserViewUid = 0x20039B02;
 #else
 const TVersion KVersion(0, KMobblerMinorVersion, KMobblerBuildNumber);
 const TInt KMobblerAppUid = 0xA0007648;

@@ -33,7 +33,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 _LIT(KMobblerClf, "Mobbler CLF");
 
 #ifdef __SYMBIAN_SIGNED__
-const TInt KImplementationUid = {0x2002661E};
+const TInt KImplementationUid = {0x20039B05};
 #else
 const TInt KImplementationUid = {0xA000BEB3};
 #endif

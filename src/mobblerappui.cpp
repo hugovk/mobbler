@@ -41,10 +41,6 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include <aknswallpaperutils.h>
 #include <apgcli.h>
 
-// SW Installer Launcher API
-#include <SWInstApi.h>
-#include <SWInstDefs.h>
-
 #else // !__SYMBIAN_SIGNED__
 
 #ifndef __WINS__
@@ -87,10 +83,10 @@ _LIT(KSpace, " ");
 
 // Gesture interface
 #ifdef __SYMBIAN_SIGNED__
-const TUid KGesturesInterfaceUid = {0x20026567};
-const TUid KDestinationImplUid = {0x20026621};
-const TUid KMobblerGesturePlugin5xUid = {0x2002656A};
-const TUid KContentListingImplUid = {0x2002661E};
+const TUid KGesturesInterfaceUid = {0x20039AFD};
+const TUid KDestinationImplUid = {0x20039B08};
+const TUid KMobblerGesturePlugin5xUid = {0x20039B00};
+const TUid KContentListingImplUid = {0x20039B05};
 #else
 const TUid KGesturesInterfaceUid = {0xA000B6CF};
 const TUid KDestinationImplUid = {0xA000BEB6};

@@ -27,65 +27,64 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "mobbler.mmh" 
 
-// Protected UIDS 0x2002655A - 0x2002656D
+// Protected UIDs 0x2002655A - 0x2002656D
 //                0x2002661D - 0x20026626
+// Nokia Ovi UIDs 0x20038513 - 0x20038517
+//                0x20039AF8 - 0x20039B0C
 
 /* Mobbler UIDs
 
-Protected - Unprotected - Purpose
+Protected - Unprotected - Ovi Signing - Purpose
 
-0x2002655A - 0xA0007648 - Mobbler exe
+0x2002655A - 0xA0007648 - 0x20038513 - Mobbler exe
 
-0x2002655B - 0xA0007CA8 - status view
-0x2002655C - 0xA0007CA9 - settings view
+0x2002655B - 0xA0007CA8 - 0x20038514 - status view
+0x2002655C - 0xA0007CA9 - 0x20038515 - settings view
 0x2002655D - 0xA0007CAA - (DON'T USE)
-0x2002655E - !0xA0007CAB - music app observer 3.1 dll 
-0x2002655F - !0xA0007CAC - music app observer 3.1 implementation
+0x2002655E - !0xA0007CAB - 0x20038516 - music app observer 3.1 dll 
+0x2002655F - !0xA0007CAC - 0x20038517 - music app observer 3.1 implementation
 0x20026560 - !0xA0007CAD - ?
 0x20026561 - !0xA0007CAE - (DON'T USE)
-0x20026562 - !0xA0007CAF - music app observer 3.0 implementation
-0x20026563 - 0xA000B6CB - touch feedback dll
-0x20026564 - 0xA000B6CC - touch feedback interface
-0x20026565 - 0xA000B6CD - touch feedback implementation
-0x20026566 - 0xA000B6CE - gesture plug-in dll (3rd edition)
-0x20026567 - 0xA000B6CF - gesture plug-in interface
-0x20026568 - 0xA000B6D0 - gesture plug-in 3rd edition implementation
-0x20026569 - 0xA000B6D1 - gesture plug-in dll (5th edition)
-0x2002656A - 0xA000B6C2 - gesture plug-in 5th edition implementation
-0x2002656B - 0xA000B6C3 - web services view
-0x2002656C - 0xA000B6D4 - browser view
-0x2002656D - 0xA000BEB1 - content listing dll
-0x2002661D - 0xA000BEB2 - content listing interface
-0x2002661E - 0xA000BEB3 - content listing implementation
-0x2002661F - 0xA000BEB4 - destinations dll
-0x20026620 - 0xA000BEB5 - destinations interface
-0x20026621 - 0xA000BEB6 - destinations implementation
+0x20026562 - !0xA0007CAF - 0x20039AF8 - music app observer 3.0 implementation
+0x20026563 - 0xA000B6CB - 0x20039AF9 - touch feedback dll
+0x20026564 - 0xA000B6CC - 0x20039AFA - touch feedback interface
+0x20026565 - 0xA000B6CD - 0x20039AFB - touch feedback implementation
+0x20026566 - 0xA000B6CE - 0x20039AFC - gesture plug-in dll (3rd edition)
+0x20026567 - 0xA000B6CF - 0x20039AFD - gesture plug-in interface
+0x20026568 - 0xA000B6D0 - 0x20039AFE - gesture plug-in 3rd edition implementation
+0x20026569 - 0xA000B6D1 - 0x20039AFF - gesture plug-in dll (5th edition)
+0x2002656A - 0xA000B6C2 - 0x20039B00 - gesture plug-in 5th edition implementation
+0x2002656B - 0xA000B6C3 - 0x20039B01 - web services view
+0x2002656C - 0xA000B6D4 - 0x20039B02 - browser view
+0x2002656D - 0xA000BEB1 - 0x20039B03 - content listing dll
+0x2002661D - 0xA000BEB2 - 0x20039B04 - content listing interface
+0x2002661E - 0xA000BEB3 - 0x20039B05 - content listing implementation
+0x2002661F - 0xA000BEB4 - 0x20039B06 - destinations dll
+0x20026620 - 0xA000BEB5 - 0x20039B07 - destinations interface
+0x20026621 - 0xA000BEB6 - 0x20039B08 - destinations implementation
 0x20026622 - 0xA000BEB7 - unused
 0x20026623 - 0xA000BEB8 - unused
 0x20026624 - 0xA000BEB9 - unused
 0x20026625 - 0xA000BEBA - unused
 0x20026626 - 0x???????? - unused
-0x20027114 - 0xA000D9F4 - mpx music app observer dll
-0x20027115 - 0xA000D9F5 - mpx music app observer implementation
-0x20027116 - 0xA000D9F6 - music app observer interface
-0x20027117 - 0xA000D9F7 - music app observer 3.0 dll
+0x20027114 - 0xA000D9F4 - 0x20039B09 - mpx music app observer dll
+0x20027115 - 0xA000D9F5 - 0x20039B0A - mpx music app observer implementation
+0x20027116 - 0xA000D9F6 - 0x20039B0B - music app observer interface
+0x20027117 - 0xA000D9F7 - 0x20039B0C - music app observer 3.0 dll
 0x20027118 - 0xA000D9F8 - unused
 0x20027119 - 0xA000D9F9 - unused
 0x2002711A - 0xA000D9FA - unused
 0x2002711B - 0xA000D9FB - unused
 0x2002711C - 0xA000D9FC - unused
 0x2002711D - 0xA000D9FD - unused
-
-
-
 */
 
 #ifdef SYMBIAN_SIGNED
 
-TARGET			mobbler_0x2002655A.exe
+TARGET			mobbler_0x20038513.exe
 TARGETTYPE		exe
-UID				0x100039CE 0x2002655A
-SECUREID		0x2002655A
+UID				0x100039CE 0x20038513
+SECUREID		0x20038513
 
 #else // !SYMBIAN_SIGNED
 
@@ -241,7 +240,7 @@ EPOCHEAPSIZE  0x100000 0xA00000
 START RESOURCE	..\data\mobbler.rss
 HEADER
 #ifdef SYMBIAN_SIGNED
-TARGET mobbler_0x2002655A
+TARGET mobbler_0x20038513
 #else
 TARGET mobbler_0xA0007648
 #endif
@@ -251,7 +250,7 @@ END //RESOURCE
 START RESOURCE	..\data\mobbler_strings.rss
 HEADER
 #ifdef SYMBIAN_SIGNED
-TARGET mobbler_strings_0x2002655A
+TARGET mobbler_strings_0x20038513
 #else
 TARGET mobbler_strings_0xA0007648
 #endif
@@ -261,7 +260,7 @@ END //RESOURCE
 START RESOURCE	..\data\mobbler_reg.rss
 LANG 01
 #ifdef SYMBIAN_SIGNED
-TARGET mobbler_reg_0x2002655A
+TARGET mobbler_reg_0x20038513
 #else
 TARGET mobbler_reg_0xA0007648
 #endif

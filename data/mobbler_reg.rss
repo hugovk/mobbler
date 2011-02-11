@@ -30,7 +30,7 @@ CHARACTER_SET UTF8
 UID2 KUidAppRegistrationResourceFile
 
 #ifdef __SYMBIAN_SIGNED__
-UID3 0x2002655A
+UID3 0x20038513
 #else
 UID3 0xA0007648
 #endif
@@ -38,8 +38,8 @@ UID3 0xA0007648
 RESOURCE APP_REGISTRATION_INFO
 	{
 #ifdef __SYMBIAN_SIGNED__
-	app_file = "mobbler_0x2002655A";
-	localisable_resource_file =  "\\resource\\apps\\mobbler_0x2002655A";
+	app_file = "mobbler_0x20038513";
+	localisable_resource_file =  "\\resource\\apps\\mobbler_0x20038513";
 #else
 	app_file = "mobbler_0xA0007648";
 	localisable_resource_file =  "\\resource\\apps\\mobbler_0xA0007648";

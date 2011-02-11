@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef __WINS__
 _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler.mif");
 #else
-_LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0x2002655A.mif");
+_LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0x20038513.mif");
 #endif // __WINS__
 #else // !__SYMBIAN_SIGNED__
 #include <ssmobbler.mbg>
@@ -45,19 +45,19 @@ _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0xA0007648.mif");
 #endif // __SYMBIAN_SIGNED__
 
 #if defined (__SYMBIAN_SIGNED__) && !defined(__WINS__)
-_LIT(KPngScrobble, "\\resource\\apps\\mobbler_0x2002655A\\scrobble.png");
-_LIT(KPngTrackIcon, "\\resource\\apps\\mobbler_0x2002655A\\icon_track.png");
-_LIT(KPngAlarmIcon, "\\resource\\apps\\mobbler_0x2002655A\\icon_alarm.png");
-_LIT(KPngLastFm, "\\resource\\apps\\mobbler_0x2002655A\\lastfm.png");
-_LIT(KPngSubscriberIcon, "\\resource\\apps\\mobbler_0x2002655A\\icon_subscriber.png");
+_LIT(KPngScrobble, "\\resource\\apps\\mobbler_0x20038513\\scrobble.png");
+_LIT(KPngTrackIcon, "\\resource\\apps\\mobbler_0x20038513\\icon_track.png");
+_LIT(KPngAlarmIcon, "\\resource\\apps\\mobbler_0x20038513\\icon_alarm.png");
+_LIT(KPngLastFm, "\\resource\\apps\\mobbler_0x20038513\\lastfm.png");
+_LIT(KPngSubscriberIcon, "\\resource\\apps\\mobbler_0x20038513\\icon_subscriber.png");
 
-_LIT(KDefaultAlbumImage, "\\resource\\apps\\mobbler_0x2002655A\\default_album.gif");
-_LIT(KDefaultArtistImage, "\\resource\\apps\\mobbler_0x2002655A\\default_artist.png");
-_LIT(KDefaultEventImage, "\\resource\\apps\\mobbler_0x2002655A\\default_event.png");
-_LIT(KDefaultUserImage, "\\resource\\apps\\mobbler_0x2002655A\\default_user.png");
-_LIT(KDefaultPlaylistImage, "\\resource\\apps\\mobbler_0x2002655A\\default_playlist.png");
-_LIT(KDefaultTagImage, "\\resource\\apps\\mobbler_0x2002655A\\default_tag.png");
-_LIT(KDefaultTrackImage, "\\resource\\apps\\mobbler_0x2002655A\\default_track.png");
+_LIT(KDefaultAlbumImage, "\\resource\\apps\\mobbler_0x20038513\\default_album.gif");
+_LIT(KDefaultArtistImage, "\\resource\\apps\\mobbler_0x20038513\\default_artist.png");
+_LIT(KDefaultEventImage, "\\resource\\apps\\mobbler_0x20038513\\default_event.png");
+_LIT(KDefaultUserImage, "\\resource\\apps\\mobbler_0x20038513\\default_user.png");
+_LIT(KDefaultPlaylistImage, "\\resource\\apps\\mobbler_0x20038513\\default_playlist.png");
+_LIT(KDefaultTagImage, "\\resource\\apps\\mobbler_0x20038513\\default_tag.png");
+_LIT(KDefaultTrackImage, "\\resource\\apps\\mobbler_0x20038513\\default_track.png");
 #else
 _LIT(KPngScrobble, "\\resource\\apps\\mobbler\\scrobble.png");
 _LIT(KPngTrackIcon, "\\resource\\apps\\mobbler\\icon_track.png");

@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 const TUid KMusicAppUID = {0x102072C3};
 
 #ifdef __SYMBIAN_SIGNED__
-const TInt KImplementationUid = {0x20027115}; 
+const TInt KImplementationUid = {0x20039B0A}; 
 #else
 const TInt KImplementationUid = {0xA000D9F5}; 
 #endif

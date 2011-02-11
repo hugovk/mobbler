@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gestureobserver3x.h"
 
 #ifdef __SYMBIAN_SIGNED__
-const TInt KImplementationUid = {0x20026568};
+const TInt KImplementationUid = {0x20039AFE};
 #else
 const TInt KImplementationUid = {0xA000B6D0};
 #endif

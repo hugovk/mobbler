@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler.mmh"
 
 #ifdef SYMBIAN_SIGNED
-TARGET		musicappobserver_0x2002655E.dll
+TARGET		musicappobserver_0x20038516.dll
 TARGETTYPE	PLUGIN
-UID		0x10009D8D 0x2002655E
+UID		0x10009D8D 0x20038516
 #else
 TARGET		musicappobserver_0xA0007CAB.dll
 TARGETTYPE	PLUGIN
@@ -41,7 +41,7 @@ SOURCE		musicappobserver.cpp
 
 START RESOURCE ..\data\musicappobserver.rss
 #ifdef SYMBIAN_SIGNED
-TARGET musicappobserver_0x2002655E
+TARGET musicappobserver_0x20038516
 #else
 TARGET musicappobserver_0xA0007CAB
 #endif

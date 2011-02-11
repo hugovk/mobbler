@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerdestinations.h"
 
 #ifdef __SYMBIAN_SIGNED__
-const TInt KImplementationUid = {0x20026621};
+const TInt KImplementationUid = {0x20039B08};
 #else
 const TInt KImplementationUid = {0xA000BEB6};
 #endif

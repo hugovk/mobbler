@@ -27,7 +27,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 const TUid KMusicAppUid = {0x102072c3};
 
 #ifdef __SYMBIAN_SIGNED__
-const TInt KImplementationUid = {0x20026562}; 
+const TInt KImplementationUid = {0x20039AF8}; 
 #else
 const TInt KImplementationUid = {0xA0007CAF}; 
 #endif

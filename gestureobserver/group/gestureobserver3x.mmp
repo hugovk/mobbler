@@ -32,9 +32,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // MACRO __GESTURE_DEBUG_LOGGING__
 
 #ifdef SYMBIAN_SIGNED
-TARGET		gestureobserver3x_0x20026566.dll
+TARGET		gestureobserver3x_0x20039AFC.dll
 TARGETTYPE	PLUGIN
-UID		0x10009D8D 0x20026566
+UID		0x10009D8D 0x20039AFC
 #else
 TARGET		gestureobserver3x_0xA000B6CE.dll
 TARGETTYPE	PLUGIN
@@ -54,7 +54,7 @@ SOURCE		gestureskipaction.cpp
 
 START RESOURCE ..\data\gestureobserver3x.rss
 #ifdef SYMBIAN_SIGNED
-TARGET gestureobserver3x_0x20026566
+TARGET gestureobserver3x_0x20039AFC
 #else
 TARGET gestureobserver3x_0xA000B6CE
 #endif

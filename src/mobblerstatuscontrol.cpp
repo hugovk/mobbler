@@ -63,7 +63,7 @@ const TRgb KRgbTransparent(0x00, 0x00, 0x00, 0x00);
 #endif
 
 #ifdef __SYMBIAN_SIGNED__
-const TUid KTouchFeedbackImplUid = {0x20026565};
+const TUid KTouchFeedbackImplUid = {0x20039AFB};
 #else
 const TUid KTouchFeedbackImplUid = {0xA000B6CD};
 #endif 

@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 RESOURCE REGISTRY_INFO theInfo
 	{
 #ifdef __SYMBIAN_SIGNED__
-	dll_uid = 0x2002656D;
+	dll_uid = 0x20039B03;
 #else
 	dll_uid = 0xA000BEB1;
 #endif
@@ -36,7 +36,7 @@ RESOURCE REGISTRY_INFO theInfo
 		INTERFACE_INFO
 			{
 #ifdef __SYMBIAN_SIGNED__
-			interface_uid = 0x2002661D;
+			interface_uid = 0x20039B04;
 #else
 			interface_uid = 0xA000BEB2;
 #endif
@@ -45,7 +45,7 @@ RESOURCE REGISTRY_INFO theInfo
 				IMPLEMENTATION_INFO
 					{
 #ifdef __SYMBIAN_SIGNED__
-					implementation_uid = 0x2002661E;
+					implementation_uid = 0x20039B05;
 #else
 					implementation_uid = 0xA000BEB3;
 #endif

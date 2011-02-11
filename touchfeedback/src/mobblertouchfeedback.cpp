@@ -25,7 +25,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblertouchfeedback.h"
 
 #ifdef __SYMBIAN_SIGNED__
-const TInt KImplementationUid = {0x20026565};
+const TInt KImplementationUid = {0x20039AFB};
 #else
 const TInt KImplementationUid = {0xA000B6CD};
 #endif

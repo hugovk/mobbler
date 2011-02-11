@@ -24,10 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler.mmh" 
 
 #ifdef SYMBIAN_SIGNED
-TARGET			mobblermusicapp30_0x20027117.dll
+TARGET			mobblermusicapp30_0x20039B0C.dll
 TARGETTYPE	PLUGIN
-UID				0x10009D8D 0x20027117
-SECUREID		0x20027117
+UID				0x10009D8D 0x20039B0C
+SECUREID		0x20039B0C
 #else // !SYMBIAN_SIGNED
 TARGET			mobblermusicapp30_0xA000D9F7.dll
 TARGETTYPE	PLUGIN
@@ -46,7 +46,7 @@ SOURCE		mobblerplaybackpositionlistener.cpp
 
 START RESOURCE ../data/mobblermusicapp30.rss
 #ifdef SYMBIAN_SIGNED
-TARGET mobblermusicapp30_0x20027117
+TARGET mobblermusicapp30_0x20039B0C
 #else
 TARGET mobblermusicapp30_0xA000D9F7
 #endif

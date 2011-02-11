@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobbler.mmh"
 
 #ifdef SYMBIAN_SIGNED
-TARGET		mobblerdestinations_0x2002661F.dll
+TARGET		mobblerdestinations_0x20039B06.dll
 TARGETTYPE	PLUGIN
-UID		0x10009D8D 0x2002661F
+UID		0x10009D8D 0x20039B06
 #else
 TARGET		mobblerdestinations_0xA000BEB4.dll
 TARGETTYPE	PLUGIN
@@ -41,7 +41,7 @@ SOURCE		mobblerdestinations.cpp
 
 START RESOURCE ..\data\mobblerdestinations.rss
 #ifdef SYMBIAN_SIGNED
-TARGET mobblerdestinations_0x2002661F
+TARGET mobblerdestinations_0x20039B06
 #else
 TARGET mobblerdestinations_0xA000BEB4
 #endif
