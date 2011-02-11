@@ -190,6 +190,7 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandRadioGroup,
 	EMobblerCommandRadioCustom,
 	EMobblerCommandRadioMix,
+	EMobblerCommandRadioFriends,
 	EMobblerCommandRadioEnumLast,
 	
 	EMobblerCommandCheckForUpdates,

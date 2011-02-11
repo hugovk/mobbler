@@ -1260,6 +1260,7 @@ void CMobblerLastFmConnection::SelectStationL(MMobblerFlatDataObserver* aObserve
 	_LIT8(KRadioStationMix, "lastfm://user/%S/mix");
 	_LIT8(KRadioStationArtist, "lastfm://artist/%S/similarartists");
 	_LIT8(KRadioStationTag, "lastfm://globaltags/%S");
+	_LIT8(KRadioStationFriends, "lastfm://user/%S/friends");
 	_LIT8(KRadioStationNeighbours, "lastfm://user/%S/neighbours");
 	_LIT8(KRadioStationRecommended, "lastfm://user/%S/recommended");
 	_LIT8(KRadioStationGroup, "lastfm://group/%S");
@@ -1267,6 +1268,7 @@ void CMobblerLastFmConnection::SelectStationL(MMobblerFlatDataObserver* aObserve
 		{
 		case EPersonal: radioUrl->Des().AppendFormat(KRadioStationPersonal, &textPtr); break;
 		case EMix: radioUrl->Des().AppendFormat(KRadioStationMix, &textPtr); break;
+		case EFriends: radioUrl->Des().AppendFormat(KRadioStationFriends, &textPtr); break;
 		case ERecommendations: radioUrl->Des().AppendFormat(KRadioStationRecommended, &textPtr); break;
 		case ENeighbourhood: radioUrl->Des().AppendFormat(KRadioStationNeighbours, &textPtr); break;
 		case EArtist: radioUrl->Des().AppendFormat(KRadioStationArtist, &textPtr); break;

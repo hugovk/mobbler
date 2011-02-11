@@ -412,5 +412,6 @@ RESOURCE STRING r_mobbler_share_album				{ text = STR_mobbler_share_album; }
 RESOURCE STRING r_mobbler_lastfm_account		{ text = STR_mobbler_lastfm_account; }
 
 RESOURCE STRING r_mobbler_radio_mix					{ text = STR_mobbler_radio_mix; }
+RESOURCE STRING r_mobbler_radio_friends				{ text = STR_mobbler_radio_friends; }
 
 // End of file

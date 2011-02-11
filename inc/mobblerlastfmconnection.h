@@ -87,7 +87,8 @@ public:
 		ETag,
 		EGroup,
 		ECustom,
-		EMix
+		EMix,
+		EFriends
 		};
 
 	enum TMode

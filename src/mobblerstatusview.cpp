@@ -204,6 +204,7 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_RADIO_RECOMMENDATIONS,	EMobblerCommandRadioRecommendations);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_RADIO_NEIGHBOURHOOD,		EMobblerCommandRadioNeighbourhood);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_RADIO_MIX,				EMobblerCommandRadioMix);
+		SetMenuItemTextL(aMenuPane, R_MOBBLER_RADIO_FRIENDS,			EMobblerCommandRadioFriends);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_RADIO_GROUP,				EMobblerCommandRadioGroup);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_RADIO_CUSTOM,				EMobblerCommandRadioCustom);
 		}
