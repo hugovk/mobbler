@@ -1394,7 +1394,7 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			
 			if (error == KErrNone)
 				{
-				if (version.iMinor > KVersion.iMinor)
+				if ((version.iMinor > KVersion.iMinor)
 					|| 
 					(version.iMinor == KVersion.iMinor && 
 					 version.iBuild > KVersion.iBuild))
@@ -2469,7 +2469,7 @@ void CMobblerAppUi::OpenWebBrowserL(const TDesC& aUrl)
 	url.Copy(*utf8);
 	delete utf8;
 	
-	// Escape encode things like Ä and ö
+	// Escape encode things like � and �
 	HBufC16* encode(EscapeUtils::EscapeEncodeL(url, EscapeUtils::EEscapeNormal));
 	CleanupStack::PushL(encode);
 	
@@ -2726,12 +2726,12 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	else if (statusPtrC.CompareF(K400) == 0)
 		{
 		LOG(_L8("400 - MISSING KEY"));
-		//LOG(_L8("   Parameter i missing. Authorization failed."));
+		//LOG(_L8("   Parameter i missing. Authorization failed."));
 		}
 	else if (statusPtrC.CompareF(K401) == 0)
 		{
-		LOG(_L8("401  UNAUTHORIZED"));
-		//LOG(_L8("   Parameter i invalid. Authorization failed."));
+		LOG(_L8("401 � UNAUTHORIZED"));
+		//LOG(_L8("   Parameter i invalid. Authorization failed."));
 		}
 	else if (statusPtrC.CompareF(K402) == 0)
 		{
