@@ -1,8 +1,12 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
-Copyright (C) 200?  Emre Can
-Copyright (C) 2010  Arda Kılıçdağı
+Copyright (C) 2008, 2009, 2010, 2011  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
+Copyright (C) 2009  Emre Can
+Copyright (C) 2010, 2011  Arda Kılıçdağı
 Copyright (C) 2010  Irfan Öztürk
 
 http://code.google.com/p/mobbler
@@ -319,4 +323,4 @@ rls_string STR_mobbler_custom_format "%S radyo"
 rls_string STR_mobbler_share_album "Albüm paylaş"
 rls_string STR_mobbler_lastfm_account "Last.fm hesabınız var mı?"
 rls_string STR_mobbler_radio_mix "Karışık radyom"
-rls_string STR_mobbler_radio_friends "My friends' radio"
+rls_string STR_mobbler_radio_friends "Arkadaşlarımın radyoları"
