@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
 Copyright (C) 2009  Steve Punter
 Copyright (C) 2009  James Aley
 Copyright (C) 2009, 2010  gw111zz
@@ -171,7 +171,9 @@ enum TMobblerSettingItemListViewCommands
 	EMobblerCommandTwitterChange,
 	EMobblerCommandTwitterRemove,
 	
+#ifdef LYRICS
 	EMobblerCommandTrackLyrics,
+#endif
 	
 	// radio commands
 	EMobblerCommandRadioStart,

@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2009, 2010  Michael Coffey
-Copyright (C) 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009, 2010, 2011  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
@@ -113,7 +113,9 @@ CMobblerTrackList::~CMobblerTrackList()
 	delete iAlbumInfoObserver;
 	delete iWebServicesHelper;
 	delete iLoveObserver;
+#ifdef LYRICS
 	delete iLyricsObserver;
+#endif
 	}
 
 void CMobblerTrackList::GetTrackDetails(TPtrC8& aArtist, TPtrC8& aAlbum, TPtrC8& aTitle)
@@ -263,12 +265,14 @@ CMobblerListControl* CMobblerTrackList::HandleListCommandL(TInt aCommand)
 			track->Release();
 			}
 			break;
+#ifdef LYRICS
 		case EMobblerCommandTrackLyrics:
 			delete iLyricsObserver;
 			iLyricsObserver = CMobblerFlatDataObserverHelper::NewL(
 									iAppUi.LastFmConnection(), *this, ETrue);
 			iAppUi.LastFmConnection().FetchLyricsL(artist, title, *iLyricsObserver);
 			break;
+#endif
 		case EMobblerCommandTrackShare:
 		case EMobblerCommandArtistShare:
 		case EMobblerCommandPlaylistAddTrack:
@@ -353,7 +357,9 @@ void CMobblerTrackList::SupportedCommandsL(RArray<TInt>& aCommands)
 		aCommands.AppendL(EMobblerCommandAlbumScrobble);
 		}
 	
+#ifdef LYRICS
 	aCommands.AppendL(EMobblerCommandTrackLyrics);
+#endif
 	}
 
 void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
@@ -383,6 +389,7 @@ void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 		{
 		// Do nothing
 		}
+#ifdef LYRICS
 	else if (aObserver == iLyricsObserver)
 		{
 		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
@@ -390,6 +397,7 @@ void CMobblerTrackList::DataL(CMobblerFlatDataObserverHelper* aObserver, const T
 			iAppUi.ShowLyricsL(aData);
 			}
 		}
+#endif
 	}
 
 TInt CMobblerTrackList::ViewScrobbleLogCallBackL(TAny* aPtr)

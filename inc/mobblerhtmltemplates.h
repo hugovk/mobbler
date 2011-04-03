@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2009, 2010  gw111zz
-Copyright (C) 2010  Hugo van Kemenade
+Copyright (C) 2010, 2011  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
@@ -166,6 +166,7 @@ no-repeat fixed 5%% 30%%; \
 	</body>\
 </html>");
 
+#ifdef LYRICS
 /*
  * Format string specifiers are:
  *
@@ -182,6 +183,7 @@ no-repeat fixed 5%% 30%%; \
 		</div><!-- body_text -->\
 	</body>\
 </html>");
+#endif // LYRICS
 
 #endif
 

@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
 Copyright (C) 2009  Steve Punter
 Copyright (C) 2010  gw111zz
 
@@ -164,7 +164,9 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EVENTS,				EMobblerCommandPlusEvents);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_ARTIST_SHOUTBOX,		EMobblerCommandPlusArtistShoutbox);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TAG,					EMobblerCommandPlusTag);
+#ifdef LYRICS
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_LYRICS,				EMobblerCommandTrackLyrics);
+#endif
 		}
 	else if(aResourceId == R_MOBBLER_PLUS_SHARE_SUBMENU_PANE)
 		{
@@ -295,7 +297,9 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 			aMenuPane->SetItemDimmed(EMobblerCommandPlusVisitLastFm, ETrue);
 			aMenuPane->SetItemDimmed(EMobblerCommandBiography, ETrue);
 			aMenuPane->SetItemDimmed(EMobblerCommandPlusTag, ETrue);
+#ifdef LYRICS
 			aMenuPane->SetItemDimmed(EMobblerCommandTrackLyrics, ETrue);
+#endif
 			
 			if (static_cast<CMobblerAppUi*>(AppUi())->Mode() == CMobblerLastFmConnection::EOnline ||
 					static_cast<CMobblerAppUi*>(AppUi())->State() == CMobblerLastFmConnection::EConnecting ||
