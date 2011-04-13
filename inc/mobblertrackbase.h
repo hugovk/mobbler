@@ -70,7 +70,8 @@ public:
 	void LoveTrackL();
 	TMobblerLove Love() const;
 	
-	//void LoveTrackL();
+	void SetExpiry(const TTime& aExpiry);
+	TTime Expiry() const;
 
 	TTimeIntervalSeconds ScrobbleDuration() const;
 	TTimeIntervalSeconds InitialPlaybackPosition() const;
@@ -124,6 +125,8 @@ private:
 	TTimeIntervalSeconds iPlaybackPosition;
 	
 	TBool iScrobbled;
+	
+	TTime iExpiry;
 	};
 
 #endif // __MOBBLERTRACKBASE_H__

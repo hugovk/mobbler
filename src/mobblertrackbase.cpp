@@ -58,7 +58,8 @@ CMobblerTrackBase::CMobblerTrackBase(TTimeIntervalSeconds aTrackLength, TBool aL
 	iStartTimeUTC(Time::NullTTime()), 
 	iTrackLength(aTrackLength),
 	iTotalPlayed(0), 
-	iInitialPlaybackPosition(KErrUnknown)
+	iInitialPlaybackPosition(KErrUnknown),
+	iExpiry(Time::NullTTime())
 	{
 //	TRACER_AUTO;
 	}
@@ -297,6 +298,16 @@ CMobblerTrackBase::TMobblerLove CMobblerTrackBase::Love() const
 	{
 //	TRACER_AUTO;
 	return iLove;
+	}
+
+void CMobblerTrackBase::SetExpiry(const TTime& aExpiry)
+	{
+	iExpiry = aExpiry;
+	}
+
+TTime CMobblerTrackBase::Expiry() const
+	{
+	return iExpiry;
 	}
 
 void CMobblerTrackBase::SetTrackLength(TTimeIntervalSeconds aTrackLength)

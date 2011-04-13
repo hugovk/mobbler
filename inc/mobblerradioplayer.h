@@ -123,6 +123,8 @@ private:
 	
 	void RequestPlaylistL(TBool aCancelPrevious);
 	
+	void PurgeExpiredTracksL( TInt aFromTrack );
+	
 private:
 	void DialogDismissedL(TInt aButtonId);
 	void UpdateVolume();

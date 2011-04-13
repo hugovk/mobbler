@@ -253,7 +253,9 @@ void CMobblerRadioPlayer::HandleAudioPositionChangeL()
 		// The download on the current track is complete
 		// and there is only the length of the pre-buffer to go on the current track 
 		// so start downloading the next track now.
-		
+	
+		PurgeExpiredTracksL(1);
+			
 		if (iPlaylist->Count() > 1)
 			{
 			// There is more in the playlist so start fetching the next track
@@ -499,9 +501,29 @@ void CMobblerRadioPlayer::DataL(const TDesC8& aData, TInt aTransactionError)
 		}
 	}
 
+void CMobblerRadioPlayer::PurgeExpiredTracksL( TInt aFromTrack )
+	{
+	// Make sure we remove all expired tracks before trying to skip 
+	TTime now;
+	now.UniversalTime();
+	
+	while (iPlaylist->Count() > aFromTrack
+			&& (*iPlaylist)[aFromTrack]->Expiry() != Time::NullTTime()
+			&& (*iPlaylist)[aFromTrack]->Expiry() < now
+			&& (*iPlaylist)[aFromTrack]->LocalFile().Length() == 0)
+		{
+		// The next track in the playlist has expired and
+		// we haven't found it locally so get rid of it
+		iPlaylist->RemoveAndReleaseTrack(aFromTrack);
+		}
+	}
+
 void CMobblerRadioPlayer::SkipTrackL()
 	{
 	TRACER_AUTO;
+	
+	PurgeExpiredTracksL(1);
+	
 	if 	(static_cast<CMobblerAppUi*>(CEikonEnv::Static()->AppUi())->SleepAfterTrackStopped())
 		{
 		DoStopL(ETrue);
@@ -568,7 +590,7 @@ void CMobblerRadioPlayer::SkipTrackL()
 			
 			if (iState == EPlaying)
 				{
-				// We have skipped of the end of the fetched playlist
+				// We have skipped off the end of the fetched playlist
 				// We are playing so we must already be fetching a playlist
 				// so go back to the starting state and wait for the
 				// playlist to downloads
@@ -813,7 +835,7 @@ void CMobblerRadioPlayer::PauseL()
 		}
 	else
 		{
-		NextTrack();
+		SkipTrackL();
 		}
 	}
 

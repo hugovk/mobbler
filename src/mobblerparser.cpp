@@ -68,6 +68,7 @@ _LIT8(KExtension, "extension");
 _LIT8(KKey, "key");
 _LIT8(KIdentifier, "identifier");
 _LIT8(KLocation, "location");
+_LIT8(KLink, "link");
 _LIT8(KLoved, "loved");
 _LIT8(KMatch, "match");
 _LIT8(KNowPlaying, "nowplaying");
@@ -206,6 +207,8 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 		CSenElement& domElement(domFragment->AsElement());
 
 		CSenElement* playlistElement(domElement.Child(0));
+		
+		TTime expiryTime = Time::NullTTime();
 
 		if (playlistElement)
 			{
@@ -213,6 +216,16 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 			if (titleElement)
 				{
 				aPlaylist.SetTitleL(titleElement->Content());
+				}
+			
+			CSenElement* linkElement(playlistElement->Element(KLink));
+			if (linkElement)
+				{
+				TInt expirySeconds;
+				TLex8 lex(linkElement->Content());
+				lex.Val(expirySeconds);
+				expiryTime.UniversalTime();
+				expiryTime += TTimeIntervalSeconds(expirySeconds);
 				}
 		
 			CSenElement* trackListElement(playlistElement->Element(KTrackList));
@@ -254,6 +267,7 @@ CMobblerLastFmError* CMobblerParser::ParseRadioPlaylistL(const TDesC8& aXml, CMo
 				CMobblerTrack* track(CMobblerTrack::NewL(*creatorBuf, *titleBuf, *albumBuf, identifier, image, location, durationSeconds, streamId, loved, ETrue));
 				CleanupStack::PushL(track);
 				track->FindLocalTrackL();
+				track->SetExpiry(expiryTime);
 				aPlaylist.AppendTrackL(track);
 				CleanupStack::Pop(track);
 
