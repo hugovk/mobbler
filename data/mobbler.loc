@@ -1,0 +1,215 @@
+/*
+Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
+Copyright (C) 2008  Michael Coffey
+Copyright (C) 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  Steve Punter
+
+http://code.google.com/p/mobbler
+
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+Mobbler is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// English
+#ifdef LANGUAGE_01
+#include "mobbler.l01"
+#endif
+
+// French
+#ifdef LANGUAGE_02
+#include "mobbler.l02"
+#endif
+
+// German
+#ifdef LANGUAGE_03
+#include "mobbler.l03"
+#endif
+
+// Spanish
+#ifdef LANGUAGE_04
+#include "mobbler.l04"
+#endif
+
+// Italian
+#ifdef LANGUAGE_05
+#include "mobbler.l05"
+#endif
+
+// Swedish
+#ifdef LANGUAGE_06
+#include "mobbler.l06"
+#endif
+
+// Danish
+#ifdef LANGUAGE_07
+#include "mobbler.l07"
+#endif
+
+// Norwegian 
+#ifdef LANGUAGE_08
+#include "mobbler.l08"
+#endif
+
+// Finnish
+#ifdef LANGUAGE_09
+#include "mobbler.l09"
+#endif
+
+// US English
+#ifdef LANGUAGE_10
+#include "mobbler.l10"
+#endif
+
+// Portuguese
+#ifdef LANGUAGE_13
+#include "mobbler.l13"
+#endif
+
+// Turkish
+#ifdef LANGUAGE_14
+#include "mobbler.l14"
+#endif
+
+// Russian
+#ifdef LANGUAGE_16
+#include "mobbler.l16"
+#endif
+
+// Hungarian
+#ifdef LANGUAGE_17
+#include "mobbler.l17"
+#endif
+
+// Dutch
+#ifdef LANGUAGE_18
+#include "mobbler.l18"
+#endif
+
+// Czech
+#ifdef LANGUAGE_25
+#include "mobbler.l25"
+#endif
+
+// Slovak
+#ifdef LANGUAGE_26
+#include "mobbler.l26"
+#endif
+
+// Polish
+#ifdef LANGUAGE_27
+#include "mobbler.l27"
+#endif
+
+// Chinese PRC
+#ifdef LANGUAGE_31
+#include "mobbler.l31"
+#endif
+
+// Japanese
+#ifdef LANGUAGE_32
+#include "mobbler.l32"
+#endif
+
+// Afrikaans
+#ifdef LANGUAGE_34
+#include "mobbler.l34"
+#endif
+
+// Arabic
+#ifdef LANGUAGE_37
+#include "mobbler.l37"
+#endif
+
+// Belarusian
+#ifdef LANGUAGE_40
+#include "mobbler.l40"
+#endif
+
+// Bulgarian
+#ifdef LANGUAGE_42
+#include "mobbler.l42"
+#endif
+
+// Catalan
+#ifdef LANGUAGE_44
+#include "mobbler.l44"
+#endif
+
+// Greek
+#ifdef LANGUAGE_54
+#include "mobbler.l54"
+#endif
+
+// Hebrew
+#ifdef LANGUAGE_57
+#include "mobbler.l57"
+#endif
+
+// Indonesian
+#ifdef LANGUAGE_59
+#include "mobbler.l59"
+#endif
+
+// Korean
+#ifdef LANGUAGE_65
+#include "mobbler.l65"
+#endif
+
+// Latvian
+#ifdef LANGUAGE_67
+#include "mobbler.l67"
+#endif
+
+// Lithuanian
+#ifdef LANGUAGE_68
+#include "mobbler.l68"
+#endif
+
+// Brazilian Portuguese
+#ifdef LANGUAGE_76
+#include "mobbler.l76"
+#endif
+
+// Romanian
+#ifdef LANGUAGE_78
+#include "mobbler.l78"
+#endif
+
+// Serbian
+#ifdef LANGUAGE_79
+#include "mobbler.l79"
+#endif
+
+// Ukrainian
+#ifdef LANGUAGE_93
+#include "mobbler.l93"
+#endif
+
+// Klingon
+#ifdef LANGUAGE_333
+#include "mobbler.l333"
+#endif
+
+// l337
+#ifdef LANGUAGE_337
+#include "mobbler.l337"
+#endif
+
+// Pirate English
+#ifdef LANGUAGE_888
+#include "mobbler.l888"
+#endif
+
+// End of file
