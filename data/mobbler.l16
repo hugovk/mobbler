@@ -11,6 +11,7 @@ Copyright (C) 2009  Sergio
 Copyright (C) 2009  Pavel Malyarevsky
 Copyright (C) 2009  Vladimir Vylinsky
 Copyright (C) 2009, 2010  Yuriy "GrindWar"
+Copyright (C) 2011  Dmitry Rogov
 
 http://code.google.com/p/mobbler
 
@@ -41,7 +42,7 @@ rls_string STR_mobbler_username "Имя пользователя"
 rls_string STR_mobbler_password "Пароль"
 rls_string STR_mobbler_connecting "Соединение с Last.fm"
 rls_string STR_mobbler_about_text1 "Mobbler "
-rls_string STR_mobbler_about_text2 "\ncode.google.com/p/mobbler\n\nАвторы:\nMichael Coffey\nHugo van Kemenade\nSteve Punter\nJames Aley\ngw111zz\nJames Clarke\n\nПеревод на русский:\nВладимир Вылинский\nwww.asarkisov.com\nGrindWar"
+rls_string STR_mobbler_about_text2 "\ncode.google.com/p/mobbler\n\nАвторы:\nMichael Coffey\nHugo van Kemenade\nSteve Punter\nJames Aley\ngw111zz\nJames Clarke\n\nПеревод на русский:\nВладимир Вылинский\nwww.asarkisov.com\nGrindWar\nДмитрий Рогов"
 rls_string STR_mobbler_note_connected "Подключен к Last.fm!"
 rls_string STR_mobbler_note_banned "Mobbler запрещен! Пожалуйста, обратитесь на сайт проекта: code.google.com/p/mobbler"
 rls_string STR_mobbler_note_bad_auth "Неверный пароль"
@@ -326,3 +327,4 @@ rls_string STR_mobbler_custom_format "Радио %S"
 rls_string STR_mobbler_share_album "Поделиться альбомом"
 rls_string STR_mobbler_lastfm_account "У вас есть Last.fm аккаунт?"
 rls_string STR_mobbler_radio_mix "Мое микс-радио"
+rls_string STR_mobbler_radio_friends "Радио друзей"

@@ -1,8 +1,8 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010, 2011  Michael Coffey
 Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
-Copyright (C) 2009, 2010  Georg May
+Copyright (C) 2009, 2010, 2011  Georg May
 Copyright (C) 2009  Steve Punter
 Copyright (C) 2009  James Aley
 Copyright (C) 2009, 2010  gw111zz
@@ -82,7 +82,7 @@ rls_string STR_mobbler_radio_tag "Тэг"
 rls_string STR_mobbler_radio_enter_tag "Тэг:"
 rls_string STR_mobbler_radio_user "Імя"
 rls_string STR_mobbler_radio_enter_user "Імя:"
-rls_string STR_mobbler_radio_recommendations "Рэкамендуем"
+rls_string STR_mobbler_radio_recommendations "Рэкамендацыi"
 rls_string STR_mobbler_radio_personal "Персанальны"
 rls_string STR_mobbler_radio_loved "Закаханыя трэки"
 rls_string STR_mobbler_radio_neighbourhood "Сусед"
@@ -140,7 +140,7 @@ rls_string STR_mobbler_note_queue_not_exported "Праблема чаргова�
 rls_string STR_mobbler_note_export_empty_queue "Немагчыма экспартаваць пустую чаргу"
 rls_string STR_mobbler_scrobble_percent "Скробліць трэк пасля"
 rls_string STR_mobbler_percent "%U працэнтаў"
-rls_string STR_mobbler_get_latest_language "Моўны файл састарэў, таму калі ласка, атрымаеце апошні з code.google.com/p/mobbler"
+rls_string STR_mobbler_get_latest_language "Моўны файл састарэў, таму калі ласка, запампуйце апошні з code.google.com/p/mobbler"
 rls_string STR_mobbler_sleep_timer "Таймер"
 rls_string STR_mobbler_sleep_timer_prompt "Таймер (хвіліны):"
 rls_string STR_mobbler_softkey_set "Дадаць"
@@ -272,7 +272,7 @@ rls_string STR_mobbler_set_wallpaper_automatically "Аўтаматычна"
 rls_string STR_mobbler_set_wallpaper_manually "Уручную"
 rls_string STR_mobbler_language_patches "Моўны патч"
 rls_string STR_mobbler_sleep_timer_time_minutes "Сон праз (хвіліны)"
-rls_string STR_mobbler_close_query "Штоьсці спрабуе зачыніць Mobbler. Вы ўпэўнены ў жаданні спыніць Скроблінг?"
+rls_string STR_mobbler_close_query "Штосьці спрабуе зачыніць Mobbler. Вы ўпэўнены ў жаданні спыніць Скроблінг?"
 rls_string STR_mobbler_qr_code "QR Код"
 rls_string STR_mobbler_map "Мапы"
 rls_string STR_mobbler_visit_map "Месца падзеi"
@@ -321,3 +321,4 @@ rls_string STR_mobbler_custom_format "%S радыё"
 rls_string STR_mobbler_share_album "Падзяліцца альбомам"
 rls_string STR_mobbler_lastfm_account "У вас ёсць рахунак на Last.fm?"
 rls_string STR_mobbler_radio_mix "Маё мiкс-радыё"
+rls_string STR_mobbler_radio_friends "Радыё сяброў"

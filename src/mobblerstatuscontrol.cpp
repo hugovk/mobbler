@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
@@ -1172,10 +1172,12 @@ TKeyResponse CMobblerStatusControl::OfferKeyEventL(const TKeyEvent& aKeyEvent, T
 			break;
 #endif
 #ifdef _DEBUG
+#ifdef LYRICS
 		case '7':
 			const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandTrackLyrics);
 			response = EKeyWasConsumed;
 			break;
+#endif
 #endif
 		case '8':
 			const_cast<CMobblerAppUi&>(iAppUi).HandleCommandL(EMobblerCommandEditSettings);

@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009, 2010, 2011  Hugo van Kemenade
 Copyright (C) 2009  James Aley
 Copyright (C) 2009, 2010  gw111zz
 
@@ -195,7 +195,9 @@ public:
 	void GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const TDesC8& aLongitude);
 	TInt LaunchFileL(const TDesC& aFilename);
 	TBool DetailsNeeded();
+#ifdef LYRICS
 	void ShowLyricsL(const TDesC8& aData);
+#endif
 	void ShowBiographyL(const TDesC8& aData);
 	void WarnOldScrobblesL();
 
@@ -329,7 +331,9 @@ private:
 	CMobblerFlatDataObserverHelper* iArtistBiographyObserver;
 	CMobblerFlatDataObserverHelper* iAutoCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iManualCheckForUpdatesObserver;
+#ifdef LYRICS
 	CMobblerFlatDataObserverHelper* iLyricsObserver;
+#endif
 #ifdef __SYMBIAN_SIGNED__
 	CMobblerFlatDataObserverHelper* iLocalEventsObserver;
 #endif

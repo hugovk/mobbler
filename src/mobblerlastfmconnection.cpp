@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
 Copyright (C) 2010 gw111zz
 
 http://code.google.com/p/mobbler
@@ -72,11 +72,13 @@ _LIT8(KMobblerTwitterConsumerSecret, "");
 _LIT8(KLatesverFileLocation, "http://www.mobbler.co.uk/latestver.xml");
 #endif
 
+#ifdef LYRICS
 #ifdef PERMANENT_LYRICSFLY_ID_KEY
 #include "mobblerlyricsflyidkey.h"
 #else
 // Update with the weekly user ID key from http://www.lyricsfly.com/api/#doc
 _LIT8(KLyricsflyIdKey, "1c0736f65ac693cbd-temporary.API.access");
+#endif
 #endif
 
 // The file name to store the queue of listened tracks
@@ -768,6 +770,7 @@ void CMobblerLastFmConnection::SimilarL(const TInt aCommand, const TDesC8& aArti
 	AppendAndSubmitTransactionL(transaction);
 	}
 
+#ifdef LYRICS
 void CMobblerLastFmConnection::FetchLyricsL(const TDesC8& aArtist,
 											const TDesC8& aTitle, 
 											MMobblerFlatDataObserver& aObserver)
@@ -817,6 +820,7 @@ void CMobblerLastFmConnection::FetchLyricsL(const TDesC8& aArtist,
 	
 	AppendAndSubmitTransactionL(transaction);
 	}
+#endif // LYRICS
 
 void CMobblerLastFmConnection::RecentTracksL(const TDesC8& aUser, MMobblerFlatDataObserver& aObserver)
 	{

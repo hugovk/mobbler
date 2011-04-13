@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
 Copyright (C) 2008, 2009  Steve Punter
 Copyright (C) 2009  James Aley
 Copyright (C) 2010  gw111zz
@@ -246,7 +246,9 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iAutoCheckForUpdatesObserver;
 	delete iManualCheckForUpdatesObserver;
 	delete iDocHandler;
+#ifdef LYRICS
 	delete iLyricsObserver;
+#endif
 	delete iInterfaceSelector;
 	delete iLastFmConnection;
 	delete iMobblerDownload;
@@ -1015,6 +1017,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandPlusTopTags:
 			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopTags), currentTrack->Artist().String8());
 			break;
+#ifdef LYRICS
 		case EMobblerCommandTrackLyrics:
 			{
 			if (currentTrack)
@@ -1028,6 +1031,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				}
 			}
 			break;
+#endif
 			case EMobblerCommandTrackAddTag:
 			if (CurrentTrack())
 				{
@@ -1396,11 +1400,9 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			
 			if (error == KErrNone)
 				{
-				if ((version.iMajor == KVersion.iMajor && 
-					 version.iMinor > KVersion.iMinor)
+				if ((version.iMinor > KVersion.iMinor)
 					|| 
-					(version.iMajor == KVersion.iMajor && 
-					 version.iMinor == KVersion.iMinor && 
+					(version.iMinor == KVersion.iMinor && 
 					 version.iBuild > KVersion.iBuild))
 					{
 					CAknQueryDialog* dlg(CAknQueryDialog::NewL());
@@ -1423,10 +1425,12 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 					}
 				}
 			}
+#ifdef LYRICS
 		else if (aObserver == iLyricsObserver)
 			{
 			ShowLyricsL(aData);
 			}
+#endif
 		else if (aObserver == iArtistBiographyObserver)
 			{
 			ShowBiographyL(aData);
@@ -2607,6 +2611,7 @@ TBool CMobblerAppUi::DetailsNeeded()
 	return EFalse;
 	}
 
+#ifdef LYRICS
 void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	{
 	TRACER_AUTO;
@@ -2730,12 +2735,12 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 	else if (statusPtrC.CompareF(K400) == 0)
 		{
 		LOG(_L8("400 - MISSING KEY"));
-		//LOG(_L8("   Parameter “i” missing. Authorization failed."));
+		//LOG(_L8("   Parameter i missing. Authorization failed."));
 		}
 	else if (statusPtrC.CompareF(K401) == 0)
 		{
 		LOG(_L8("401 – UNAUTHORIZED"));
-		//LOG(_L8("   Parameter “i” invalid. Authorization failed."));
+		//LOG(_L8("   Parameter i invalid. Authorization failed."));
 		}
 	else if (statusPtrC.CompareF(K402) == 0)
 		{
@@ -2751,6 +2756,7 @@ void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
 
 	CleanupStack::PopAndDestroy(2); // xmlReader & domFragment
 	}
+#endif // LYRICS
 
 void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
     {
