@@ -1,24 +1,32 @@
 /*
-mobbler.l31 - Chinese Simplified
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2008  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Michael Coffey
+Copyright (C) 2008, 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009  Steve Punter
+Copyright (C) 2009  James Aley
+Copyright (C) 2009, 2010  gw111zz
+Copyright (C) 2008  ?
+Copyright (C) 2009  FengYi
+Copyright (C) 2009, 2010, 2011  Tunghsiao Liu
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+mobbler.l31 - Chinese Simplified
+
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 rls_string STR_mobbler_mobbler "Mobbler"
@@ -287,32 +295,32 @@ rls_string STR_mobbler_similar "相似"
 rls_string STR_mobbler_top "顶端"
 rls_string STR_mobbler_lyrics "歌词"
 rls_string STR_mobbler_lyrics_not_found "歌词未找到"
-rls_string STR_mobbler_scrobble_track_option "Scrobble track"
-rls_string STR_mobbler_scrobble_album_option "Scrobble album"
-rls_string STR_mobbler_local_events "Local events"
-rls_string STR_mobbler_old_scrobbles_warning "You have queued scrobbles close to two weeks old which will be ignored by Last.fm after that. Scrobble soon!"
-rls_string STR_mobbler_twitter_change "Change Twitter user"
-rls_string STR_mobbler_twitter_remove "Remove Twitter user"
-rls_string STR_mobbler_twitter_follow "Would you like to follow @Mobbler on Twitter?"
-rls_string STR_mobbler_share_lastfm "Last.fm friends"
+rls_string STR_mobbler_scrobble_track_option "提交曲目"
+rls_string STR_mobbler_scrobble_album_option "提交专辑"
+rls_string STR_mobbler_local_events "本地活动"
+rls_string STR_mobbler_old_scrobbles_warning "您正在试图提交两周前的数据，Last.fm 会忽略这些数据"
+rls_string STR_mobbler_twitter_change "修改 Twitter 帐号"
+rls_string STR_mobbler_twitter_remove "移除 Twitter 帐号"
+rls_string STR_mobbler_twitter_follow "您是否想在 Twitter 上收听 @Mobbler 帐号？"
+rls_string STR_mobbler_share_lastfm "Last.fm 好友"
 rls_string STR_mobbler_share_twitter "Twitter"
-rls_string STR_mobbler_share_contacts "Contacts"
-rls_string STR_mobbler_twitter_now_playing_track_format "Listening to \"%S\" by %S"
-rls_string STR_mobbler_twitter_share_track_format "Sharing \"%S\" by %S"
-rls_string STR_mobbler_twitter_love_track_format "Loved \"%S\" by %S"
-rls_string STR_mobbler_twitter_now_playing_album_format "Listening to %S by %S"
-rls_string STR_mobbler_twitter_share_album_format "Sharing %S by %S"
-rls_string STR_mobbler_twitter_now_playing_artist_format "Listening to %S"
-rls_string STR_mobbler_twitter_share_artist_format "Sharing %S"
-rls_string STR_mobbler_download_album_art_always_and_keep "Always and keep"
-rls_string STR_mobbler_download_album_art_always_and_ditch "Always and ditch"
-rls_string STR_mobbler_radio_group "Group"
-rls_string STR_mobbler_radio_enter_group "Group:"
-rls_string STR_mobbler_group_format "%S radio"
-rls_string STR_mobbler_radio_custom "Custom"
-rls_string STR_mobbler_radio_enter_custom "Custom:"
-rls_string STR_mobbler_custom_format "%S radio"
-rls_string STR_mobbler_share_album "Share album"
-rls_string STR_mobbler_lastfm_account "Do you have a Last.fm account?"
-rls_string STR_mobbler_radio_mix "My mix radio"
-rls_string STR_mobbler_radio_friends "My friends' radio"
+rls_string STR_mobbler_share_contacts "联系人"
+rls_string STR_mobbler_twitter_now_playing_track_format "正在收听 \"%S\" - %S"
+rls_string STR_mobbler_twitter_share_track_format "分享曲目 \"%S\" - %S"
+rls_string STR_mobbler_twitter_love_track_format "添加到最爱 \"%S\" - %S"
+rls_string STR_mobbler_twitter_now_playing_album_format "正在收听 to %S - %S"
+rls_string STR_mobbler_twitter_share_album_format "分享曲目 %S - %S"
+rls_string STR_mobbler_twitter_now_playing_artist_format "正在收听 %S"
+rls_string STR_mobbler_twitter_share_artist_format "分享曲目 %S"
+rls_string STR_mobbler_download_album_art_always_and_keep "总是下载并保留"
+rls_string STR_mobbler_download_album_art_always_and_ditch "总是下载并替换"
+rls_string STR_mobbler_radio_group "小组"
+rls_string STR_mobbler_radio_enter_group "小组:"
+rls_string STR_mobbler_group_format "%S 的电台"
+rls_string STR_mobbler_radio_custom "自定义"
+rls_string STR_mobbler_radio_enter_custom "自定义:"
+rls_string STR_mobbler_custom_format "%S 的电台"
+rls_string STR_mobbler_share_album "分享专辑"
+rls_string STR_mobbler_lastfm_account "您是否拥有 Last.fm 帐号？"
+rls_string STR_mobbler_radio_mix "我的混合电台"
+rls_string STR_mobbler_radio_friends "我好友的电台"
