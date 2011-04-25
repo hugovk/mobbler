@@ -1,0 +1,70 @@
+/*
+gestureobserver3x.mmp
+
+mobbler, a last.fm mobile scrobbler for Symbian smartphones.
+Copyright (C) 2008  Michael Coffey
+
+http://code.google.com/p/mobbler
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+#include "mobbler.mmh"
+
+// Data logging for accelerometer.
+// Uncomment this macro to enable CSV file logging of received sensor data.
+// See KSensorCsvFilePath for the logfile location.
+// MACRO __MOBBLER_SENSOR_DATA_LOGGING__
+
+// Verbose debug logging.
+// MACRO __GESTURE_DEBUG_LOGGING__
+
+#ifdef SYMBIAN_SIGNED
+TARGET		gestureobserver3x_0x20039AFC.dll
+TARGETTYPE	PLUGIN
+UID		0x10009D8D 0x20039AFC
+#else
+TARGET		gestureobserver3x_0xA000B6CE.dll
+TARGETTYPE	PLUGIN
+UID		0x10009D8D 0xA000B6CE
+#endif
+
+EPOCALLOWDLLDATA
+
+SOURCEPATH	..\src
+USERINCLUDE	..\inc
+SYSTEMINCLUDE	\epoc32\include
+
+SOURCE		gestureobserver.cpp
+SOURCE		gestureobserver3x.cpp
+SOURCE		gesturetimeout.cpp
+SOURCE		gestureskipaction.cpp
+
+START RESOURCE ..\data\gestureobserver3x.rss
+#ifdef SYMBIAN_SIGNED
+TARGET gestureobserver3x_0x20039AFC
+#else
+TARGET gestureobserver3x_0xA000B6CE
+#endif
+END
+
+LIBRARY		euser.lib
+LIBRARY		efsrv.lib
+
+#ifndef WINS
+LIBRARY		rrsensorapi.lib
+#endif
+
+// End of file

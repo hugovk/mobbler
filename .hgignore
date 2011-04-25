@@ -1,0 +1,13 @@
+syntax: regexp
+^.*\.sis
+^.*\.sisx
+^.*\.cproject
+^.*\.project
+^.*\.cer
+^.*\.key
+^.*\.ini
+^.*\.orig
+^.*ABLD\.BAT
+^.*mobblerbeta\.h
+^.*mobblerlyricsflyidkey\.h
+^.*mobblertwitter\.h
