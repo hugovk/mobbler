@@ -1,0 +1,201 @@
+ChangeLog
+
+The next one:
+
+  * Pause: now supporting tea breaks
+  * Refreshed icons
+  * Removed broken lyrics
+  * Use default browser
+  * Belarusian, French and Turkish updated
+  * Fixed check for updates
+
+2.10(x)
+
+  * Fix for radio on Nokia N8/Symbian^3
+  * Subscriber-only radio
+  * Share on Twitter
+  * Signup
+  * Biography
+  * Local events based on cell ID
+  * Better lyrics display
+  * Username limit increased from 15 -> 32 chars
+  * Better equaliser support
+  * Japanese, Korean, Portuguese and Ukrainian added and other languages updated
+  * Old scrobbles warning
+  * Play Mix Radio station
+  * Play Last.fm group radio station
+  * Play a custom lastfm:// radio station
+  * Removed discontinued Loved Tracks and Playlists radio station
+  * 20 volume steps where available (Symbian^3)
+  * Display subscriber's prestigious black icon
+  * Rejigged the Start a station menu 
+
+1.09(265) - We are now Symbian Signed!
+
+  * This is the same build as 0.09(265), but with a couple of extra signed only features
+  * Set the album art of the current song as your phone's wallpaper
+  * Opening the browser is no longer embedded 
+
+Note Symbian-Signed versions have major version 1 and a solid red logo. Self-signed versions have major version 0 and the crazy paving version of the logo. We hope to only release Symbian-Signed versions from now on and use self-signed versions for beta testing.
+
+0.09(265) - Local tracks, lyrics, love, tagging, and touring
+
+  * If you're listening to the radio, but you have a track on your device, Mobbler will now play the track on your device instead of streaming it to save you some bandwidth and battery. You will get a little hard disk icon in the bottom left of the album art if this happens.
+  * We can now fetch and show lyrics of the current track from Lyricsfly.com?
+  * You can now add and remove track, album, and artist tags on the current track and also from the list views
+  * We now show if you have loved a track before
+  * We now show if the artist you are listening to is touring. You will get a red banner on the top right of the album art. On 5th Edition you'll be able to click the banner to view the events.
+  * Remember the last searched for track, album, artist, tag
+  * Bug fixes 
+
+0.08(241) - Bug fixes
+
+  * Non-subscribers can now listen to the radio again (error was made in some tidying up changes)
+  * Should no longer get an update error if mobblerhelper is installed 
+
+0.08(237) - Fixed some bugs and added some minor features
+
+  * Open a map in Google Maps (if installed) for an event location
+  * Can now view a list of queued scrobbles through the Tools menu, and delete unwanted scrobbles
+  * Open a QR Code to let friends download Mobbler
+  * Now downloads avatars in shoutboxes
+  * Radio now works on Nokia E52 and E72 (disabled equaliser for these devices)
+  * mobblerhelper.sis is no longer needed for 3.0 phones (please uninstall it first)
+  * Some minor defect fixes 
+
+0.07(6187) - 5th edition scrobbling, Mobbler icon, some bug fixes
+
+  * Supports scrobbling for S60 5th edition phones like the Nokia 5800, 5530 XpressMusic and N97
+  * Added the official Mobbler logo
+  * Some bug fixes 
+
+0.6(5124) - Fixed a few bugs and let non-subscribers back in
+
+0.5.2 - Subscriber radio only
+
+  * Now using the official Last.fm radio API (this means you have to be a Last.fm subscriber to listen to the radio now. Sorry. Not our choice)
+  * 3.2 phones onwards now use destinations to connect
+  * Album art transitions between tracks (sine wave ease in ease out for those that are interested)
+  * You can slide the album art with your finger to skip track on touch screen phones
+  * Press 9 to toggle larger album art
+  * Press 0 to get links to mobile last.fm webpages related to the current track
+  * Added a setting to choose the mp3 quality between 64Kbps and 128Kbps (previously was always 128Kbps)
+  * We now download mp3s with a "speed multiplier" of 2 - This means that mp3s are downloaded twice as fast as they used to be, should mean less time downloading and more battery life
+  * Set alarms to wake you up with last.fm - Set at your own risk
+  * Create playlists
+  * Start a particular playlist radio station
+  * Search for tracks, albums, artist, tags on Last.fm
+  * More options in the web services list views to do with sharing tracks, artist, and events, plus viewing the tracks of an album etc.
+  * Some bug fixes (Now works on the N97!) 
+
+0.5.1 - Same as 0.5.2, but had  Issue 444 .
+
+0.5.0 - beta
+
+0.4.5 - Some bug fixes
+
+  * The font we were selecting was not working properly on some phones
+  * some devices could not play radio because they do not support the equaliser
+  * updated the Swedish translation 
+
+0.4.4 - Last.fm Web Services and more
+
+  * The left joypad (or plus button) now allows you to do things with the current track like share the artist or track with a friends or add the track to one of your playlists, as well as viewing info about that track. We plan to add and make improvements here in future, like viewing bios etc.
+  * You can view your Last.fm data through the View submenu on the options menu. There are a number of lists you can view here and there a a few actions you can do in them. We are planning to add more and more options here in the future.
+  * There is now a sleep timer to turn Mobbler off for those of you that like taking our software to bed with them.
+  * You can now disable scrobbling so that you can listen to tracks without your friends knowing. You can also select the scrobble percentage that you want to scrobble anywhere between 50% and 100%.
+  * Album art is now higher quality and scaled correctly, so you may notice an improvement. Also Mobbler will display album art for music player tracks, if it can find it in the folder of the mp3. If not you can change a setting so that it will try to find it through Last.fm, display it, and save it in the mp3 folder for next time.
+  * We have added gestures for those of you that have 3rd edition devices with an accelerometer. So far all you can do is skip to the next track by flicking the phone to the right. 
+
+(0.4.0-0.4.3 - Beta versions of 0.4.4)
+
+0.3.5 - Fixed a problem with the radio playing
+
+  * There have been a few problems with Last.fm's legacy servers recently. Mainly that they stop working and therefore Mobbler stops working. We found that we could change Mobbler so that it requests playlists with mp3 locations on Last.fm's new servers so hopefully this will stop the problems we have been having with the radio not working. 
+
+0.3.4 - Fixed some major problems in 0.3.3
+
+  * Many people had problems with 0.3.3 mainly on E series devices (phone rebooting when skipping track etc) this was down to incorrect use of the audio equaliser which has now been fixed
+  * This release should also finally fix the problem with installing the downloaded update. 
+
+0.3.3 - Improved audio playback performance
+
+  * No audio skipping when using other applications! (audio player is now in a separate thread)
+  * Start buffering the next track when the current track is still playing, but has finished downloading
+  * Added an audio equaliser
+  * Export the track queue to a log file to be uploaded by scrobble uploader on a PC
+  * Can now pause the music player and this is not counted as stopping the track - long tracks like podcasts were being scrobbled multiple times when paused because of this
+  * Other minor improvements and fixes 
+
+0.3.2 - Updates
+
+  * Checking for updates: fixed that it doesn't install properly when updating through this method and added and option at automatically check once a week.
+  * You can now set the pre-buffered amount of mp3 data in seconds
+  * You can now select a default access point
+  * Now remembers the last station you were listening so that it can be restarted
+  * Remembers the text that was entered in the radio station dialogs so that it doesn't have to be retyped
+  * Added an option to keep the backlight on when the radio is playing
+  * General improvements in playback performance and UI feedback
+  * 5th edition is now supported properly: the graphics are displayed properly and there are touch screen buttons (scrobbling from the music player doesn't seem to working, but I don't think that is Mobbler's fault). 
+
+0.3.1 - Updates
+
+  * Some minor updates 
+
+0.3.0 - New graphics, bug fixes, and check for updates feature
+
+  * The graphics in Mobbler have been updated with help from several Mobbler users (Still needs a Mobbler specific logo and the positions for landscape displays are not finalised)
+  * Some bugs fixed that were in 0.2.4 like having to enter your username in lowercase, and crashing when there was an error trying to connect
+  * A check for updates feature has been which will download the latest version of Mobbler through your browser if it is newer than the currently installed version
+  * Changed so that there is an offline and online mode instead of connecting and disconnecting. This is so Mobbler can remember that you were in online code and try to automatically connect the next time it is started. (Need to allow the user to select a default access point to get this working properly though) 
+
+0.2.4 - Enhancements and bug fixes
+
+Enhancements;
+
+  * Added love/ban functionality on the up/down keys (volume is now only on the dedicated volume buttons). Note that Mobbler will only love a track once it has been scrobbled and banning a track will automatically skip to the next track.
+  * Added a buffering progress dialog (not sure if this is annoying. Will probably move into the view later)
+  * Now shows track duration and playback position in seconds (this will probably be a progress bar in future)
+  * removed the fake CD case graphic from the album art (it even annoyed me)
+  * will now automatically skip to the next track if the audio transaction fails (I find that this means that there is less hand holding when on the train, etc) 
+
+Bug Fixes;
+
+  * Fixed problem with 3.0 phones that could not start artist, tag, or user stations.
+  * Fixed many other minor things that I can't remember. 
+
+0.2.3 - Bug fix! a minor error in version 0.2.2 meant that mobbler was unable to observe the S60 music application (no scrobbling). This has now been fixed.
+
+0.2.2 - Some more bug fixes and enhancements.
+
+  * Changed the priority of the audio output stream so that it doesn't 'hiccup' so much when mobbler is playing radio in the background
+  * Stopped mobbler from disconnecting when a http transaction fails (this means that failing to download the album art, etc, will not stop you from listening to the radio)
+  * Now URL decodes the radio station name so it doesn't have +'s and %xx's
+  * Radio station name should also appear in the language of the phone, where that is one of the languages that last.fm provide translations for
+  * Now switches between portrait and landscape modes correctly on N82 and N95
+  * The error dialogs are now information dialogs so that they don't interrupt the playback of the music player
+  * The about dialog no longer clicks the buy button when dismissed
+  * The buy button now links to the Mobbler Amazon aStore and searches for the current artist and album name
+  * Added Greek and Arabic translations (Arabic had been added to the source before, but due to a clerical error it was accidentally not included in mobbler until now) 
+
+0.2.1 - Some bug fixes. N73 and N80 not starting problem fixed. Crash after listening to radio and then won't open problem fixed. Now uses the proper Symbian XML parser, &amp; things get turned to & as well as being safer (radio station name still looks messy).
+
+0.2.0 - The first radio player version of mobbler. Added Chinese and Portuguese.
+
+0.1.18 - Added Latvian, Polish, Finnish, Hungarian, and Arabic. Fixed crash when sending to last.fm whilst connecting. Mobbler now closes the data connection properly when disconnect is pressed. Now displays an information note of the current track details when a track starts playing. Fixed a bug where negative track queue number was seen when submitting tracks after a mobbler restart.
+
+0.1.17 - Some minor bug fixes
+
+0.1.16 - Fixed the "icon/menu hang" issue with pre feature pack 1 phone
+
+0.1.15 - Now correctly encodes UTF-8 characters correctly(for Russian and Lithuanian)
+
+0.1.14 - Fixed problem introduced in 0.1.13 where tracks could be submitted multiple times when being skipped immediately.
+
+0.1.13 - Added Lithuanian, Italian, German and Dutch. Fixed a problem where some tracks seemed to be missed.
+
+0.1.12 - Added German and Spanish. Some improvements to the http submitting mechanism.
+
+0.1.11 - Fixed a problem where tracks where not being submitted if they were skipped or stopped. Fixed a crash when trying to connect twice.
+
+1.1.0 - 0.1.10 - ?
