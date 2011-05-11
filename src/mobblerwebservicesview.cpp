@@ -118,9 +118,7 @@ void CMobblerWebServicesView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* a
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_SCROBBLE_LOG_REMOVE,	EMobblerCommandScrobbleLogRemove);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_TAG,					EMobblerCommandTag);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_BIOGRAPHY,			EMobblerCommandBiography);
-#ifdef LYRICS
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_LYRICS,				EMobblerCommandTrackLyrics);
-#endif
 		}
 	else if (aResourceId == R_MOBBLER_ATTENDANCE_SUBMENU_PANE)
 		{

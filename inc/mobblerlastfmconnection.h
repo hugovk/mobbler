@@ -216,10 +216,6 @@ public:
 	void PlaylistFetchAlbumL(const TDesC8& aAlbumId, MMobblerFlatDataObserver& aObserver);
 	void PlaylistAddTrackL(const TDesC8& aPlaylistId, const TDesC8& aArtist, const TDesC8& aTrack, MMobblerFlatDataObserver& aObserver);
 	
-#ifdef LYRICS
-	void FetchLyricsL(const TDesC8& aArtist, const TDesC8& aTitle, MMobblerFlatDataObserver& aObserver);
-#endif
-
 	TBool ExportQueueToLogFileL();
 
 	TBool ScrobblingOn() { return iScrobblingOn; }

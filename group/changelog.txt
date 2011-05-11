@@ -4,9 +4,9 @@ The next one:
 
   * Pause: now supporting tea breaks
   * Refreshed icons
-  * Removed broken lyrics
+  * Fixed lyrics
   * Use default browser
-  * Belarusian, French and Turkish updated
+  * Belarusian, Danish, French, Simplified Chinese and Turkish updated
   * Fixed check for updates
 
 2.10(x)

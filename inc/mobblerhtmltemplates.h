@@ -166,25 +166,6 @@ no-repeat fixed 5%% 30%%; \
 	</body>\
 </html>");
 
-#ifdef LYRICS
-/*
- * Format string specifiers are:
- *
- * %S - artist name
- * %S - track name
- * %S - lyrics text
- */
-	_LIT8(KLyricsHtmlTemplate,  "\
-	<body>\
-		<div id=\"nav_bar\"><h3>%S - %S</h3></div>\
-		<div id=\"body_text\">\
-		<p>%S</p>\
-\
-		</div><!-- body_text -->\
-	</body>\
-</html>");
-#endif // LYRICS
-
 #endif
 
 // End of File

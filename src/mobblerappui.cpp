@@ -77,6 +77,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblerwebserviceshelper.h"
 #include "mobblerwebservicesview.h"
 
+_LIT(KPlus, "+");
 _LIT(KRadioFile, "C:radiostations.dat");
 _LIT(KSearchFile, "C:searchterms.dat");
 _LIT(KSpace, " ");
@@ -246,9 +247,6 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iAutoCheckForUpdatesObserver;
 	delete iManualCheckForUpdatesObserver;
 	delete iDocHandler;
-#ifdef LYRICS
-	delete iLyricsObserver;
-#endif
 	delete iInterfaceSelector;
 	delete iLastFmConnection;
 	delete iMobblerDownload;
@@ -1017,60 +1015,52 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 		case EMobblerCommandPlusTopTags:
 			ActivateLocalViewL(iWebServicesView->Id(), TUid::Uid(EMobblerCommandArtistTopTags), currentTrack->Artist().String8());
 			break;
-#ifdef LYRICS
 		case EMobblerCommandTrackLyrics:
-			{
 			if (currentTrack)
 				{
-				delete iLyricsObserver;
-				iLyricsObserver = CMobblerFlatDataObserverHelper::NewL(
-											*iLastFmConnection, *this, ETrue);
-				iLastFmConnection->FetchLyricsL(currentTrack->Artist().String8(), 
-												currentTrack->Title().String8(), 
-												*iLyricsObserver);
+				ShowLyricsL(currentTrack->Artist().String(),
+							currentTrack->Title().String());
 				}
-			}
 			break;
-#endif
-			case EMobblerCommandTrackAddTag:
-			if (CurrentTrack())
+		case EMobblerCommandTrackAddTag:
+			if (currentTrack)
 				{
 				iWebServicesHelper->AddTagL(*CurrentTrack(), aCommand);
 				}
 			break;
 		case EMobblerCommandTrackRemoveTag:
-			if (CurrentTrack())
+			if (currentTrack)
 				{
 				iWebServicesHelper->TrackRemoveTagL(*CurrentTrack());
 				}
 			break;
 		case EMobblerCommandAlbumAddTag:
-			if (CurrentTrack())
+			if (currentTrack)
 				{
 				iWebServicesHelper->AddTagL(*CurrentTrack(), aCommand);
 				}
 			break;
 		case EMobblerCommandAlbumRemoveTag:
-			if (CurrentTrack())
+			if (currentTrack)
 				{
 				iWebServicesHelper->AlbumRemoveTagL(*CurrentTrack());
 				}
 			break;
 		case EMobblerCommandArtistAddTag:
-			if (CurrentTrack())
+			if (currentTrack)
 				{
 				iWebServicesHelper->AddTagL(*CurrentTrack(), aCommand);
 				}
 			break;
 		case EMobblerCommandArtistRemoveTag:
-			if (CurrentTrack())
+			if (currentTrack)
 				{
 				iWebServicesHelper->ArtistRemoveTagL(*CurrentTrack());
 				}
 			break;
 		case EMobblerCommandVisitWebPage:
 			{
-			if (CurrentTrack())
+			if (currentTrack)
 				{
 				CEikTextListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
 				CleanupStack::PushL(list);
@@ -1087,17 +1077,17 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 				CDesCArrayFlat* items(new CDesCArrayFlat(4));
 				CleanupStack::PushL(items);
 				
-				HBufC* action(CurrentTrack()->Title().String().AllocLC());
+				HBufC* action(currentTrack->Title().String().AllocLC());
 				items->AppendL(*action);
 				CleanupStack::PopAndDestroy(action);
 				
-				action = CurrentTrack()->Artist().String().AllocLC();
+				action = currentTrack->Artist().String().AllocLC();
 				items->AppendL(*action);
 				CleanupStack::PopAndDestroy(action);
 				
-				if (CurrentTrack()->Album().String().Length() > 0)
+				if (currentTrack->Album().String().Length() > 0)
 					{
-					action = CurrentTrack()->Album().String().AllocLC();
+					action = currentTrack->Album().String().AllocLC();
 					items->AppendL(*action);
 					CleanupStack::PopAndDestroy(action);
 					}
@@ -1127,7 +1117,7 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 							GoToLastFmL(EMobblerCommandArtistWebPage);
 							break;
 						case 2:
-							if (CurrentTrack()->Album().String().Length() > 0)
+							if (currentTrack->Album().String().Length() > 0)
 								{
 								GoToLastFmL(EMobblerCommandAlbumWebPage);
 								break;
@@ -1425,12 +1415,6 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 					}
 				}
 			}
-#ifdef LYRICS
-		else if (aObserver == iLyricsObserver)
-			{
-			ShowLyricsL(aData);
-			}
-#endif
 		else if (aObserver == iArtistBiographyObserver)
 			{
 			ShowBiographyL(aData);
@@ -2374,7 +2358,6 @@ void CMobblerAppUi::GoToLastFmL(TInt aCommand, const TDesC8& aEventId)
 		_LIT(KSlash, "/");
 		_LIT(KUnderscoreSlash, "_/");
 		_LIT(KPlusEvents, "+events");
-		_LIT(KPlus, "+");
 		
 		url.Append(KMusicSlash);
 		url.Append(currentTrack->Artist().String());
@@ -2470,16 +2453,19 @@ void CMobblerAppUi::HandleLocationCompleteL(const TDesC8& /*aAccuracy*/, const T
 void CMobblerAppUi::OpenWebBrowserL(const TDesC& aUrl)
 	{
 	TRACER_AUTO;
+	LOG(aUrl);
 	TBuf<KMaxMobblerTextSize> url(aUrl);
 	
 	// Convert to UTF-8
 	HBufC8* utf8(EscapeUtils::ConvertFromUnicodeToUtf8L(url));
 	url.Copy(*utf8);
 	delete utf8;
+	LOG(url);
 	
 	// Escape encode things like Ä and ö
 	HBufC16* encode(EscapeUtils::EscapeEncodeL(url, EscapeUtils::EEscapeNormal));
 	CleanupStack::PushL(encode);
+	LOG(*encode);
 	
 #ifdef __SYMBIAN_SIGNED__
 	// Find the default browser, on S^1/S^3 it may be a 3rd party browser
@@ -2624,152 +2610,23 @@ TBool CMobblerAppUi::DetailsNeeded()
 	return EFalse;
 	}
 
-#ifdef LYRICS
-void CMobblerAppUi::ShowLyricsL(const TDesC8& aData)
+void CMobblerAppUi::ShowLyricsL(const TDesC& aArtist, const TDesC& aTitle)
 	{
 	TRACER_AUTO;
-	DUMPDATA(aData, _L("lyrics.xml"));
-	_LIT8(KSg, "sg"); // song
-	_LIT8(KAr, "ar"); // artist name
-	_LIT8(KTt, "tt"); // title of the song
-	_LIT8(KTx, "tx"); // lyrics text
-	_LIT8(K200, "200");
-	_LIT8(K300, "300");
-	
-	// Parse the XML
-	CSenXmlReader* xmlReader(CSenXmlReader::NewLC());
-	CSenDomFragment* domFragment(MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData));
-	
-	// Get the status error code
-	TPtrC8 statusPtrC(domFragment->AsElement().Element(KStatus)->Content());
-	
-	if ((statusPtrC.CompareF(K200) == 0) || 
-		(statusPtrC.CompareF(K300) == 0))
-		{
-		TPtrC8 artistPtrC(domFragment->AsElement().Element(KSg)->Element(KAr)->Content());
-		TPtrC8  titlePtrC(domFragment->AsElement().Element(KSg)->Element(KTt)->Content());
-		TPtrC8 lyricsPtrC(domFragment->AsElement().Element(KSg)->Element(KTx)->Content());
-		
-		HBufC8* artistBuf(HBufC8::NewLC(artistPtrC.Length()));
-		HBufC8*  titleBuf(HBufC8::NewLC( titlePtrC.Length()));
-		HBufC8* lyricsBuf(HBufC8::NewLC(lyricsPtrC.Length()));
-		SenXmlUtils::DecodeHttpCharactersL(artistPtrC, artistBuf);
-		SenXmlUtils::DecodeHttpCharactersL( titlePtrC,  titleBuf);
-		SenXmlUtils::DecodeHttpCharactersL(lyricsPtrC, lyricsBuf);
-		
-		TPtr8 lyricsPtr(lyricsBuf->Des());
-		MobblerUtility::FixLyricsLineBreaks(lyricsPtr);
-		
-/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
-		// Only link back to corrections with the permanent ID key.
-		// Temporary keys don't return correct checksums to prevent abuse.
-		_LIT8(KCs, "cs"); // checksum (for link back)
-		_LIT8(KId, "id"); // song ID (for link back)
-		_LIT8(KLinkBackFormat, "<a href=\"http://lyricsfly.com/search/correction.php?%S&id=%S\">Make corrections</a>\r\n");
-		
-		TPtrC8 checkSumPtrC(domFragment->AsElement().Element(KSg)->Element(KCs)->Content());
-		TPtrC8 idPtrC(domFragment->AsElement().Element(KSg)->Element(KId)->Content());
-		
-		HBufC8* linkBackBuf(HBufC8::NewLC(KLinkBackFormat().Length() + 
-										  checkSumPtrC.Length() + 
-										  idPtrC.Length()));
-		
-		linkBackBuf->Des().Format(KLinkBackFormat, &checkSumPtrC, &idPtrC);
-		LOG(*linkBackBuf);
-		
-		file.WriteL(*linkBackBuf);
-#endif*/
+	_LIT(KUrl, "http://lyrics.wikia.com/index.php?search=");
+	_LIT(KColon, ":");
+	TBuf<KMaxMobblerTextSize> url(KUrl());
+	TBuf<KMaxMobblerTextSize> artist(aArtist);
+	TBuf<KMaxMobblerTextSize> track(aTitle);
+	// MobblerUtility::FixLyricsSpecialCharacters(artist);
+	// MobblerUtility::FixLyricsSpecialCharacters(track);
+	url.Append(artist);
+	url.Append(KColon);
+	url.Append(track);
+	LOG(url);
 
-		// Show lyrics in the browser view thingy
-		HBufC8* lyricsHtml(HBufC8::NewLC(
-				KHtmlHeaderTemplate().Length() +
-				KLyricsHtmlTemplate().Length() +
-				artistBuf->Length() + 
-				titleBuf->Length() + 
-				lyricsBuf->Length()
-/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
-				+ KLinkBackFormat().Length()
-				+ linkBackBuf->Length()
-#endif*/
-				));
-
-		TPtr8 lyricsHtmlPtr(lyricsHtml->Des());
-		lyricsHtmlPtr.Append(KHtmlHeaderTemplate);
-		lyricsHtmlPtr.AppendFormat(
-				KLyricsHtmlTemplate,
-				artistBuf, 
-				titleBuf,
-				lyricsBuf);
-
-/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
-		lyricsHtmlPtr.Append(*linkBackBuf);
-#endif*/
-
-		DUMPDATA(lyricsHtmlPtr, _L("lyrics.txt"));
-
-		ActivateLocalViewL(iBrowserView->Id(), TUid::Uid(EMobblerCommandTrackLyrics), lyricsHtmlPtr);
-
-		CleanupStack::PopAndDestroy(lyricsHtml);
-/*#ifdef PERMANENT_LYRICSFLY_ID_KEY
-		CleanupStack::PopAndDestroy(linkBackBuf);
-#endif*/
-		CleanupStack::PopAndDestroy(3); // lyricsBuf, titleBuf, artistBuf
-		}
-	else
-		{
-		CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
-		note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_LYRICS_NOT_FOUND));
-		
-//		TPtrC8 songPtrC(domFragment->AsElement().Element(KSg)->Content());
-//		file.WriteL(songPtrC);
-		}
-	
-#ifdef _DEBUG
-	_LIT8(K204, "204");
-	_LIT8(K400, "400");
-	_LIT8(K401, "401");
-	_LIT8(K402, "402");
-	_LIT8(K406, "406");
-	if (statusPtrC.CompareF(K200) == 0)
-		{
-		LOG(_L8("200 - ok"));
-		//LOG(_L8("    Results are returned. All parameters checked ok."));
-		}
-	else if (statusPtrC.CompareF(K204) == 0)
-		{
-		LOG(_L8("204 - NO CONTENT"));
-		//LOG(_L8("   Parameter query returned no results. All parameters checked ok."));
-		}
-	else if (statusPtrC.CompareF(K300) == 0)
-		{
-		LOG(_L8("300 - TESTING LIMITED"));
-		//LOG(_L8("    Temporary access. Limited content. All parameters checked ok."));
-		}
-	else if (statusPtrC.CompareF(K400) == 0)
-		{
-		LOG(_L8("400 - MISSING KEY"));
-		//LOG(_L8("   Parameter i missing. Authorization failed."));
-		}
-	else if (statusPtrC.CompareF(K401) == 0)
-		{
-		LOG(_L8("401 – UNAUTHORIZED"));
-		//LOG(_L8("   Parameter i invalid. Authorization failed."));
-		}
-	else if (statusPtrC.CompareF(K402) == 0)
-		{
-		LOG(_L8("402 - LIMITED TIME"));
-		//LOG(_L8("    This response is returned only if you query too soon. Limit query requests. Time of delay is shown in <delay> tag in milliseconds."));
-		}
-	else if (statusPtrC.CompareF(K406) == 0)
-		{
-		LOG(_L8("406 - QUERY TOO SHORT"));
-		//LOG(_L8("    Query request string is too short. All other parameters checked ok."));
-		}
-#endif // _DEBUG
-
-	CleanupStack::PopAndDestroy(2); // xmlReader & domFragment
+	OpenWebBrowserL(url);
 	}
-#endif // LYRICS
 
 void CMobblerAppUi::ShowBiographyL(const TDesC8& aData)
     {

@@ -262,9 +262,13 @@ void CMobblerTrack::FindLocalAlbumImageL()
 				LOG(_L8("Found album art ID3"));
 				
 				HBufC8* albumArtFromId3(HBufC8::NewLC(metaDataFieldContainer.Field(EMetaDataJpeg).Length()));
+				LOG(_L8("Copy jpeg data"));
 				albumArtFromId3->Des().Copy(metaDataFieldContainer.Field(EMetaDataJpeg));
+				LOG(_L8("New image"));
                 iImage = CMobblerBitmap::NewL(*this, *albumArtFromId3);
+				LOG(_L8("Pop and destroy buffer"));
                 CleanupStack::PopAndDestroy(albumArtFromId3);
+                LOG(_L8("Set image type"));
                 
                 iImageType = EMobblerImageTypeAlbumLocal;
 				}

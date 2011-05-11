@@ -142,12 +142,10 @@ RESOURCE MENU_PANE r_mobbler_webservices_menu_pane
 			{
 			command = EMobblerCommandBiography;
 			},
-#ifdef LYRICS
 		MENU_ITEM
 			{
 			command = EMobblerCommandTrackLyrics;
 			},
-#endif
 		MENU_ITEM
 			{
 			command = EMobblerCommandAttendance;
@@ -360,12 +358,10 @@ RESOURCE MENU_PANE r_mobbler_status_menu_pane
 			{
 			command = EMobblerCommandPlusPlaylistAddTrack;
 			},
-#ifdef LYRICS
 		MENU_ITEM
 			{
 			command = EMobblerCommandTrackLyrics;
 			},
-#endif
 		MENU_ITEM
 			{
 			command = EMobblerCommandPlusSimilar;

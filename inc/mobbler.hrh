@@ -170,10 +170,7 @@ enum TMobblerSettingItemListViewCommands
 	
 	EMobblerCommandTwitterChange,
 	EMobblerCommandTwitterRemove,
-	
-#ifdef LYRICS
 	EMobblerCommandTrackLyrics,
-#endif
 	
 	// radio commands
 	EMobblerCommandRadioStart,

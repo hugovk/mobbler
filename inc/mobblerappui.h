@@ -195,9 +195,7 @@ public:
 	void GoToMapL(const TDesC8& aName, const TDesC8& aLatitude, const TDesC8& aLongitude);
 	TInt LaunchFileL(const TDesC& aFilename);
 	TBool DetailsNeeded();
-#ifdef LYRICS
-	void ShowLyricsL(const TDesC8& aData);
-#endif
+	void ShowLyricsL(const TDesC& aArtist, const TDesC& aTitle);
 	void ShowBiographyL(const TDesC8& aData);
 	void WarnOldScrobblesL();
 
@@ -331,9 +329,6 @@ private:
 	CMobblerFlatDataObserverHelper* iArtistBiographyObserver;
 	CMobblerFlatDataObserverHelper* iAutoCheckForUpdatesObserver;
 	CMobblerFlatDataObserverHelper* iManualCheckForUpdatesObserver;
-#ifdef LYRICS
-	CMobblerFlatDataObserverHelper* iLyricsObserver;
-#endif
 #ifdef __SYMBIAN_SIGNED__
 	CMobblerFlatDataObserverHelper* iLocalEventsObserver;
 #endif

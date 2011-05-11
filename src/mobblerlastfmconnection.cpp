@@ -72,14 +72,6 @@ _LIT8(KMobblerTwitterConsumerSecret, "");
 _LIT8(KLatesverFileLocation, "http://www.mobbler.co.uk/latestver.xml");
 #endif
 
-#ifdef LYRICS
-#ifdef PERMANENT_LYRICSFLY_ID_KEY
-#include "mobblerlyricsflyidkey.h"
-#else
-// Update with the weekly user ID key from http://www.lyricsfly.com/api/#doc
-_LIT8(KLyricsflyIdKey, "1c0736f65ac693cbd-temporary.API.access");
-#endif
-#endif
 
 // The file name to store the queue of listened tracks
 _LIT(KTracksFile, "c:track_queue.dat");
@@ -769,58 +761,6 @@ void CMobblerLastFmConnection::SimilarL(const TInt aCommand, const TDesC8& aArti
 	
 	AppendAndSubmitTransactionL(transaction);
 	}
-
-#ifdef LYRICS
-void CMobblerLastFmConnection::FetchLyricsL(const TDesC8& aArtist,
-											const TDesC8& aTitle, 
-											MMobblerFlatDataObserver& aObserver)
-	{
-	TRACER_AUTO;
-	LOGTEXT("CMobblerLastFmConnection::FetchLyricsL");
-	LOG2(aArtist, aTitle);
-	
-	// 1. replace special characters with %
-	HBufC8* artistBuf(aArtist.AllocLC());
-	HBufC8*  titleBuf( aTitle.AllocLC());
-	TPtr8 artistPtr(artistBuf->Des());
-	TPtr8  titlePtr( titleBuf->Des());
-	MobblerUtility::FixLyricsSpecialCharacters(artistPtr);
-	MobblerUtility::FixLyricsSpecialCharacters(titlePtr);
-	LOG2(artistPtr, titlePtr);
-
-	// 2. URL encode artist and title
-	_LIT8(KLyricsflyFormat, "http://lyricsfly.com/api/api.php?i=%S&a=%S&t=%S");
-	
-	HBufC8* artistEncoded(MobblerUtility::URLEncodeLC(artistPtr));
-	HBufC8* titleEncoded(MobblerUtility::URLEncodeLC(titlePtr));
-	
-	HBufC8* uriBuf(HBufC8::NewLC(KLyricsflyFormat().Length() + 
-								 KLyricsflyIdKey().Length() +
-								 artistEncoded->Length() + 
-								 titleEncoded->Length()));
-	
-	uriBuf->Des().Format(KLyricsflyFormat, &KLyricsflyIdKey, 
-							artistEncoded, titleEncoded);
-	LOG(*uriBuf);
-	
-	TUriParser8 uriParser;
-	uriParser.Parse(*uriBuf);
-	
-	CUri8* uri(CUri8::NewLC(uriParser));
-	
-	CMobblerTransaction* transaction(CMobblerTransaction::NewL(*this, uri));
-	transaction->SetFlatDataObserver(&aObserver);
-	
-	CleanupStack::Pop(uri);
-	CleanupStack::PopAndDestroy(uriBuf);
-	CleanupStack::PopAndDestroy(titleEncoded);
-	CleanupStack::PopAndDestroy(artistEncoded);
-	CleanupStack::PopAndDestroy(titleBuf);
-	CleanupStack::PopAndDestroy(artistBuf);
-	
-	AppendAndSubmitTransactionL(transaction);
-	}
-#endif // LYRICS
 
 void CMobblerLastFmConnection::RecentTracksL(const TDesC8& aUser, MMobblerFlatDataObserver& aObserver)
 	{

@@ -54,9 +54,6 @@ private:
 	CMobblerWebServicesHelper* iWebServicesHelper;
 	CMobblerFlatDataObserverHelper* iAlbumInfoObserver;
 	CMobblerFlatDataObserverHelper* iLoveObserver;
-#ifdef LYRICS
-	CMobblerFlatDataObserverHelper* iLyricsObserver;
-#endif
 	
 	// callback for viewing scrobble log
 	CAsyncCallBack* iAsyncCallBack;

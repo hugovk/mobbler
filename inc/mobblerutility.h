@@ -42,10 +42,7 @@ public:
 	static TBuf8<2> LanguageL();
 	static TBuf<30> LocalLastFmDomainL(const TInt aMobile = ETrue);
 
-#ifdef LYRICS
-	static void FixLyricsSpecialCharacters(TDes8& aText);
-	static void FixLyricsLineBreaks(TDes8& aText);
-#endif
+	// static void FixLyricsSpecialCharacters(TDes& aText);
 	
 	static void StripUnwantedTagsFromHtmlL(HBufC8*& aHtml);
 
