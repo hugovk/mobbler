@@ -40,15 +40,6 @@ CAPABILITY	NetworkServices ReadUserData SwEvent ReadDeviceData WriteDeviceData L
 CAPABILITY	NetworkServices ReadUserData
 #endif
 
-// Uncomment this to build the lyrics. Currently removed as the 
-// Lyricsfly API was discontinued and no replacement is yet found
-//MACRO LYRICS
-
-#ifdef LYRICS
-// uncomment this to use Mobbler's permanent user ID key for Lyricsfly
-//MACRO PERMANENT_LYRICSFLY_ID_KEY
-#endif
-
 // Use this if you have mobblertwitter.h
 //MACRO TWITTER
 
