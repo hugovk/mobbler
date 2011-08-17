@@ -8,6 +8,7 @@ Copyright (C) 2009, 2010  gw111zz
 Copyright (C) 2008, 2009  Mike Arvela
 Copyright (C) 2009  Arno Karppinen
 Copyright (C) 2010  Viivi Viher-Vehmas
+Copyright (C) 2011  Renne Tergujeff
 
 http://code.google.com/p/mobbler
 
@@ -149,7 +150,7 @@ rls_string STR_mobbler_softkey_set "Aseta"
 rls_string STR_mobbler_softkey_remove "Poista"
 rls_string STR_mobbler_sleep_timer_action "Uniajastimen toiminta:"
 rls_string STR_mobbler_sleep_timer_action_stop "Lopeta soittaminen"
-rls_string STR_mobbler_sleep_timer_action_offline "Vaihda offline-tilaan"
+rls_string STR_mobbler_sleep_timer_action_offline "Siirry offline-tilaan"
 rls_string STR_mobbler_sleep_timer_action_exit "Poistu"
 rls_string STR_mobbler_sleep_timer_expired "Uniajastin lopussa"
 rls_string STR_mobbler_sleep_timer_removed "Uniajastin poistettu"
@@ -256,7 +257,7 @@ rls_string STR_mobbler_bit_rate "Tiedonsiirtonopeus"
 rls_string STR_mobbler_64_kbps "64 kb/s"
 rls_string STR_mobbler_128_kbps "128 kb/s"
 rls_string STR_mobbler_format_search "%S etsi"
-rls_string STR_mobbler_64_kbps_warning "64 kb/s -laatuinen radio on käytettävissä vain Last.fm tilaajilla. Käytetään 128 kb/s."
+rls_string STR_mobbler_64_kbps_warning "64 kb/s -laatuinen radio on käytettävissä vain Last.fm:n tilaajilla. Käytetään 128 kb/s."
 rls_string STR_mobbler_volume "Äänenvoimakkuus"
 rls_string STR_mobbler_station "Kanava"
 rls_string STR_mobbler_station_text "Artisti/merkintä/käyttäjä"
@@ -323,4 +324,4 @@ rls_string STR_mobbler_custom_format "Radio %S"
 rls_string STR_mobbler_share_album "Jaa albumi"
 rls_string STR_mobbler_lastfm_account "Onko sinulla Last.fm-käyttäjätili?"
 rls_string STR_mobbler_radio_mix "Minulle miksattu"
-rls_string STR_mobbler_radio_friends "My friends' radio"
+rls_string STR_mobbler_radio_friends "Kaverini"

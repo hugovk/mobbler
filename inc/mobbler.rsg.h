@@ -30,6 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <mobbler_0xA0007648.rsg>
 #endif
 
-#endif // __MOBBLERSTRINGS_RSG_H__
+#endif // __MOBBLER_RSG_H__
 
 // End of file
