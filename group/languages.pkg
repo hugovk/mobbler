@@ -43,8 +43,11 @@
 ; Supports S60 release v5.0
 [0x1028315F], 0, 0, 0, {"Series60ProductID"}
 
-; Supports Symbian^3
+; Supports Symbian^3 and Anna
 [0x20022E6D], 0, 0, 0, {"Series60ProductID"}
+
+; Supports Symbian Belle
+[0x2003A678], 0, 0, 0, {"Series60ProductID"}
 
 ; Must be on the C: drive
 {

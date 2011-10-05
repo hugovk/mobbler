@@ -71,6 +71,7 @@ CMobblerTouchFeedback::~CMobblerTouchFeedback()
 
 void CMobblerTouchFeedback::InstantFeedback(TInt aType)
 	{
+	(void)aType; // Remove compiler warning
 #ifdef  __S60_50__
 	iTouchFeedback->InstantFeedback(static_cast<TTouchLogicalFeedback>(aType));
 #endif
