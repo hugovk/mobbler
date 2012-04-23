@@ -1,24 +1,24 @@
 /*
-mobblerbitmapcontainer.cpp
-
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
-Copyright (C) 2009  Michael Coffey
+Copyright (C) 2009, 2010  Michael Coffey
+Copyright (C) 2009, 2010, 2012  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
-This program is free software; you can redistribute it and/or
+This file is part of Mobbler.
+
+Mobbler is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
+Mobbler is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <icl/imagecodecdata.h>
@@ -28,19 +28,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mobblerbitmapcollection.h"
 #include "mobblertracer.h"
 
+#include <mobblerbuttons.mbg>
+
 #ifdef __SYMBIAN_SIGNED__
 #include <mobbler.mbg>
 #ifdef __WINS__
 _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler.mif");
+_LIT(KMobblerButtonsMifFile, "\\resource\\apps\\mobblerbuttons_5th.mif");
 #else
 _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0x20038513.mif");
+_LIT(KMobblerButtonsMifFile, "\\resource\\apps\\mobblerbuttons_0x20038513.mif");
 #endif // __WINS__
 #else // !__SYMBIAN_SIGNED__
 #include <ssmobbler.mbg>
 #ifdef __WINS__
 _LIT(KMobblerMifFile, "\\resource\\apps\\ssmobbler.mif");
+_LIT(KMobblerButtonsMifFile, "\\resource\\apps\\mobblerbuttons_5th.mif");
 #else
 _LIT(KMobblerMifFile, "\\resource\\apps\\mobbler_0xA0007648.mif");
+_LIT(KMobblerButtonsMifFile, "\\resource\\apps\\mobblerbuttons_0xA0007648.mif");
 #endif // __WINS__
 #endif // __SYMBIAN_SIGNED__
 
@@ -156,7 +162,7 @@ CMobblerBitmapCollection::~CMobblerBitmapCollection()
     
 	iBitmaps.ResetAndDestroy();
 	}
-	
+
 CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObserver, TInt aId) const
 	{
     TRACER_AUTO;
@@ -199,53 +205,25 @@ CMobblerBitmap* CMobblerBitmapCollection::BitmapL(MMobblerBitmapObserver& aObser
 #endif
 				break;
 			case EBitmapMore:
-#ifdef __SYMBIAN_SIGNED__
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerMore, EMbmMobblerMore_mask);
-#else
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerMore, EMbmSsmobblerMore_mask);
-#endif
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerButtonsMifFile, EMbmMobblerbuttonsMore, EMbmMobblerbuttonsMore_mask);
 				break;
 			case EBitmapLove:
-#ifdef __SYMBIAN_SIGNED__
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerLove, EMbmMobblerLove_mask);
-#else
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerLove, EMbmSsmobblerLove_mask);
-#endif
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerButtonsMifFile, EMbmMobblerbuttonsLove, EMbmMobblerbuttonsLove_mask);
 				break;
 			case EBitmapBan:
-#ifdef __SYMBIAN_SIGNED__
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerBan, EMbmMobblerBan_mask);
-#else
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerBan, EMbmSsmobblerBan_mask);
-#endif
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerButtonsMifFile, EMbmMobblerbuttonsBan, EMbmMobblerbuttonsBan_mask);
 				break;
 			case EBitmapPlay:
-#ifdef __SYMBIAN_SIGNED__
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerPlay, EMbmMobblerPlay_mask);
-#else
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerPlay, EMbmSsmobblerPlay_mask);
-#endif
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerButtonsMifFile, EMbmMobblerbuttonsPlay, EMbmMobblerbuttonsPlay_mask);
 				break;
 			case EBitmapPause:
-#ifdef __SYMBIAN_SIGNED__
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerPause, EMbmMobblerPause_mask);
-#else
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerPause, EMbmSsmobblerPause_mask);
-#endif
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerButtonsMifFile, EMbmMobblerbuttonsPause, EMbmMobblerbuttonsPause_mask);
 				break;
 			case EBitmapNext:
-#ifdef __SYMBIAN_SIGNED__
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerNext, EMbmMobblerNext_mask);
-#else
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerNext, EMbmSsmobblerNext_mask);
-#endif
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerButtonsMifFile, EMbmMobblerbuttonsNext, EMbmMobblerbuttonsNext_mask);
 				break;
 			case EBitmapStop:
-#ifdef __SYMBIAN_SIGNED__
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmMobblerStop, EMbmMobblerStop_mask);
-#else
-				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerMifFile, EMbmSsmobblerStop, EMbmSsmobblerStop_mask);
-#endif
+				bitmap = CMobblerBitmap::NewL(aObserver, KMobblerButtonsMifFile, EMbmMobblerbuttonsStop, EMbmMobblerbuttonsStop_mask);
 				break;
 			case EBitmapSpeakerHigh:
 #ifdef __SYMBIAN_SIGNED__

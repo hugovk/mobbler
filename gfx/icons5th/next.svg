@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- Converted with SVG Converter - Version 0.9.5 (Compiled Mon May 30 09:08:51 2011) - Copyright (C) 2011 Nokia -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" version="1.0" height="48" viewBox="0 0 48 48" baseProfile="tiny" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg2">
+ <metadata id="metadata4101"/>
+ <defs id="defs4"/>
+ <path style="fill:#75a1d0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.00000059999999990;marker:none;visibility:visible;display:inline;overflow:visible" id="path131" d="m 22.269295,12.23504 18.893141,11.689673 -18.893141,11.689673 0,-23.379346 z"/>
+ <path style="fill:#75a1d0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.00000059999999990;marker:none;visibility:visible;display:inline;overflow:visible" id="path133" d="M 2.8363484,12.23504 21.72949,23.924713 2.8363484,35.614386 l 0,-23.379346 z"/>
+ <path style="fill:none;stroke:#3465a4;stroke-width:1.09632635000000000;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible" id="path135" d="m 22.269295,12.23504 18.893141,11.689673 -18.893141,11.689673 0,-23.379346 z m -19.4329466,0 18.8931416,11.689673 -18.8931416,11.689673 0,-23.379346 z"/>
+ <path style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible" id="path137" d="m 22.809099,13.209179 17.307467,10.715534 -17.307467,10.715534 0,-21.431068 z m -19.4329466,0 17.3074676,10.715534 -17.3074676,10.715534 0,-21.431068 z m 20.5125546,1.98307 0,17.464928 14.136118,-8.732464 -14.136118,-8.732464 z m -19.4329465,0 0,17.464928 L 18.591879,23.924713 4.4557605,15.192249 z"/>
+ <rect width="3.2388244" x="-44.941555" y="-34.501083" height="21.152742" style="fill:#75a1d0;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.09632576000000000;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible" id="rect145" transform="scale(-1,-1)"/>
+ <path style="fill:none;stroke:#3465a4;stroke-width:1.09632576000000000;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible" id="path147" d="m 46.021166,35.614385 0,-23.379346 -5.39804,0 0,23.379346 5.39804,0 z"/>
+</svg>

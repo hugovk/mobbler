@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2009, 2010, 2011  Hugo van Kemenade
+Copyright (C) 2009, 2010, 2011, 2012  Hugo van Kemenade
 Copyright (C) 2009  James Aley
 Copyright (C) 2009, 2010  gw111zz
 
@@ -47,8 +47,8 @@ const TInt KUpdateIntervalHours(24);
 #endif
 const TInt KMaxMobblerTextSize(255);
 
-const TInt KMobblerMinorVersion(10);
-const TInt KMobblerBuildNumber(314);
+const TInt KMobblerMinorVersion(11);
+const TInt KMobblerBuildNumber(11);
 
 #ifdef __SYMBIAN_SIGNED__
 const TVersion KVersion(2, KMobblerMinorVersion, KMobblerBuildNumber);

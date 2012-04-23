@@ -3,7 +3,7 @@ ChangeLog
 The next one:
 
   * Pause: now supporting tea breaks
-  * Refreshed icons
+  * Refreshed icons, including Symbian Belle icon
   * Fixed lyrics
   * Use default browser
   * Belarusian, Danish, French, Simplified Chinese and Turkish updated
