@@ -1,6 +1,6 @@
 ChangeLog
 
-The next one:
+2.11(x)
 
   * Pause: now supporting tea breaks
   * Refreshed icons, including Symbian Belle icon
