@@ -46,9 +46,6 @@ public:
 	
 	TBool RequiresAuthentication() const;
 	
-	void SetTwitter();
-	void AddTwitterOAuthStringL(const TDesC8& aString);
-	
 	void SubmitL();
 	void Cancel();
 	
@@ -80,9 +77,6 @@ private:
 	CBufBase* iBuffer;
 	
 	TBool iRequiresAuthentication;
-	
-	TBool iTwitter;
-	CDesC8Array* iTwitterOAuthStrings;
 	};
 
 #endif // __MOBBLERTRANSACTION_H__

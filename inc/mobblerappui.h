@@ -332,8 +332,6 @@ private:
 #ifdef __SYMBIAN_SIGNED__
 	CMobblerFlatDataObserverHelper* iLocalEventsObserver;
 #endif
-	CMobblerFlatDataObserverHelper* iTwitterAuthObserver;
-	CMobblerFlatDataObserverHelper* iTwitterFollowObserver;
 
 	CMobblerDestinationsInterface* iDestinations;
 	TUid iDestinationsDtorUid;

@@ -51,8 +51,6 @@ public:
 	static CMobblerLastFmError* ParseRadioTuneL(const TDesC8& aXml, CMobblerString*& aStationName);
 	static CMobblerLastFmError* ParseRadioPlaylistL(const TDesC8& aXml, CMobblerRadioPlaylist& aPlaylist);
 	
-	static HBufC8* CMobblerParser::ParseTwitterAuthL(const TDesC8& aData);
-
 	static TInt ParseUpdateResponseL(const TDesC8& aXml, TVersion& aVersion, TDes8& aLocation);
 	
 	static TInt FriendOrder(const CMobblerListItem& aLeft, const CMobblerListItem& aRight);

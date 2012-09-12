@@ -40,7 +40,4 @@ CAPABILITY	NetworkServices ReadUserData SwEvent ReadDeviceData WriteDeviceData L
 CAPABILITY	NetworkServices ReadUserData
 #endif
 
-// Use this if you have mobblertwitter.h
-//MACRO TWITTER
-
 // End of file

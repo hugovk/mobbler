@@ -1,5 +1,5 @@
 /*
-mobblerdownloadmanager.h
+mobblerdownload.h
 
 mobbler, a last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey

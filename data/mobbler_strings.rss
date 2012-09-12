@@ -380,24 +380,8 @@ RESOURCE STRING r_mobbler_scrobble_album_option	{ text = STR_mobbler_scrobble_al
 RESOURCE STRING r_mobbler_local_events			{ text = STR_mobbler_local_events; }
 RESOURCE STRING r_mobbler_old_scrobbles_warning	{ text = STR_mobbler_old_scrobbles_warning; }
 
-RESOURCE STRING r_mobbler_twitter				{ text = STR_mobbler_twitter; }
-RESOURCE STRING r_mobbler_twitter_change		{ text = STR_mobbler_twitter_change; }
-RESOURCE STRING r_mobbler_twitter_remove		{ text = STR_mobbler_twitter_remove; }
-RESOURCE STRING r_mobbler_twitter_follow		{ text = STR_mobbler_twitter_follow; }
-
 RESOURCE STRING r_mobbler_share_lastfm			{ text = STR_mobbler_share_lastfm; }
-RESOURCE STRING r_mobbler_share_twitter			{ text = STR_mobbler_share_twitter; }
-RESOURCE STRING r_mobbler_share_contacts		{ text = STR_mobbler_share_contacts; }
-
-RESOURCE STRING r_mobbler_twitter_now_playing_track_format	{ text = STR_mobbler_twitter_now_playing_track_format; }
-RESOURCE STRING r_mobbler_twitter_share_track_format		{ text = STR_mobbler_twitter_share_track_format; }
-RESOURCE STRING r_mobbler_twitter_love_track_format			{ text = STR_mobbler_twitter_love_track_format; }
-
-RESOURCE STRING r_mobbler_twitter_now_playing_album_format	{ text = STR_mobbler_twitter_now_playing_album_format; }
-RESOURCE STRING r_mobbler_twitter_share_album_format		{ text = STR_mobbler_twitter_share_album_format; }
-
-RESOURCE STRING r_mobbler_twitter_now_playing_artist_format	{ text = STR_mobbler_twitter_now_playing_artist_format; }
-RESOURCE STRING r_mobbler_twitter_share_artist_format		{ text = STR_mobbler_twitter_share_artist_format; }
+//RESOURCE STRING r_mobbler_share_contacts		{ text = STR_mobbler_share_contacts; }
 
 RESOURCE STRING r_mobbler_download_album_art_always_and_ditch	{ text = STR_mobbler_download_album_art_always_and_ditch; }
 

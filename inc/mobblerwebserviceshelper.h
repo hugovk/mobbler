@@ -39,8 +39,7 @@ private:
 		{
 		EShareCancelled,
 		EShareWithContacts,
-		EShareWithFriends,
-		EShareWithTwitter
+		EShareWithFriends
 		};
 	
 public:
@@ -71,8 +70,6 @@ private:
 	HBufC* DisplayContactListL();
 	HBufC* DisplayEmailListL(const CDesCArray& aEmails);
 	
-	void DoShareTwitterL(const TInt aCommand);
-	
 	TShareWith ShareSourceL();
 	
 	void DoShareL(TInt aCommand, const TDesC8& aRecipient);
@@ -94,17 +91,6 @@ private:
 	CMobblerFlatDataObserverHelper* iTrackTagRemoveTagsHelper;
 	CMobblerFlatDataObserverHelper* iAlbumTagRemoveTagsHelper;
 	CMobblerFlatDataObserverHelper* iArtistTagRemoveTagsHelper;
-	
-	CMobblerFlatDataObserverHelper* iTwitterAuthObserverTrack;
-	CMobblerFlatDataObserverHelper* iTwitterAuthObserverAlbum;
-	CMobblerFlatDataObserverHelper* iTwitterAuthObserverArtist;
-	
-	CMobblerFlatDataObserverHelper* iTwitterFollowObserverTrack;
-	CMobblerFlatDataObserverHelper* iTwitterFollowObserverAlbum;
-	CMobblerFlatDataObserverHelper* iTwitterFollowObserverArtist;
-	
-	CMobblerFlatDataObserverHelper* iShortenObserverHelper;
-	CMobblerFlatDataObserverHelper* iTweetObserverHelper;
 	
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperTrackShare;
 	CMobblerFlatDataObserverHelper* iFriendFetchObserverHelperAlbumShare;

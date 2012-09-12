@@ -1,5 +1,5 @@
 /*
-mobblerdownloadmanager.cpp
+mobblerdownload.cpp
 
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008  Michael Coffey

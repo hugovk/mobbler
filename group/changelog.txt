@@ -4,10 +4,11 @@ ChangeLog
 
   * Pause: now supporting tea breaks
   * Refreshed icons, including Symbian Belle icon
-  * Fixed lyrics
+  * Fixed lyrics, using wikia.lyrics.com
   * Use default browser
   * Belarusian, Danish, French, Simplified Chinese and Turkish updated
   * Fixed check for updates
+  * Removed obsolete Twitter sharing
 
 2.10(x)
 

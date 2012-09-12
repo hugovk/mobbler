@@ -127,12 +127,6 @@ public:
 	
 	TBool& AutomaticWallpaper() { return iAutomaticWallpaper; }
 	void SetAutomaticWallpaper(TBool aAutomaticWallpaper) { iAutomaticWallpaper = aAutomaticWallpaper; SaveSettingValuesL(); }
-	
-	TDesC8& TwitterAuthToken() { return iTwitterAuthToken; }
-	void SetTwitterAuthToken(const TDesC8& aTwitterAuthToken) { iTwitterAuthToken.Copy(aTwitterAuthToken); SaveSettingValuesL(); }
-	
-	TDesC8& TwitterAuthTokenSecret() { return iTwitterAuthTokenSecret; }
-	void SetTwitterAuthTokenSecret(const TDesC8& aTwitterAuthTokenSecret) { iTwitterAuthTokenSecret.Copy(aTwitterAuthTokenSecret); SaveSettingValuesL(); }
 
 protected:
 	TBuf<KMaxMobblerTextSize> iUsername;
@@ -159,8 +153,6 @@ protected:
 	TInt iAlarmStation;
 	TBuf<KMaxMobblerTextSize> iAlarmOption;
 	TBool iAutomaticWallpaper;
-	TBuf8<KMaxMobblerTextSize> iTwitterAuthToken;
-	TBuf8<KMaxMobblerTextSize> iTwitterAuthTokenSecret;
 	};
 
 #endif // __MOBBLERSETTINGITEMLISTSETTINGS_H__

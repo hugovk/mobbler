@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011, 2012  Hugo van Kemenade
 Copyright (C) 2009, 2010  gw111zz
 
 http://code.google.com/p/mobbler
@@ -109,13 +109,6 @@ public:
 		EAttending,
 		EMaybe,
 		ENotAttending
-		};
-
-	enum TTwitterCommand
-		{
-		ETweet,
-		EFollowMobbler,
-		EAccessToken
 		};
 
 public:
@@ -230,11 +223,6 @@ public:
 	void GetLocationL(const CTelephony::TNetworkInfoV1& aNetworkInfo, MMobblerFlatDataObserver& aObserver);
 	void GeoGetEventsL(const TDesC8& aLatitude, const TDesC8& aLongitude, MMobblerFlatDataObserver& aObserver);
 #endif
-	
-	void ShortenL(const TDesC8& aUrl, MMobblerFlatDataObserver& aObserver);
-	TBool QueryTwitterL(const TInt aCommand, 
-						MMobblerFlatDataObserver& aObserver, 
-						const TDesC8& aTweet = KNullDesC8);
 	
 private:
 	void RunL();
@@ -351,11 +339,6 @@ private:
 
 	TBool i64KbpsWarningShown;
 	TInt iDayNoInYearOfLastAgeCheck;
-	
-	CMobblerFlatDataObserverHelper* iTwitterTokenHelper;
-	HBufC8* iTweet;
-	MMobblerFlatDataObserver* iTweetObserver;
-	TInt64 iNonceSeed;
 	};
 
 #endif // __MOBBLERLASTFMCONNECTION_H__

@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010, 2011  Michael Coffey
-Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011, 2012  Hugo van Kemenade
 Copyright (C) 2008, 2009  Steve Punter
 Copyright (C) 2009  James Aley
 Copyright (C) 2010  gw111zz
@@ -272,8 +272,6 @@ CMobblerAppUi::~CMobblerAppUi()
 	delete iLocation;
 	delete iLocalEventsObserver;
 #endif
-	delete iTwitterAuthObserver;
-	delete iTwitterFollowObserver;
 	
 	if (iContentListing)
 		{
@@ -728,19 +726,6 @@ void CMobblerAppUi::HandleCommandL(TInt aCommand)
 			ActivateLocalViewL(iSettingView->Id(), 
 								TUid::Uid(CMobblerSettingItemListView::ENormalSettings), 
 								KNullDesC8);
-			break;
-		case EMobblerCommandTwitterChange:
-			delete iTwitterAuthObserver;
-			iTwitterAuthObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);
-			if (!iLastFmConnection->QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserver))
-				{
-				delete iTwitterAuthObserver;
-				iTwitterAuthObserver = NULL;
-				}
-			break;
-		case EMobblerCommandTwitterRemove:
-			SettingView().Settings().SetTwitterAuthToken(KNullDesC8);
-			SettingView().Settings().SetTwitterAuthTokenSecret(KNullDesC8);
 			break;
 		case EMobblerCommandAbout:
 			{
@@ -1501,40 +1486,6 @@ void CMobblerAppUi::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC
 			LaunchFileL(KMapKmlFilename);
 			}
 #endif // __SYMBIAN_SIGNED__
-		else if (aObserver == iTwitterAuthObserver)
-			{
-			DUMPDATA(aData, _L("twitterauth.xml"));
-			HBufC8* error(CMobblerParser::ParseTwitterAuthL(aData));
-			
-			if (!error)
-				{
-				CAknQueryDialog* dlg(CAknQueryDialog::NewL());
-				TBool followMobbler(dlg->ExecuteLD(R_MOBBLER_YES_NO_QUERY_DIALOG, iResourceReader->ResourceL(R_MOBBLER_TWITTER_FOLLOW)));
-				
-				if (followMobbler)
-					{
-					delete iTwitterFollowObserver;
-					iTwitterFollowObserver = CMobblerFlatDataObserverHelper::NewL(*iLastFmConnection, *this, ETrue);
-					iLastFmConnection->QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserver);
-					}
-				else
-					{
-					CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
-					note->ExecuteLD(iResourceReader->ResourceL(R_MOBBLER_DONE));
-					}
-				}
-			else
-				{
-				CleanupStack::PushL(error);
-				CMobblerString* message(CMobblerString::NewL(*error));
-				CleanupStack::PopAndDestroy(error);
-				CleanupStack::PushL(message);
-				// Tell the user that there was an error connecting
-				CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
-				note->ExecuteLD(message->String());
-				CleanupStack::PopAndDestroy(message);
-				}
-			}
 		} // 	if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
 	}
 

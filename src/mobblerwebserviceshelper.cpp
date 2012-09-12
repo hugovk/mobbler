@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2009, 2010  Michael Coffey
-Copyright (C) 2009, 2010  Hugo van Kemenade
+Copyright (C) 2009, 2010, 2012  Hugo van Kemenade
 
 http://code.google.com/p/mobbler
 
@@ -47,9 +47,6 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 #include "mobblerutility.h"
 #include "mobblerwebserviceshelper.h"
 
-const TInt KMaxTweetLength(140);
-const TInt KBitlyUrlLength(23);
-
 CMobblerWebServicesHelper* CMobblerWebServicesHelper::NewL(CMobblerAppUi& aAppUi)
 	{
     TRACER_AUTO;
@@ -89,12 +86,6 @@ CMobblerWebServicesHelper::~CMobblerWebServicesHelper()
 	delete iPlaylistAddObserverHelper;
 	delete iPlaylistFetchObserverHelper;
 	
-	delete iTwitterAuthObserverTrack;
-	delete iTwitterAuthObserverArtist;
-	
-	delete iTwitterFollowObserverTrack;
-	delete iTwitterFollowObserverArtist;
-	
 	if (iTrack)
 		{
 		iTrack->Release();
@@ -124,7 +115,6 @@ CMobblerWebServicesHelper::TShareWith CMobblerWebServicesHelper::ShareSourceL()
 	CleanupStack::PushL(items);
 	
 	items->AppendL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SHARE_LASTFM));
-	items->AppendL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SHARE_TWITTER));
 	//items->AppendL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_SHARE_CONTACTS));
 	
 	CleanupStack::Pop(items);
@@ -140,9 +130,6 @@ CMobblerWebServicesHelper::TShareWith CMobblerWebServicesHelper::ShareSourceL()
 			{
 			case 0:
 				shareSource = EShareWithFriends;
-				break;
-			case 1:
-				shareSource = EShareWithTwitter;
 				break;
 			case 2:
 				shareSource = EShareWithContacts;
@@ -185,20 +172,6 @@ void CMobblerWebServicesHelper::TrackShareL(CMobblerTrack& aTrack)
 			CleanupStack::PopAndDestroy(2, contact);
 			}
 		}
-	else if (shareSource == EShareWithTwitter)
-		{
-		if (iAppUi.SettingView().Settings().TwitterAuthToken().Length() == 0
-				|| iAppUi.SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
-			{
-			delete iTwitterAuthObserverTrack;
-			iTwitterAuthObserverTrack = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserverTrack);
-			}
-		else
-			{
-			DoShareTwitterL(EMobblerCommandTrackShare);
-			}
-		}
 	}
 
 void CMobblerWebServicesHelper::AlbumShareL(CMobblerTrack& aTrack)
@@ -229,20 +202,6 @@ void CMobblerWebServicesHelper::AlbumShareL(CMobblerTrack& aTrack)
 			CMobblerString* contactString(CMobblerString::NewLC(*contact));
 			DoShareL(EMobblerCommandAlbumShare, contactString->String8());
 			CleanupStack::PopAndDestroy(2, contact);
-			}
-		}
-	else if (shareSource == EShareWithTwitter)
-		{
-		if (iAppUi.SettingView().Settings().TwitterAuthToken().Length() == 0
-				|| iAppUi.SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
-			{
-			delete iTwitterAuthObserverAlbum;
-			iTwitterAuthObserverAlbum = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserverAlbum);
-			}
-		else
-			{
-			DoShareTwitterL(EMobblerCommandAlbumShare);
 			}
 		}
 	}
@@ -276,92 +235,6 @@ void CMobblerWebServicesHelper::ArtistShareL(CMobblerTrack& aTrack)
 			DoShareL(EMobblerCommandArtistShare, contactString->String8());
 			CleanupStack::PopAndDestroy(2, contact);
 			}
-		}
-	else if (shareSource == EShareWithTwitter)
-		{
-		if (iAppUi.SettingView().Settings().TwitterAuthToken().Length() == 0
-				|| iAppUi.SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
-			{
-			delete iTwitterAuthObserverArtist;
-			iTwitterAuthObserverArtist = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-			iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EAccessToken, *iTwitterAuthObserverArtist);
-			}
-		else
-			{
-			DoShareTwitterL(EMobblerCommandArtistShare);
-			}
-		}
-	}
-
-void CMobblerWebServicesHelper::DoShareTwitterL(const TInt aCommand)
-	{
-	TPtrC shareFormat(KNullDesC);
-	
-	TInt resourceId(R_MOBBLER_TWITTER_NOW_PLAYING_TRACK_FORMAT);
-	if (iAppUi.CurrentTrack() && (*iAppUi.CurrentTrack() == *iTrack))
-		{
-		// this is the current track so say that we are playing it now
-		if (aCommand == EMobblerCommandArtistShare)
-			{
-			resourceId = R_MOBBLER_TWITTER_NOW_PLAYING_ARTIST_FORMAT;
-			}
-		else if (aCommand == EMobblerCommandAlbumShare)
-			{
-			resourceId = R_MOBBLER_TWITTER_NOW_PLAYING_ALBUM_FORMAT;
-			}
-		}
-	else
-		{
-		if (aCommand == EMobblerCommandArtistShare)
-			{
-			resourceId = R_MOBBLER_TWITTER_SHARE_ARTIST_FORMAT;
-			}
-		else if (aCommand == EMobblerCommandAlbumShare)
-			{
-			resourceId = R_MOBBLER_TWITTER_SHARE_ALBUM_FORMAT;
-			}
-		else
-			{
-			resourceId = R_MOBBLER_TWITTER_SHARE_TRACK_FORMAT;
-			}
-		}
-	shareFormat.Set(iAppUi.ResourceReader().ResourceL(resourceId));
-	
-	// Ask for custom message
-	TInt messageLength(shareFormat.Length() + iTrack->Artist().String().Length() + KBitlyUrlLength);
-	if (aCommand == EMobblerCommandTrackShare)
-		{
-		messageLength += iTrack->Title().String().Length();
-		}
-	delete iShareMessage;
-	iShareMessage = HBufC::NewL(Max(KMaxTweetLength, messageLength));
-	TPtr shareMessage(iShareMessage->Des());
-	if (aCommand == EMobblerCommandTrackShare)
-		{
-		shareMessage.Format(shareFormat, &iTrack->Title().String(), &iTrack->Artist().String());
-		}
-	else if (aCommand == EMobblerCommandAlbumShare)
-		{
-		shareMessage.Format(shareFormat, &iTrack->Album().String(), &iTrack->Artist().String());
-		}
-	else
-		{
-		shareMessage.Format(shareFormat, &iTrack->Artist().String());
-		}
-	
-	CAknTextQueryDialog* shareDialog(new(ELeave) CAknTextQueryDialog(shareMessage));
-	shareDialog->PrepareLC(R_MOBBLER_TEXT_QUERY_DIALOG);
-	shareDialog->SetPromptL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_MESSAGE_PROMPT));
-	shareDialog->SetPredictiveTextInputPermitted(ETrue);
-	shareDialog->SetMaxLength(KMaxTweetLength - KBitlyUrlLength);
-	
-	if (shareDialog->RunLD())
-		{
-		// create and get the URL shortened
-		delete iShortenObserverHelper;
-		iShortenObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-		iAppUi.LastFmConnection().ShortenL(iTrack->UrlLC(aCommand)->Des(), *iShortenObserverHelper);
-		CleanupStack::PopAndDestroy(); // iTrack->TrackUrlLC()
 		}
 	}
 
@@ -692,355 +565,214 @@ void CMobblerWebServicesHelper::DoShareL(TInt aCommand, const TDesC8& aRecipient
 void CMobblerWebServicesHelper::DataL(CMobblerFlatDataObserverHelper* aObserver, const TDesC8& aData, TInt aTransactionError)
 	{
     TRACER_AUTO;
-    
     TBool releaseTrack(ETrue);
     
-    if (aObserver == iTwitterAuthObserverTrack
-    	|| aObserver == iTwitterAuthObserverAlbum
-		|| aObserver == iTwitterAuthObserverArtist)
-		{
-		// We do the twitter auth responses here because it's not xml
-		// All the other responses have their xml parsed
-    
-		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
-			{
-			HBufC8* error(CMobblerParser::ParseTwitterAuthL(aData));
-			
-			if (!error)
-				{
-				CAknQueryDialog* dlg(CAknQueryDialog::NewL());
-				TBool followMobbler(dlg->ExecuteLD(R_MOBBLER_YES_NO_QUERY_DIALOG, iAppUi.ResourceReader().ResourceL(R_MOBBLER_TWITTER_FOLLOW)));
-				
-				if (followMobbler)
-					{
-					if (aObserver == iTwitterAuthObserverTrack)
-						{
-						delete iTwitterFollowObserverTrack;
-						iTwitterFollowObserverTrack = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserverTrack);
-						}
-					else if (aObserver == iTwitterAuthObserverAlbum)
-						{
-						delete iTwitterFollowObserverAlbum;
-						iTwitterFollowObserverAlbum = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserverAlbum);
-						}
-					else
-						{
-						delete iTwitterFollowObserverArtist;
-						iTwitterFollowObserverArtist = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::EFollowMobbler, *iTwitterFollowObserverArtist);
-						}
-					
-					releaseTrack = EFalse;
-					}
-				else
-					{
-					if (aObserver == iTwitterAuthObserverTrack) DoShareTwitterL(EMobblerCommandTrackShare);
-					else if (aObserver == iTwitterAuthObserverAlbum) DoShareTwitterL(EMobblerCommandAlbumShare);
-					else if (aObserver == iTwitterAuthObserverArtist) DoShareTwitterL(EMobblerCommandArtistShare);
-					}
-				}
-			else
-				{
-				// Tell the user that there was an error 
-				CleanupStack::PushL(error);
-				CMobblerString* message(CMobblerString::NewL(*error));
-				CleanupStack::PopAndDestroy(error);
-				CleanupStack::PushL(message);
-				CAknResourceNoteDialog *note(new (ELeave) CAknInformationNote(EFalse));
-				note->ExecuteLD(message->String());
-				CleanupStack::PopAndDestroy(message);
-				}
-			}
-		else
-			{
-			CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
-			note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_ERROR));
-			}
-		}
+    if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
+        {
+        // Parse the XML
+        CSenXmlReader* xmlReader(NULL);
+        CSenDomFragment* domFragment(NULL);
+        
+        // Don't parse the response for the following calls as we don't need to
+        xmlReader = CSenXmlReader::NewLC();
+        domFragment = MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData);
+        
+        if (aObserver == iShareObserverHelper ||
+                aObserver == iPlaylistAddObserverHelper)
+            {
+            if (domFragment->AsElement().AttrValue(KStatus)->Compare(KOk) == 0)
+                {
+                // Everything worked
+                CAknConfirmationNote* note(new (ELeave) CAknConfirmationNote(EFalse));
+                note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_DONE));
+                }
+            else
+                {
+                // There was an error so display it
+                CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
+                CMobblerString* string(CMobblerString::NewLC(domFragment->AsElement().Element(KError)->Content()));
+                note->ExecuteLD(string->String());
+                CleanupStack::Pop(string);
+                }
+            }
+        else if (aObserver == iFriendFetchObserverHelperTrackShare ||
+                    aObserver == iFriendFetchObserverHelperAlbumShare ||
+                    aObserver == iFriendFetchObserverHelperArtistShare ||
+                    aObserver == iFriendFetchObserverHelperEventShare)
+            {
+            // Parse and bring up a share with friends popup menu
+            
+            CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
+            CleanupStack::PushL(list);
+            
+            CAknPopupList* popup(CAknPopupList::NewL(list, R_AVKON_SOFTKEYS_OK_CANCEL, AknPopupLayouts::EMenuWindow));
+            CleanupStack::PushL(popup);
+            
+            list->ConstructL(popup, CEikListBox::ELeftDownInViewRect);
+            
+            popup->SetTitleL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_TO_PROMPT));
+            
+            list->CreateScrollBarFrameL(ETrue);
+            list->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto);
+            
+            CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
+            CleanupStack::PushL(items);
+            
+            RPointerArray<CSenElement>& users(domFragment->AsElement().Element(KFriends)->ElementsL());
+            
+            const TInt KUserCount(users.Count());
+            for (TInt i(0); i < KUserCount; ++i)
+                {
+                CMobblerString* user(CMobblerString::NewLC(users[i]->Element(KName)->Content()));
+                items->AppendL(user->String());
+                CleanupStack::PopAndDestroy(user);
+                }
+            
+            CleanupStack::Pop(items);
+            
+            list->Model()->SetItemTextArray(items);
+            list->Model()->SetOwnershipType(ELbmOwnsItemArray);
+            
+            CleanupStack::Pop(popup);
+            
+            if (popup->ExecuteLD())
+                {
+                CMobblerString* recipient(CMobblerString::NewLC((*items)[list->CurrentItemIndex()]));
+                
+                if (aObserver == iFriendFetchObserverHelperTrackShare)
+                    {
+                    DoShareL(EMobblerCommandTrackShare, recipient->String8());
+                    }
+                else if (aObserver == iFriendFetchObserverHelperAlbumShare)
+                    {
+                    DoShareL(EMobblerCommandAlbumShare, recipient->String8());
+                    }
+                else if (aObserver == iFriendFetchObserverHelperArtistShare)
+                    {
+                    DoShareL(EMobblerCommandArtistShare, recipient->String8());
+                    }
+                else
+                    {
+                    // This must be sharing an event
+                    DoShareL(EMobblerCommandEventShare, recipient->String8());
+                    }
+                
+                CleanupStack::PopAndDestroy(recipient);
+                }
+            
+            CleanupStack::PopAndDestroy(list); //list
+            }
+        else if (aObserver == iPlaylistFetchObserverHelper)
+            {
+            // parse and bring up an add to playlist popup menu
+            CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
+            CleanupStack::PushL(list);
+            
+            CAknPopupList* popup(CAknPopupList::NewL(list, R_AVKON_SOFTKEYS_OK_CANCEL, AknPopupLayouts::EMenuWindow));
+            CleanupStack::PushL(popup);
+            
+            list->ConstructL(popup, CEikListBox::ELeftDownInViewRect);
+            
+            popup->SetTitleL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_PLAYLIST_ADD_TRACK));
+            
+            list->CreateScrollBarFrameL(ETrue);
+            list->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto);
+            
+            CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
+            CleanupStack::PushL(items);
+            
+            RPointerArray<CSenElement>& playlists(domFragment->AsElement().Element(KPlaylists)->ElementsL());
+            
+            const TInt KPlaylistCount(playlists.Count());
+            for (TInt i(0); i < KPlaylistCount; ++i)
+                {
+                CMobblerString* playlist(CMobblerString::NewLC(playlists[i]->Element(KTitle)->Content()));
+                items->AppendL(playlist->String());
+                CleanupStack::PopAndDestroy(playlist);
+                }
+            
+            CleanupStack::Pop(items);
+            
+            list->Model()->SetItemTextArray(items);
+            list->Model()->SetOwnershipType(ELbmOwnsItemArray);
+            
+            CleanupStack::Pop(popup);
+            
+            if (popup->ExecuteLD())
+                {
+                if (list->CurrentItemIndex() >= 0)
+                    {
+                    delete iPlaylistAddObserverHelper;
+                    iPlaylistAddObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+                    iAppUi.LastFmConnection().PlaylistAddTrackL(playlists[list->CurrentItemIndex()]->Element(KId)->Content(), iTrack->Artist().String8(), iTrack->Title().String8(), *iPlaylistAddObserverHelper);
+                    }
+                }
+            
+            CleanupStack::PopAndDestroy(list); //list
+            }
+        else if (aObserver == iTrackTagRemoveTagsHelper
+                || aObserver == iAlbumTagRemoveTagsHelper
+                || aObserver == iArtistTagRemoveTagsHelper)
+            {
+            RPointerArray<CSenElement>& tags(domFragment->AsElement().Element(KTags)->ElementsL());
+            
+            const TInt KTagCount(tags.Count());
+            
+            if (KTagCount > 0)
+                {
+                CDesCArray* textArray(new(ELeave) CDesCArrayFlat(KTagCount));
+                CleanupStack::PushL(textArray);
+                
+                for (TInt i(0) ; i < KTagCount ; ++i)
+                    {
+                    CMobblerString* tagName(CMobblerString::NewLC(tags[i]->Element(KName)->Content()));
+                    textArray->AppendL(tagName->String());
+                    CleanupStack::PopAndDestroy(tagName);
+                    }
+                
+                TInt index;
+                CAknListQueryDialog* tagRemoveDialog = new(ELeave) CAknListQueryDialog(&index);
+                tagRemoveDialog->PrepareLC(R_MOBBLER_TAG_REMOVE_QUERY);
+                tagRemoveDialog->SetItemTextArray(textArray); 
+                tagRemoveDialog->SetOwnershipType(ELbmDoesNotOwnItemArray); 
+             
+                if (tagRemoveDialog->RunLD())
+                    {
+                    // remove the tag!
+                    CMobblerString* tagName(CMobblerString::NewLC((*textArray)[index]));
+                    
+                    delete iTagRemoveHelper;
+                    iTagRemoveHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
+                    
+                    if (aObserver == iTrackTagRemoveTagsHelper)
+                        {
+                        iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandTrackRemoveTag, iTrack->Artist().String8(), KNullDesC8, iTrack->Title().String8(), tagName->String8(), *iTagRemoveHelper);
+                        }
+                    else if (aObserver == iAlbumTagRemoveTagsHelper)
+                        {
+                        iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandAlbumRemoveTag, iTrack->Artist().String8(), iTrack->Album().String8(), KNullDesC8, tagName->String8(), *iTagRemoveHelper);
+                        }
+                    else if (aObserver == iArtistTagRemoveTagsHelper)
+                        {
+                        iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandArtistRemoveTag, iTrack->Artist().String8(), KNullDesC8, KNullDesC8, tagName->String8(), *iTagRemoveHelper);
+                        }
+                    
+                    CleanupStack::PopAndDestroy(tagName);
+                    }
+                
+                CleanupStack::Pop(textArray);
+                }
+            else
+                {
+                // TODO: display an error!
+                }
+            }
+        }
     else
-		{
-		if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone
-				// We don't care if there was an error following @Mobbler
-				// it was probably just that they are already following us
-			    || aObserver == iTwitterFollowObserverTrack
-			    || aObserver == iTwitterFollowObserverAlbum
-				|| aObserver == iTwitterFollowObserverArtist)
-			{
-			// Parse the XML
-			CSenXmlReader* xmlReader(NULL);
-			CSenDomFragment* domFragment(NULL);
-			
-			if (!(aObserver == iTwitterFollowObserverTrack
-				    || aObserver == iTwitterFollowObserverAlbum
-					|| aObserver == iTwitterFollowObserverArtist))
-				{
-				// Don't parse the response for the following calls as we don't need to and
-				// it could be a blank document if they were already following @Mobbler
-				xmlReader = CSenXmlReader::NewLC();
-				domFragment = MobblerUtility::PrepareDomFragmentLC(*xmlReader, aData);
-				}
-			
-			if (aObserver == iShareObserverHelper ||
-					aObserver == iPlaylistAddObserverHelper)
-				{
-				if (domFragment->AsElement().AttrValue(KStatus)->Compare(KOk) == 0)
-					{
-					// Everything worked
-					CAknConfirmationNote* note(new (ELeave) CAknConfirmationNote(EFalse));
-					note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_DONE));
-					}
-				else
-					{
-					// There was an error so display it
-					CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
-					CMobblerString* string(CMobblerString::NewLC(domFragment->AsElement().Element(KError)->Content()));
-					note->ExecuteLD(string->String());
-					CleanupStack::Pop(string);
-					}
-				}
-			else if (aObserver == iFriendFetchObserverHelperTrackShare ||
-						aObserver == iFriendFetchObserverHelperAlbumShare ||
-						aObserver == iFriendFetchObserverHelperArtistShare ||
-						aObserver == iFriendFetchObserverHelperEventShare)
-				{
-				// Parse and bring up a share with friends popup menu
-				
-				CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
-				CleanupStack::PushL(list);
-				
-				CAknPopupList* popup(CAknPopupList::NewL(list, R_AVKON_SOFTKEYS_OK_CANCEL, AknPopupLayouts::EMenuWindow));
-				CleanupStack::PushL(popup);
-				
-				list->ConstructL(popup, CEikListBox::ELeftDownInViewRect);
-				
-				popup->SetTitleL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_TO_PROMPT));
-				
-				list->CreateScrollBarFrameL(ETrue);
-				list->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto);
-				
-				CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
-				CleanupStack::PushL(items);
-				
-				RPointerArray<CSenElement>& users(domFragment->AsElement().Element(KFriends)->ElementsL());
-				
-				const TInt KUserCount(users.Count());
-				for (TInt i(0); i < KUserCount; ++i)
-					{
-					CMobblerString* user(CMobblerString::NewLC(users[i]->Element(KName)->Content()));
-					items->AppendL(user->String());
-					CleanupStack::PopAndDestroy(user);
-					}
-				
-				CleanupStack::Pop(items);
-				
-				list->Model()->SetItemTextArray(items);
-				list->Model()->SetOwnershipType(ELbmOwnsItemArray);
-				
-				CleanupStack::Pop(popup);
-				
-				if (popup->ExecuteLD())
-					{
-					CMobblerString* recipient(CMobblerString::NewLC((*items)[list->CurrentItemIndex()]));
-					
-					if (aObserver == iFriendFetchObserverHelperTrackShare)
-						{
-						DoShareL(EMobblerCommandTrackShare, recipient->String8());
-						}
-					else if (aObserver == iFriendFetchObserverHelperAlbumShare)
-						{
-						DoShareL(EMobblerCommandAlbumShare, recipient->String8());
-						}
-					else if (aObserver == iFriendFetchObserverHelperArtistShare)
-						{
-						DoShareL(EMobblerCommandArtistShare, recipient->String8());
-						}
-					else
-						{
-						// This must be sharing an event
-						DoShareL(EMobblerCommandEventShare, recipient->String8());
-						}
-					
-					CleanupStack::PopAndDestroy(recipient);
-					}
-				
-				CleanupStack::PopAndDestroy(list); //list
-				}
-			else if (aObserver == iPlaylistFetchObserverHelper)
-				{
-				// parse and bring up an add to playlist popup menu
-				CAknSinglePopupMenuStyleListBox* list(new(ELeave) CAknSinglePopupMenuStyleListBox);
-				CleanupStack::PushL(list);
-				
-				CAknPopupList* popup(CAknPopupList::NewL(list, R_AVKON_SOFTKEYS_OK_CANCEL, AknPopupLayouts::EMenuWindow));
-				CleanupStack::PushL(popup);
-				
-				list->ConstructL(popup, CEikListBox::ELeftDownInViewRect);
-				
-				popup->SetTitleL(iAppUi.ResourceReader().ResourceL(R_MOBBLER_PLAYLIST_ADD_TRACK));
-				
-				list->CreateScrollBarFrameL(ETrue);
-				list->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto);
-				
-				CDesCArrayFlat* items(new(ELeave) CDesCArrayFlat(1));
-				CleanupStack::PushL(items);
-				
-				RPointerArray<CSenElement>& playlists(domFragment->AsElement().Element(KPlaylists)->ElementsL());
-				
-				const TInt KPlaylistCount(playlists.Count());
-				for (TInt i(0); i < KPlaylistCount; ++i)
-					{
-					CMobblerString* playlist(CMobblerString::NewLC(playlists[i]->Element(KTitle)->Content()));
-					items->AppendL(playlist->String());
-					CleanupStack::PopAndDestroy(playlist);
-					}
-				
-				CleanupStack::Pop(items);
-				
-				list->Model()->SetItemTextArray(items);
-				list->Model()->SetOwnershipType(ELbmOwnsItemArray);
-				
-				CleanupStack::Pop(popup);
-				
-				if (popup->ExecuteLD())
-					{
-					if (list->CurrentItemIndex() >= 0)
-						{
-						delete iPlaylistAddObserverHelper;
-						iPlaylistAddObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						iAppUi.LastFmConnection().PlaylistAddTrackL(playlists[list->CurrentItemIndex()]->Element(KId)->Content(), iTrack->Artist().String8(), iTrack->Title().String8(), *iPlaylistAddObserverHelper);
-						}
-					}
-				
-				CleanupStack::PopAndDestroy(list); //list
-				}
-			else if (aObserver == iTrackTagRemoveTagsHelper
-					|| aObserver == iAlbumTagRemoveTagsHelper
-					|| aObserver == iArtistTagRemoveTagsHelper)
-				{
-				RPointerArray<CSenElement>& tags(domFragment->AsElement().Element(KTags)->ElementsL());
-				
-				const TInt KTagCount(tags.Count());
-				
-				if (KTagCount > 0)
-					{
-					CDesCArray* textArray(new(ELeave) CDesCArrayFlat(KTagCount));
-					CleanupStack::PushL(textArray);
-					
-					for (TInt i(0) ; i < KTagCount ; ++i)
-						{
-						CMobblerString* tagName(CMobblerString::NewLC(tags[i]->Element(KName)->Content()));
-						textArray->AppendL(tagName->String());
-						CleanupStack::PopAndDestroy(tagName);
-						}
-					
-					TInt index;
-					CAknListQueryDialog* tagRemoveDialog = new(ELeave) CAknListQueryDialog(&index);
-					tagRemoveDialog->PrepareLC(R_MOBBLER_TAG_REMOVE_QUERY);
-					tagRemoveDialog->SetItemTextArray(textArray); 
-					tagRemoveDialog->SetOwnershipType(ELbmDoesNotOwnItemArray); 
-				 
-					if (tagRemoveDialog->RunLD())
-						{
-						// remove the tag!
-						CMobblerString* tagName(CMobblerString::NewLC((*textArray)[index]));
-						
-						delete iTagRemoveHelper;
-						iTagRemoveHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						
-						if (aObserver == iTrackTagRemoveTagsHelper)
-							{
-							iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandTrackRemoveTag, iTrack->Artist().String8(), KNullDesC8, iTrack->Title().String8(), tagName->String8(), *iTagRemoveHelper);
-							}
-						else if (aObserver == iAlbumTagRemoveTagsHelper)
-							{
-							iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandAlbumRemoveTag, iTrack->Artist().String8(), iTrack->Album().String8(), KNullDesC8, tagName->String8(), *iTagRemoveHelper);
-							}
-						else if (aObserver == iArtistTagRemoveTagsHelper)
-							{
-							iAppUi.LastFmConnection().QueryLastFmL(EMobblerCommandArtistRemoveTag, iTrack->Artist().String8(), KNullDesC8, KNullDesC8, tagName->String8(), *iTagRemoveHelper);
-							}
-						
-						CleanupStack::PopAndDestroy(tagName);
-						}
-					
-					CleanupStack::Pop(textArray);
-					}
-				else
-					{
-					// TODO: display an error!
-					}
-				}
-			else if (aObserver == iTwitterFollowObserverTrack)
-				{
-				DoShareTwitterL(EMobblerCommandTrackShare);
-				}
-			else if (aObserver == iTwitterFollowObserverAlbum)
-				{
-				DoShareTwitterL(EMobblerCommandAlbumShare);
-				}
-			else if (aObserver == iTwitterFollowObserverArtist)
-				{
-				DoShareTwitterL(EMobblerCommandArtistShare);
-				}
-			else if (aObserver == iShortenObserverHelper)
-				{
-				DUMPDATA(aData, _L("shorten.xml"));
-				if (aTransactionError == CMobblerLastFmConnection::ETransactionErrorNone)
-					{
-					_LIT8(KErrorCode, "errorCode");
-					TPtrC8 errorCode(domFragment->AsElement().Element(KErrorCode)->Content());
-					
-					if (errorCode.Compare(K0) == 0)
-						{
-						TBuf8<KMaxTweetLength> tweet;
-						
-						CMobblerString* shareMessage(CMobblerString::NewLC(*iShareMessage));
-						tweet.Append(shareMessage->String8());
-						
-						_LIT8(KNodeKeyVal, "nodeKeyVal");
-						_LIT8(KShortUrl, "shortUrl");
-						TPtrC8 shortUrl(domFragment->AsElement().Element(KResults)->Element(KNodeKeyVal)->Element(KShortUrl)->Content());
-						_LIT8(KSpace, " ");
-						tweet.Append(KSpace);
-						tweet.Append(shortUrl);
-	
-						delete iTweetObserverHelper;
-						iTweetObserverHelper = CMobblerFlatDataObserverHelper::NewL(iAppUi.LastFmConnection(), *this, ETrue);
-						if (!iAppUi.LastFmConnection().QueryTwitterL(CMobblerLastFmConnection::CMobblerLastFmConnection::ETweet, *iTweetObserverHelper, tweet))
-							{
-							// it was cancelled before the request was made
-							delete iTweetObserverHelper;
-							iTweetObserverHelper = NULL;
-							}
-						
-						CleanupStack::PopAndDestroy(shareMessage);
-						}
-					else
-						{
-						// there was an error with our shortening
-						}
-					}
-				else
-					{
-					// there was a transaction error with shortening
-					}
-				}
-			
-			if (!(aObserver == iTwitterFollowObserverTrack
-				    || aObserver == iTwitterFollowObserverAlbum
-					|| aObserver == iTwitterFollowObserverArtist))
-				{
-				CleanupStack::PopAndDestroy(2, xmlReader);
-				}
-			}
-		else
-			{
-			CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
-			note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_ERROR));
-			}
-    	}
+        {
+        CAknInformationNote* note(new (ELeave) CAknInformationNote(EFalse));
+        note->ExecuteLD(static_cast<CMobblerAppUi*>(CCoeEnv::Static()->AppUi())->ResourceReader().ResourceL(R_MOBBLER_ERROR));
+        }
 	
 	if (releaseTrack && iTrack)
 		{

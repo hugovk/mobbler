@@ -171,18 +171,14 @@ void CMobblerSettingItemListSettings::LoadSettingValuesL()
 		TRAP_IGNORE(alarmStation = readStream.ReadInt32L());
 		TRAP_IGNORE(readStream >> alarmOption);
 		TRAP_IGNORE(automaticWallpaper = readStream.ReadInt8L());
-		TBuf8<KMaxMobblerTextSize> twitterAuthToken;
-		TRAP_IGNORE(readStream >> twitterAuthToken);
-		TBuf8<KMaxMobblerTextSize> twitterAuthTokenSecret;
-		TRAP_IGNORE(readStream >> twitterAuthTokenSecret);
+		TBuf8<KMaxMobblerTextSize> dummy;
+		TRAP_IGNORE(readStream >> dummy);
+		TRAP_IGNORE(readStream >> dummy);
 		
 		iAlarmOption.Copy(alarmOption);
 		
 		iUsername.Copy(username);
 		iPassword.Copy(password);
-		
-		iTwitterAuthToken.Copy(twitterAuthToken);
-		iTwitterAuthTokenSecret.Copy(twitterAuthTokenSecret);
 		
 		CleanupStack::PopAndDestroy(&readStream);
 		}
@@ -266,8 +262,6 @@ void CMobblerSettingItemListSettings::SaveSettingValuesL()
 		writeStream.WriteInt32L(AlarmStation());
 		writeStream << AlarmOption();
 		writeStream.WriteInt8L(AutomaticWallpaper());
-		writeStream << TwitterAuthToken();
-		writeStream << TwitterAuthTokenSecret();
 		
 		CleanupStack::PopAndDestroy(&writeStream);
 		}

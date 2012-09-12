@@ -99,6 +99,12 @@
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler.mif"-					"!:\resource\apps\mobbler_0x20038513.mif"
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler\Mobbler.png"-				"C:\private\20038513\Mobbler.png"
 
+IF exists("z:\system\install\Series60v3.0.sis")
+    "$(EPOCROOT)epoc32\data\z\resource\apps\mobblerbuttons_3rd.mif"-	"!:\resource\apps\mobblerbuttons_0x20038513.mif" 
+ELSE 
+    "$(EPOCROOT)epoc32\data\z\resource\apps\mobblerbuttons_5th.mif"-	"!:\resource\apps\mobblerbuttons_0x20038513.mif"  
+ENDIF
+
 ; Resource file
 {
 "$(EPOCROOT)epoc32\data\z\resource\apps\mobbler_0x20038513.r01"

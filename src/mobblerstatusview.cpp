@@ -1,7 +1,7 @@
 /*
 Mobbler, a Last.fm mobile scrobbler for Symbian smartphones.
 Copyright (C) 2008, 2009, 2010  Michael Coffey
-Copyright (C) 2008, 2009, 2010, 2011  Hugo van Kemenade
+Copyright (C) 2008, 2009, 2010, 2011, 2012  Hugo van Kemenade
 Copyright (C) 2009  Steve Punter
 Copyright (C) 2010  gw111zz
 
@@ -259,8 +259,6 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_EXPORT_QUEUE_TO_LOG,		EMobblerCommandExportQueueToLogFile);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_LANGUAGE_PATCHES,			EMobblerCommandLanguagePatches);
 		SetMenuItemTextL(aMenuPane, R_MOBBLER_QR_CODE,					EMobblerCommandQrCode);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER_CHANGE,			EMobblerCommandTwitterChange);
-		SetMenuItemTextL(aMenuPane, R_MOBBLER_TWITTER_REMOVE,			EMobblerCommandTwitterRemove);
 		}
 
 	// Now the menu text is set, dimming logic is next
@@ -382,15 +380,6 @@ void CMobblerStatusView::DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuP
 		aMenuPane->SetItemDimmed(EMobblerCommandArtistTopTags, ETrue);
 		
 		aMenuPane->SetItemDimmed(EMobblerCommandEventWebPage, ETrue);
-		}
-	else if (aResourceId == R_MOBBLER_TOOLS_SUBMENU_PANE)
-		{
-		if (static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthToken().Length() == 0
-				|| static_cast<CMobblerAppUi*>(AppUi())->SettingView().Settings().TwitterAuthTokenSecret().Length() == 0)
-			{
-			// The user hasn't authenticated with Twitter so hide the remove options
-			aMenuPane->SetItemDimmed(EMobblerCommandTwitterRemove, ETrue);
-			}
 		}
 	
 	// Third edition only due to an S60 5th edition bug (issue 364)
