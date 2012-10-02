@@ -88,6 +88,7 @@ _LIT(KIapId, "IAP\\Id");
 
 _LIT8(KEmail, "email");
 _LIT8(KHttp, "http");
+_LIT8(KHttps, "https");
 _LIT8(KLimit, "limit");
 _LIT8(KMessage, "message");
 _LIT8(KPassword, "password");
@@ -524,28 +525,20 @@ void CMobblerLastFmConnection::WebServicesHandshakeL()
 	delete iWebServicesSessionKey;
 	iWebServicesSessionKey = NULL;
 	
-	HBufC8* passwordHash(MobblerUtility::MD5LC(iPassword->String8()));
-	HBufC8* usernameAndPasswordHash(HBufC8::NewLC(passwordHash->Length() + iUsername->String8().Length()));
-	usernameAndPasswordHash->Des().Copy(iUsername->String8());
-	usernameAndPasswordHash->Des().Append(*passwordHash);
-	
-	HBufC8* authToken(MobblerUtility::MD5LC(*usernameAndPasswordHash));
-	
 	_LIT8(KQueryAuthGetMobileSession, "auth.getMobileSession");
 	CMobblerWebServicesQuery* query(CMobblerWebServicesQuery::NewLC(KQueryAuthGetMobileSession));
-	_LIT8(KAuthToken, "authToken");
-	query->AddFieldL(KAuthToken, *authToken);
 	query->AddFieldL(KUsername, iUsername->String8());
+	query->AddFieldL(KPassword, iPassword->String8());
 	HBufC8* queryText(query->GetQueryAuthLC());
 	
-	CUri8* uri(SetUpWebServicesUriLC());
+	CUri8* uri(SetUpWebServicesUriLC(ETrue));
 	uri->SetComponentL(*queryText, EUriQuery);
 	
 	delete iWebServicesHandshakeTransaction;
-	iWebServicesHandshakeTransaction = CMobblerTransaction::NewL(*this, uri);
+	iWebServicesHandshakeTransaction = CMobblerTransaction::NewL(*this, ETrue, uri, query);
 	CleanupStack::Pop(uri);
 	iWebServicesHandshakeTransaction->SubmitL();
-	CleanupStack::PopAndDestroy(5, passwordHash);
+	CleanupStack::PopAndDestroy(queryText);
 	}
 
 #ifdef FULL_BETA_BUILD
@@ -2197,6 +2190,7 @@ void CMobblerLastFmConnection::TransactionCompleteL(CMobblerTransaction* aTransa
 void CMobblerLastFmConnection::TransactionFailedL(CMobblerTransaction* aTransaction, const TDesC8& aResponse, const TDesC8& aStatus, TInt aStatusCode)
 	{
 	TRACER_AUTO;
+	DUMPDATA(aResponse, _L("transactionfailed.xml"));
 #ifdef _DEBUG
 	// Transaction log file 
 	_LIT(KTransactionLogFile, "C:\\Data\\Mobbler\\transaction.log");
@@ -2355,18 +2349,6 @@ TInt CMobblerLastFmConnection::MHFRunError(TInt /*aError*/, RHTTPTransaction /*a
 	TRACER_AUTO;
 	// send KErrNone back so that it doesn't panic
 	return KErrNone;
-	}
-
-void CMobblerLastFmConnection::CreateAuthTokenL(TDes8& aHash, TTimeIntervalSeconds aUnixTimeStamp)
-	{
-	TRACER_AUTO;
-	HBufC8* passwordHash(MobblerUtility::MD5LC(iPassword->String8()));
-	HBufC8* passwordHashAndTimeStamp(HBufC8::NewLC(passwordHash->Length() + 20));
-	passwordHashAndTimeStamp->Des().Append(*passwordHash);
-	passwordHashAndTimeStamp->Des().AppendNum(aUnixTimeStamp.Int());
-	HBufC8* authToken(MobblerUtility::MD5LC(*passwordHashAndTimeStamp));
-	aHash.Copy(*authToken);
-	CleanupStack::PopAndDestroy(3, passwordHash);
 	}
 
 TInt CMobblerLastFmConnection::ScrobbleLogCount() const
@@ -2698,13 +2680,21 @@ void CMobblerLastFmConnection::DeleteCurrentTrackFile()
 	iCurrentTrackSaved = EFalse;
 	}
 
-CUri8* CMobblerLastFmConnection::SetUpWebServicesUriLC()
+CUri8* CMobblerLastFmConnection::SetUpWebServicesUriLC(
+    const TBool aHttps)
 	{
 	TRACER_AUTO;
 	CUri8* uri(CUri8::NewLC());
 	
 	_LIT8(KComponentTwoDotZero, "/2.0/");
-	uri->SetComponentL(KHttp, EUriScheme);
+    if (aHttps)
+        {
+        uri->SetComponentL(KHttps, EUriScheme);
+        }
+    else
+        {
+        uri->SetComponentL(KHttp, EUriScheme);
+        }
 	// The Last.fm URL to send the handshake to:
 	_LIT8(KWebServicesHost, "ws.audioscrobbler.com");
 	uri->SetComponentL(KWebServicesHost, EUriHost);

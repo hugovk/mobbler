@@ -277,9 +277,8 @@ private:
 	CMobblerLastFmConnection(MMobblerLastFmConnectionObserver& aObserver, TUint32 aIapId, TInt aBitRate);
 
 private:  // utilities
-	void CreateAuthTokenL(TDes8& aHash, TTimeIntervalSeconds aUnixTimeStamp);
 	void StripOutTabs(TDes8& aString);
-	CUri8* SetUpWebServicesUriLC();
+	CUri8* SetUpWebServicesUriLC(const TBool aHttps = EFalse);
 
 	// track queue methods
 	void LoadTrackQueueL();
