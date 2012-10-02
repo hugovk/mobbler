@@ -121,8 +121,11 @@ void CMobblerTransaction::SubmitL()
 		{
 		if (iQuery)
 			{
-			// we were passed a query so add the session key
-			iQuery->AddFieldL(KSk, *iConnection.iWebServicesSessionKey);
+            if (iConnection.iWebServicesSessionKey)
+                {
+                // we were passed a query so add the session key
+                iQuery->AddFieldL(KSk, *iConnection.iWebServicesSessionKey);
+                }
 			
 			iForm = iQuery->GetFormLC();
 			CleanupStack::Pop(iForm);
