@@ -27,7 +27,7 @@ along with Mobbler.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef BETA_BUILD
 // comment this to remove beta username validation
-MACRO FULL_BETA_BUILD
+//MACRO FULL_BETA_BUILD
 #endif
 
 // uncomment this to build a version with protected UIDs for Symbian Signing
